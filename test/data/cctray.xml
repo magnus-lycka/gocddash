@@ -1,26 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Projects>
-  <Project name="foo :: alpha" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="382" lastBuildTime="2015-11-26T11:45:17" webUrl="http://go-server/go/pipelines/foo/382/alpha/1" />
-  <Project name="foo :: alpha :: defaultJob" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="382" lastBuildTime="2015-11-26T11:45:17" webUrl="http://go-server/go/tab/build/detail/foo/382/alpha/1/defaultJob" />
-  <Project name="bar :: beta" activity="Sleeping" lastBuildStatus="Failure" lastBuildLabel="57" lastBuildTime="2015-11-03T09:16:23" webUrl="http://go-server/go/pipelines/bar/57/runTests/1"><messages><message text="Willy Wonka &lt;willyw@example.com&gt;" kind="Breakers" /></messages></Project>
-  <Project name="bar :: beta :: defaultJob" activity="Sleeping" lastBuildStatus="Failure" lastBuildLabel="57" lastBuildTime="2015-11-03T09:16:23" webUrl="http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob"><messages><message text="Willy Wonka &lt;willyw@example.com&gt;" kind="Breakers" /></messages></Project>
-  <Project name="baz :: gamma" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="203" lastBuildTime="2015-11-26T11:46:33" webUrl="http://go-server/go/pipelines/baz/203/readyToTest/1" />
-  <Project name="baz :: gamma :: defaultJob" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="203" lastBuildTime="2015-11-26T11:46:33" webUrl="http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob" />
-  <Project name="baz :: delta" activity="Sleeping" lastBuildStatus="Failure" lastBuildLabel="181" lastBuildTime="2015-11-23T10:02:08" webUrl="http://go-server/go/pipelines/baz/181/delta/1"><messages><message text="Mary Wollstonecraft &lt;maryw@example.com&gt;" kind="Breakers" /></messages></Project>
-  <Project name="baz :: delta :: defaultJob" activity="Sleeping" lastBuildStatus="Failure" lastBuildLabel="181" lastBuildTime="2015-11-23T10:02:08" webUrl="http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob"><messages><message text="Mary Wollstonecraft &lt;maryw@example.com&gt;" kind="Breakers" /></messages></Project>
-  <Project name="qux :: defaultStage" activity="Building" lastBuildStatus="Failure" lastBuildLabel="239" lastBuildTime="2015-11-26T12:29:28" webUrl="http://go-server/go/pipelines/qux/240/defaultStage/1" />
-  <Project name="qux :: defaultStage :: defaultJob" activity="Building" lastBuildStatus="Failure" lastBuildLabel="239" lastBuildTime="2015-11-26T12:29:28" webUrl="http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob" />
-  <Project name="norf :: runTests" activity="Building" lastBuildStatus="Success" lastBuildLabel="189" lastBuildTime="2015-11-26T12:10:11" webUrl="http://go-server/go/pipelines/norf/190/runTests/1" />
-  <Project name="norf :: runTests :: defaultJob" activity="Building" lastBuildStatus="Success" lastBuildLabel="189" lastBuildTime="2015-11-26T12:10:11" webUrl="http://go-server/go/tab/build/detail/norf/190/runTests/1/defaultJob" />
-  <Project name="large-norf :: runTests" activity="Sleeping" lastBuildStatus="Failure" lastBuildLabel="13" lastBuildTime="2015-11-20T14:57:44" webUrl="http://go-server/go/pipelines/large-norf/13/runTests/1" />
-  <Project name="large-norf :: runTests :: defaultJob" activity="Sleeping" lastBuildStatus="Failure" lastBuildLabel="13" lastBuildTime="2015-11-20T15:44:54" webUrl="http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob" />
-  <Project name="fnord :: runTests" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="98" lastBuildTime="2015-11-26T13:15:09" webUrl="http://go-server/go/pipelines/fnord/98/runTests/1" />
-  <Project name="fnord :: runTests :: defaultJob" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="98" lastBuildTime="2015-11-26T13:15:09" webUrl="http://go-server/go/tab/build/detail/fnord/98/runTests/1/defaultJob" />
-  <Project name="snafu-service :: build" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="250" lastBuildTime="2015-11-26T10:48:49" webUrl="http://go-server/go/pipelines/snafu-service/250/build/1" />
-  <Project name="snafu-service :: build :: defaultJob" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="250" lastBuildTime="2015-11-26T10:48:49" webUrl="http://go-server/go/tab/build/detail/snafu-service/250/build/1/defaultJob" />
-  <Project name="snafu-service :: test" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="250" lastBuildTime="2015-11-26T11:28:42" webUrl="http://go-server/go/pipelines/snafu-service/250/test/1" />
-  <Project name="snafu-service :: test :: Integration_Tests" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="250" lastBuildTime="2015-11-26T11:28:42" webUrl="http://go-server/go/tab/build/detail/snafu-service/250/test/1/Integration_Tests" />
-  <Project name="snafu-service :: test :: DB_Tests" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="250" lastBuildTime="2015-11-26T10:51:21" webUrl="http://go-server/go/tab/build/detail/snafu-service/250/test/1/DB_Tests" />
-  <Project name="snafu-transformation :: defaultStage" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="100" lastBuildTime="2015-11-25T14:37:04" webUrl="http://go-server/go/pipelines/snafu-transformation/100/defaultStage/1" />
-  <Project name="snafu-transformation :: defaultStage :: defaultJob" activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="100" lastBuildTime="2015-11-25T14:37:04" webUrl="http://go-server/go/tab/build/detail/snafu-transformation/100/defaultStage/1/defaultJob" />
+  <Project name="foo :: alpha" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="382" lastBuildTime="2015-11-26T11:45:17"
+           webUrl="http://go-server/go/pipelines/foo/382/alpha/1" />
+  <Project name="foo :: alpha :: defaultJob" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="382" lastBuildTime="2015-11-26T11:45:17"
+           webUrl="http://go-server/go/tab/build/detail/foo/382/alpha/1/defaultJob" />
+  <Project name="bar :: beta" activity="Sleeping" lastBuildStatus="Failure"
+           lastBuildLabel="57" lastBuildTime="2015-11-03T09:16:23"
+           webUrl="http://go-server/go/pipelines/bar/57/runTests/1">
+    <messages>
+      <message text="Willy Wonka &lt;willyw@example.com&gt;"
+               kind="Breakers" />
+    </messages>
+  </Project>
+  <Project name="bar :: beta :: defaultJob" activity="Sleeping" lastBuildStatus="Failure"
+           lastBuildLabel="57" lastBuildTime="2015-11-03T09:16:23"
+           webUrl="http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob">
+    <messages>
+      <message text="Willy Wonka &lt;willyw@example.com&gt;" kind="Breakers" />
+    </messages>
+  </Project>
+  <Project name="baz :: gamma" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="203" lastBuildTime="2015-11-26T11:46:33"
+           webUrl="http://go-server/go/pipelines/baz/203/readyToTest/1" />
+  <Project name="baz :: gamma :: defaultJob" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="203" lastBuildTime="2015-11-26T11:46:33"
+           webUrl="http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob" />
+  <Project name="baz :: delta" activity="Sleeping" lastBuildStatus="Failure"
+           lastBuildLabel="181" lastBuildTime="2015-11-23T10:02:08"
+           webUrl="http://go-server/go/pipelines/baz/181/delta/1">
+    <messages>
+      <message text="Mary Wollstonecraft &lt;maryw@example.com&gt;" kind="Breakers" />
+    </messages>
+  </Project>
+  <Project name="baz :: delta :: defaultJob" activity="Sleeping" lastBuildStatus="Failure"
+           lastBuildLabel="181" lastBuildTime="2015-11-23T10:02:08"
+           webUrl="http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob">
+    <messages>
+      <message text="Mary Wollstonecraft &lt;maryw@example.com&gt;" kind="Breakers" />
+    </messages>
+  </Project>
+  <Project name="qux :: defaultStage" activity="Building" lastBuildStatus="Failure"
+           lastBuildLabel="239" lastBuildTime="2015-11-26T12:29:28"
+           webUrl="http://go-server/go/pipelines/qux/240/defaultStage/1" />
+  <Project name="qux :: defaultStage :: defaultJob" activity="Building" lastBuildStatus="Failure"
+           lastBuildLabel="239" lastBuildTime="2015-11-26T12:29:28"
+           webUrl="http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob" />
+  <Project name="norf :: runTests" activity="Building" lastBuildStatus="Success"
+           lastBuildLabel="189" lastBuildTime="2015-11-26T12:10:11"
+           webUrl="http://go-server/go/pipelines/norf/190/runTests/1" />
+  <Project name="norf :: runTests :: defaultJob" activity="Building" lastBuildStatus="Success"
+           lastBuildLabel="189" lastBuildTime="2015-11-26T12:10:11"
+           webUrl="http://go-server/go/tab/build/detail/norf/190/runTests/1/defaultJob" />
+  <Project name="large-norf :: runTests" activity="Sleeping" lastBuildStatus="Failure"
+           lastBuildLabel="13" lastBuildTime="2015-11-20T14:57:44"
+           webUrl="http://go-server/go/pipelines/large-norf/13/runTests/1" />
+  <Project name="large-norf :: runTests :: defaultJob" activity="Sleeping" lastBuildStatus="Failure"
+           lastBuildLabel="13" lastBuildTime="2015-11-20T15:44:54"
+           webUrl="http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob" />
+  <Project name="fnord :: runTests" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="98" lastBuildTime="2015-11-26T13:15:09"
+           webUrl="http://go-server/go/pipelines/fnord/98/runTests/1" />
+  <Project name="fnord :: runTests :: defaultJob" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="98" lastBuildTime="2015-11-26T13:15:09"
+           webUrl="http://go-server/go/tab/build/detail/fnord/98/runTests/1/defaultJob" />
+  <Project name="snafu-service :: build" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="250" lastBuildTime="2015-11-26T10:48:49"
+           webUrl="http://go-server/go/pipelines/snafu-service/250/build/1" />
+  <Project name="snafu-service :: build :: defaultJob" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="250" lastBuildTime="2015-11-26T10:48:49"
+           webUrl="http://go-server/go/tab/build/detail/snafu-service/250/build/1/defaultJob" />
+  <Project name="snafu-service :: test" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="250" lastBuildTime="2015-11-26T11:28:42"
+           webUrl="http://go-server/go/pipelines/snafu-service/250/test/1" />
+  <Project name="snafu-service :: test :: Integration_Tests" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="250" lastBuildTime="2015-11-26T11:28:42"
+           webUrl="http://go-server/go/tab/build/detail/snafu-service/250/test/1/Integration_Tests" />
+  <Project name="snafu-service :: test :: DB_Tests" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="250" lastBuildTime="2015-11-26T10:51:21"
+           webUrl="http://go-server/go/tab/build/detail/snafu-service/250/test/1/DB_Tests" />
+  <Project name="snafu-transformation :: defaultStage" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="100" lastBuildTime="2015-11-25T14:37:04"
+           webUrl="http://go-server/go/pipelines/snafu-transformation/100/defaultStage/1" />
+  <Project name="snafu-transformation :: defaultStage :: defaultJob" activity="Sleeping" lastBuildStatus="Success"
+           lastBuildLabel="100" lastBuildTime="2015-11-25T14:37:04"
+           webUrl="http://go-server/go/tab/build/detail/snafu-transformation/100/defaultStage/1/defaultJob" />
 </Projects>
