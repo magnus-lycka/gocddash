@@ -3,8 +3,11 @@ from xml.etree import ElementTree as Et
 
 
 class Projects(object):
-    def __init__(self, fn):
-        self.tree = Et.parse(fn)
+    def __init__(self, source):
+        try:
+            self.tree = Et.fromstring(source)
+        except TypeError:
+            self.tree = Et.parse(source)
         self.pipelines = {}
         self.stages = defaultdict(list)
         self.jobs = defaultdict(list)

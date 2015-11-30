@@ -4,7 +4,7 @@ from parse_cctray import Projects
 
 class TestPipelines(unittest.TestCase):
     def setUp(self):
-        self.projects = Projects('data/cctray.xml')
+        self.projects = Projects(open('data/cctray.xml').read())
         self.pipelines = self.projects.pipelines
 
     def test_count_pipelines(self):
