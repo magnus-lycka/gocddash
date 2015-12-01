@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block headstuff %}
+
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1.1', {packages: ['line']});
+    google.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      {% for type, column in jobqdata.columns %}
+      data.addColumn('{{ type }}', '{{ column }}');
+      {% endfor %}
+
+      data.addRows([
+      {% for row in jobqdata.rows %}
+        [ {{ row|join(', ') }} ] {% if not loop.last %},{% endif %}
+      {% endfor %}
+      ]);
+
+      var options = {
+        chart: {
+          title: 'Job queue size on GoCD server',
+        },
+        width: 1200,
+        height: 500
+      };
+
+      var chart = new google.charts.Line(document.getElementById('linechart_material'));
+
+      chart.draw(data, options);
+    }
+  </script>
+
+{% endblock %}
+
+{% block content %}
+  <div id="linechart_material"></div>
+{% endblock %}

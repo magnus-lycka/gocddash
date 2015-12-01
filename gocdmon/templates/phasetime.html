@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block headstuff %}
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+      {% for title, rows in data.items() %}
+        var data = google.visualization.arrayToDataTable([
+        ["Phase", "miliseconds"],{% for label, value in rows.items() %}
+        ["{{ label }}",  {{ value }}]{% if not loop.last %},{% endif %}{% endfor %}
+        ]);
+        var options = {
+          title: "{{ title }}",
+          pieHole: 0.4,
+        };
+        var chart = new google.visualization.PieChart(document.getElementById("{{ title }}"));
+        chart.draw(data, options);
+      {% endfor %}
+      }
+    </script>
+{% endblock %}
+
+{% block content %}
+  {% for title in data %}
+    <div id="{{ title }}" style="width: 900px; height: 500px;"></div>
+  {% endfor %}
+
+  <div id="linechart_material"></div>
+{% endblock %}

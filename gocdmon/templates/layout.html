@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>GoCD Dashboard</title>
+
+  {% block headstuff %}{% endblock %}
+
+  </head>
+  <body>
+    <h1>GoCD Dashboard</h1>
+      {% for url, label in pages %}
+        [ <a href="{{ url }}">{{ label }}</a> ]
+      {% endfor %}
+
+  {% block content %}{% endblock %}
+
+  </body>
+</html>
