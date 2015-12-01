@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+{% for pipeline in project.select(which) %}
+    {% if loop.index is divisibleby(cols) %}
+    <div class="row">
+    {% endif %}
+        <div class="col-md-{{ 12 // cols }}">
+            <div class="panel panel-{{ pipeline.status | bootstrap_status }}">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a href="{{ pipeline.url }}">{{ pipeline.name }}
+                            <span class="badge">{{ pipeline.label }}
+                            </span>
+                            {{ pipeline.changed }}
+                        </a>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                {% for stage in pipeline.stages %}
+                    <div class="btn-group-vertical">
+                        <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}" role="button"
+                           href="{{ stage.url }}">{{ stage.name }} <span class="badge">{{ stage.counter }}</span></a>
+                        {% for job in stage.jobs %}
+                        <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
+                           href="{{ job.url }}">{{ job.name }}</span></a>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {% for kind, message in pipeline.messages %}
+                    <br>
+                    {{ kind }}: {{ message }}
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% if loop.index is divisibleby(cols) %}
+    </div>
+    {% endif %}
+{% endfor %}
+</div>
+{% endblock %}

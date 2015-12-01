@@ -76,7 +76,7 @@
            webUrl="http://go-server/go/pipelines/snafu-service/250/test/1" />
   <Project name="snafu-service :: test :: Integration_Tests" activity="Sleeping" lastBuildStatus="Success"
            lastBuildLabel="250" lastBuildTime="2015-11-26T11:28:42"
-           webUrl="http://go-server/go/tab/build/detail/snafu-service/250/test/1/Integration_Tests" />
+           webUrl="http://go-server/go/tab/build/detail/snafu-service/250/test/2/Integration_Tests" />
   <Project name="snafu-service :: test :: DB_Tests" activity="Sleeping" lastBuildStatus="Success"
            lastBuildLabel="250" lastBuildTime="2015-11-26T10:51:21"
            webUrl="http://go-server/go/tab/build/detail/snafu-service/250/test/1/DB_Tests" />

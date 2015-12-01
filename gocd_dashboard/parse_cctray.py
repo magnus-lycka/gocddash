@@ -27,15 +27,15 @@ class Projects(object):
             self.pipelines[project.pipeline_name].add_facts(project)
 
     @staticmethod
-    def green_which(entity):
+    def all_which(entity):
         return True
 
     @staticmethod
-    def yellow_which(entity):
+    def yellow_progress(entity):
         return entity.status != 'Success'
 
     @staticmethod
-    def red_which(entity):
+    def failing_which(entity):
         return 'Failure' in entity.status
 
     @staticmethod
@@ -44,14 +44,15 @@ class Projects(object):
 
     def select(self, which):
         selection = {
-            'green': self.green_which,
-            'yellow': self.yellow_which,
-            'red': self.red_which,
+            'all': self.all_which,
+            'progress': self.yellow_progress,
+            'failing': self.failing_which,
         }[which]
         pipelines = [p for p in self.pipelines.values() if selection(p)]
         pipelines.sort(key=self.time_key)
         pipelines.reverse()
         return pipelines
+
 
 class Pipeline(object):
     def __init__(self):
@@ -61,14 +62,16 @@ class Pipeline(object):
         self.changed = None
         self.url = None
         self.name = None
+        self.label = None
         self.stages = []
 
     def add_facts(self, project):
         self.changed = max(self.changed, project.attrib['lastBuildTime'])
         if not self.name:
             self.name = project.pipeline_name
-            self.url = project.attrib['webUrl'].rsplit('/',2)[0]
-        if not project.stage_name in [stage.name for stage in self.stages]:
+            self.url = project.attrib['webUrl'].rsplit('/', 2)[0].replace('pipelines/', 'pipelines/value_stream_map/')
+            self.label = self.url.split('/')[-1]
+        if project.stage_name not in [stage.name for stage in self.stages]:
             self.stages.append(Stage(project))
         if project.job_name:
             self.stages[-1].add_job(project)
@@ -91,12 +94,13 @@ class Stage(Entity):
         super(Stage, self).__init__(project)
         self.jobs = []
         self.name = project.stage_name
+        self.counter = self.url.split('/')[-1]
 
     def add_job(self, project):
         self.jobs.append(Job(project))
+
 
 class Job(Entity):
     def __init__(self, project):
         super(Job, self).__init__(project)
         self.name = project.job_name
-

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{{ ts }}
+<tt>
+  {{ blob }}
+</tt>
+
+<div class="container">
+  <form role="form" action="" method="post">
+    {% for checked, pipelinegroup in pipelinegroups %}
+    <div class="checkbox">
+      <label><input type="checkbox" {{ checked }} id="{{ pipelinegroup }}">{{ pipelinegroup }}</label>
+    </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-default" value="Save pipeline-group selection">
+  </form>
+</div>
+{% endblock %}
