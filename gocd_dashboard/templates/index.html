@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container">
-{% for pipeline in project.select(which) %}
+{% for pipeline in pipelines %}
     {% if loop.index is divisibleby(cols) %}
     <div class="row">
     {% endif %}
@@ -9,6 +9,9 @@
             <div class="panel panel-{{ pipeline.status | bootstrap_status }}">
                 <div class="panel-heading">
                     <h3 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse{{ loop.index }}">
+                            <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                        </a>
                         <a href="{{ pipeline.url }}">{{ pipeline.name }}
                             <span class="badge">{{ pipeline.label }}
                             </span>
@@ -16,21 +19,26 @@
                         </a>
                     </h3>
                 </div>
-                <div class="panel-body">
-                {% for stage in pipeline.stages %}
-                    <div class="btn-group-vertical">
-                        <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}" role="button"
-                           href="{{ stage.url }}">{{ stage.name }} <span class="badge">{{ stage.counter }}</span></a>
-                        {% for job in stage.jobs %}
-                        <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
-                           href="{{ job.url }}">{{ job.name }}</span></a>
+                <div id="collapse{{ loop.index }}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                    {% for stage in pipeline.stages %}
+                        <div class="btn-group-vertical">
+                            <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}" role="button"
+                               href="{{ stage.url }}">{{ stage.name }} <span class="badge">{{ stage.counter }}</span></a>
+                            {% for job in stage.jobs %}
+                            <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
+                               href="{{ job.url }}">{{ job.name }}</span></a>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    {% for kind in pipeline.messages | sort %}
+                        <br>
+                        {{ kind }}:
+                        {% for message in pipeline.messages[kind] | sort %}
+                            {{ message }}
                         {% endfor %}
+                    {% endfor %}
                     </div>
-                {% endfor %}
-                {% for kind, message in pipeline.messages %}
-                    <br>
-                    {{ kind }}: {{ message }}
-                {% endfor %}
                 </div>
             </div>
         </div>

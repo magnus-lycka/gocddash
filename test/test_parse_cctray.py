@@ -1,5 +1,6 @@
 import unittest
-from parse_cctray import Projects
+from parse_cctray import Projects, Pipeline
+from xml.etree import ElementTree as Et
 
 
 class TestPipelines(unittest.TestCase):
@@ -49,6 +50,39 @@ class TestPipelines(unittest.TestCase):
     def test_pipeline_selection_failing(self):
         expected = "qux baz large-norf bar".split()
         self.assertEqual(expected, [p.name for p in self.projects.select('failing')])
+
+    def test_pipeline_selection_groups(self):
+        pipelines = "fnord qux norf baz foo snafu-service snafu-transformation large-norf bar".split()
+        expected = "fnord baz foo bar".split()
+        groups = ['b', 'f']
+        group_map = {pl: pl[0] for pl in pipelines}
+        self.assertEqual(expected, [p.name for p in self.projects.select('all', groups=groups, group_map=group_map)])
+
+    def test_add_messages(self):
+        pipeline = Pipeline()
+        project = Et.Element('Project')
+        messages = Et.SubElement(project, 'messages')
+        message1 = Et.SubElement(messages, 'message')
+        message1.attrib['kind'] = 'thiskind'
+        message1.attrib['text'] = 'thistext'
+        message2 = Et.SubElement(messages, 'message')
+        message2.attrib['kind'] = 'thatkind'
+        message2.attrib['text'] = 'thattext'
+        message3 = Et.SubElement(messages, 'message')
+        message3.attrib['kind'] = 'thatkind'
+        message3.attrib['text'] = 'thatothertext'
+        pipeline.add_messages(project)
+        expected = dict(thiskind={'thistext'}, thatkind={'thattext', 'thatothertext'})
+
+        self.assertEqual(pipeline.messages, expected)
+
+    def test_pipeline_messages(self):
+        expected = {
+            'bar': {'Breakers': {"Willy Wonka <willyw@example.com>"}},
+            'baz': {'Breakers': {"Mary Wollstonecraft <maryw@example.com>"}},
+        }
+        for name, pipeline in self.pipelines.items():
+            self.assertEqual(pipeline.messages, expected.get(name, {}))
 
 
 class TestStages(unittest.TestCase):

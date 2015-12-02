@@ -31,7 +31,7 @@ class Projects(object):
         return True
 
     @staticmethod
-    def yellow_progress(entity):
+    def progress_which(entity):
         return entity.status != 'Success'
 
     @staticmethod
@@ -42,15 +42,17 @@ class Projects(object):
     def time_key(enity):
         return enity.changed
 
-    def select(self, which):
+    def select(self, which, groups=None, group_map=None):
         selection = {
             'all': self.all_which,
-            'progress': self.yellow_progress,
+            'progress': self.progress_which,
             'failing': self.failing_which,
         }[which]
         pipelines = [p for p in self.pipelines.values() if selection(p)]
         pipelines.sort(key=self.time_key)
         pipelines.reverse()
+        if groups:
+            pipelines = [pl for pl in pipelines if group_map[pl.name] in groups]
         return pipelines
 
 
@@ -64,6 +66,7 @@ class Pipeline(object):
         self.name = None
         self.label = None
         self.stages = []
+        self.messages = defaultdict(set)
 
     def add_facts(self, project):
         self.changed = max(self.changed, project.attrib['lastBuildTime'])
@@ -80,6 +83,11 @@ class Pipeline(object):
         prefix = "Building after " if "Building" in self.activity_set else ""
         suffix = "Failure" if "Failure" in self.last_build_set else "Success"
         self.status = prefix + suffix
+        self.add_messages(project)
+
+    def add_messages(self, project):
+        for message in project.findall('messages/message'):
+            self.messages[message.attrib['kind']].add(message.attrib['text'])
 
 
 class Entity(object):
