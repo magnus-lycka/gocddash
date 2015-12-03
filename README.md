@@ -21,3 +21,37 @@ Gocd-dashboard uses the cctray.xml file from the go-server.
 
 Since gocd-dashboard uses bootstrap, you can easily pimp
 it to your liking.
+
+## Usage
+
+   usage: app.py [-h] [-s SERVER] [-u USER] [-p PASSWD] [-d] [-c {1,2,3,4}]
+
+   optional arguments:
+     -h, --help            show this help message and exit
+     -s SERVER, --server SERVER
+                           go server url
+     -u USER, --user USER  go server user name
+     -p PASSWD, --passwd PASSWD
+                           go server password
+     -d, --debug
+     -c {1,2,3,4}, --columns {1,2,3,4}
+                           # columns in pipeline list
+
+## Known shortcomings / bugs
+
+- You need to press a save button after selecting/deselecting
+  pipeline-groups, and then go back to the main page.
+- The "Select all groups" button only works once. (Then you need to save etc.)
+- Uncollapsed state isn't maintained on page reload
+- No change of glypgh on changing collapsed state
+- Pipeline groups currently selected with session cookie
+- Missing installation & operation instructions and routines
+- The stuff in the gocdmon subdirectory is not integrated yet
+
+### Issues with cctray.xml
+
+Some issues come from details in the cctray.xml file:
+
+- It's unclear to me what the timedtamp refers to for a build in progress.
+- Jobs aren't shown at all if they e.g. are to run on all machines.
+

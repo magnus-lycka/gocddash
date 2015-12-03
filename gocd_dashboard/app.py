@@ -5,6 +5,7 @@ import getpass
 import argparse
 from collections import defaultdict
 import json
+from datetime import date
 
 config = defaultdict(str)
 group_of_pipeline = defaultdict(str)
@@ -23,6 +24,21 @@ def bootstrap_status(cctray_status):
     return mapping.get(cctray_status, 'default')
 
 
+@app.template_filter('bootstrap_building')
+def bootstrap_building(cctray_status):
+    if 'Building' in cctray_status:
+        return "progress-bar-striped"
+    return ""
+
+
+@app.template_filter('time_or_date')
+def time_or_date(timestamp):
+    date_part, time_part = timestamp.split('T')
+    if date_part == str(date.today()):
+        return time_part
+    return date_part
+
+
 @app.route("/", methods=['GET'])
 def dashboard():
     which = request.args.get('which', 'failing')
@@ -33,6 +49,11 @@ def dashboard():
     groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
     pipelines = project.select(which, groups=groups, group_map=group_of_pipeline)
     return render_template('index.html', pipelines=pipelines, cols=config['columns'])
+
+
+@app.before_first_request
+def setup():
+    get_all_pipeline_groups()
 
 
 def get_all_pipeline_groups():
@@ -49,11 +70,6 @@ def get_all_pipeline_groups():
     return pipeline_groups
 
 
-def get_checked_in_form():
-    print request.form.items()
-    return list(request.form)
-
-
 @app.route("/select", methods=['GET', 'POST'])
 def select():
     all_pipeline_groups = get_all_pipeline_groups()
@@ -62,7 +78,7 @@ def select():
 
     blob = ''
     if request.method == 'POST':
-        checked_pipeline_groups = get_checked_in_form()
+        checked_pipeline_groups = list(request.form)
     else:
         checked_pipeline_groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
     for i, pipeline_group in enumerate(all_pipeline_groups):
@@ -80,7 +96,7 @@ def parse_args():
     parser.add_argument('-u', '--user', help='go server user name')
     parser.add_argument('-p', '--passwd', help='go server password')
     parser.add_argument('-d', '--debug', action='store_true')
-    parser.add_argument('-c', '--columns', choices=[1, 2, 3, 4], default=2, help="# columns in pipeline list")
+    parser.add_argument('-c', '--columns', type=int, choices=[1, 2, 3, 4], default=2, help="# columns in pipeline list")
     pargs = parser.parse_args()
     config.update(vars(pargs))
 

@@ -7,15 +7,19 @@
     {% endif %}
         <div class="col-md-{{ 12 // cols }}">
             <div class="panel panel-{{ pipeline.status | bootstrap_status }}">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <a data-toggle="collapse" href="#collapse{{ loop.index }}">
+                <div class="panel-heading {{ pipeline.status | bootstrap_building }}">
+                    <h3 class="panel-title ">
+                        <a data-toggle="collapse" href="#collapse{{ loop.index }}"
+                           title="View details">
                             <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
                         </a>
                         <a href="{{ pipeline.url }}">{{ pipeline.name }}
                             <span class="badge">{{ pipeline.label }}
                             </span>
-                            {{ pipeline.changed }}
+                        </a>
+                        <a  data-toggle="tooltip" title="{{ pipeline.changed }}"
+                            href="{{ pipeline.url }}">
+                            {{ pipeline.changed | time_or_date }}
                         </a>
                     </h3>
                 </div>
@@ -23,11 +27,12 @@
                     <div class="panel-body">
                     {% for stage in pipeline.stages %}
                         <div class="btn-group-vertical">
-                            <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}" role="button"
-                               href="{{ stage.url }}">{{ stage.name }} <span class="badge">{{ stage.counter }}</span></a>
+                            <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}"
+                               role="button" href="{{ stage.url }}">{{ stage.name }}
+                                <span class="badge">{{ stage.counter }}</span></a>
                             {% for job in stage.jobs %}
                             <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
-                               href="{{ job.url }}">{{ job.name }}</span></a>
+                               href="{{ job.url }}">{{ job.name }}</a>
                             {% endfor %}
                         </div>
                     {% endfor %}
@@ -47,4 +52,14 @@
     {% endif %}
 {% endfor %}
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+
+<!-- Refresh every minute -->
+<script type="text/javascript">
+  window.setTimeout(function(){ document.location.reload(true); }, 60000);
+</script>
+
 {% endblock %}
