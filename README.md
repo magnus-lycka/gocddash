@@ -19,3 +19,5 @@ stages and jobs at the go-server.
 
 Gocd-dashboard uses the cctray.xml file from the go-server.
 
+Since gocd-dashboard uses bootstrap, you can easily pimp
+it to your liking.
