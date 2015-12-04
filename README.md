@@ -52,6 +52,6 @@ it to your liking.
 
 Some issues come from details in the cctray.xml file:
 
-- It's unclear to me what the timedtamp refers to for a build in progress.
+- For a build in progress, the timestamp is completion time for previous build. :-(
 - Jobs aren't shown at all if they e.g. are to run on all machines.
 
