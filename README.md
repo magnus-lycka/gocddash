@@ -24,18 +24,18 @@ it to your liking.
 
 ## Usage
 
-   usage: app.py [-h] [-s SERVER] [-u USER] [-p PASSWD] [-d] [-c {1,2,3,4}]
+    usage: app.py [-h] [-s SERVER] [-u USER] [-p PASSWD] [-d] [-c {1,2,3,4}]
 
-   optional arguments:
-     -h, --help            show this help message and exit
-     -s SERVER, --server SERVER
-                           go server url
-     -u USER, --user USER  go server user name
-     -p PASSWD, --passwd PASSWD
-                           go server password
-     -d, --debug
-     -c {1,2,3,4}, --columns {1,2,3,4}
-                           # columns in pipeline list
+    optional arguments:
+        -h, --help           show this help message and exit
+        -s SERVER, --server SERVER
+                             go server url
+        -u USER, --user USER  go server user name
+        -p PASSWD, --passwd PASSWD
+                             go server password
+        -d, --debug
+        -c {1,2,3,4}, --columns {1,2,3,4}
+                             # columns in pipeline list
 
 ## Known shortcomings / bugs
 
