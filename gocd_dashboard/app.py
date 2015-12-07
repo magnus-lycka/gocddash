@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect
 import cctray_source
 import parse_cctray
 import getpass
@@ -42,9 +42,12 @@ def time_or_date(timestamp):
 @app.route("/", methods=['GET'])
 def dashboard():
     which = request.args.get('which', 'failing')
+    kwargs = {}
+    if config['user']:
+        kwargs['auth'] = (config['user'], config['passwd'])
     xml = cctray_source.get_cctray_source(
         config['server'] + '/go/cctray.xml',
-        auth=(config['user'], config['passwd'])).data
+        **kwargs).data
     project = parse_cctray.Projects(xml)
     groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
     pipelines = project.select(which, groups=groups, group_map=group_of_pipeline)
@@ -57,9 +60,12 @@ def setup():
 
 
 def get_all_pipeline_groups():
+    kwargs = {}
+    if config['user']:
+        kwargs['auth'] = (config['user'], config['passwd'])
     json_text = cctray_source.get_cctray_source(
         config['server'] + '/go/api/config/pipeline_groups',
-        auth=(config['user'], config['passwd'])).data
+        **kwargs).data
     full_json = json.loads(json_text)
     pipeline_groups = []
     for pipeline_group in full_json:
@@ -79,6 +85,7 @@ def select():
     blob = ''
     if request.method == 'POST':
         checked_pipeline_groups = list(request.form)
+        return redirect("/", code=302)
     else:
         checked_pipeline_groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
     for i, pipeline_group in enumerate(all_pipeline_groups):

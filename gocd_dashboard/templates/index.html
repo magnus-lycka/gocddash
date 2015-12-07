@@ -11,7 +11,7 @@
                     <h3 class="panel-title ">
                         <a data-toggle="collapse" href="#collapse{{ loop.index }}"
                            title="View details">
-                            <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                            <span id="glyph{{ loop.index }}" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </a>
                         <a href="{{ pipeline.url }}">{{ pipeline.name }}
                             <span class="badge">{{ pipeline.label }}
@@ -60,6 +60,18 @@
 <!-- Refresh every minute -->
 <script type="text/javascript">
   window.setTimeout(function(){ document.location.reload(true); }, 60000);
+</script>
+
+<script type="text/javascript">
+{% for pipeline in pipelines %}
+    $("#collapse{{ loop.index }}").on('shown.bs.collapse', function () {
+       $("#glyph{{ loop.index }}").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+    });
+
+    $("#collapse{{ loop.index }}").on('hidden.bs.collapse', function () {
+       $("#glyph{{ loop.index }}").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+    });
+{% endfor %}
 </script>
 
 {% endblock %}
