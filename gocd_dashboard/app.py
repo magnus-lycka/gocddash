@@ -39,7 +39,7 @@ def time_or_date(timestamp):
     return date_part
 
 
-@app.route("/", methods=['GET'])
+@app.route("/dash", methods=['GET'])
 def dashboard():
     which = request.args.get('which', 'failing')
     xml = cctray_source.get_cctray_source(
@@ -70,7 +70,7 @@ def get_all_pipeline_groups():
     return pipeline_groups
 
 
-@app.route("/select", methods=['GET', 'POST'])
+@app.route("/dash/select", methods=['GET', 'POST'])
 def select():
     all_pipeline_groups = get_all_pipeline_groups()
     # all_pipeline_groups is a list of

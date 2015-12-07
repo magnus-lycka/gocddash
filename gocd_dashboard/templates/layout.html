@@ -9,8 +9,8 @@
           content="Dashboard for Thoughtworks Go Continuous Delivery, Go.CD, CoCD">
     <meta name="author" content="magnus@thinkware.se">
     <title>Go.CD Dashboard</title>
-
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/slate/bootstrap.min.css" rel="stylesheet">
+    <!--link href="/static/css/bootstrap.min.css" rel="stylesheet"-->
 </head>
 
 <body>
@@ -29,21 +29,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Go.CD Dashboard</a>
+            <a class="navbar-brand" href="/dash">Go.CD Dashboard</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a class="btn btn-warning" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Show only failing builds" href="/?which=failing">Failing</a></li>
+                       title="Show only failing builds" href="/dash?which=failing">Failing</a></li>
                 <li><a class="btn btn-info" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Show failing and building" href="/?which=progress">Progress</a></li>
+                       title="Show failing and building" href="/dash?which=progress">Progress</a></li>
                 <li><a class="btn btn-success" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Show all builds" href="/?which=all">All</a></li>
+                       title="Show all builds" href="/dash?which=all">All</a></li>
             </ul>
             <ul class="nav navbar-nav">
                 <li><a class="btn" role="button" data-toggle="tooltip" data-placement="bottom"
                        title="Select which pipeline groups to monitor"
-                       href="/select">Select Pipeline-Groups</a></li>
+                       href="/dash/select">Select Pipeline-Groups</a></li>
             </ul>
 
         </div><!--/.navbar-collapse -->
@@ -55,8 +55,9 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/static/js/bootstrap.min.js"></script>
+<!--script src="/static/js/bootstrap.min.js"></script-->
 
 <script>
 $(document).ready(function(){
