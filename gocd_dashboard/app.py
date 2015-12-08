@@ -5,12 +5,16 @@ import getpass
 import argparse
 from collections import defaultdict
 import json
-from datetime import date
+from datetime import date, datetime
 
 config = defaultdict(str)
 group_of_pipeline = defaultdict(str)
-
 app = Flask(__name__)
+
+
+def get_bootstrap_theme(request):
+    theme = request.cookies.get('theme_cookie')
+    return theme or 'slate'
 
 
 @app.template_filter('bootstrap_status')
@@ -39,6 +43,22 @@ def time_or_date(timestamp):
     return date_part
 
 
+@app.template_filter('dt')
+def _jinja2_filter_datetime(date_, fmt=None):
+    if fmt:
+        return date_.strftime(fmt)
+    else:
+        return date_.strftime('%Y-%m-%d')
+
+
+@app.template_filter('tm')
+def _jinja2_filter_datetime(datetime_, fmt=None):
+    if fmt:
+        return datetime_.strftime(fmt)
+    else:
+        return datetime_.strftime('%H:%M:%S')
+
+
 @app.route("/dash", methods=['GET'])
 def dashboard():
     which = request.args.get('which', 'failing')
@@ -49,9 +69,15 @@ def dashboard():
         config['server'] + '/go/cctray.xml',
         **kwargs).data
     project = parse_cctray.Projects(xml)
-    groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
-    pipelines = project.select(which, groups=groups, group_map=group_of_pipeline)
-    return render_template('index.html', pipelines=pipelines, cols=config['columns'])
+    groups = request.cookies.get(
+        'checked_pipeline_groups_cookie', '').split(',')
+    pipelines = project.select(
+        which, groups=groups, group_map=group_of_pipeline)
+    return render_template('index.html',
+                           pipelines=pipelines,
+                           theme=get_bootstrap_theme(request),
+                           cols=config['columns'],
+                           now=datetime.now())
 
 
 @app.before_first_request
@@ -82,18 +108,41 @@ def select():
     # all_pipeline_groups is a list of
     # [ 'name', checked?, [piplines names...] ]
 
-    blob = ''
     if request.method == 'POST':
         checked_pipeline_groups = list(request.form)
-        return redirect("/", code=302)
+        response = redirect("/dash", code=302)
+        response.set_cookie('checked_pipeline_groups_cookie',
+                            value=",".join(checked_pipeline_groups))
     else:
-        checked_pipeline_groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
-    for i, pipeline_group in enumerate(all_pipeline_groups):
-        if pipeline_group[0] in checked_pipeline_groups:
-            all_pipeline_groups[i][1] = 'checked'
-    template = render_template('select.html', blob=blob, pipelinegroups=all_pipeline_groups)
-    response = make_response(template)
-    response.set_cookie('checked_pipeline_groups_cookie', value=",".join(checked_pipeline_groups))
+        checked_pipeline_groups = request.cookies.get(
+            'checked_pipeline_groups_cookie', '').split(',')
+        for i, pipeline_group in enumerate(all_pipeline_groups):
+            if pipeline_group[0] in checked_pipeline_groups:
+                all_pipeline_groups[i][1] = 'checked'
+        template = render_template('select.html',
+                                   pipelinegroups=all_pipeline_groups,
+                                   now=datetime.now(),
+                                   theme=get_bootstrap_theme(request))
+        response = make_response(template)
+    return response
+
+
+@app.route("/dash/select_theme", methods=['GET', 'POST'])
+def select_theme():
+    all_pipeline_groups = get_all_pipeline_groups()
+    # all_pipeline_groups is a list of
+    # [ 'name', checked?, [piplines names...] ]
+
+    if request.method == 'POST':
+        theme = request.form.get('theme_name')
+        response = redirect("/dash/select_theme", code=302)
+        response.set_cookie('theme_cookie',
+                            value=theme or get_bootstrap_theme(request))
+    else:
+        template = render_template('select_theme.html',
+                                   now=datetime.now(),
+                                   theme=get_bootstrap_theme(request))
+        response = make_response(template)
     return response
 
 
@@ -103,7 +152,8 @@ def parse_args():
     parser.add_argument('-u', '--user', help='go server user name')
     parser.add_argument('-p', '--passwd', help='go server password')
     parser.add_argument('-d', '--debug', action='store_true')
-    parser.add_argument('-c', '--columns', type=int, choices=[1, 2, 3, 4], default=2, help="# columns in pipeline list")
+    parser.add_argument('-c', '--columns', type=int, choices=[1, 2, 3, 4],
+                        default=2, help="# columns in pipeline list")
     pargs = parser.parse_args()
     config.update(vars(pargs))
 

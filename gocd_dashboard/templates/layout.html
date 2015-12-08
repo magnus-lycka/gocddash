@@ -9,7 +9,7 @@
           content="Dashboard for Thoughtworks Go Continuous Delivery, Go.CD, CoCD">
     <meta name="author" content="magnus@thinkware.se">
     <title>Go.CD Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/slate/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{ theme }}/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -43,8 +43,14 @@
                 <li><a class="btn" role="button" data-toggle="tooltip" data-placement="bottom"
                        title="Select which pipeline groups to monitor"
                        href="/dash/select">Select Pipeline-Groups</a></li>
+                <li><a class="btn" role="button" data-toggle="tooltip" data-placement="bottom"
+                       title="Select which bootstrap theme to use."
+                       href="/dash/select_theme">Select Theme</a></li>
             </ul>
-
+            <ul class="nav navbar-nav navbar-right">
+                <li>Last refresh:<br>{{ now | tm }}</li>
+                <li><br><span id="seconds">0</span> seconds</li>
+            </ul>
         </div><!--/.navbar-collapse -->
     </div>
 </nav>
@@ -62,6 +68,13 @@
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
 });
+</script>
+
+<script>
+var sec = 0;
+setInterval( function(){
+    $("#seconds").html(++sec);
+}, 1000);
 </script>
 
 {% block scripts %}{% endblock %}

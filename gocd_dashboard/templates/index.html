@@ -54,7 +54,6 @@
 </div>
 {% endblock %}
 
-
 {% block scripts %}
 
 <!-- Refresh every minute -->
@@ -67,7 +66,6 @@
     $("#collapse{{ loop.index }}").on('shown.bs.collapse', function () {
        $("#glyph{{ loop.index }}").removeClass("glyphicon-plus").addClass("glyphicon-minus");
     });
-
     $("#collapse{{ loop.index }}").on('hidden.bs.collapse', function () {
        $("#glyph{{ loop.index }}").removeClass("glyphicon-minus").addClass("glyphicon-plus");
     });

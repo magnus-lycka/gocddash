@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+  <form class="themeform" role="form" action="" method="post">
+    {% for theme_name in ['cerulean', 'cosmo', 'cyborg', 'darkly', 'flatly', 'journal', 'lumen', 'paper', 'readable', 'sandstone', 'simplex', 'slate', 'spacelab', 'superhero', 'united', 'yeti'] %}
+    <label class="radio-inline">
+      <input type="radio" name="theme_name" id="radio_{{theme_name}}"
+             {% if theme_name == theme %}checked{% endif %}
+             value="{{theme_name}}">{{theme_name}}
+    </label><br>
+    {% endfor %}
+    <br>
+    <input type="submit" class="btn btn-default" value="Select theme">
+  </form>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

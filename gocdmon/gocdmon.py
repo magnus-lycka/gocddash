@@ -10,6 +10,7 @@ from jobqueue import SAMPLES_MARKER
 app = Flask(__name__)
 env = Environment(loader=FileSystemLoader('templates'))
 
+
 class JobStateChanges(object):
     def __init__(self, dbpath):
         self.millis_two_weeks_ago = 1000 * (time.time() - 14 * 24 * 60 * 60)
@@ -39,7 +40,7 @@ class JobStateChanges(object):
         states = "Scheduled Assigned Preparing Building Completing Completed".split()
         order = []
         for i, start in enumerate(states[:-1]):
-            for stop in states[i+1:]:
+            for stop in states[i + 1:]:
                 order.append("{} => {}".format(start, stop))
         for key in order:
             for period in result:
@@ -112,11 +113,13 @@ class JobQData(object):
             # Assume string
             return ts[:13]
 
+
 pages = [
     ('/', 'Index'),
     ('/jobqhist', 'Job Queue History'),
     ('/phasetime', 'Time in Job Phases'),
 ]
+
 
 @app.route('/jobqhist')
 def jobqhist():
