@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response, redirect
+from flask import Flask, render_template, request, make_response, redirect, url_for
 import cctray_source
 import parse_cctray
 import getpass
@@ -7,14 +7,14 @@ from collections import defaultdict
 import json
 from datetime import date, datetime
 
-config = defaultdict(str)
 group_of_pipeline = defaultdict(str)
 app = Flask(__name__)
+app.config.from_pyfile('application.cfg', silent=False)
 
 
 def get_bootstrap_theme(request):
     theme = request.cookies.get('theme_cookie')
-    return theme or 'slate'
+    return theme or 'cyborg'
 
 
 @app.template_filter('bootstrap_status')
@@ -59,14 +59,14 @@ def _jinja2_filter_datetime(datetime_, fmt=None):
         return datetime_.strftime('%H:%M:%S')
 
 
-@app.route("/dash", methods=['GET'])
+@app.route("/", methods=['GET'])
 def dashboard():
     which = request.args.get('which', 'failing')
     kwargs = {}
-    if config['user']:
-        kwargs['auth'] = (config['user'], config['passwd'])
+    if 'GO_SERVER_USER' in app.config:
+        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
     xml = cctray_source.get_cctray_source(
-        config['server'] + '/go/cctray.xml',
+        app.config['GO_SERVER_URL'] + '/go/cctray.xml',
         **kwargs).data
     project = parse_cctray.Projects(xml)
     groups = request.cookies.get(
@@ -76,7 +76,7 @@ def dashboard():
     return render_template('index.html',
                            pipelines=pipelines,
                            theme=get_bootstrap_theme(request),
-                           cols=config['columns'],
+                           cols=app.config['PIPELINE_COLUMNS'],
                            now=datetime.now())
 
 
@@ -87,10 +87,10 @@ def setup():
 
 def get_all_pipeline_groups():
     kwargs = {}
-    if config['user']:
-        kwargs['auth'] = (config['user'], config['passwd'])
+    if 'GO_SERVER_USER' in app.config:
+        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
     json_text = cctray_source.get_cctray_source(
-        config['server'] + '/go/api/config/pipeline_groups',
+        app.config['GO_SERVER_URL'] + '/go/api/config/pipeline_groups',
         **kwargs).data
     full_json = json.loads(json_text)
     pipeline_groups = []
@@ -102,7 +102,7 @@ def get_all_pipeline_groups():
     return pipeline_groups
 
 
-@app.route("/dash/select", methods=['GET', 'POST'])
+@app.route("/select", methods=['GET', 'POST'])
 def select():
     all_pipeline_groups = get_all_pipeline_groups()
     # all_pipeline_groups is a list of
@@ -110,7 +110,7 @@ def select():
 
     if request.method == 'POST':
         checked_pipeline_groups = list(request.form)
-        response = redirect("/dash", code=302)
+        response = redirect(url_for('dashboard'), code=302)
         response.set_cookie('checked_pipeline_groups_cookie',
                             value=",".join(checked_pipeline_groups))
     else:
@@ -127,7 +127,7 @@ def select():
     return response
 
 
-@app.route("/dash/select_theme", methods=['GET', 'POST'])
+@app.route("/select_theme", methods=['GET', 'POST'])
 def select_theme():
     all_pipeline_groups = get_all_pipeline_groups()
     # all_pipeline_groups is a list of
@@ -135,7 +135,7 @@ def select_theme():
 
     if request.method == 'POST':
         theme = request.form.get('theme_name')
-        response = redirect("/dash/select_theme", code=302)
+        response = redirect(url_for('select_theme'), code=302)
         response.set_cookie('theme_cookie',
                             value=theme or get_bootstrap_theme(request))
     else:
@@ -148,22 +148,23 @@ def select_theme():
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--server', help='go server url')
-    parser.add_argument('-u', '--user', help='go server user name')
-    parser.add_argument('-p', '--passwd', help='go server password')
+    parser.add_argument('-s', '--go-server-url', help='go server url')
+    parser.add_argument('-u', '--go-server-user', help='go server user name')
+    parser.add_argument('-p', '--go-server-passwd', help='go server password')
     parser.add_argument('-d', '--debug', action='store_true')
-    parser.add_argument('-c', '--columns', type=int, choices=[1, 2, 3, 4],
-                        default=2, help="# columns in pipeline list")
+    parser.add_argument('-c', '--pipeline-columns', type=int, choices=[1, 2, 3, 4],
+                        default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     pargs = parser.parse_args()
-    config.update(vars(pargs))
+    pargs_dict = vars(pargs)
+    app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict})
 
 
 if __name__ == "__main__":
     parse_args()
-    if not config['server']:
-        config['server'] = raw_input('go-server url: ')
-    if not config['user']:
-        config['user'] = raw_input('user: ')
-    if not config['passwd']:
-        config['passwd'] = getpass.getpass()
-    app.run(debug=config['debug'])
+    if 'GO_SERVER_URL' not in app.config:
+        app.config['GO_SERVER_URL'] = raw_input('go-server url: ')
+    if 'GO_SERVER_USER' not in app.config:
+        app.config['GO_SERVER_USER'] = raw_input('go-user: ')
+    if 'GO_SERVER_PASSWD' not in app.config:
+        app.config['GO_SERVER_PASSWD'] = getpass.getpass()
+    app.run()

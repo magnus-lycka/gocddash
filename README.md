@@ -55,3 +55,20 @@ Some issues come from details in the cctray.xml file:
 - For a build in progress, the timestamp is completion time for previous build. :-(
 - Jobs aren't shown at all if they e.g. are to run on all machines.
 
+## Deployment
+
+Gocd-dashoboard can be deployed with uWSGI, e.g. behind nginx.
+
+To try out that thing work with uWSGI, you can initially run it like this:
+
+cd to the directory where you have your app.py, and run:
+
+    uwsgi --plugin python --http-socket 127.0.0.1:7777 -H <path to virtual env> -w app:app
+
+Then you can point your browser to http://127.0.0.1:7777/dash and verify that
+everything works as expected. When this works, you need to make sure that
+everything also works with the uWSGI service and nginx.
+
+Both these applications have similar setup strategies, with config under
+/etc/uwsgi and /etc/nginx.
+
