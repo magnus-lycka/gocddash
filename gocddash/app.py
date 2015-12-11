@@ -36,7 +36,7 @@ def dashboard():
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
     return render_template('index.html',
-                           go_server_url = app.config['GO_SERVER_URL'],
+                           go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
                            pipelines=pipelines,
                            theme=get_bootstrap_theme(request),
                            cols=app.config['PIPELINE_COLUMNS'],
@@ -62,7 +62,7 @@ def select():
             if pipeline_group[0] in checked_pipeline_groups:
                 all_pipeline_groups[i][1] = 'checked'
         template = render_template('select.html',
-                                   go_server_url = app.config['GO_SERVER_URL'],
+                                   go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
                                    pipelinegroups=all_pipeline_groups,
                                    now=datetime.now(),
                                    theme=get_bootstrap_theme(request))
@@ -72,10 +72,6 @@ def select():
 
 @gocddash.route("/select_theme/", methods=['GET', 'POST'])
 def select_theme():
-    all_pipeline_groups = get_all_pipeline_groups()
-    # all_pipeline_groups is a list of
-    # [ 'name', checked?, [piplines names...] ]
-
     if request.method == 'POST':
         theme = request.form.get('theme_name')
         response = redirect(url_for('gocddash.select_theme'), code=302)
@@ -83,7 +79,7 @@ def select_theme():
                             value=theme or get_bootstrap_theme(request))
     else:
         template = render_template('select_theme.html',
-                                   go_server_url = app.config['GO_SERVER_URL'],
+                                   go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
                                    now=datetime.now(),
                                    theme=get_bootstrap_theme(request))
         response = make_response(template)
