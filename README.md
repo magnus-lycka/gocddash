@@ -39,11 +39,7 @@ it to your liking.
 
 ## Known shortcomings / bugs
 
-- You need to press a save button after selecting/deselecting
-  pipeline-groups, and then go back to the main page.
-- The "Select all groups" button only works once. (Then you need to save etc.)
 - Uncollapsed state isn't maintained on page reload
-- No change of glypgh on changing collapsed state
 - Pipeline groups currently selected with session cookie
 - Missing installation & operation instructions and routines
 - The stuff in the gocdmon subdirectory is not integrated yet
