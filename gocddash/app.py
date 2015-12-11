@@ -36,6 +36,7 @@ def dashboard():
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
     return render_template('index.html',
+                           go_server_url = app.config['GO_SERVER_URL'],
                            pipelines=pipelines,
                            theme=get_bootstrap_theme(request),
                            cols=app.config['PIPELINE_COLUMNS'],
@@ -61,6 +62,7 @@ def select():
             if pipeline_group[0] in checked_pipeline_groups:
                 all_pipeline_groups[i][1] = 'checked'
         template = render_template('select.html',
+                                   go_server_url = app.config['GO_SERVER_URL'],
                                    pipelinegroups=all_pipeline_groups,
                                    now=datetime.now(),
                                    theme=get_bootstrap_theme(request))
@@ -81,6 +83,7 @@ def select_theme():
                             value=theme or get_bootstrap_theme(request))
     else:
         template = render_template('select_theme.html',
+                                   go_server_url = app.config['GO_SERVER_URL'],
                                    now=datetime.now(),
                                    theme=get_bootstrap_theme(request))
         response = make_response(template)
