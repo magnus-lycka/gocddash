@@ -1,7 +1,7 @@
-# gocd-dashboard
+# gocddash
 Status dashboard for Go.CD Continuous Delivery Server
 
-Gocd-dashboard provides an overview of the builds in your
+Gocddash provides an overview of the builds in your
 Thoughtworks Go Continuous Delivery server.
 
 You select which pipeline groups you want to monitor,
@@ -17,10 +17,7 @@ stages and jobs, as well as the list of breakers.
 There are also links to the current versions of pipelines,
 stages and jobs at the go-server.
 
-Gocd-dashboard uses the cctray.xml file from the go-server.
-
-Since gocd-dashboard uses bootstrap, you can easily pimp
-it to your liking.
+Gocddash uses the cctray.xml file from the go-server.
 
 ## Usage
 
@@ -53,7 +50,7 @@ Some issues come from details in the cctray.xml file:
 
 ## Deployment
 
-Gocd-dashoboard can be deployed with uWSGI, e.g. behind nginx.
+Gocddash can be deployed with uWSGI, e.g. behind nginx.
 
 To try out that thing work with uWSGI, you can initially run it like this:
 
@@ -67,4 +64,3 @@ everything also works with the uWSGI service and nginx.
 
 Both these applications have similar setup strategies, with config under
 /etc/uwsgi and /etc/nginx.
-
