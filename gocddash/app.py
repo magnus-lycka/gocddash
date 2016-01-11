@@ -21,6 +21,12 @@ def get_bootstrap_theme(request):
     return theme or 'cyborg'
 
 
+def get_footer():
+    try:
+        return open('footer.txt').read()
+    except IOError:
+        return '???'
+
 @gocddash.route("/", methods=['GET'])
 def dashboard():
     which = request.args.get('which', 'failing')
@@ -40,7 +46,8 @@ def dashboard():
                            pipelines=pipelines,
                            theme=get_bootstrap_theme(request),
                            cols=app.config['PIPELINE_COLUMNS'],
-                           now=datetime.now())
+                           now=datetime.now(),
+                           footer = get_footer())
 
 
 
@@ -65,7 +72,8 @@ def select():
                                    go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
                                    pipelinegroups=all_pipeline_groups,
                                    now=datetime.now(),
-                                   theme=get_bootstrap_theme(request))
+                                   theme=get_bootstrap_theme(request),
+                                   footer = get_footer())
         response = make_response(template)
     return response
 
@@ -81,7 +89,8 @@ def select_theme():
         template = render_template('select_theme.html',
                                    go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
                                    now=datetime.now(),
-                                   theme=get_bootstrap_theme(request))
+                                   theme=get_bootstrap_theme(request),
+                                   footer = get_footer())
         response = make_response(template)
     return response
 
