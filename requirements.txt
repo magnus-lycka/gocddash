@@ -1,4 +1,2 @@
 Flask>=0.10.1
-#Flask-Bootstrap>=3.3.5.7
-#flask-nav>=0.5
 requests>=2.8.1
