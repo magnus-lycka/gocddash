@@ -7,25 +7,25 @@ import datetime
 
 
 def fetch_agents():
-    GO_SERVER = os.environ.get('GO_SERVER', 'http://localhost:8153')
-    GO_USER = os.environ.get('GO_USER')
-    GO_PASSWD = os.environ.get('GO_PASSWD')
+    go_server = os.environ.get('GO_SERVER', 'http://localhost:8153')
+    go_user = os.environ.get('GO_USER')
+    go_passwd = os.environ.get('GO_PASSWD')
     kwargs = {}
-    if GO_USER:
-        kwargs['auth'] = (GO_USER, GO_PASSWD)
-    r = requests.get(GO_SERVER + '/go/api/agents', **kwargs)
+    if go_user:
+        kwargs['auth'] = (go_user, go_passwd)
+    r = requests.get(go_server + '/go/api/agents', **kwargs)
     assert r.status_code == 200, r
     return json.loads(r.content)
 
 
 def fetch_agent_jobs(agent, offset):
-    GO_SERVER = os.environ.get('GO_SERVER', 'http://localhost:8153')
-    GO_USER = os.environ.get('GO_USER')
-    GO_PASSWD = os.environ.get('GO_PASSWD')
+    go_server = os.environ.get('GO_SERVER', 'http://localhost:8153')
+    go_user = os.environ.get('GO_USER')
+    go_passwd = os.environ.get('GO_PASSWD')
     kwargs = {}
-    if GO_USER:
-        kwargs['auth'] = (GO_USER, GO_PASSWD)
-    url = GO_SERVER + '/go/api/agents/%s/job_run_history/%i' % (agent, offset)
+    if go_user:
+        kwargs['auth'] = (go_user, go_passwd)
+    url = go_server + '/go/api/agents/%s/job_run_history/%i' % (agent, offset)
     r = requests.get(url, **kwargs)
     assert r.status_code == 200, r
     return json.loads(r.content)

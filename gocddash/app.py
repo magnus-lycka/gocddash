@@ -16,7 +16,7 @@ group_of_pipeline = defaultdict(str)
 gocddash = Blueprint('gocddash', __name__)
 
 
-def get_bootstrap_theme(request):
+def get_bootstrap_theme():
     theme = request.cookies.get('theme_cookie')
     return theme or 'cyborg'
 
@@ -26,6 +26,7 @@ def get_footer():
         return open('footer.txt').read()
     except IOError:
         return '???'
+
 
 @gocddash.route("/", methods=['GET'])
 def dashboard():
@@ -42,20 +43,19 @@ def dashboard():
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
     return render_template('index.html',
-                           go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
+                           go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                            pipelines=pipelines,
-                           theme=get_bootstrap_theme(request),
+                           theme=get_bootstrap_theme(),
                            cols=app.config['PIPELINE_COLUMNS'],
                            now=datetime.now(),
-                           footer = get_footer())
-
+                           footer=get_footer())
 
 
 @gocddash.route("/select/", methods=['GET', 'POST'])
 def select():
     all_pipeline_groups = get_all_pipeline_groups()
     # all_pipeline_groups is a list of
-    # [ 'name', checked?, [piplines names...] ]
+    # [ 'name', checked?, [pipelines names...] ]
 
     if request.method == 'POST':
         checked_pipeline_groups = list(request.form)
@@ -69,11 +69,11 @@ def select():
             if pipeline_group[0] in checked_pipeline_groups:
                 all_pipeline_groups[i][1] = 'checked'
         template = render_template('select.html',
-                                   go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
+                                   go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                                    pipelinegroups=all_pipeline_groups,
                                    now=datetime.now(),
-                                   theme=get_bootstrap_theme(request),
-                                   footer = get_footer())
+                                   theme=get_bootstrap_theme(),
+                                   footer=get_footer())
         response = make_response(template)
     return response
 
@@ -84,13 +84,13 @@ def select_theme():
         theme = request.form.get('theme_name')
         response = redirect(url_for('gocddash.select_theme'), code=302)
         response.set_cookie('theme_cookie',
-                            value=theme or get_bootstrap_theme(request))
+                            value=theme or get_bootstrap_theme())
     else:
         template = render_template('select_theme.html',
-                                   go_server_url = app.config['PUBLIC_GO_SERVER_URL'],
+                                   go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                                    now=datetime.now(),
-                                   theme=get_bootstrap_theme(request),
-                                   footer = get_footer())
+                                   theme=get_bootstrap_theme(),
+                                   footer=get_footer())
         response = make_response(template)
     return response
 
@@ -142,7 +142,7 @@ def _jinja2_filter_datetime(datetime_, fmt=None):
         return datetime_.strftime('%H:%M:%S')
 
 
-@app.before_first_request
+@app.before_request
 def setup():
     get_all_pipeline_groups()
 
@@ -162,7 +162,6 @@ def get_all_pipeline_groups():
             pipeline_groups[-1][-1].append(pipeline['name'])
             group_of_pipeline[pipeline['name']] = pipeline_group['name']
     return pipeline_groups
-
 
 
 def parse_args():
