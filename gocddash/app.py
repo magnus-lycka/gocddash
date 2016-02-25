@@ -44,13 +44,13 @@ def dashboard():
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
     for pipeline in pipelines:
-        pipeline_name = pipeline['name']
+        pipeline_name = pipeline.name
         message, whom = pipeline_is_paused(pipeline_name)
         if message:
-            pipeline['status'] = 'Paused'
-            pipeline['messages']['PausedCause'].add(message)
+            pipeline.status = 'Paused'
+            pipeline.messages['PausedCause'].add(message)
         if whom:
-            pipeline['messages']['PausedBy'].add(message)
+            pipeline.messages['PausedBy'].add(message)
 
     return render_template('index.html',
                            go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
