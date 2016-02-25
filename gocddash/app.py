@@ -3,6 +3,7 @@ import cctray_source
 import parse_cctray
 import getpass
 import argparse
+import requests
 from collections import defaultdict
 import json
 from datetime import date, datetime
@@ -42,6 +43,15 @@ def dashboard():
         'checked_pipeline_groups_cookie', '').split(',')
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
+    for pipeline in pipelines:
+        pipeline_name = pipeline['name']
+        message, whom = pipeline_is_paused(pipeline_name)
+        if message:
+            pipeline['status'] = 'Paused'
+            pipeline['messages']['PausedCause'].add(message)
+        if whom:
+            pipeline['messages']['PausedBy'].add(message)
+
     return render_template('index.html',
                            go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                            pipelines=pipelines,
@@ -107,6 +117,7 @@ def bootstrap_status(cctray_status):
         'Building after Failure': 'warning',
         'Building after Success': 'info',
         'Success': 'success',
+        'Paused': 'default',
     }
     return mapping.get(cctray_status, 'default')
 
@@ -145,6 +156,22 @@ def _jinja2_filter_datetime(datetime_, fmt=None):
 @app.before_request
 def setup():
     get_all_pipeline_groups()
+
+
+def pipeline_is_paused(pipeline_name):
+    kwargs = {}
+    if 'GO_SERVER_USER' in app.config:
+        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
+        url = '/go/api/pipelines/{}/status'.format(pipeline_name)
+        response = requests.get(url, **kwargs)
+        if response.status_code == 200:
+            status = json.loads(response.text.replace("\\'", ""))
+            if status["paused"]:
+                return status.get("pausedCause") or 'Paused', status.get("pausedBy")
+        else:
+            print response
+            raise ValueError(response.status_code)
+    return None, None
 
 
 def get_all_pipeline_groups():
