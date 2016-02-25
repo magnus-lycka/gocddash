@@ -162,7 +162,7 @@ def pipeline_is_paused(pipeline_name):
     kwargs = {}
     if 'GO_SERVER_USER' in app.config:
         kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
-        url = '/go/api/pipelines/{}/status'.format(pipeline_name)
+        url = app.config['GO_SERVER_URL'] + '/go/api/pipelines/{}/status'.format(pipeline_name)
         response = requests.get(url, **kwargs)
         if response.status_code == 200:
             status = json.loads(response.text.replace("\\'", ""))
