@@ -19,6 +19,28 @@ stages and jobs at the go-server.
 
 Gocddash uses the cctray.xml file from the go-server.
 
+## Why gocddash? Why not buildreactor?
+
+We wrote gocddash to have clear information radiators regarding
+GoCD builds on large screens in developer team rooms.
+
+Since these large screens were Smart TVs with builtin web
+browsers (which were not Google Chrome) we wanted something
+running as a web service rather than a Chrome plugin.
+
+Gocddash is different than buildreactor in several ways:
+
+ - It only works with GoCD. No Jenkins, Bamboo or Travis etc.
+ - No pop-up alerts, just the dashboard.
+ - It understands the difference between Pipelines, Stages and Jobs, and show them in the correct hierarchy.
+ - It understands Pipeline Groups, and lets you select the groups you are interested in seeing, rather than the mess of maybe hundreds of stages and jobs.
+ - It sorts Pipelines by build time and shows the most recent on the top.
+ - You can select if you only want to see broken Pipelines, brooken + currently building, or all Pipelines.
+ - It understands paused Pipelines and greys them out.
+ - It shows you the Pipeline counters, the Stage counters, and a timestamp for the latest build.
+ - It needs to be installed and run on some server...
+ - It has plenty of themes.
+
 ## Usage
 
     usage: app.py [-h] [-s SERVER] [-u USER] [-p PASSWD] [-d] [-c {1,2,3,4}]
