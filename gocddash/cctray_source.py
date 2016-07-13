@@ -4,7 +4,7 @@ import requests
 class CCTrayFile(object):
     def __init__(self, file_name, **kwargs):
         self.cctray = open(file_name + "/cctray.xml").read()
-        self.pipelinegroups = open(file_name + "/pipeline_groups.json").read()
+        self.pipelinegroups = []
 
 
 class CCTrayServer(object):
