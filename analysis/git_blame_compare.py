@@ -69,10 +69,6 @@ def get_git_comparison(pipeline_name, current, comparison):
     return final_list
 
 
-def findItem(theList, item):
-    return [(ind, theList[ind].index(item)) for ind in range(len(theList)) if item in theList[ind]]
-
-
 def put_current_pipeline_at_top(git_blame_list, pipeline_name):
     sorted_list = sorted(git_blame_list, key=lambda x: pipeline_name not in x[0])
     return sorted_list
