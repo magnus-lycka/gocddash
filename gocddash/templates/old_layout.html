@@ -1,0 +1,42 @@
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button"
+                    class="navbar-toggle collapsed"
+                    data-toggle="collapse"
+                    data-target="#navbar"
+                    aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ go_server_url }}">{{ go_server_url }}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="btn btn-warning" role="button" data-toggle="tooltip" data-placement="bottom"
+                       title="Show only failing builds"
+                       href="{{ url_for('gocddash.dashboard') }}?which=failing">Failing</a></li>
+                <li><a class="btn btn-info" role="button" data-toggle="tooltip" data-placement="bottom"
+                       title="Show failing and building" href="{{ url_for('gocddash.dashboard') }}?which=progress">Progress</a>
+                </li>
+                <li><a class="btn btn-success" role="button" data-toggle="tooltip" data-placement="bottom"
+                       title="Show all builds" href="{{ url_for('gocddash.dashboard') }}?which=all">All</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li><a class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom"
+                       title="Select which pipeline groups to monitor"
+                       href="{{ url_for('gocddash.select') }}">Select Pipeline-Groups</a></li>
+                <li><a class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom"
+                       title="Select which bootstrap theme to use."
+                       href="{{ url_for('gocddash.select_theme') }}">Select Theme</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>Last refresh:<br>{{ now | tm }}</li>
+                <li><br><span id="seconds">00</span> seconds</li>
+            </ul>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
