@@ -16,7 +16,7 @@ yoyo-migrations
 
 Start up a local database with docker:
 
-    docker run -p 15554:5432 -d dockerregistry.pagero.local/go-analysis-db:1.1.1-GO
+    docker run -p 15554:5432 -d go-analysis-db:1.1.1-GO
 
 Run the migration script
 
