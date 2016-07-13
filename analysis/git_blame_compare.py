@@ -63,8 +63,19 @@ def get_git_comparison(pipeline_name, current, comparison):
 
     final_list = extract_list_of_lists_from_html_table(git_sections)
 
-    return only_real_people(final_list)
+    final_list = only_real_people(final_list)
+    final_list = put_current_pipeline_at_top(final_list, pipeline_name)
 
+    return final_list
+
+
+def findItem(theList, item):
+    return [(ind, theList[ind].index(item)) for ind in range(len(theList)) if item in theList[ind]]
+
+
+def put_current_pipeline_at_top(git_blame_list, pipeline_name):
+    sorted_list = sorted(git_blame_list, key=lambda x: pipeline_name not in x[0])
+    return sorted_list
 
 def only_real_people(git_blame_list):
     return [item for item in git_blame_list if "go-agent" not in item[3]]
@@ -73,8 +84,8 @@ def only_real_people(git_blame_list):
 if __name__ == '__main__':
     pd.set_option("display.width", 600)
     pipeline_name = "po-characterize-tests"
-    current = "2029"
-    comparison = "2029"
+    current = "2052"
+    comparison = "2048"
     git_blame_list = get_git_comparison(pipeline_name, current, comparison)
     print(git_blame_list)
     for row in git_blame_list:
