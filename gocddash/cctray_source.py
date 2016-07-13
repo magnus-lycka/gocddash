@@ -2,18 +2,26 @@ import requests
 
 
 class CCTrayFile(object):
-    def __init__(self, fn, **kwargs):
-        self.data = open(fn).read()
+    def __init__(self, file_name, **kwargs):
+        self.cctray = open(file_name + "/cctray.xml").read()
+        self.pipelinegroups = open(file_name + "/pipeline_groups.json").read()
 
 
 class CCTrayServer(object):
     def __init__(self, url, **kwargs):
-        response = requests.get(url, **kwargs)
-        if response.status_code == 200:
-            self.data = response.content
-        else:
-            print response
-            raise ValueError(response.status_code)
+        self.url = url
+        self.auth = kwargs['auth']
+
+        def fetch_from_go(path):
+            response = requests.get(self.url + path, auth=self.auth)
+            if response.status_code == 200:
+                return response.content.decode("utf-8")
+            else:
+                print(response)
+                raise ValueError(response.status_code)
+
+        self.cctray = fetch_from_go('/go/cctray.xml')
+        self.pipelinegroups = fetch_from_go('/go/api/config/pipeline_groups')
 
 
 def get_cctray_source(source, **kwargs):

@@ -16,15 +16,19 @@ class Projects(object):
     def parse(self):
         for project in self.tree.findall('Project'):
             name_parts = [n.strip() for n in project.attrib['name'].split('::')]
-            project.pipeline_name = name_parts[0]
-            project.stage_name = name_parts[1]
+            project.set("pipeline_name", name_parts[0])
+            # project.pipeline_name = name_parts[0]  # Old python 2 code...
+            project.set("stage_name", name_parts[1])
+            # project.stage_name = name_parts[1]  # Python 2 etc...
             if len(name_parts) > 2:
-                project.job_name = name_parts[2]
+                project.set("job_name", name_parts[2])
+                # project.job_name = name_parts[2]
             else:
-                project.job_name = None
-            if project.pipeline_name not in self.pipelines:
-                self.pipelines[project.pipeline_name] = Pipeline()
-            self.pipelines[project.pipeline_name].add_facts(project)
+                project.set("job_name", None)
+                # project.job_name = None
+            if project.get("pipeline_name") not in self.pipelines:
+                self.pipelines[project.get("pipeline_name")] = Pipeline()
+            self.pipelines[project.get("pipeline_name")].add_facts(project)
 
     @staticmethod
     def all_which(entity):
@@ -69,14 +73,17 @@ class Pipeline(object):
         self.messages = defaultdict(set)
 
     def add_facts(self, project):
-        self.changed = max(self.changed, project.attrib['lastBuildTime'])
+        if self.changed:
+            self.changed = max(self.changed, project.attrib['lastBuildTime'])
+        else:
+            self.changed = project.attrib['lastBuildTime']
         if not self.name:
-            self.name = project.pipeline_name
+            self.name = project.get("pipeline_name")
             self.url = project.attrib['webUrl'].rsplit('/', 2)[0].replace('pipelines/', 'pipelines/value_stream_map/')
             self.label = self.url.split('/')[-1]
-        if project.stage_name not in [stage.name for stage in self.stages]:
+        if project.get("stage_name") not in [stage.name for stage in self.stages]:
             self.stages.append(Stage(project))
-        if project.job_name:
+        if project.get("job_name"):
             self.stages[-1].add_job(project)
         self.activity_set.add(project.attrib['activity'])
         self.last_build_set.add(project.attrib['lastBuildStatus'])
@@ -101,7 +108,7 @@ class Stage(Entity):
     def __init__(self, project):
         super(Stage, self).__init__(project)
         self.jobs = []
-        self.name = project.stage_name
+        self.name = project.get("stage_name")
         self.counter = self.url.split('/')[-1]
 
     def add_job(self, project):
@@ -111,4 +118,4 @@ class Stage(Entity):
 class Job(Entity):
     def __init__(self, project):
         super(Job, self).__init__(project)
-        self.name = project.job_name
+        self.name = project.get("job_name")

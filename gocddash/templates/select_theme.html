@@ -13,11 +13,25 @@
     <br>
     <input type="submit" class="btn btn-default" value="Select theme">
   </form>
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="boss-key" value="">
+      Management dashboard
+    </label>
+  </div>
 </div>
 
 
 {% endblock %}
 
 {% block scripts %}
-
+<script type="text/javascript">
+  var bossKey = $('#boss-key');
+  bossKey.change(function () {
+    window.localStorage.setItem("show-mgmt-bar", this.checked);
+    console.log(this.checked);
+  });
+  bossKey.prop('checked', window.localStorage.getItem("show-mgmt-bar") === "true");
+</script>
 {% endblock %}

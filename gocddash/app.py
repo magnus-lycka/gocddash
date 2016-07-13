@@ -1,12 +1,18 @@
-from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint
-import cctray_source
-import parse_cctray
-import getpass
 import argparse
-import requests
-from collections import defaultdict
+import getpass
 import json
+from collections import defaultdict
 from datetime import date, datetime
+
+import requests
+from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint
+
+from analysis.data_access import get_synced_pipelines
+from analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage
+from analysis.git_blame_compare import get_git_comparison
+from dash_board import failure_tip, pipeline_status
+from gocddash import cctray_source
+from gocddash import parse_cctray
 
 group_of_pipeline = defaultdict(str)
 
@@ -19,7 +25,7 @@ gocddash = Blueprint('gocddash', __name__)
 
 def get_bootstrap_theme():
     theme = request.cookies.get('theme_cookie')
-    return theme or 'cyborg'
+    return theme or 'paper'
 
 
 def get_footer():
@@ -32,13 +38,8 @@ def get_footer():
 @gocddash.route("/", methods=['GET'])
 def dashboard():
     which = request.args.get('which', 'failing')
-    kwargs = {}
-    if 'GO_SERVER_USER' in app.config:
-        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
-    xml = cctray_source.get_cctray_source(
-        app.config['GO_SERVER_URL'] + '/go/cctray.xml',
-        **kwargs).data
-    project = parse_cctray.Projects(xml)
+    project = get_cctray_status()
+    progress_bar_data = get_progress_bar_data(project)
     groups = request.cookies.get(
         'checked_pipeline_groups_cookie', '').split(',')
     pipelines = project.select(
@@ -52,13 +53,40 @@ def dashboard():
         if whom:
             pipeline.messages['PausedBy'].add(whom)
 
+    synced_pipelines = dict()
+    for name, max_counter in get_synced_pipelines():
+        synced_pipelines[name] = max_counter
+
     return render_template('index.html',
                            go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                            pipelines=pipelines,
                            theme=get_bootstrap_theme(),
                            cols=app.config['PIPELINE_COLUMNS'],
                            now=datetime.now(),
-                           footer=get_footer())
+                           footer=get_footer(),
+                           synced_pipelines=synced_pipelines,
+                           progress_bar_data=progress_bar_data)
+
+
+def get_progress_bar_data(project):
+    no_failing_pipelines = float(len(project.select("failing")))
+    no_progress_pipelines = float(len(project.select("progress")))
+    total_no_pipelines = float(len(project.select("all")))
+
+    success_percentage = (total_no_pipelines - no_progress_pipelines) / total_no_pipelines * 100
+    progress_percentage = (no_progress_pipelines - no_failing_pipelines) / total_no_pipelines * 100
+    failing_percentage = no_failing_pipelines / total_no_pipelines * 100
+
+    return [success_percentage, progress_percentage, failing_percentage]
+
+
+def get_cctray_status():
+    kwargs = {}
+    if 'GO_SERVER_USER' in app.config:
+        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
+    xml = cctray_source.get_cctray_source(app.config['GO_SERVER_URL'], **kwargs).cctray
+    project = parse_cctray.Projects(xml)
+    return project
 
 
 @gocddash.route("/select/", methods=['GET', 'POST'])
@@ -105,6 +133,53 @@ def select_theme():
     return response
 
 
+@gocddash.route("/insights/<pipelinename>", methods=['GET'])
+def insights(pipelinename):
+    current_stage = get_current_stage(pipelinename)
+    current_status = pipeline_status.create_stage_info(current_stage)
+    last_stage = get_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
+                                    current_stage.stage_index)
+    previous_status = pipeline_status.create_stage_info(last_stage)
+    latest_passing_stage = get_latest_passing_stage(pipelinename)
+
+    git_blame_data = get_git_comparison(pipelinename, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
+
+    rerun_link = "http://go.pagero.local/go/pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
+                                                                          current_stage.pipeline_counter,
+                                                                          current_stage.stage_name,
+                                                                          current_stage.stage_index)
+    log_link = "http://go.pagero.local/go/tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
+        current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
+        current_stage.stage_index, "defaultJob")
+
+    main_pipeline_link = "http://go.pagero.local/go/tab/pipeline/history/{}".format(current_stage.pipeline_name)
+
+    comparison_link = "http://go.pagero.local/go/compare/{}/{}/with/{}".format(current_stage.pipeline_name,
+                                                                               current_stage.pipeline_counter,
+                                                                               latest_passing_stage.pipeline_counter)
+
+    dash_status = get_cctray_status()
+
+    template = render_template(
+        'insights.html',  # Defined in the templates folder
+        go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
+        now=datetime.now(),
+        theme=get_bootstrap_theme(),
+        footer=get_footer(),
+        pipeline_status=current_status,
+        gitblame=git_blame_data,
+        rerun_link=rerun_link,
+        comparison_link=comparison_link,
+        live_info=dash_status.pipelines[pipelinename],
+        latest_passing_stage=latest_passing_stage,
+        previous_status=previous_status,
+        failure_tip=failure_tip.get_failure_tip(current_status, previous_status, latest_passing_stage.pipeline_counter),
+        log_link=log_link,
+        main_pipeline_link=main_pipeline_link
+    )
+    return make_response(template)
+
+
 app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
@@ -122,11 +197,43 @@ def bootstrap_status(cctray_status):
     return mapping.get(cctray_status, 'default')
 
 
+@app.template_filter('rerun_valid')
+def rerun_valid(rerun_status):
+    if 'Building' in rerun_status:
+        return "btn btn-lg btn-block"
+    return "btn btn-primary btn-lg btn-block"
+
+
 @app.template_filter('bootstrap_building')
 def bootstrap_building(cctray_status):
     if 'Building' in cctray_status:
         return "progress-bar-striped"
     return ""
+
+
+@app.template_filter('build_outcome')
+def build_outcome(build_passed):
+    return "text-success" if build_passed else "text-danger"
+
+
+@app.template_filter('failure_stage')
+def failure_stage(failure_stage):
+    return "text-danger" if failure_stage else "text-warning"
+
+
+@app.template_filter('building_panel_label')
+def building_panel_label(cctray_status):
+    if 'Building' in cctray_status:
+        return "Building in Go"
+    return "Latest in Go"
+
+
+@app.template_filter('pluralize')
+def pluralize(number, singular='', plural='s'):
+    if number == 1:
+        return singular
+    else:
+        return plural
 
 
 @app.template_filter('time_or_date')
@@ -169,7 +276,7 @@ def pipeline_is_paused(pipeline_name):
             if status["paused"]:
                 return status.get("pausedCause") or 'Paused', status.get("pausedBy")
         else:
-            print response
+            print(response)
             raise ValueError(response.status_code)
     return None, None
 
@@ -179,8 +286,8 @@ def get_all_pipeline_groups():
     if 'GO_SERVER_USER' in app.config:
         kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
     json_text = cctray_source.get_cctray_source(
-        app.config['GO_SERVER_URL'] + '/go/api/config/pipeline_groups',
-        **kwargs).data
+        app.config['GO_SERVER_URL'],
+        **kwargs).pipelinegroups
     full_json = json.loads(json_text)
     pipeline_groups = []
     for pipeline_group in full_json:
@@ -204,7 +311,7 @@ def parse_args():
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
 
 
-if __name__ == "__main__":
+def main():
     parse_args()
     if 'GO_SERVER_URL' not in app.config:
         app.config['GO_SERVER_URL'] = raw_input('go-server url: ')
@@ -213,3 +320,7 @@ if __name__ == "__main__":
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
     app.run()
+
+
+if __name__ == "__main__":
+    main()
