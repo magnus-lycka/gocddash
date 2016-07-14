@@ -1,0 +1,17 @@
+{
+  "username": "USERNAME",
+  "password": "PASSWORD",
+  "base_GO_URL": "http://localhost:8153/go/",
+  "pipelines": [
+    {
+      "name": "some-pipeline",
+      "begin_at": 2200,
+      "log_parser": "junit"
+    },
+    {
+      "name": "another-pipeline",
+      "begin_at": 900,
+      "log_parser": "junit"
+    }
+  ]
+}
