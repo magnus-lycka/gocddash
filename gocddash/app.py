@@ -142,7 +142,7 @@ def insights(pipelinename):
     previous_status = pipeline_status.create_stage_info(last_stage)
     latest_passing_stage = get_latest_passing_stage(pipelinename)
 
-    if (current_stage.is_success()):
+    if current_stage.is_success():
         git_blame_data = []
     else:
         git_blame_data = get_git_comparison(pipelinename, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)

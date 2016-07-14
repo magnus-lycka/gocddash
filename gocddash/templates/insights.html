@@ -115,7 +115,7 @@
         {% if not pipeline_status.is_success() %}
         <div class="col-md-12">
             <h4>Upstream git blame:
-                <small>({{ pipeline_status.pipeline_counter }} compared to {{ latest_passing_pipeline_counter }})
+                <small>({{ pipeline_status.stage.pipeline_counter }} compared to {{ latest_passing_stage.pipeline_counter }})
                 </small>
                 <a type="button" class="btn btn-info" style="float: right;" href="{{ comparison_link }}">Go to GO CD
                     comparison page</a>
