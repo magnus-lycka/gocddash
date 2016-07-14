@@ -1,5 +1,6 @@
 import codecs
 import json
+import os
 from pathlib import Path
 
 
@@ -14,6 +15,9 @@ def singleton(cls):
 @singleton
 class PipelineConfig:
     def __init__(self):
+        if not os.path.isfile(str(Path(__file__).parents[1]) + "/pipelines.json"):
+            print("Error: Missing pipelines.json file!")
+            quit()
         with codecs.open(str(Path(__file__).parents[1]) + "/pipelines.json", encoding="utf-8") as pipelines_json:
             self.pipelines = json.load(pipelines_json)
 

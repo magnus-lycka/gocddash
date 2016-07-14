@@ -18,7 +18,7 @@ class CCTrayServer(object):
                 return response.content.decode("utf-8")
             else:
                 print(response)
-                raise ValueError(response.status_code)
+                return None
 
         self.cctray = fetch_from_go('cctray.xml')
         self.pipelinegroups = fetch_from_go('api/config/pipeline_groups')

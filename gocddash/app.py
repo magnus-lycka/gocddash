@@ -1,11 +1,12 @@
 import argparse
 import getpass
 import json
+import os
 from collections import defaultdict
 from datetime import date, datetime
 
 import requests
-from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint
+from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
 from analysis.data_access import get_synced_pipelines
 from analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage
@@ -56,6 +57,7 @@ def dashboard():
     synced_pipelines = dict()
     for name, max_counter in get_synced_pipelines():
         synced_pipelines[name] = max_counter
+    # allt bra?
 
     return render_template('index.html',
                            go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
@@ -84,9 +86,28 @@ def get_cctray_status():
     kwargs = {}
     if 'GO_SERVER_USER' in app.config:
         kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
+
     xml = cctray_source.get_cctray_source(app.config['GO_SERVER_URL'], **kwargs).cctray
+    if xml is None:
+       abort(500)
+
     project = parse_cctray.Projects(xml)
     return project
+
+
+@gocddash.app_errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html', statuscode=e), 500
+
+
+@gocddash.app_errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html', statuscode=e,
+                           dashboard_link=url_for('gocddash.dashboard')), 404
+
+@gocddash.app_errorhandler(Exception)
+def all_exception_handler(error):
+    return render_template('500.html'), 500
 
 
 @gocddash.route("/select/", methods=['GET', 'POST'])
@@ -186,8 +207,7 @@ def insights(pipelinename):
 
 
 app = Flask(__name__)
-app.config.from_pyfile('application.cfg', silent=False)
-app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
+
 
 
 @app.template_filter('bootstrap_status')
@@ -282,7 +302,7 @@ def pipeline_is_paused(pipeline_name):
                 return status.get("pausedCause") or 'Paused', status.get("pausedBy")
         else:
             print(response)
-            raise ValueError(response.status_code)
+            abort(500)
     return None, None
 
 
@@ -293,6 +313,8 @@ def get_all_pipeline_groups():
     json_text = cctray_source.get_cctray_source(
         app.config['GO_SERVER_URL'],
         **kwargs).pipelinegroups
+    if json_text is None:
+        abort(500)
     full_json = json.loads(json_text)
     pipeline_groups = []
     for pipeline_group in full_json:
@@ -317,11 +339,16 @@ def parse_args():
 
 
 def main():
+    if not os.path.isfile(os.path.dirname(__file__) + '/application.cfg'):
+        print("Error: Missing application.cfg file in {}/".format(os.path.dirname((__file__))))
+        quit()
+    app.config.from_pyfile('application.cfg', silent=False)
+    app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
     parse_args()
     if 'GO_SERVER_URL' not in app.config:
-        app.config['GO_SERVER_URL'] = raw_input('go-server url: ')
+        app.config['GO_SERVER_URL'] = input('go-server url: ')
     if 'GO_SERVER_USER' not in app.config:
-        app.config['GO_SERVER_USER'] = raw_input('go-user: ')
+        app.config['GO_SERVER_USER'] = input('go-user: ')
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
     app.run()

@@ -70,8 +70,10 @@ def get_git_comparison(pipeline_name, current, comparison):
 
 
 def put_current_pipeline_at_top(git_blame_list, pipeline_name):
-    sorted_list = sorted(git_blame_list, key=lambda x: pipeline_name not in x[0])
+    sorted_list = sorted(git_blame_list, key=lambda x: pipeline_name not in x[
+        0])  # Not all pipeline names are the same as their git repo names. Possible fix is to do NLP similarity comparisons.
     return sorted_list
+
 
 def only_real_people(git_blame_list):
     return [item for item in git_blame_list if "go-agent" not in item[3]]
@@ -80,8 +82,8 @@ def only_real_people(git_blame_list):
 if __name__ == '__main__':
     pd.set_option("display.width", 600)
     pipeline_name = "po-characterize-tests"
-    current = "2052"
-    comparison = "2048"
+    current = "2050"
+    comparison = "2025"
     git_blame_list = get_git_comparison(pipeline_name, current, comparison)
     print(git_blame_list)
     for row in git_blame_list:
