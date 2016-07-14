@@ -9,6 +9,10 @@ Before you can run these tests you will need to install [TextTest](http://textte
 
 note this should be a valid path on your machine, and point to the location of this respository.
 
+Install other prerequisites:
+
+    sudo pip3 install docker
+
 Then start TextTest in this working directory with this command:
 
     texttest -a dash -d .
