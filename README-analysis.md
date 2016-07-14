@@ -8,7 +8,6 @@ With pip3 (apt-get install python3-pip), install the following packages:
 flask
 jinja2
 psycopg2
-htmlparser
 pandas
 yoyo-migrations
 
