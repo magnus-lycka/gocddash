@@ -56,8 +56,9 @@ Non-comprehensive list of indicators for flickering tests:
 * First test in suite fails
 
 
-Dashboard:
-----------
+Starting the Dashboard
+-----------------------
+
 Before it will work you need some configuration. Firstly tell it the url of your go server, by creating a file 'application.cfg' under 'gocddash'. There is a sample example file there named 'application.cfg.example' that you can copy.
 
 The synchronization of run data from Go is done through `sync_pipelines.py`. Synchronization of data will be done for pipelines specified in `pipelines.json`. Look at `sample_pipelines.json` to see what format this file should have.
