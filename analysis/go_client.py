@@ -52,4 +52,4 @@ def go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name):
 
 def go_request_comparison_html(pipeline_name, current, comparison):
     return requests.get(base_go_url + "compare/{}/{}/with/{}".format(pipeline_name, current, comparison),
-                 auth=auth).content
+                 auth=auth).content.decode('utf-8', 'ignore')

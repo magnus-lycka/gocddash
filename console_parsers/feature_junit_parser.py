@@ -3,7 +3,6 @@ from analysis.go_client import go_request_junit_report
 from console_parsers.html_utils import *
 
 
-
 class JunitConsoleParser:
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name):
         self.console_log = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name)

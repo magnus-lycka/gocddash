@@ -7,7 +7,7 @@ from console_parsers.html_utils import *
 
 def open_html(pipeline_name, current, comparison):
     html = go_request_comparison_html(pipeline_name, current, comparison)
-    soup = BeautifulSoup(html.decode('utf-8', 'ignore'), "html.parser")
+    soup = BeautifulSoup(html, "html.parser")
     return soup
 
 
