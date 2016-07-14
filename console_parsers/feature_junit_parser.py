@@ -24,7 +24,7 @@ class JunitConsoleParser:
 
         console_log = [item.strip() for item in console_log if item and item != ' ']
         console_log = ["Failure " + item.split("Failure")[1] if "Failure" in item else item for item in
-                       console_log]  # Don't know why IDEA is complaining here
+                       console_log]
         console_log = ["Error " + item.split("Error")[1] if "Error" in item else item for item in console_log]
         console_log = [(item.split(' ', 1)[0], item.split(' ', 1)[1]) for item in console_log]
         return console_log
@@ -34,10 +34,3 @@ class JunitConsoleParser:
         if failures:
             for error in failures:
                 insert_junit_failure_information(stage_id, error[0], error[1])
-
-
-if __name__ == '__main__':
-    testy = JunitConsoleParser("paysol-feature-tests", 2356, 1, "runTests")
-    print(testy.parse_info())
-    testy = JunitConsoleParser("po-webtest", 1872, 1, "defaultStage")
-    print(testy.parse_info())

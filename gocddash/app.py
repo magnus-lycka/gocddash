@@ -142,19 +142,24 @@ def insights(pipelinename):
     previous_status = pipeline_status.create_stage_info(last_stage)
     latest_passing_stage = get_latest_passing_stage(pipelinename)
 
-    git_blame_data = get_git_comparison(pipelinename, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
+    if (current_stage.is_success()):
+        git_blame_data = []
+    else:
+        git_blame_data = get_git_comparison(pipelinename, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
 
-    rerun_link = "http://go.pagero.local/go/pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
+    base_url = app.config['GO_SERVER_URL']
+
+    rerun_link = base_url + "/go/pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
                                                                           current_stage.pipeline_counter,
                                                                           current_stage.stage_name,
                                                                           current_stage.stage_index)
-    log_link = "http://go.pagero.local/go/tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
+    log_link = base_url + "/go/tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
         current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
         current_stage.stage_index, "defaultJob")
 
-    main_pipeline_link = "http://go.pagero.local/go/tab/pipeline/history/{}".format(current_stage.pipeline_name)
+    main_pipeline_link = base_url + "/go/tab/pipeline/history/{}".format(current_stage.pipeline_name)
 
-    comparison_link = "http://go.pagero.local/go/compare/{}/{}/with/{}".format(current_stage.pipeline_name,
+    comparison_link = base_url + "/go/compare/{}/{}/with/{}".format(current_stage.pipeline_name,
                                                                                current_stage.pipeline_counter,
                                                                                latest_passing_stage.pipeline_counter)
 
@@ -269,7 +274,7 @@ def pipeline_is_paused(pipeline_name):
     kwargs = {}
     if 'GO_SERVER_USER' in app.config:
         kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
-        url = app.config['GO_SERVER_URL'] + '/go/api/pipelines/{}/status'.format(pipeline_name)
+        url = app.config['GO_SERVER_URL'] + 'api/pipelines/{}/status'.format(pipeline_name)
         response = requests.get(url, **kwargs)
         if response.status_code == 200:
             status = json.loads(response.text.replace("\\'", ""))

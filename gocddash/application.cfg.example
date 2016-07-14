@@ -1,4 +1,4 @@
-GO_SERVER_URL = "http://localhost:8153"
+GO_SERVER_URL = "http://localhost:8153/go/"
 GO_SERVER_USER = "change to go user name"
 GO_SERVER_PASSWD = "change to go password"
 

@@ -20,8 +20,8 @@ class CCTrayServer(object):
                 print(response)
                 raise ValueError(response.status_code)
 
-        self.cctray = fetch_from_go('/go/cctray.xml')
-        self.pipelinegroups = fetch_from_go('/go/api/config/pipeline_groups')
+        self.cctray = fetch_from_go('cctray.xml')
+        self.pipelinegroups = fetch_from_go('api/config/pipeline_groups')
 
 
 def get_cctray_source(source, **kwargs):
