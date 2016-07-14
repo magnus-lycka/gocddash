@@ -30,7 +30,9 @@ def get_previous_stage(pipeline_name, pipeline_counter, current_stage_index):
 
 def get_current_stage(pipeline_name):
     result = fetch_current_stage(pipeline_name)
-    return Stage(*result)
+    if result:
+        return Stage(*result)
+    return None
 
 
 def get_latest_passing_stage(pipeline_name):

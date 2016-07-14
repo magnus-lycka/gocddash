@@ -11,7 +11,7 @@ note this should be a valid path on your machine, and point to the location of t
 
 Install other prerequisites:
 
-    sudo pip3 install docker
+    sudo pip3 install docker-py
 
 Then start TextTest in this working directory with this command:
 

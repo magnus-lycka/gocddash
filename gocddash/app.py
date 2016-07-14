@@ -97,7 +97,8 @@ def get_cctray_status():
 
 @gocddash.app_errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html', statuscode=e), 500
+    return render_template('500.html', statuscode=e,
+                           error_message=e.description), 500
 
 
 @gocddash.app_errorhandler(404)
@@ -105,9 +106,9 @@ def page_not_found(e):
     return render_template('404.html', statuscode=e,
                            dashboard_link=url_for('gocddash.dashboard')), 404
 
-@gocddash.app_errorhandler(Exception)
-def all_exception_handler(error):
-    return render_template('500.html'), 500
+# @gocddash.app_errorhandler(Exception)
+# def all_exception_handler(error):
+#     return render_template('500.html', statuscode=error), 500
 
 
 @gocddash.route("/select/", methods=['GET', 'POST'])
@@ -157,6 +158,8 @@ def select_theme():
 @gocddash.route("/insights/<pipelinename>", methods=['GET'])
 def insights(pipelinename):
     current_stage = get_current_stage(pipelinename)
+    if current_stage is None:
+        abort(500, "Database error. Have you tried syncing some pipelines using sync_pipelines.py?")
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
                                     current_stage.stage_index)
@@ -302,7 +305,7 @@ def pipeline_is_paused(pipeline_name):
                 return status.get("pausedCause") or 'Paused', status.get("pausedBy")
         else:
             print(response)
-            abort(500)
+            abort(500, "GO server is most likely down.")
     return None, None
 
 
@@ -314,7 +317,7 @@ def get_all_pipeline_groups():
         app.config['GO_SERVER_URL'],
         **kwargs).pipelinegroups
     if json_text is None:
-        abort(500)
+        abort(500, "GO server is most likely down.")
     full_json = json.loads(json_text)
     pipeline_groups = []
     for pipeline_group in full_json:
