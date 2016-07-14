@@ -149,17 +149,17 @@ def insights(pipelinename):
 
     base_url = app.config['GO_SERVER_URL']
 
-    rerun_link = base_url + "/go/pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
+    rerun_link = base_url + "pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
                                                                           current_stage.pipeline_counter,
                                                                           current_stage.stage_name,
                                                                           current_stage.stage_index)
-    log_link = base_url + "/go/tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
+    log_link = base_url + "tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
         current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
         current_stage.stage_index, "defaultJob")
 
-    main_pipeline_link = base_url + "/go/tab/pipeline/history/{}".format(current_stage.pipeline_name)
+    main_pipeline_link = base_url + "tab/pipeline/history/{}".format(current_stage.pipeline_name)
 
-    comparison_link = base_url + "/go/compare/{}/{}/with/{}".format(current_stage.pipeline_name,
+    comparison_link = base_url + "compare/{}/{}/with/{}".format(current_stage.pipeline_name,
                                                                                current_stage.pipeline_counter,
                                                                                latest_passing_stage.pipeline_counter)
 
