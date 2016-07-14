@@ -2,8 +2,6 @@
 
 import argparse
 
-from analysis import go_request, actions
-
 
 def main():
     """ Runs program and handles CLI interaction """
@@ -33,6 +31,9 @@ Sample usage: go_cli pull -p pipeline-name
     )
 
     pargs = parser.parse_args()
+
+
+    from analysis import go_request, actions
 
     if pargs.action == 'pull':
         if not pargs.pipeline:
