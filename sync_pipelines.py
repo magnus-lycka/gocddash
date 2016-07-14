@@ -28,7 +28,7 @@ def synchronize(pipelines):
         synced_pipeline_counter = data_access.get_highest_pipeline_count(pipeline)
         sync_begin_index = max(begin_sync_index, synced_pipeline_counter)
         max_in_go = get_max_pipeline_status(pipeline)[1]
-        number_of_pipelines = max_in_go - sync_begin_index
+        number_of_pipelines = max_in_go - sync_begin_index  # This becomes -1 when syncing a currently building re-run ?
         log("Will synchronize " + pipeline + " from " + str(sync_begin_index) + " onwards.")
 
         if sync_begin_index == max_in_go:

@@ -37,7 +37,7 @@ def get_max_pipeline_status(pipeline_name):
 
 
 def get_diff(from_counter, to_counter, size):
-    return ("Requested pipelines = " + str(size) + " (from " + str(from_counter) + " to " + str(to_counter) + ")")
+    return "Requested pipelines = " + str(size) + " (from " + str(from_counter) + " to " + str(to_counter) + ")"
 
 
 def pipeline_exists_in_go(pipeline_name):

@@ -50,10 +50,9 @@ class TestFailureTip(unittest.TestCase):
         ])
         pipeline_status.PipelineConfig().get_log_parser = MagicMock(return_value="characterize")
 
-
         this_stage = self.create_stage(None, False, "TEST")
         previous_stage = self.create_stage(this_stage, False, "TEST")
         current = pipeline_status.create_stage_info(this_stage)
         previous = pipeline_status.create_stage_info(previous_stage)
         result = failure_tip.get_failure_tip(current, previous, 0)
-        self.assertEqual(result, "Same failure indices as last test. Something something...")
+        self.assertEqual(result, "Same failure indices as last test. Unlikely flickering.")
