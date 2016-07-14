@@ -1,5 +1,5 @@
-GO Analysis
-===========
+Developing GOCD Dashboard
+=========================
 
 Before everything:
 
@@ -18,9 +18,11 @@ Start up a local database with docker:
 
     docker run -p 15554:5432 -d go-analysis-db:1.1.1-GO
 
+(The image will be put on docker hub shortly. It's just an empty postgresql 9.3 database with a default schema and user 'analysisappluser')
+
 Run the migration script
 
-    yoyo apply --database postgresql://analysisappluser:analysisappluser@localhost:15554/go-analysis
+    yoyo apply --database postgresql://analysisappluser:analysisappluser@localhost:15554/go-analysis -b
 
 Usage for the cli:
 
@@ -57,8 +59,11 @@ Non-comprehensive list of indicators for flickering tests:
 
 Dashboard:
 ----------
+Before it will work you need some configuration. Firstly tell it the url of your go server, by creating a file 'application.cfg' under 'gocddash'. There is a sample example file there named 'application.cfg.example' that you can copy.
+
+The synchronization of run data from Go is done through `sync_pipelines.py`. Synchronization of data will be done for pipelines specified in `pipelines.json`. Look at `sample_pipelines.json` to see what format this file should have.
+
 Run `main.py` - this will serve the dashboard.
-The synchronization of run data from Go is done through `sync_pipelines.py`. Synchronization of data will be done for pipelines specified in `pipelines.json`.
 
 The dashboard is available locally from http://127.0.0.1:5000/dash/
 1. Since by default no pipelines are shown, they must be enabled under "Select pipeline groups".
