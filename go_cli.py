@@ -11,9 +11,9 @@ def main():
     parser = argparse.ArgumentParser(
         description='''\
 Download pipeline data from GO.CD and store locally.
-Sample usage: go_cli pull -p po-characterize-tests
-              go_cli pull -p po-characterize-tests -s 1900 -n 10
-              go_cli pull -p db-dump -s 750''',
+Sample usage: go_cli pull -p pipeline-name
+              go_cli pull -p pipeline-name -s 1900 -n 10
+              go_cli pull -p pipeline-name -s 750''',
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(

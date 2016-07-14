@@ -61,11 +61,3 @@ def create_agent_html_graph(pipeline_name, title):
 
 def show_graph(plot):
     show(plot)
-
-
-if __name__ == '__main__':
-    pd.set_option("display.width", 300)
-    pipeline_name = "po-characterize-tests"
-    data = export_data_to_pandas_df(pipeline_name)
-    plot = create_agent_html_graph(pipeline_name, "characterize")
-    # show_graph(plot)
