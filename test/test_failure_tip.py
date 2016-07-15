@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from gocddash.analysis import Stage
+from gocddash.analysis.domain import Stage
 from gocddash.dash_board import failure_tip
 from gocddash.dash_board import pipeline_status
 
