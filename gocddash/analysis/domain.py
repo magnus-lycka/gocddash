@@ -1,4 +1,4 @@
-from .data_access import fetch_previous_stage, fetch_current_stage, fetch_latest_passing_stage
+from .data_access import get_connection
 
 
 class Stage:
@@ -21,7 +21,7 @@ class Stage:
 
 
 def get_previous_stage(pipeline_name, pipeline_counter, current_stage_index):
-    result = fetch_previous_stage(pipeline_name, pipeline_counter, current_stage_index)
+    result = get_connection().fetch_previous_stage(pipeline_name, pipeline_counter, current_stage_index)
     if result:
         return Stage(*result)
     else:
@@ -29,14 +29,14 @@ def get_previous_stage(pipeline_name, pipeline_counter, current_stage_index):
 
 
 def get_current_stage(pipeline_name):
-    result = fetch_current_stage(pipeline_name)
+    result = get_connection().fetch_current_stage(pipeline_name)
     if result:
         return Stage(*result)
     return None
 
 
 def get_latest_passing_stage(pipeline_name):
-    result = fetch_latest_passing_stage(pipeline_name)
+    result = get_connection().fetch_latest_passing_stage(pipeline_name)
     if result:
         return Stage(*result)
     else:

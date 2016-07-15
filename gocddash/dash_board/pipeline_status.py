@@ -1,5 +1,5 @@
 from ..analysis.data_munging import get_failure_stage_signature
-from ..analysis.data_access import get_junit_failure_signature
+from ..analysis.data_access import get_connection
 from ..util.config import PipelineConfig
 
 
@@ -71,7 +71,7 @@ def create_stage_info(stage):
         result = TestFailure(stage, failure_signatures, failure_indices)
 
     elif stage.failure_stage == "TEST" and log_parser == "junit":
-        failure_tuples = get_junit_failure_signature(stage.stage_id)
+        failure_tuples = get_connection().get_junit_failure_signature(stage.stage_id)
         failure_signatures = [item[0] for item in failure_tuples]
         failure_indices = [item[1] for item in failure_tuples]
         result = TestFailure(stage, failure_signatures, failure_indices)

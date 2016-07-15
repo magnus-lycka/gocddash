@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
-from .data_access import *
+from .data_access import get_connection
 from .get_failure_stage import get_failure_stage
 from .go_client import *
 
@@ -37,7 +37,7 @@ def parse_pipeline_info(pipelines):
             pipeline_name = pipeline["name"]
             pipeline_id = pipeline["id"]
             stage_name = pipeline["stages"][0]["name"]
-            insert_pipeline(pipeline_id, stage_count, pipeline_name, pipeline_counter,
+            get_connection().insert_pipeline(pipeline_id, stage_count, pipeline_name, pipeline_counter,
                             pipeline["build_cause"]["trigger_message"])
             parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name)
         else:
@@ -46,10 +46,10 @@ def parse_pipeline_info(pipelines):
 
 
 def fetch_new_agents():
-    new_agents = get_new_agents()
+    new_agents = get_connection().get_new_agents()
     for agent in new_agents:
         hostname = agent_uuid_to_hostname(agent)
-        insert_agent(agent, hostname)
+        get_connection().insert_agent(agent, hostname)
 
 
 def agent_uuid_to_hostname(agent_uuid):
@@ -66,19 +66,19 @@ def parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name):
         timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
         stageid = tree["id"]
         stage_result = tree["result"]
-        insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, i, stage_result, timestamp,
+        get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, i, stage_result, timestamp,
                      tree["jobs"][0]["agent_uuid"], stage_name)
 
         fetch_failure_info(i, pipeline_counter, pipeline_name, stage_result, stageid, stage_name)
 
 
 def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stage_id, stage_name):
-    if stage_result == "Failed" and not is_failure_downloaded(stage_id):
+    if stage_result == "Failed" and not get_connection().is_failure_downloaded(stage_id):
 
         log_parser = PipelineConfig().get_log_parser(pipeline_name)
 
         failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name)
-        insert_failure_information(stage_id, failure_stage)
+        get_connection().insert_failure_information(stage_id, failure_stage)
 
         failures = get_parser_info(log_parser)(pipeline_name, pipeline_counter, stage_index, stage_name)
         failures.insert_info(stage_id)

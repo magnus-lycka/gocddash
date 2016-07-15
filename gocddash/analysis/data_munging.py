@@ -1,13 +1,12 @@
 import collections
 import re
 
-from .data_access import get_texttest_document_names, get_texttest_failures, get_failure_statistics, \
-    get_stage_texttest_failures
+from .data_access import get_connection
 from .file_storage import read_data
 
 
 def filter_docnames(pipeline_name):
-    document_names = get_texttest_document_names(pipeline_name)
+    document_names = get_connection().get_texttest_document_names(pipeline_name)
     filtered_document_names = document_filter(document_names)
     return filtered_document_names
 
@@ -38,11 +37,11 @@ def binary_dependent_variable(result_column):
 
 
 def get_failure_stage_signature(stageid):
-    return texttest_failure_group_by_stage(get_stage_texttest_failures(stageid))
+    return texttest_failure_group_by_stage(get_connection().get_stage_texttest_failures(stageid))
 
 
 def get_failure_signatures(pipeline_name):
-    failure_information = texttest_failure_group_by_stage(get_texttest_failures(pipeline_name))
+    failure_information = texttest_failure_group_by_stage(get_connection().get_texttest_failures(pipeline_name))
     failure_signatures = []
     # print failure_information
 
@@ -87,7 +86,7 @@ def check_if_consecutive_failure_signature(failure_indices):
 def export_data_to_pandas_df(pipeline_name):
     """ Exports the desired pipeline data from the postgresql database and returns a pandas dataframe """
 
-    collated_data = read_data(get_failure_statistics(pipeline_name),
+    collated_data = read_data(get_connection().get_failure_statistics(pipeline_name),
                               ["Pipelinename", "counter", "triggermessage", "approvedby", "stageindex", "scheduleddate",
                                "agentname", "failurestage", "result", "id", "stagename"])
     binary_result_column = binary_dependent_variable(collated_data.result)

@@ -1,5 +1,5 @@
 from gocddash.analysis.go_client import go_request_junit_report
-from gocddash.analysis.data_access import insert_junit_failure_information
+from gocddash.analysis.data_access import get_connection
 from .html_utils import remove_excessive_whitespace, clean_html
 
 
@@ -32,4 +32,4 @@ class JunitConsoleParser:
         failures = self.parse_info()
         if failures:
             for error in failures:
-                insert_junit_failure_information(stage_id, error[0], error[1])
+                get_connection().insert_junit_failure_information(stage_id, error[0], error[1])

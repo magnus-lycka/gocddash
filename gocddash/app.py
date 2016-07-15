@@ -19,7 +19,7 @@ from gocddash import cctray_source
 from gocddash import parse_cctray
 from gocddash.analysis.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
-from gocddash.analysis.data_access import get_synced_pipelines
+from gocddash.analysis.data_access import get_connection, create_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage
 
 group_of_pipeline = defaultdict(str)
@@ -61,7 +61,7 @@ def dashboard():
             pipeline.messages['PausedBy'].add(whom)
 
     synced_pipelines = dict()
-    for name, max_counter in get_synced_pipelines():
+    for name, max_counter in get_connection().get_synced_pipelines():
         synced_pipelines[name] = max_counter
     # allt bra?
 
@@ -105,7 +105,7 @@ def get_cctray_status():
 @gocddash.app_errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html', statuscode=e,
-                           error_message=e.description), 500
+                           ), 500
 
 
 @gocddash.app_errorhandler(404)
@@ -362,6 +362,8 @@ def main():
         app.config['GO_SERVER_USER'] = input('go-user: ')
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
+
+    create_connection()
 
     app.run(port=app.config['BIND_PORT'])
 

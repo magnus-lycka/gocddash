@@ -1,7 +1,7 @@
 import re
 
 from gocddash.analysis.go_client import go_request_console_log
-from gocddash.analysis.data_access import insert_texttest_failure
+from gocddash.analysis.data_access import get_connection
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
 
@@ -68,7 +68,7 @@ class TexttestConsoleParser:
             for key, value in failures.items():
                 for failure in value:
                     index, failure_type, document_name = failure
-                    insert_texttest_failure(stage_id, index, failure_type, document_name)
+                    get_connection().insert_texttest_failure(stage_id, index, failure_type, document_name)
 
 if __name__ == '__main__':
     test = TexttestConsoleParser('po-characterize-tests', 2064, 1, 'runTests')

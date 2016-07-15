@@ -7,7 +7,7 @@ def mann_whitneyu_test(x, y):
     :param x: one-dimensional array (length n)
     :param y: one-dimensional array (length n)
     '''
-    print mannwhitneyu(x, y)
+    print (mannwhitneyu(x, y))
 
 
 
