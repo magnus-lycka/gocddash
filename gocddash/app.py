@@ -346,6 +346,7 @@ def parse_args():  # Now redundant
     parser.add_argument('-c', '--pipeline-columns', type=int, choices=[1, 2, 3, 4],
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     parser.add_argument('-b', '--bind-port', help='bind port')
+    parser.add_argument('--db-port', help='database port')
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
@@ -363,7 +364,7 @@ def main():
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
 
-    create_connection()
+    create_connection(db_port=app.config['DB_PORT'])
 
     app.run(port=app.config['BIND_PORT'])
 

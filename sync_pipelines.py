@@ -14,7 +14,7 @@ from inspect import getsourcefile
 
 
 def parse_pipeline_availability(pipelines):
-    synced_pipelines = data_access.get_synced_pipelines()
+    synced_pipelines = data_access.get_connection().get_synced_pipelines()
     local_pipelines, local_pipeline_counters = zip(*synced_pipelines) if synced_pipelines else ([], [])
 
     available_pipelines = []
@@ -29,7 +29,7 @@ def parse_pipeline_availability(pipelines):
 
 def synchronize(pipelines):
     for pipeline, begin_sync_index in pipelines:
-        synced_pipeline_counter = data_access.get_highest_pipeline_count(pipeline)
+        synced_pipeline_counter = data_access.get_connection().get_highest_pipeline_count(pipeline)
         sync_begin_index = max(begin_sync_index, synced_pipeline_counter)
         max_in_go = go_request.get_max_pipeline_status(pipeline)[1]
         number_of_pipelines = max_in_go - sync_begin_index  # This becomes -1 when syncing a currently building re-run ?
@@ -50,6 +50,7 @@ def millis_interval(start, end):
 
 
 def main():
+    data_access.create_connection()
     pipelines_path = str(Path(abspath(getsourcefile(lambda: 0))).parents[0]) + "/gocddash/pipelines.json"
     with codecs.open(pipelines_path, encoding='utf-8') as input_reader: # TODO: does this mean that this is open through the entire lifecycle?
         json_tree = json.load(input_reader)
