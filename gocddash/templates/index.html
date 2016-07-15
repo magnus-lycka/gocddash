@@ -22,7 +22,7 @@
                             {{ pipeline.changed | time_or_date }}
                         </a>
                         {% if pipeline.name in synced_pipelines.keys() %}
-                        <a href="/dash/insights/{{pipeline.name}}"> <span id="glyph{{ insights }}"
+                        <a href="{{ application_root }}/insights/{{pipeline.name}}"> <span id="glyph{{ insights }}"
                                                                           class="glyphicon glyphicon-stats"
                                                                           aria-hidden="true"></span> | <i> Insights
                             Available </i>

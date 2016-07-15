@@ -73,7 +73,8 @@ def dashboard():
                            now=datetime.now(),
                            footer=get_footer(),
                            synced_pipelines=synced_pipelines,
-                           progress_bar_data=progress_bar_data)
+                           progress_bar_data=progress_bar_data,
+                           application_root=app.config['APPLICATION_ROOT'])
 
 
 def get_progress_bar_data(project):
