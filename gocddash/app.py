@@ -221,6 +221,7 @@ app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
 
 
+
 @app.template_filter('bootstrap_status')
 def bootstrap_status(cctray_status):
     mapping = {
@@ -336,7 +337,7 @@ def get_all_pipeline_groups():
     return pipeline_groups
 
 
-def parse_args():
+def parse_args():  # Now redundant
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--go-server-url', help='go server url')
     parser.add_argument('-u', '--go-server-user', help='go server user name')
@@ -344,6 +345,7 @@ def parse_args():
     parser.add_argument('-d', '--debug', action='store_true')
     parser.add_argument('-c', '--pipeline-columns', type=int, choices=[1, 2, 3, 4],
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
+    parser.add_argument('-b', '--bind-port', help='bind port')
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
@@ -360,7 +362,8 @@ def main():
         app.config['GO_SERVER_USER'] = input('go-user: ')
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
-    app.run()
+
+    app.run(port=app.config['BIND_PORT'])
 
 
 if __name__ == "__main__":
