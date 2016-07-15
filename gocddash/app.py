@@ -10,8 +10,7 @@ import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
 import sys
-print(sys.path)
-
+sys.path.append("/home/eliasd/development/gocddash")
 from gocddash import cctray_source
 from gocddash import parse_cctray
 from gocddash.analysis.git_blame_compare import get_git_comparison
@@ -26,7 +25,6 @@ group_of_pipeline = defaultdict(str)
 # sub-mounted WSGI environment. See
 # http://stackoverflow.com/questions/18967441/add-a-prefix-to-all-flask-routes
 gocddash = Blueprint('gocddash', __name__)
-
 
 def get_bootstrap_theme():
     theme = request.cookies.get('theme_cookie')
@@ -345,9 +343,11 @@ def parse_args():
 
 
 def main():
-    if not os.path.isfile(os.path.dirname(__file__) + '/application.cfg'):
-        print("Error: Missing application.cfg file in {}/".format(os.path.dirname((__file__))))
-        quit()
+    # print(__file__)
+    # if not os.path.isfile(os.path.dirname(__file__) + '/application.cfg'):
+    #
+    #     print("Error: Missing application.cfg file in {}/".format(os.path.dirname((__file__))))
+    #     quit()
     app.config.from_pyfile('application.cfg', silent=False)
     app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
     parse_args()
