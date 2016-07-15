@@ -1,0 +1,17 @@
+[
+  {
+    "counter": 1234,
+    "name": "greger",
+    "id": 123,
+    "build_cause": {
+      "trigger_message": "hej :)"
+    },
+    "stages": [
+      {
+        "result": "Success",
+        "counter": 1,
+        "name": "hej"
+      }
+    ]
+  }
+]

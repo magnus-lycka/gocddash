@@ -12,8 +12,8 @@ def start_servers(docker):
     db_port = 15550  # TODO: make the db port configurable in data_access.py so it can be set on the command line
     db_container = _start_db_docker(docker, db_port)
 
-    application_port = 5000
-    application_process = None  # TODO: start applicationa
+    application_port = 4545
+    application_process = subprocess.Popen(["/usr/bin/env", "python3", "/home/wilhelm/develop/gocddash/gocddash/app.py", "-b", str(application_port)])
 
     return db_container, application_process
 
@@ -21,6 +21,7 @@ def start_servers(docker):
 def stop_servers(docker, db, application):
     # stop the dasboard server
     # stop the db docker
+    application.kill()
     docker.stop_container(db)
 
 
@@ -43,6 +44,8 @@ def main():
         "dockerregistry.pagero.local")  # TODO: Put this image on docker hub instead of our internal docker registry
     db, application = start_servers(docker)
     try:
+        import time
+        time.sleep(2)
         perform_testcase()
     finally:
         stop_servers(docker, db, application)

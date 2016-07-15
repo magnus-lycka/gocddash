@@ -18,5 +18,6 @@ gui_log:gui_log.txt
 [run_dependent_text]
 stdout:(id=)[^\s]+{REPLACE \1<id>}
 stdout:pulling image for{[->]}image pulled
+gui_log:Last refresh:
 [end]
 

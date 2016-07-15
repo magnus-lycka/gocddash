@@ -51,9 +51,13 @@ class GoSource:
         return requests.get(self.base_go_url + "compare/{}/{}/with/{}".format(pipeline_name, current, comparison),
                             auth=self.auth).content.decode('utf-8', 'ignore')
 
+
 class FileSource:
+    def __init__(self, directory):
+        self.directory = directory
+
     def go_request_pipeline_history(self, pipeline_name, offset=0):
-        return ""
+        return open(self.directory + "/history/" + pipeline_name + ".json").read()
 
     def go_get_pipeline_instance(self, pipeline_name, pipeline_counter):
         return ""
