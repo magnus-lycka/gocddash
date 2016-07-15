@@ -6,6 +6,11 @@ import json
 import time
 
 from gocddash.analysis import data_access, actions, go_request
+from gocddash.dash_board import read_config
+
+from pathlib import Path
+from os.path import abspath
+from inspect import getsourcefile
 
 
 def parse_pipeline_availability(pipelines):
@@ -26,7 +31,7 @@ def synchronize(pipelines):
     for pipeline, begin_sync_index in pipelines:
         synced_pipeline_counter = data_access.get_highest_pipeline_count(pipeline)
         sync_begin_index = max(begin_sync_index, synced_pipeline_counter)
-        max_in_go = get_max_pipeline_status(pipeline)[1]
+        max_in_go = go_request.get_max_pipeline_status(pipeline)[1]
         number_of_pipelines = max_in_go - sync_begin_index  # This becomes -1 when syncing a currently building re-run ?
         log("Will synchronize " + pipeline + " from " + str(sync_begin_index) + " onwards.")
 
@@ -45,9 +50,10 @@ def millis_interval(start, end):
 
 
 def main():
-    with codecs.open("pipelines.json", encoding='utf-8') as input_reader: # TODO: does this mean that this is open through the entire lifecycle?
+    pipelines_path = str(Path(abspath(getsourcefile(lambda: 0))).parents[0]) + "/gocddash/pipelines.json"
+    with codecs.open(pipelines_path, encoding='utf-8') as input_reader: # TODO: does this mean that this is open through the entire lifecycle?
         json_tree = json.load(input_reader)
-        requested_pipelines = get_pipelines_to_sync(json_tree)
+        requested_pipelines = read_config.get_pipelines_to_sync(json_tree)
         log("Starting synchronization.")
         pipelines = parse_pipeline_availability(requested_pipelines)
         synchronize(pipelines)

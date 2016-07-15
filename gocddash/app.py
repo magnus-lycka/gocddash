@@ -216,6 +216,8 @@ def insights(pipelinename):
 
 
 app = Flask(__name__)
+app.config.from_pyfile('application.cfg', silent=False)
+app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
 
 
 @app.template_filter('bootstrap_status')
@@ -350,8 +352,6 @@ def main():
     if not os.path.isfile(os.path.dirname(abspath(getsourcefile(lambda: 0))) + '/application.cfg'):
         print("Error: Missing application.cfg file in {}/".format(os.path.dirname((abspath(getsourcefile(lambda: 0))))))
         quit()
-    app.config.from_pyfile('application.cfg', silent=False)
-    app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
     parse_args()
     if 'GO_SERVER_URL' not in app.config:
         app.config['GO_SERVER_URL'] = input('go-server url: ')
