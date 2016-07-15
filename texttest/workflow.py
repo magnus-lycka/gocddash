@@ -3,7 +3,7 @@
 import subprocess
 
 from docker_management import ContainerManager
-
+import os
 
 def start_servers(docker):
     # start db docker on unique port
@@ -13,14 +13,13 @@ def start_servers(docker):
     db_container = _start_db_docker(docker, db_port)
 
     application_port = 4545
-    application_process = subprocess.Popen(["/usr/bin/env", "python3", "/home/wilhelm/develop/gocddash/gocddash/app.py", "-b", str(application_port)])
+    gocd_dash_path = os.environ['gocd_dash']
+    application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path, "-b", str(application_port)])
 
     return db_container, application_process
 
 
 def stop_servers(docker, db, application):
-    # stop the dasboard server
-    # stop the db docker
     application.kill()
     docker.stop_container(db)
 
