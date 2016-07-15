@@ -2,4 +2,5 @@
 
 if __name__ == "__main__":
     from gocddash.app import main
+
     main()

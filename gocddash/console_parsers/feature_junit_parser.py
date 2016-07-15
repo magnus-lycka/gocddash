@@ -1,5 +1,6 @@
-from gocddash.analysis import go_request_junit_report
-from gocddash.analysis import insert_junit_failure_information
+from gocddash.analysis.go_client import go_request_junit_report
+from gocddash.analysis.data_access import insert_junit_failure_information
+from .html_utils import remove_excessive_whitespace, clean_html
 
 
 class JunitConsoleParser:

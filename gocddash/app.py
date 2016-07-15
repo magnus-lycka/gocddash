@@ -212,8 +212,6 @@ def insights(pipelinename):
 
 app = Flask(__name__)
 
-
-
 @app.template_filter('bootstrap_status')
 def bootstrap_status(cctray_status):
     mapping = {

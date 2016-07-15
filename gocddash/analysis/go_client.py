@@ -1,6 +1,6 @@
 import requests
 
-from util.config import PipelineConfig
+from gocddash.util.config import PipelineConfig
 
 base_go_url = PipelineConfig().get_base_go_url()
 api_go_url = PipelineConfig().get_base_go_url() + "api/"

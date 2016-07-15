@@ -1,5 +1,5 @@
 # company-specific config files
-pipelines.json
+gocddash/pipelines.json
 gocddash/application.cfg
 
 # Byte-compiled / optimized / DLL files
