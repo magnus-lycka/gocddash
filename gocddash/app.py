@@ -6,11 +6,15 @@ from collections import defaultdict
 from datetime import date, datetime
 
 import requests
+from pathlib import Path
 
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
 import sys
-sys.path.append("/home/eliasd/development/gocddash")
+from os.path import abspath
+from inspect import getsourcefile
+sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
+
 from gocddash import cctray_source
 from gocddash import parse_cctray
 from gocddash.analysis.git_blame_compare import get_git_comparison
@@ -343,11 +347,9 @@ def parse_args():
 
 
 def main():
-    # print(__file__)
-    # if not os.path.isfile(os.path.dirname(__file__) + '/application.cfg'):
-    #
-    #     print("Error: Missing application.cfg file in {}/".format(os.path.dirname((__file__))))
-    #     quit()
+    if not os.path.isfile(os.path.dirname(abspath(getsourcefile(lambda: 0))) + '/application.cfg'):
+        print("Error: Missing application.cfg file in {}/".format(os.path.dirname((abspath(getsourcefile(lambda: 0))))))
+        quit()
     app.config.from_pyfile('application.cfg', silent=False)
     app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
     parse_args()

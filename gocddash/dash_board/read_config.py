@@ -1,4 +1,4 @@
-from gocddash.analysis import get_max_pipeline_status
+from gocddash.analysis.go_request import get_max_pipeline_status
 
 
 def parse_config(json_config):
