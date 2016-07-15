@@ -1,7 +1,7 @@
 import psycopg2
 
 
-class _DB:
+class SQLConnection:
     def __init__(self):
         self.conn = None
 
@@ -15,7 +15,7 @@ class _DB:
         else:
             return self.conn
 
-DB = _DB()
+DB = SQLConnection()
 
 def insert_pipeline(id, stage_count, name, counter, trigger_message):
     DB.connection().execute("""UPDATE pipeline SET stagecount=%s, pipelinename=%s, counter=%s, triggermessage=%s WHERE id=%s""",

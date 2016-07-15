@@ -9,18 +9,20 @@ def start_servers(docker):
     # start db docker on unique port
     # load data into db from flat files in test case
     # start the dashboard server on unique port
-    db_port = 15550 # TODO: make the db port configurable in data_access.py so it can be set on the command line
+    db_port = 15550  # TODO: make the db port configurable in data_access.py so it can be set on the command line
     db_container = _start_db_docker(docker, db_port)
 
     application_port = 5000
-    application_process = None # TODO: start application
+    application_process = None  # TODO: start applicationa
 
     return db_container, application_process
+
 
 def stop_servers(docker, db, application):
     # stop the dasboard server
     # stop the db docker
     docker.stop_container(db)
+
 
 def perform_testcase():
     print("Starting test workflow for GO CD Dashboard")
@@ -35,13 +37,16 @@ def perform_testcase():
                 out = sprocess_call.communicate()[0]
                 log.write(out)
 
+
 def main():
-    docker = ContainerManager("dockerregistry.pagero.local") # TODO: Put this image on docker hub instead of our internal docker registry
+    docker = ContainerManager(
+        "dockerregistry.pagero.local")  # TODO: Put this image on docker hub instead of our internal docker registry
     db, application = start_servers(docker)
     try:
         perform_testcase()
     finally:
         stop_servers(docker, db, application)
+
 
 def _start_db_docker(docker, dbport):
     db_image = "go-analysis-db"
