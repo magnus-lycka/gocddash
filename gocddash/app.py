@@ -9,12 +9,15 @@ import requests
 
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
-import cctray_source
-import parse_cctray
-from analysis.git_blame_compare import get_git_comparison
-from dash_board import failure_tip, pipeline_status
-from analysis.data_access import get_synced_pipelines
-from analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage
+import sys
+print(sys.path)
+
+from gocddash import cctray_source
+from gocddash import parse_cctray
+from gocddash.analysis.git_blame_compare import get_git_comparison
+from gocddash.dash_board import failure_tip, pipeline_status
+from gocddash.analysis.data_access import get_synced_pipelines
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage
 
 group_of_pipeline = defaultdict(str)
 
@@ -211,6 +214,7 @@ def insights(pipelinename):
 
 
 app = Flask(__name__)
+
 
 @app.template_filter('bootstrap_status')
 def bootstrap_status(cctray_status):
