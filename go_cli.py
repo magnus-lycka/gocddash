@@ -32,8 +32,8 @@ Sample usage: go_cli pull -p pipeline-name
 
     pargs = parser.parse_args()
 
-
-    from analysis import go_request, actions
+    from gocddash.analysis import go_request
+    from gocddash.analysis import actions
 
     if pargs.action == 'pull':
         if not pargs.pipeline:

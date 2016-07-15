@@ -10,6 +10,7 @@ jinja2
 psycopg2
 pandas
 yoyo-migrations
+beautifulsoup4
 
 (Don't be afraid if the pandas installation takes a while.)
 

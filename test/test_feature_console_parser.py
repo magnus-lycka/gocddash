@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from console_parsers import feature_junit_parser
+from gocddash.console_parsers import feature_junit_parser
 
 _junit_report = """<table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 <div class="tests">

@@ -1,4 +1,4 @@
-from analysis import pipeline_fetcher, go_request, data_access, file_storage
+from gocddash.analysis import pipeline_fetcher, go_request, data_access, file_storage
 
 
 def pull(pipeline_name, subsequent_pipelines, start, dry_run):

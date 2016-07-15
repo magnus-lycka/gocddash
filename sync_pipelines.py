@@ -5,8 +5,7 @@ import datetime
 import json
 import time
 
-from analysis import data_access, actions, go_request
-from dash_board.read_config import *
+from gocddash.analysis import data_access, actions, go_request
 
 
 def parse_pipeline_availability(pipelines):

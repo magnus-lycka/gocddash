@@ -1,8 +1,7 @@
 import json
 from datetime import datetime
 
-from console_parsers.determine_parser import get_parser_info
-from util.config import PipelineConfig
+from gocddash.console_parsers.determine_parser import get_parser_info
 from .data_access import *
 from .get_failure_stage import get_failure_stage
 from .go_client import *

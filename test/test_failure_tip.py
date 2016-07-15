@@ -1,9 +1,9 @@
 import unittest
-
-from dash_board import pipeline_status
-from dash_board import failure_tip
-from analysis.domain import Stage
 from unittest.mock import MagicMock
+
+from gocddash.analysis import Stage
+from gocddash.dash_board import failure_tip
+from gocddash.dash_board import pipeline_status
 
 
 class TestFailureTip(unittest.TestCase):

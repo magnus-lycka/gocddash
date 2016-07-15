@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from console_parsers import characterize_console_parser
+from gocddash.console_parsers import characterize_console_parser
 
 console_log = """08:17:55.463 [go] Job Started: 2016-07-13 08:17:55 CEST
 

@@ -1,6 +1,6 @@
 import unittest
 
-from analysis.actions import assert_correct_input
+from gocddash.analysis import assert_correct_input
 
 
 class TestAssertCorrectInput(unittest.TestCase):

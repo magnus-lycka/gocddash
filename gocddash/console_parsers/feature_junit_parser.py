@@ -1,6 +1,5 @@
-from analysis.data_access import insert_junit_failure_information
-from analysis.go_client import go_request_junit_report
-from console_parsers.html_utils import *
+from gocddash.analysis import go_request_junit_report
+from gocddash.analysis import insert_junit_failure_information
 
 
 class JunitConsoleParser:

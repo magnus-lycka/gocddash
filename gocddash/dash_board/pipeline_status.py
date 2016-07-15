@@ -1,5 +1,5 @@
-from analysis.data_access import get_junit_failure_signature
 from analysis.data_munging import get_failure_stage_signature
+from analysis.data_access import get_junit_failure_signature
 from util.config import PipelineConfig
 
 

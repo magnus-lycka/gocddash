@@ -1,7 +1,7 @@
 import re
 
-from analysis.data_access import insert_texttest_failure
-from analysis.go_client import go_request_console_log
+from gocddash.analysis import go_request_console_log
+from gocddash.analysis import insert_texttest_failure
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
 

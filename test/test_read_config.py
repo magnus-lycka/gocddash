@@ -1,5 +1,6 @@
 import unittest
-from dash_board import read_config
+
+from gocddash.dash_board import read_config
 
 
 def get_max_mock(name):

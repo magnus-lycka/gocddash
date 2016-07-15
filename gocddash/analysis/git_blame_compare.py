@@ -1,9 +1,8 @@
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from analysis.go_client import go_request_comparison_html
+from .go_client import go_request_comparison_html
 from console_parsers.html_utils import *
-
 
 def open_html(pipeline_name, current, comparison):
     html = go_request_comparison_html(pipeline_name, current, comparison)

@@ -1,4 +1,4 @@
-from analysis.data_access import fetch_previous_stage, fetch_current_stage, fetch_latest_passing_stage
+from .data_access import fetch_previous_stage, fetch_current_stage, fetch_latest_passing_stage
 
 
 class Stage:

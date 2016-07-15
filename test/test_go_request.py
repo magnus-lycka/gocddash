@@ -1,7 +1,5 @@
 import unittest
 
-from analysis.go_request import *
-
 
 class TestGoFailureExtractor(unittest.TestCase):
     def test_no_start_specified(self):

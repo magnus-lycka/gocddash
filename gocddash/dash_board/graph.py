@@ -5,7 +5,7 @@ from bokeh.charts import Bar
 from bokeh.models import HoverTool
 from bokeh.plotting import *
 
-from analysis.data_munging import export_data_to_pandas_df
+from gocddash.analysis import export_data_to_pandas_df
 
 
 def arrange_graph_data(panda_dataframe):
