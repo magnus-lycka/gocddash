@@ -95,7 +95,10 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a type="button" class="{{ live_info.status | rerun_valid }}" href="{{ rerun_link }}" target="_blank">
+            {% if "Building" in live_info.status %}
+                {% set disabled="disabled" %}
+            {% endif %}
+            <a type="button" class="{{ live_info.status | rerun_valid }} {{ disabled }}" href="{{ rerun_link }}" target="_blank">
                 <span id="glyph-rerun" class="glyphicon glyphicon-repeat pull-left" aria-hidden="true"></span>
                 RERUN {{ pipeline_status.stage.stage_name }}
                 {% if "Building" in live_info.status %}
