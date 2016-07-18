@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from gocddash.analysis.data_access import truncate_tables
+from gocddash.analysis.data_access import get_connection, create_connection
 
 if __name__ == '__main__':
-    truncate_tables()
+    conn = create_connection()
+    get_connection().truncate_tables()

@@ -94,48 +94,65 @@ class FileSource:
     def go_get_cctray(self):
         return ""
 
-source = GoSource(PipelineConfig().get_base_go_url(), PipelineConfig().get_auth())
-
 
 def go_request_pipeline_history(pipeline_name, offset=0):
-    return source.go_request_pipeline_history(pipeline_name, offset)
+    return _go_client.go_request_pipeline_history(pipeline_name, offset)
 
 
 def go_get_pipeline_instance(pipeline_name, pipeline_counter):
-    return source.go_get_pipeline_instance(pipeline_name, pipeline_counter)
+    return _go_client.go_get_pipeline_instance(pipeline_name, pipeline_counter)
 
 
 def go_get_stage_instance(pipeline_name, pipeline_counter, stage_name):
-    return source.go_get_stage_instance(pipeline_name, pipeline_counter, stage_name)
+    return _go_client.go_get_stage_instance(pipeline_name, pipeline_counter, stage_name)
 
 
 def go_request_stages_history(pipeline_name, pipeline_id, stage, stage_name):
-    return source.go_request_stages_history(pipeline_name, pipeline_id, stage, stage_name)
+    return _go_client.go_request_stages_history(pipeline_name, pipeline_id, stage, stage_name)
 
 
 def go_get_agent_information(agent_uuid):
-    return source.go_get_agent_information(agent_uuid)
+    return _go_client.go_get_agent_information(agent_uuid)
 
 
 def go_get_pipeline_groups():
-    return source.go_get_pipeline_groups()
+    return _go_client.go_get_pipeline_groups()
 
 
 def go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name):
-    return source.go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name)
+    return _go_client.go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name)
 
 
 def go_request_job_history(pipeline_name, stage_name, offset=0):
-    return source.go_request_job_history(pipeline_name, stage_name, offset)
+    return _go_client.go_request_job_history(pipeline_name, stage_name, offset)
 
 
 def go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name):
-    return source.go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name)
+    return _go_client.go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name)
 
 
 def go_request_comparison_html(pipeline_name, current, comparison):
-    return source.go_request_comparison_html(pipeline_name, current, comparison)
+    return _go_client.go_request_comparison_html(pipeline_name, current, comparison)
 
 
 def go_get_cctray():
-    return source.go_get_cctray()
+    return _go_client.go_get_cctray()
+
+
+_go_client = None
+
+
+def create_go_client(base_go_url, auth):
+    global _go_client
+    if not _go_client:
+        if "http" in base_go_url:
+            _go_client = GoSource(base_go_url, auth)
+        else:
+            _go_client = FileSource("//")
+    return _go_client
+
+
+def get_client():
+    if not _go_client:
+        raise ValueError("GO client not instantiated")
+    return _go_client

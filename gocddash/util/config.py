@@ -6,11 +6,14 @@ from pathlib import Path
 
 def singleton(cls):
     instances = {}
+
     def get_instance():
         if cls not in instances:
             instances[cls] = cls()
         return instances[cls]
+
     return get_instance
+
 
 @singleton
 class PipelineConfig:
@@ -30,8 +33,6 @@ class PipelineConfig:
     def get_auth(self):
         return self.pipelines["username"], self.pipelines["password"]
 
-    def get_base_go_url(self):
-        return self.pipelines["base_GO_URL"]
 
 if __name__ == '__main__':
     test = PipelineConfig()

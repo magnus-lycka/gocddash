@@ -15,7 +15,8 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash import parse_cctray
-from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray
+from gocddash.util.config import PipelineConfig
+from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, create_go_client, get_client
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
@@ -210,6 +211,7 @@ app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
 create_connection(db_port=app.config['DB_PORT'])
+create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
 
 @app.template_filter('bootstrap_status')
 def bootstrap_status(cctray_status):
@@ -322,7 +324,12 @@ def get_all_pipeline_groups():
     return pipeline_groups
 
 
-def parse_args():  # Now redundant
+def is_valid_file(parser, arg):
+    if not os.path.isfile(arg):
+        parser.error("The file %s does not exist!" % arg)
+
+
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--go-server-url', help='go server url')
     parser.add_argument('-u', '--go-server-user', help='go server user name')
@@ -332,6 +339,7 @@ def parse_args():  # Now redundant
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     parser.add_argument('-b', '--bind-port', help='bind port')
     parser.add_argument('--db-port', help='database port')
+    parser.add_argument('--pipeline-config', help='pipeline config', type=lambda x: is_valid_file(parser, x), default=os.path.dirname((abspath(getsourcefile(lambda: 0)))) + "/pipelines.json")
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
@@ -349,6 +357,7 @@ def main():
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
 
+    # PipelineConfig().set_pipelines_json_path(app.config['PIPELINE_CONFIG'])
     app.run(port=app.config['BIND_PORT'])
 
 
