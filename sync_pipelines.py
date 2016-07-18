@@ -65,6 +65,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--app-cfg', help='application config')
     parser.add_argument('-p', '--pipeline-cfg', help='pipeline config')
+    parser.add_argument('-f', '--file-source', help='go client file source')
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     return pargs_dict
@@ -87,6 +88,10 @@ def main():
         server_url, user, passwd = read_cfg(app_cfg)
     else:
         server_url, user, passwd = read_cfg()
+
+    file_source = pargs_dict['file_source']
+    if file_source:
+        server_url = file_source
 
     go_client.create_go_client(server_url, (user, passwd))
 
