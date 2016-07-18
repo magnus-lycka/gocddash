@@ -15,7 +15,7 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash import parse_cctray
-from gocddash.util.config import PipelineConfig
+from gocddash.util.config import create_config
 from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, create_go_client, get_client
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
@@ -341,12 +341,10 @@ def parse_args():
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     parser.add_argument('-b', '--bind-port', help='bind port')
     parser.add_argument('--db-port', help='database port')
-    parser.add_argument('--pipeline-config', help='pipeline config', default=os.path.dirname((abspath(getsourcefile(lambda: 0)))) + "/pipelines.json")
+    parser.add_argument('--pipeline-config', help='pipeline config')
     parser.add_argument('--file-client', help='file client')
     pargs = parser.parse_args()
-    print(pargs)
     pargs_dict = vars(pargs)
-    print(pargs_dict)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
     return pargs_dict
 
@@ -365,6 +363,12 @@ def main():
     if pargs_dict['file_client']:
         create_go_client(pargs_dict['file_client'], auth=None)
     # PipelineConfig().set_pipelines_json_path(app.config['PIPELINE_CONFIG'])
+    pipeline_path = pargs_dict['pipeline_config']
+    if pipeline_path:
+        if os.path.isfile(pargs_dict['pipeline_config']):
+            create_config(pargs_dict['pipeline_config'])
+    else:
+        create_config()
     app.run(port=app.config['BIND_PORT'])
 
 if __name__ == "__main__":

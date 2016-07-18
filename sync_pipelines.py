@@ -4,13 +4,13 @@ import codecs
 import datetime
 import json
 import time
+from configparser import ConfigParser
+from itertools import chain
+import os
 
-from gocddash.analysis import data_access, actions, go_request
+from gocddash.analysis import data_access, actions, go_request, go_client
 from gocddash.dash_board import read_config
-
-from pathlib import Path
-from os.path import abspath
-from inspect import getsourcefile
+from gocddash.util import config
 
 
 def parse_pipeline_availability(pipelines):
@@ -49,9 +49,23 @@ def millis_interval(start, end):
     return millis
 
 
+def read_cfg():
+    parser = ConfigParser()
+    with open(os.getcwd() + "/gocddash/application.cfg") as lines:
+        lines = chain(("[top]",), lines)  # Reads cfg file without section headers
+        parser.read_file(lines)
+    cfg = dict(parser.items('top'))
+    return cfg['go_server_url'].strip('"'), cfg['go_server_user'].strip('"'), cfg['go_server_passwd'].strip('"')
+
+
 def main():
+    # Instantiate config, database and go client
     data_access.create_connection()
-    pipelines_path = str(Path(abspath(getsourcefile(lambda: 0))).parents[0]) + "/gocddash/pipelines.json"
+    config.create_config()
+    pipelines_path = config.get_config().path
+    server_url, user, passwd = read_cfg()
+    go_client.create_go_client(server_url, (user, passwd))
+
     with codecs.open(pipelines_path, encoding='utf-8') as input_reader: # TODO: does this mean that this is open through the entire lifecycle?
         json_tree = json.load(input_reader)
         requested_pipelines = read_config.get_pipelines_to_sync(json_tree)
@@ -73,6 +87,7 @@ def main():
                 last_sync = datetime.datetime.now()
                 synchronize(pipelines)
                 log("Synchronization finished.")
+
 
 def log(string):
     print(str(datetime.datetime.now()) + " " + string)

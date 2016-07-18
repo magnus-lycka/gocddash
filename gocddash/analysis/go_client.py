@@ -1,8 +1,5 @@
 import requests
 
-from gocddash.util.config import PipelineConfig
-
-
 class GoSource:
     def __init__(self, base_go_url, auth):
         self.base_go_url = base_go_url

@@ -1,6 +1,6 @@
 from ..analysis.data_munging import get_failure_stage_signature
 from ..analysis.data_access import get_connection
-from ..util.config import PipelineConfig
+from ..util.config import get_config
 
 
 class StageSuccess:
@@ -58,7 +58,7 @@ class TestFailure(StageFailure):
 
 
 def create_stage_info(stage):
-    log_parser = PipelineConfig().get_log_parser(stage.pipeline_name)
+    log_parser = get_config().get_log_parser(stage.pipeline_name)
 
     if stage.is_success():
         result = StageSuccess(stage)

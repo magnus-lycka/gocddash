@@ -3,6 +3,7 @@ from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
 from gocddash.util.get_failure_stage import get_failure_stage
+from gocddash.util.config import get_config
 from .data_access import get_connection
 from .go_client import *
 
@@ -75,7 +76,7 @@ def parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name):
 def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stage_id, stage_name):
     if stage_result == "Failed" and not get_connection().is_failure_downloaded(stage_id):
 
-        log_parser = PipelineConfig().get_log_parser(pipeline_name)
+        log_parser = get_config().get_log_parser(pipeline_name)
 
         failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name)
         get_connection().insert_failure_information(stage_id, failure_stage)
