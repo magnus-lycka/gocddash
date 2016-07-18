@@ -7,6 +7,7 @@ import time
 from configparser import ConfigParser
 from itertools import chain
 import os
+import argparse
 
 from gocddash.analysis import data_access, actions, go_request, go_client
 from gocddash.dash_board import read_config
@@ -49,21 +50,44 @@ def millis_interval(start, end):
     return millis
 
 
-def read_cfg():
+def read_cfg(path=os.getcwd() + "/gocddash/application.cfg"):
     parser = ConfigParser()
-    with open(os.getcwd() + "/gocddash/application.cfg") as lines:
+    if not os.path.exists(path):
+        raise FileNotFoundError("Error: Missing application.cfg file in {}".format(path))
+    with open(path) as lines:
         lines = chain(("[top]",), lines)  # Reads cfg file without section headers
         parser.read_file(lines)
     cfg = dict(parser.items('top'))
     return cfg['go_server_url'].strip('"'), cfg['go_server_user'].strip('"'), cfg['go_server_passwd'].strip('"')
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--app-cfg', help='application config')
+    parser.add_argument('-p', '--pipeline-cfg', help='pipeline config')
+    pargs = parser.parse_args()
+    pargs_dict = vars(pargs)
+    return pargs_dict
+
+
 def main():
     # Instantiate config, database and go client
     data_access.create_connection()
-    config.create_config()
+    pargs_dict = parse_args()
+
+    pipeline_cfg = pargs_dict['pipeline_cfg']
+    if pipeline_cfg:
+        config.create_pipeline_config(pipeline_cfg)
+    else:
+        config.create_pipeline_config()
     pipelines_path = config.get_config().path
-    server_url, user, passwd = read_cfg()
+
+    app_cfg = pargs_dict['app_cfg']
+    if app_cfg:
+        server_url, user, passwd = read_cfg(app_cfg)
+    else:
+        server_url, user, passwd = read_cfg()
+
     go_client.create_go_client(server_url, (user, passwd))
 
     with codecs.open(pipelines_path, encoding='utf-8') as input_reader: # TODO: does this mean that this is open through the entire lifecycle?

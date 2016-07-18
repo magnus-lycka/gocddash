@@ -4,11 +4,11 @@ from unittest.mock import MagicMock
 from gocddash.analysis.domain import Stage
 from gocddash.dash_board import failure_tip
 from gocddash.dash_board import pipeline_status
-from gocddash.util.config import create_config
+from gocddash.util.config import create_pipeline_config
 
 
 class TestFailureTip(unittest.TestCase):
-    create_config()
+    create_pipeline_config()
 
     def create_stage(self, parent=None, passed=False, failure_stage=None):
         if parent:

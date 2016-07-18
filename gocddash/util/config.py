@@ -8,8 +8,7 @@ class PipelineConfig:
     def __init__(self, path):
         self.path = path
         if not os.path.isfile(path):
-            print("Error: Missing pipelines.json file in {}!".format(path))
-            quit()
+            raise FileNotFoundError("Error: Missing pipelines.json file in {}!".format(path))
         with codecs.open(path, encoding="utf-8") as pipelines_json:
             self.pipelines = json.load(pipelines_json)
 
@@ -23,7 +22,7 @@ class PipelineConfig:
 _pipeline_config = None
 
 
-def create_config(path=str(Path(__file__).parents[1]) + "/pipelines.json"):
+def create_pipeline_config(path=str(Path(__file__).parents[1]) + "/pipelines.json"):
     global _pipeline_config
     # if not _pipeline_config:
     # This line was removed in order for UWSGI to work properly as UWSGI doesn't call the main method in app.py
@@ -40,4 +39,4 @@ def get_config():
 
 
 if __name__ == '__main__':
-    test = create_config()
+    test = create_pipeline_config()

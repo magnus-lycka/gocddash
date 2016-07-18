@@ -14,7 +14,7 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash import parse_cctray
-from gocddash.util.config import create_config
+from gocddash.util.config import create_pipeline_config
 from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, go_get_pipeline_status, create_go_client, get_client
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
@@ -209,7 +209,7 @@ def insights(pipelinename):
 app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
-create_config()
+create_pipeline_config()
 create_connection(db_port=app.config['DB_PORT'])
 create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
 
@@ -362,7 +362,7 @@ def main():
     pipeline_path = pargs_dict['pipeline_config']
     if pipeline_path:
         if os.path.isfile(pargs_dict['pipeline_config']):
-            create_config(pargs_dict['pipeline_config'])
+            create_pipeline_config(pargs_dict['pipeline_config'])
 
     app.run(port=app.config['BIND_PORT'])
 
