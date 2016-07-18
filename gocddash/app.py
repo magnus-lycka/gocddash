@@ -209,8 +209,10 @@ def insights(pipelinename):
 app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
+create_config()
 create_connection(db_port=app.config['DB_PORT'])
 create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
+
 
 @app.template_filter('bootstrap_status')
 def bootstrap_status(cctray_status):
@@ -361,8 +363,7 @@ def main():
     if pipeline_path:
         if os.path.isfile(pargs_dict['pipeline_config']):
             create_config(pargs_dict['pipeline_config'])
-    else:
-        create_config()
+
     app.run(port=app.config['BIND_PORT'])
 
 if __name__ == "__main__":
