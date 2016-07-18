@@ -1,4 +1,4 @@
-from .go_client import *
+from gocddash.analysis.go_client import *
 
 
 def get_failure_stage(pipeline_name, pipeline_id, stage, stage_name):

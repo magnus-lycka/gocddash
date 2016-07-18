@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from gocddash.analysis import git_blame_compare
+from gocddash.console_parsers import git_blame_compare
 
 git_blame = """
         <div id="pipeline_header">

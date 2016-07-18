@@ -1,2 +1,3 @@
 # With an empty database, display dashboard
 empty
+show_pipelines

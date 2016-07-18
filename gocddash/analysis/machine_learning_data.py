@@ -1,7 +1,7 @@
 import pandas as pd
 
+from gocddash.util.file_storage import save_as_csv
 from .data_munging import *
-from .file_storage import save_as_csv
 
 
 def build_binary_cleaned_docname_csv(pipeline_name, path):

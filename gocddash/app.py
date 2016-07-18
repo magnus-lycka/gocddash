@@ -2,22 +2,21 @@ import argparse
 import getpass
 import json
 import os
+import sys
 from collections import defaultdict
 from datetime import date, datetime
-
-import requests
+from inspect import getsourcefile
+from os.path import abspath
 from pathlib import Path
 
+import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
-import sys
-from os.path import abspath
-from inspect import getsourcefile
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash import cctray_source
 from gocddash import parse_cctray
-from gocddash.analysis.git_blame_compare import get_git_comparison
+from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage

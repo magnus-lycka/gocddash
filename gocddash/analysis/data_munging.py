@@ -1,8 +1,8 @@
 import collections
 import re
 
+from gocddash.util.file_storage import read_data
 from .data_access import get_connection
-from .file_storage import read_data
 
 
 def filter_docnames(pipeline_name):

@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
+from gocddash.util.get_failure_stage import get_failure_stage
 from .data_access import get_connection
-from .get_failure_stage import get_failure_stage
 from .go_client import *
 
 
