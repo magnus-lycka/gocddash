@@ -318,6 +318,7 @@ def get_all_pipeline_groups():
     return pipeline_groups
 
 
+#
 def is_valid_file(parser, arg):
     if not os.path.isfile(arg):
         parser.error("The file %s does not exist!" % arg)
@@ -356,7 +357,6 @@ def main():
 
     if pargs_dict['file_client']:
         create_go_client(pargs_dict['file_client'], auth=None)
-    # PipelineConfig().set_pipelines_json_path(app.config['PIPELINE_CONFIG'])
     pipeline_path = pargs_dict['pipeline_config']
     if pipeline_path:
         if os.path.isfile(pargs_dict['pipeline_config']):
