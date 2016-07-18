@@ -10,6 +10,8 @@ full_name:Go CD Dashboard
 default_checkout:gocddash
 
 link_test_path:urls.txt
+link_test_path:go/application.cfg
+link_test_path:go/pipelines.json
 link_test_path:go/config
 link_test_path:go/history
 link_test_path:go/status

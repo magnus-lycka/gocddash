@@ -11,8 +11,10 @@ def start_servers(docker):
     # db_container = _start_db_docker(docker, db_port)
     application_port = random.randrange(4545, 4999)
     gocd_dash_path = os.environ['gocd_dash']
-    application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path, "-b", str(application_port), "--db-port", str(15554), "--file-client",
+    application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "gocddash/app.py", "-b", str(application_port), "--db-port", str(15554), "--file-client",
                                             os.getcwd()])
+
+    subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "sync_pipelines.py", "-a", os.getcwd() + "/application.cfg", "-p", os.getcwd() + "/pipelines.json", "-f", os.getcwd()])
 
     # return db_container, application_process
     return None, application_port, application_process

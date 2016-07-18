@@ -1,7 +1,7 @@
 [
   {
-    "counter": 1234,
-    "name": "greger",
+    "counter": 382,
+    "name": "foo",
     "id": 123,
     "build_cause": {
       "trigger_message": "hej :)"
