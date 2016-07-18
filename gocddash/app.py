@@ -327,6 +327,8 @@ def get_all_pipeline_groups():
 def is_valid_file(parser, arg):
     if not os.path.isfile(arg):
         parser.error("The file %s does not exist!" % arg)
+    else:
+        return open(arg, 'r')  # return an open file handle
 
 
 def parse_args():
@@ -339,17 +341,20 @@ def parse_args():
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     parser.add_argument('-b', '--bind-port', help='bind port')
     parser.add_argument('--db-port', help='database port')
-    parser.add_argument('--pipeline-config', help='pipeline config', type=lambda x: is_valid_file(parser, x), default=os.path.dirname((abspath(getsourcefile(lambda: 0)))) + "/pipelines.json")
+    parser.add_argument('--pipeline-config', help='pipeline config', default=os.path.dirname((abspath(getsourcefile(lambda: 0)))) + "/pipelines.json")
+    parser.add_argument('--file-client', help='file client')
     pargs = parser.parse_args()
+    print(pargs)
     pargs_dict = vars(pargs)
+    print(pargs_dict)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
-
+    return pargs_dict
 
 def main():
     if not os.path.isfile(os.path.dirname(abspath(getsourcefile(lambda: 0))) + '/application.cfg'):
         print("Error: Missing application.cfg file in {}/".format(os.path.dirname((abspath(getsourcefile(lambda: 0))))))
         quit()
-    parse_args()
+    pargs_dict = parse_args()
     if 'GO_SERVER_URL' not in app.config:
         app.config['GO_SERVER_URL'] = input('go-server url: ')
     if 'GO_SERVER_USER' not in app.config:
@@ -357,9 +362,10 @@ def main():
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
 
+    if pargs_dict['file_client']:
+        create_go_client(pargs_dict['file_client'], auth=None)
     # PipelineConfig().set_pipelines_json_path(app.config['PIPELINE_CONFIG'])
     app.run(port=app.config['BIND_PORT'])
-
 
 if __name__ == "__main__":
     main()

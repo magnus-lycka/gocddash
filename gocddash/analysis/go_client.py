@@ -144,11 +144,10 @@ _go_client = None
 
 def create_go_client(base_go_url, auth):
     global _go_client
-    if not _go_client:
-        if "http" in base_go_url:
-            _go_client = GoSource(base_go_url, auth)
-        else:
-            _go_client = FileSource("//")
+    if "http" in base_go_url:
+        _go_client = GoSource(base_go_url, auth)
+    else:
+        _go_client = FileSource(base_go_url)
     return _go_client
 
 
