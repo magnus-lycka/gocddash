@@ -18,6 +18,9 @@ class GoSource:
     def go_get_pipeline_instance(self, pipeline_name, pipeline_counter):
         return self.api_request("pipelines/" + pipeline_name + "/instance/" + str(pipeline_counter) + "/").content
 
+    def go_get_pipeline_status(self, pipeline_name):
+        return self.api_request("pipelines/" + pipeline_name + "/status").content.decode("utf-8")
+
     def go_get_stage_instance(self, pipeline_name, pipeline_counter, stage_name):
         return self.api_request(
             "stages/" + pipeline_name + "/" + stage_name + "/instance/" + str(pipeline_counter) + "/1").content
@@ -64,6 +67,9 @@ class FileSource:
     def go_get_pipeline_instance(self, pipeline_name, pipeline_counter):
         return ""
 
+    def go_get_pipeline_status(self, pipeline_name):
+        return open(self.directory + "/status/" + pipeline_name + ".json").read()
+
     def go_get_stage_instance(self, pipeline_name, pipeline_counter, stage_name):
         return ""
 
@@ -80,7 +86,7 @@ class FileSource:
         return ""
 
     def go_get_pipeline_groups(self):
-        return ""
+        return open(self.directory + "/config/pipeline_groups.json").read()
 
     def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name):
         return ""
@@ -89,7 +95,7 @@ class FileSource:
         return ""
 
     def go_get_cctray(self):
-        return ""
+        return open(self.directory + "/config/cctray.xml").read()
 
 
 def go_request_pipeline_history(pipeline_name, offset=0):
@@ -102,6 +108,10 @@ def go_get_pipeline_instance(pipeline_name, pipeline_counter):
 
 def go_get_stage_instance(pipeline_name, pipeline_counter, stage_name):
     return _go_client.go_get_stage_instance(pipeline_name, pipeline_counter, stage_name)
+
+
+def go_get_pipeline_status(pipeline_name):
+    return _go_client.go_get_pipeline_status(pipeline_name)
 
 
 def go_request_stages_history(pipeline_name, pipeline_id, stage, stage_name):

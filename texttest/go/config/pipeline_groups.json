@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Bananas",
+    "pipelines": [
+      {
+        "name": "foo"
+      },
+      {
+        "name": "bar"
+      }
+    ]
+  }
+]

@@ -9,14 +9,13 @@ from inspect import getsourcefile
 from os.path import abspath
 from pathlib import Path
 
-import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash import parse_cctray
 from gocddash.util.config import create_config
-from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, create_go_client, get_client
+from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, go_get_pipeline_status, create_go_client, get_client
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
@@ -296,16 +295,11 @@ def setup():
 def pipeline_is_paused(pipeline_name):
     kwargs = {}
     if 'GO_SERVER_USER' in app.config:
-        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
-        url = app.config['GO_SERVER_URL'] + 'api/pipelines/{}/status'.format(pipeline_name)
-        response = requests.get(url, **kwargs)
-        if response.status_code == 200:
-            status = json.loads(response.text.replace("\\'", ""))
-            if status["paused"]:
-                return status.get("pausedCause") or 'Paused', status.get("pausedBy")
-        else:
-            print(response)
-            abort(500, "GO server is most likely down.")
+        response = go_get_pipeline_status(pipeline_name)
+        # status = json.loads(response.text.replace("\\'", ""))
+        status = json.loads(response)
+        if status["paused"]:
+            return status.get("pausedCause") or 'Paused', status.get("pausedBy")
     return None, None
 
 
