@@ -63,7 +63,6 @@ def dashboard():
     synced_pipelines = dict()
     for name, max_counter in get_connection().get_synced_pipelines():
         synced_pipelines[name] = max_counter
-    # allt bra?
 
     return render_template('index.html',
                            go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
@@ -113,6 +112,7 @@ def page_not_found(e):
     return render_template('404.html', statuscode=e,
                            dashboard_link=url_for('gocddash.dashboard')), 404
 
+# Catches all errors - a bit too trigger happy
 # @gocddash.app_errorhandler(Exception)
 # def all_exception_handler(error):
 #     return render_template('500.html', statuscode=error), 500
@@ -178,7 +178,7 @@ def insights(pipelinename):
     else:
         git_blame_data = get_git_comparison(pipelinename, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
 
-    base_url = app.config['GO_SERVER_URL']
+    base_url = app.config['PUBLIC_GO_SERVER_URL']
 
     rerun_link = base_url + "pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
                                                                           current_stage.pipeline_counter,
