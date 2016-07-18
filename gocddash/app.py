@@ -14,8 +14,8 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
-from gocddash import cctray_source
 from gocddash import parse_cctray
+from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
@@ -88,28 +88,19 @@ def get_progress_bar_data(project):
 
 
 def get_cctray_status():
-    kwargs = {}
-    if 'GO_SERVER_USER' in app.config:
-        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
-
-    xml = cctray_source.get_cctray_source(app.config['GO_SERVER_URL'], **kwargs).cctray
-    if xml is None:
-       abort(500)
-
+    xml = go_get_cctray()
     project = parse_cctray.Projects(xml)
     return project
 
 
 @gocddash.app_errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html', statuscode=e,
-                           ), 500
+    return render_template('500.html', statuscode=e,), 500
 
 
 @gocddash.app_errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', statuscode=e,
-                           dashboard_link=url_for('gocddash.dashboard')), 404
+    return render_template('404.html', statuscode=e, dashboard_link=url_for('gocddash.dashboard')), 404
 
 # Catches all errors - a bit too trigger happy
 # @gocddash.app_errorhandler(Exception)
@@ -320,11 +311,7 @@ def get_all_pipeline_groups():
     kwargs = {}
     if 'GO_SERVER_USER' in app.config:
         kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
-    json_text = cctray_source.get_cctray_source(
-        app.config['GO_SERVER_URL'],
-        **kwargs).pipelinegroups
-    if json_text is None:
-        abort(500, "GO server is most likely down.")
+    json_text = go_get_pipeline_groups()
     full_json = json.loads(json_text)
     pipeline_groups = []
     for pipeline_group in full_json:

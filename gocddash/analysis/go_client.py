@@ -6,7 +6,6 @@ from gocddash.util.config import PipelineConfig
 class GoSource:
     def __init__(self, base_go_url, auth):
         self.base_go_url = base_go_url
-        self.api_go_url = base_go_url + "api/"
         self.auth = auth
 
     def api_request(self, url, **kwargs):
@@ -37,6 +36,9 @@ class GoSource:
         return self.api_request(
             "jobs/" + pipeline_name + "/" + stage_name + "/defaultJob/history/" + str(offset)).content
 
+    def go_get_pipeline_groups(self):
+        return self.api_request("config/pipeline_groups").content.decode("utf-8")
+
     def go_request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name):
         return self.base_request("files/" + pipeline_name + "/" + str(pipeline_id)
                                  + "/" + stage_name + "/" + str(
@@ -52,7 +54,7 @@ class GoSource:
             'utf-8', 'ignore')
 
     def go_get_cctray(self):
-        return self.base_request(self.base_go_url + "cctray.xml").content.decode('utf-8', 'ignore')
+        return self.base_request("cctray.xml").content.decode('utf-8')
 
 
 class FileSource:
@@ -78,6 +80,9 @@ class FileSource:
         return ""
 
     def go_request_job_history(self, pipeline_name, stage_name, offset=0):
+        return ""
+
+    def go_get_pipeline_groups(self):
         return ""
 
     def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name):
@@ -112,6 +117,10 @@ def go_get_agent_information(agent_uuid):
     return source.go_get_agent_information(agent_uuid)
 
 
+def go_get_pipeline_groups():
+    return source.go_get_pipeline_groups()
+
+
 def go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name):
     return source.go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name)
 
@@ -126,3 +135,7 @@ def go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name):
 
 def go_request_comparison_html(pipeline_name, current, comparison):
     return source.go_request_comparison_html(pipeline_name, current, comparison)
+
+
+def go_get_cctray():
+    return source.go_get_cctray()
