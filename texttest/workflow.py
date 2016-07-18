@@ -5,16 +5,14 @@ import subprocess
 from docker_management import ContainerManager
 import os
 
+
 def start_servers(docker):
-    # start db docker on unique port
-    # load data into db from flat files in test case
-    # start the dashboard server on unique port
-    db_port = 15550  # TODO: make the db port configurable in data_access.py so it can be set on the command line
+    db_port = 15550
     db_container = _start_db_docker(docker, db_port)
 
     application_port = 4545
     gocd_dash_path = os.environ['gocd_dash']
-    application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path, "-b", str(application_port)])
+    application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path, "-b", str(application_port), "--db-port", str(db_port)])
 
     return db_container, application_process
 
