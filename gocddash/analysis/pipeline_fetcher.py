@@ -8,18 +8,10 @@ from .data_access import get_connection
 from .go_client import *
 
 
-def request_pipelines(pipeline_name, offset):
-    pipeline_request = go_request_pipeline_history(pipeline_name, offset)
-    if (pipeline_request.status_code == 200):
-        return pipeline_request.content.decode("utf-8")
-    else:
-        return None
-
-
 def download_and_store(pipeline_name, offset, run_times):
     pipeline_json = []
     for _ in range(run_times):
-        pipelines = request_pipelines(pipeline_name, offset)
+        pipelines = go_request_pipeline_history(pipeline_name, offset)
         if pipelines:
             pipeline_json.extend(json.loads(pipelines)["pipelines"])
             offset += 10

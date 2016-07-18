@@ -22,7 +22,7 @@ def roundup(x):
 
 
 def get_max_pipeline_status(pipeline_name):
-    pipeline_request = request_pipelines(pipeline_name, 0)
+    pipeline_request = go_request_pipeline_history(pipeline_name, 0)
 
     if pipeline_request:
         pipeline_history = json.loads(pipeline_request)
@@ -41,4 +41,4 @@ def get_diff(from_counter, to_counter, size):
 
 
 def pipeline_exists_in_go(pipeline_name):
-    return go_request_pipeline_history(pipeline_name).status_code == 200
+    return go_get_pipeline_status(pipeline_name) is not None

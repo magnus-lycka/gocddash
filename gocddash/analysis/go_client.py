@@ -13,7 +13,7 @@ class GoSource:
         return requests.get(self.base_go_url + url, auth=self.auth)
 
     def go_request_pipeline_history(self, pipeline_name, offset=0):
-        return self.api_request("pipelines/" + pipeline_name + "/history/" + str(offset))
+        return self.api_request("pipelines/" + pipeline_name + "/history/" + str(offset)).content.decode("utf-8")
 
     def go_get_pipeline_instance(self, pipeline_name, pipeline_counter):
         return self.api_request("pipelines/" + pipeline_name + "/instance/" + str(pipeline_counter) + "/").content
