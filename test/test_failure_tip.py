@@ -4,9 +4,12 @@ from unittest.mock import MagicMock
 from gocddash.analysis.domain import Stage
 from gocddash.dash_board import failure_tip
 from gocddash.dash_board import pipeline_status
+from gocddash.util.config import create_config
 
 
 class TestFailureTip(unittest.TestCase):
+    create_config()
+
     def create_stage(self, parent=None, passed=False, failure_stage=None):
         if parent:
             pipeline_counter = parent.pipeline_counter - 1
@@ -14,9 +17,11 @@ class TestFailureTip(unittest.TestCase):
             pipeline_counter = 2000
 
         return Stage("characterize", pipeline_counter, "triggered by x",
-                     "changes", 1, "", "agent-123", failure_stage, "Passed" if passed else "Failed", pipeline_counter, "runTests")
+                     "changes", 1, "", "agent-123", failure_stage, "Passed" if passed else "Failed", pipeline_counter,
+                     "runTests")
 
     def test_current_passing(self):
+
         passed_stage = self.create_stage(None, True)
         current = pipeline_status.create_stage_info(passed_stage)
         result = failure_tip.get_failure_tip(current, None, 0)
@@ -48,7 +53,7 @@ class TestFailureTip(unittest.TestCase):
         pipeline_status.get_failure_stage_signature = MagicMock(side_effect=[
             {2000: {}}, {1999: {}}
         ])
-        pipeline_status.PipelineConfig().get_log_parser = MagicMock(return_value="characterize")
+        pipeline_status.get_config().get_log_parser = MagicMock(return_value="characterize")
 
         this_stage = self.create_stage(None, False, "TEST")
         previous_stage = self.create_stage(this_stage, False, "TEST")

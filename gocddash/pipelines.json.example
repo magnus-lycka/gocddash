@@ -1,7 +1,4 @@
 {
-  "username": "USERNAME",
-  "password": "PASSWORD",
-  "base_GO_URL": "http://localhost:8153/go/",
   "pipelines": [
     {
       "name": "some-pipeline",
