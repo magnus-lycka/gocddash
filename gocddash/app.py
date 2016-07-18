@@ -219,8 +219,7 @@ def insights(pipelinename):
 app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
-
-
+create_connection(db_port=app.config['DB_PORT'])
 
 @app.template_filter('bootstrap_status')
 def bootstrap_status(cctray_status):
@@ -363,8 +362,6 @@ def main():
         app.config['GO_SERVER_USER'] = input('go-user: ')
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
-
-    create_connection(db_port=app.config['DB_PORT'])
 
     app.run(port=app.config['BIND_PORT'])
 
