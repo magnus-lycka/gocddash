@@ -16,25 +16,42 @@ class SQLConnection:
         conn.autocommit = True
         self.conn = conn.cursor()
 
-    def insert_pipeline(self, id, stage_count, name, counter, trigger_message):
+    def insert_pipeline(self, pipeline):
         self.conn.execute(
-            """UPDATE pipeline SET stagecount=%s, pipelinename=%s, counter=%s, triggermessage=%s WHERE id=%s""",
-            (stage_count, name, counter, trigger_message, id))
-        self.conn.execute(
-            """INSERT INTO pipeline(id, stagecount, pipelinename, counter, triggermessage) SELECT %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline WHERE id=%s);""",
-            (id, stage_count, name, counter, trigger_message, id))
+            """UPDATE pipeline SET pipelinename=%s WHERE id=%s""",
+            (pipeline.pipeline_name, pipeline.pipeline_id))
 
-    def insert_stage(self, id, approved_by, pipeline_counter, pipeline_name, stage_index, result, scheduled_date, agent_uuid,
-                     stage_name):
         self.conn.execute(
-            """UPDATE stage SET approvedby=%s, pipelinecounter=%s, pipelinename=%s, stageindex=%s, result=%s, scheduleddate=%s, agentuuid=%s, stagename=%s WHERE id=%s;""",
-            (approved_by, pipeline_counter, pipeline_name, stage_index, result, scheduled_date, agent_uuid, stage_name,
-             id))
+            """INSERT INTO pipeline(pipelinename, id) SELECT %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline WHERE id=%s);""",
+            (pipeline.pipeline_name, pipeline.pipeline_id, pipeline.pipeline_id))
+
+    def insert_pipeline_instance(self, instance):
         self.conn.execute(
-            """INSERT INTO stage(id, approvedby, pipelinecounter, pipelinename, stageindex, result, scheduleddate, agentuuid, stagename) SELECT %s, %s, %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
-            (id, approved_by, pipeline_counter, pipeline_name, stage_index, result, scheduled_date, agent_uuid,
-             stage_name,
-             id))
+            """UPDATE pipeline_instance SET id=%s, pipelinecounter=%s, triggermessage=%s WHERE id=%s;""",
+            (instance.instance_id, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
+
+        self.conn.execute(
+            """INSERT INTO pipeline_instance(id, pipelinecounter, triggermessage) SELECT %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
+            (instance.instance_id, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
+
+    def insert_stage(self, stage):
+        self.conn.execute(
+            """UPDATE stage SET id=%s, stage_counter=%s, name=%s, approvedby=%s, result=%s WHERE id=%s;""",
+            (stage.stage_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
+
+        self.conn.execute(
+            """INSERT INTO stage(id, stage_counter, name=%s, approvedby, result) SELECT %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
+            (stage.stage_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
+
+    def insert_job(self, job):
+        self.conn.execute(
+            """UPDATE job SET id=%s, name=%s, agent_uuid=%s, scheduled_date=%s, result=%s WHERE id=%s;""",
+            (job.job_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
+
+        self.conn.execute(
+            """INSERT INTO job(id, name, agent_uuid, scheduled_date, result) SELECT %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM job WHERE id=%s);""",
+            (job.job_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
+
 
     def insert_agent(self, id, agent_name):
         self.conn.execute("""INSERT INTO agent(id, agentname) VALUES (%s, %s);""", (id, agent_name))
