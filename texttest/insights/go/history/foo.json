@@ -1,12 +1,27 @@
 {
   "pagination":{
-    "total":1
+    "total":2
   },
   "pipelines":[
     {
       "counter": 382,
       "name": "foo",
       "id": 123,
+      "build_cause": {
+        "trigger_message": "hej :)"
+      },
+      "stages": [
+        {
+          "result": "Success",
+          "counter": 1,
+          "name": "alpha"
+        }
+      ]
+    },
+    {
+      "counter": 381,
+      "name": "foo",
+      "id": 122,
       "build_cause": {
         "trigger_message": "hej :)"
       },
