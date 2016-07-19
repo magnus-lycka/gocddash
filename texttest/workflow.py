@@ -35,10 +35,8 @@ def perform_testcase(port):
                 path = url_contents[2][4:]
                 url = protocol + ":" + host + ":" + str(port) + path
 
-                log.write("url: {}".format(url))
-                # navigate to the url
-                # make ascii art of the page
-                # store the ascii art in the 'gui_log.txt' file
+                log.write("url: {}\n".format(url))
+
                 sprocess_call = subprocess.Popen(["/usr/bin/lynx", "-dump", url], stdout=subprocess.PIPE)
                 out = sprocess_call.communicate()[0]
                 log.write(out)

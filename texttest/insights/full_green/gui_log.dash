@@ -1,11 +1,12 @@
-url: http://127.0.0.1:4748/dash/insights/foo   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
+url: http://127.0.0.1:4850/dash/insights/foo
+   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
      * [4]All
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 10:17:28 | 00 seconds
+     * Last refresh: 11:32:53 | 00 seconds
 
 Insights for foo
 
@@ -46,11 +47,11 @@ Last green
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4748/dash/?which=failing
-   3. http://127.0.0.1:4748/dash/?which=progress
-   4. http://127.0.0.1:4748/dash/?which=all
-   5. http://127.0.0.1:4748/dash/select/
-   6. http://127.0.0.1:4748/dash/select_theme/
+   2. http://127.0.0.1:4850/dash/?which=failing
+   3. http://127.0.0.1:4850/dash/?which=progress
+   4. http://127.0.0.1:4850/dash/?which=all
+   5. http://127.0.0.1:4850/dash/select/
+   6. http://127.0.0.1:4850/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/foo
    8. http://go.pagero.local/go/pipelines/foo/382/alpha/1
    9. http://go.pagero.local/go/tab/build/detail/foo/382/alpha/1/defaultJob#tab-tests
