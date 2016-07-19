@@ -46,8 +46,8 @@ def fetch_new_agents():
 
 
 def agent_uuid_to_hostname(agent_uuid):
-    agent_information = go_get_agent_information(agent_uuid)
-    if agent_information.status_code == 404:
+    exists, agent_information = go_get_agent_information(agent_uuid)
+    if not exists:
         return "UNKNOWN:" + agent_uuid
     return json.loads(agent_information)["hostname"]
 
