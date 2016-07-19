@@ -6,6 +6,7 @@ from gocddash.util.get_failure_stage import get_failure_stage
 from gocddash.util.config import get_config
 from .data_access import get_connection
 from .go_client import *
+from .domain import PipelineInstance, Stage, Job
 
 
 def download_and_store(pipeline_name, offset, run_times):
@@ -30,8 +31,8 @@ def parse_pipeline_info(pipelines):
             pipeline_name = pipeline["name"]
             pipeline_id = pipeline["id"]
             stage_name = pipeline["stages"][0]["name"]
-            get_connection().insert_pipeline(pipeline_id, stage_count, pipeline_name, pipeline_counter,
-                            pipeline["build_cause"]["trigger_message"])
+            instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
+            get_connection().insert_pipeline_instance(instance)
             parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name)
         else:
             print("This pipeline index (" + str(pipeline_counter) + ") is not finished yet.")
@@ -59,8 +60,12 @@ def parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name):
         timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
         stageid = tree["id"]
         stage_result = tree["result"]
-        get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, stageIndex, stage_result, timestamp,
-                     tree["jobs"][0]["agent_uuid"], stage_name)
+        stage = Stage(stage_name, tree["approved_by"], stage_result, stageIndex, stageid)
+        get_connection().insert_stage(stage)
+        # job = Job()
+        # TODO: Insert job
+        # get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, stageIndex, stage_result, timestamp,
+        #              tree["jobs"][0]["agent_uuid"], stage_name)
 
         fetch_failure_info(stageIndex, pipeline_counter, pipeline_name, stage_result, stageid, stage_name)
 

@@ -4,14 +4,9 @@
 from yoyo import step
 
 steps = [
-    step("""CREATE TABLE pipeline(
-              id INTEGER NOT NULL PRIMARY KEY,
-              pipelinename TEXT UNIQUE
-            );""",
-         "DROP TABLE pipeline;"),
-
     step("""CREATE TABLE pipeline_instance(
               id INTEGER NOT NULL PRIMARY KEY,
+              pipeline_name TEXT,
               pipelinecounter INTEGER,
               triggermessage TEXT
             );

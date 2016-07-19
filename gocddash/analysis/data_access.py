@@ -76,7 +76,7 @@ class SQLConnection:
 
     def get_new_agents(self):
         self.conn.execute(
-            """SELECT DISTINCT agentuuid FROM stage WHERE agentuuid IS NOT NULL EXCEPT SELECT id FROM agent""")
+            """SELECT DISTINCT agent_uuid FROM job WHERE agent_uuid IS NOT NULL EXCEPT SELECT id FROM agent""")
         return map(lambda x: x[0], self.conn.fetchall())
 
     def is_failure_downloaded(self, stage_id):
