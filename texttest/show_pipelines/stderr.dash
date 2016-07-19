@@ -1,2 +1,2 @@
- * Running on http://127.0.0.1:4765/ (Press CTRL+C to quit)
-127.0.0.1 - - [18/Jul/2016 13:34:15] "GET /dash/?which=failing HTTP/1.0" 200 -
+ * Running on http://127.0.0.1:4777/ (Press CTRL+C to quit)
+127.0.0.1 - - [19/Jul/2016 09:35:50] "GET /dash/?which=all HTTP/1.0" 200 -
