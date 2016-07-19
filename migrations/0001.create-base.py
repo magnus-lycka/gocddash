@@ -6,27 +6,35 @@ from yoyo import step
 steps = [
     step("""CREATE TABLE pipeline(
               id INTEGER NOT NULL PRIMARY KEY,
-              stagecount INTEGER,
-              pipelinename TEXT,
-              counter INTEGER,
-              triggermessage TEXT,
-              UNIQUE (pipelinename, counter)
+              pipelinename TEXT UNIQUE
             );""",
          "DROP TABLE pipeline;"),
 
-    step("""CREATE TABLE stage(
+    step("""CREATE TABLE pipeline_instance(
               id INTEGER NOT NULL PRIMARY KEY,
-              approvedby TEXT,
               pipelinecounter INTEGER,
-              pipelinename TEXT,
-              stageindex INTEGER,
-              result TEXT,
-              scheduleddate TIMESTAMP,
-              agentuuid TEXT,
-              stagename TEXT
+              triggermessage TEXT
             );
     """,
+         "DROP TABLE pipeline_instance;"),
+
+    step("""CREATE TABLE stage(
+              id INTEGER NOT NULL PRIMARY KEY,
+              stage_counter INTEGER,
+              name TEXT,
+              approvedby TEXT,
+              result TEXT
+            );""",
          "DROP TABLE stage;"),
+
+    step("""CREATE TABLE job(
+              id INTEGER NOT NULL PRIMARY KEY,
+              name TEXT,
+              agent_uuid TEXT,
+              scheduled_date TIMESTAMP,
+              result TEXT
+            );""",
+         "DROP TABLE job;"),
 
     step("""CREATE TABLE agent(
               id TEXT NOT NULL PRIMARY KEY,
@@ -48,5 +56,13 @@ steps = [
               stageid INTEGER,
               failurestage TEXT
             );""",
-         "DROP TABLE failureinformation;")
+         "DROP TABLE failureinformation;"),
+
+    step("""CREATE TABLE junitfailure(
+              id SERIAL PRIMARY KEY,
+              stageid INTEGER,
+              failuretype TEXT,
+              failuretest TEXT
+            );""",
+         "DROP TABLE junitfailure;")
 ]
