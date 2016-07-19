@@ -31,7 +31,7 @@ class SQLConnection:
             (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
 
         self.conn.execute(
-            """INSERT INTO pipeline_instance(id, pipeline_name, pipelinecounter, triggermessage) SELECT %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
+            """INSERT INTO pipeline_instance(id, pipeline_name, pipelinecounter, triggermessage) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
             (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
 
     def insert_stage(self, stage):
@@ -40,7 +40,7 @@ class SQLConnection:
             (stage.stage_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
 
         self.conn.execute(
-            """INSERT INTO stage(id, stage_counter, name=%s, approvedby, result) SELECT %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
+            """INSERT INTO stage(id, stage_counter, name, approvedby, result) SELECT %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
             (stage.stage_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
 
     def insert_job(self, job):
@@ -70,7 +70,7 @@ class SQLConnection:
                                 (stageid, failure_type, failure_test))
 
     def get_highest_pipeline_count(self, pipeline_name):
-        self.conn.execute("""SELECT COALESCE(max(counter), 0) FROM pipeline WHERE pipelinename = %s""",
+        self.conn.execute("""SELECT COALESCE(max(pipelinecounter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
                                 (pipeline_name,))
         return self.conn.fetchone()[0]
 
@@ -111,7 +111,7 @@ class SQLConnection:
         return self.conn.fetchall()
 
     def get_synced_pipelines(self):
-        self.conn.execute("""SELECT pipelinename, max(counter) FROM pipeline GROUP BY pipelinename;""")
+        self.conn.execute("""SELECT pipeline_name, max(pipelinecounter) FROM pipeline_instance GROUP BY pipeline_name;""")
         return self.conn.fetchall()
 
     def fetch_current_stage(self, pipeline_name):
