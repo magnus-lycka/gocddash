@@ -122,7 +122,7 @@ class SQLConnection:
         return self.conn.fetchone()
 
     def truncate_tables(self):
-        self.conn.execute("TRUNCATE failureinformation, junitfailure, pipeline, stage, texttestfailure")
+        self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index):
         sql = """(SELECT * FROM failure_info WHERE pipelinename = %s AND counter = %s AND stageindex < %s
