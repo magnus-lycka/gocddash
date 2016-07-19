@@ -7,6 +7,8 @@ filename_convention_scheme:standard
 # Expanded name to use for application
 full_name:Go CD Dashboard
 
+queue_system_max_capacity:1
+
 default_checkout:gocddash
 
 link_test_path:urls.txt
