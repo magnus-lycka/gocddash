@@ -1,0 +1,60 @@
+url: http://127.0.0.1:4685/dash/insights/foo
+   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
+     * [2]Failing
+     * [3]Progress
+     * [4]All
+
+     * [5]Select pipeline groups
+     * [6]Select theme
+     * Last refresh: 13:23:21 | 00 seconds
+
+Insights for foo
+
+   Information: Latest pipeline in GO is not the same as the latest
+   analysed. Waiting for sync (~1min).
+
+Latest in Go
+
+   Pipeline counter: 383 , run 1
+
+   Status: Success
+
+Latest analyzed
+
+   Pipeline counter:
+          382
+
+   Result:
+          Success
+
+   Triggered by:
+          hej :)
+
+   Approved by:
+          asdf
+
+Last green
+
+   Pipeline counter: 382 (0 pipelines ago)
+
+   At: 2015-07-10 08:25:18
+     __________________________________________________________________
+
+   [7]Overview
+   [8]RERUN alpha
+   [9]Test Summary
+     __________________________________________________________________
+
+   ???
+
+References
+
+   1. http://go.pagero.local/go/
+   2. http://127.0.0.1:4685/dash/?which=failing
+   3. http://127.0.0.1:4685/dash/?which=progress
+   4. http://127.0.0.1:4685/dash/?which=all
+   5. http://127.0.0.1:4685/dash/select/
+   6. http://127.0.0.1:4685/dash/select_theme/
+   7. http://go.pagero.local/go/tab/pipeline/history/foo
+   8. http://go.pagero.local/go/pipelines/foo/382/alpha/1
+   9. http://go.pagero.local/go/tab/build/detail/foo/382/alpha/1/defaultJob#tab-tests
