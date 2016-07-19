@@ -31,10 +31,11 @@ class Pipeline:
 
 
 class Instance:
-    def __init__(self, pipeline_counter, trigger_message, id):
+    def __init__(self, pipeline_counter, trigger_message, instance_id):
         self.pipeline_counter = pipeline_counter
         self.trigger_message = trigger_message
-        self.id = id
+        self.instance_id = instance_id
+        self.stages = {}
 
 
 class Stage:
@@ -57,9 +58,9 @@ class Stage:
 
 
 class Job:
-    def __init__(self, job_name, agent_uuid, scheduled_date, id, result):
+    def __init__(self, job_name, agent_uuid, scheduled_date, job_id, job_result):
         self.job_name = job_name
         self.agent_uuid = agent_uuid
         self.scheduled_date = scheduled_date
-        self.id = id
-        self.result = result
+        self.job_id = job_id
+        self.job_result = job_result
