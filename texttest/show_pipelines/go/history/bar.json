@@ -4,9 +4,9 @@
   },
   "pipelines":[
     {
-      "counter": 382,
-      "name": "foo",
-      "id": 123,
+      "counter": 57,
+      "name": "bar",
+      "id": 6948,
       "build_cause": {
         "trigger_message": "hej :)"
       },
@@ -14,7 +14,7 @@
         {
           "result": "Success",
           "counter": 1,
-          "name": "alpha"
+          "name": "beta"
         }
       ]
     }

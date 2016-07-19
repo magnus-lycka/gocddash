@@ -28,6 +28,7 @@ stdout:pulling image for{[->]}image pulled
 gui_log:Last refresh:
 gui_log:127.0.0.1:\d*{REPLACE 127.0.0.1:<port>}
 stderr:127.0.0.1:\d*{REPLACE 127.0.0.1:<port>}
+stderr:\d{2}/\w{3}/\d{4}{REPLACE <date>}
 stderr:\d{2}:\d{2}:\d{2}{REPLACE <timestamp>}
 [end]
 
