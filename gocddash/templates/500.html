@@ -1,14 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>500 Internal Error</title>
+    <title>500 Internal Server Error</title>
 </head>
-<body>
-{{ statuscode }}
-<br>
-{{ statuscode.description }}
-<br>
 
-</body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>500: Internal Server Error</title>
+    </head>
+    <div class="container">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <h1>500: Internal Server Error</h1>
+                <p>{{ statuscode }}: The server could not handle your request at this moment. This may be caused by
+                    various reasons including:</p>
+                        <ul class="list-group">
+                            <li class="list-group-item"> The GO server is down</li>
+                            <li class="list-group-item"> WSGI is behaving differently than expected</li>
+                            <li class="list-group-item"> There's some mistake in the code</li>
+                        </ul>
+                <p><a class="btn btn-primary btn-lg" href="{{ dashboard_link }}" role="button">Go back to the dashboard</a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

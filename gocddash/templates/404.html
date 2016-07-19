@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Nu blev det fel</title>
-</head>
-<body>
-<h2>{{ statuscode }}</h2>
-Oops! These are not the droids you're looking for.
+{% extends "layout.html" %}
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>404: Not Found!</title>
+    </head>
+    <div class="container">
 
-<br>
-<br>
+        <div class="jumbotron">
+            <h1>:(</h1>
+            <p>{{ statuscode }}: It looks like the page you're trying to access does not exist.</p>
+            <p><a class="btn btn-primary btn-lg" href="{{ dashboard_link }}" role="button">Go back to the dashboard</a></p>
+        </div>
+    </div>
+{% endblock %}
 
-TODO: Make this page look similar to Pagero.com 404 page but with some different links.
-<br>
-<a href="{{ dashboard_link }}">Go back to the dashboard</a>
-
-</body>
-</html>

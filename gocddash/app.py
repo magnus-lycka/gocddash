@@ -29,6 +29,7 @@ group_of_pipeline = defaultdict(str)
 # http://stackoverflow.com/questions/18967441/add-a-prefix-to-all-flask-routes
 gocddash = Blueprint('gocddash', __name__)
 
+
 def get_bootstrap_theme():
     theme = request.cookies.get('theme_cookie')
     return theme or 'paper'
@@ -95,12 +96,12 @@ def get_cctray_status():
 
 @gocddash.app_errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html', statuscode=e,), 500
+    return render_template('500.html', statuscode=e, now=datetime.now(), footer=get_footer(), theme=get_bootstrap_theme(), dashboard_link=url_for('gocddash.dashboard')), 500
 
 
 @gocddash.app_errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', statuscode=e, dashboard_link=url_for('gocddash.dashboard')), 404
+    return render_template('404.html', statuscode=e, dashboard_link=url_for('gocddash.dashboard'), now=datetime.now(), footer=get_footer(), theme=get_bootstrap_theme()), 404
 
 # Catches all errors - a bit too trigger happy
 # @gocddash.app_errorhandler(Exception)
@@ -320,7 +321,6 @@ def get_all_pipeline_groups():
     return pipeline_groups
 
 
-#
 def is_valid_file(parser, arg):
     if not os.path.isfile(arg):
         parser.error("The file %s does not exist!" % arg)
@@ -344,6 +344,7 @@ def parse_args():
     pargs_dict = vars(pargs)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
     return pargs_dict
+
 
 def main():
     if not os.path.isfile(os.path.dirname(abspath(getsourcefile(lambda: 0))) + '/application.cfg'):

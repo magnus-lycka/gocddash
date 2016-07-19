@@ -50,7 +50,7 @@ class FailureRecommendation:
             (lambda: self.current.test_names == self.previous.test_names,
              "Same failure indices as last test. Unlikely flickering."),
             (lambda: len(current.test_names) == 1,
-             "Only one test failure. Potential for flickering."),
+             "Only one test failure. Potential for flickering but needs further investigation."),
             (lambda: len(self.current.test_names) == len(self.previous.test_names),
              "Same number of failures as previous test. Unlikely flickering.")
         ]
