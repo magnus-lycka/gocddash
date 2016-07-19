@@ -1,0 +1,12 @@
+{
+  "name": "beta",
+  "approved_by": "asdf",
+  "id": 647838,
+  "result": "Failed",
+  "jobs": [
+    {
+      "scheduled_date": 1436509518752,
+      "agent_uuid": "1"
+    }
+  ]
+}

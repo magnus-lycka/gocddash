@@ -1,0 +1,2 @@
+ * Running on http://127.0.0.1:4591/ (Press CTRL+C to quit)
+127.0.0.1 - - [19/Jul/2016 11:43:39] "GET /dash/insights/foo HTTP/1.0" 200 -

@@ -1,0 +1,5 @@
+starting docker container from image dockerregistry.pagero.local/go-analysis-db:1.1.1-GO
+started docker container with id=73442f370b0f89653c53f99003a76a71d44be517597de62da4426650419a5d65
+Starting test workflow for GO CD Dashboard
+stopping docker container
+docker container stopped and removed
