@@ -16,6 +16,7 @@ class GoSource:
         response = self.base_request(url, headers)
         if response.status_code != 200:
             raise ValueError("Got response code " + str(response.status_code) + " when requesting " + url)
+        return response.content.decode("utf-8")
 
     def api_request(self, url, headers=None):
         return self.base_request("api/" + url, headers)
