@@ -157,7 +157,7 @@ def select_theme():
 def insights(pipelinename):
     current_stage = get_current_stage(pipelinename)
     if current_stage is None:
-        abort(500, "Database error. Have you tried syncing some pipelines using sync_pipelines.py?")
+        abort(500, "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
                                     current_stage.stage_index)
