@@ -49,20 +49,20 @@ def agent_uuid_to_hostname(agent_uuid):
     agent_information = go_get_agent_information(agent_uuid)
     if agent_information.status_code == 404:
         return "UNKNOWN:" + agent_uuid
-    return json.loads(agent_information.content.decode("utf-8"))["hostname"]
+    return json.loads(agent_information)["hostname"]
 
 
 def parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name):
-    for i in range(int(stage_count), 0, -1):
-        response = go_request_stages_history(pipeline_name, pipeline_counter, i, stage_name).decode("utf-8")
+    for stageIndex in range(int(stage_count), 0, -1):
+        response = go_request_stages_history(pipeline_name, pipeline_counter, stageIndex, stage_name)
         tree = json.loads(response)
         timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
         stageid = tree["id"]
         stage_result = tree["result"]
-        get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, i, stage_result, timestamp,
+        get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, stageIndex, stage_result, timestamp,
                      tree["jobs"][0]["agent_uuid"], stage_name)
 
-        fetch_failure_info(i, pipeline_counter, pipeline_name, stage_result, stageid, stage_name)
+        fetch_failure_info(stageIndex, pipeline_counter, pipeline_name, stage_result, stageid, stage_name)
 
 
 def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stage_id, stage_name):

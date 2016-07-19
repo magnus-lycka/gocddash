@@ -27,10 +27,10 @@ class GoSource:
 
     def go_request_stages_history(self, pipeline_name, pipeline_id, stage, stage_name):
         return self.api_request(
-            "stages/" + pipeline_name + "/" + stage_name + "/instance/" + str(pipeline_id) + "/" + str(stage)).content
+            "stages/" + pipeline_name + "/" + stage_name + "/instance/" + str(pipeline_id) + "/" + str(stage)).content.decode("utf-8")
 
     def go_get_agent_information(self, agent_uuid):
-        return self.api_request("agents/" + agent_uuid, headers={"Accept": "application/vnd.go.cd.v2+json"})
+        return self.api_request("agents/" + agent_uuid, headers={"Accept": "application/vnd.go.cd.v2+json"}).content.decode("utf-8")
 
     def go_request_job_history(self, pipeline_name, stage_name, offset=0):
         return self.api_request(
@@ -73,11 +73,11 @@ class FileSource:
     def go_get_stage_instance(self, pipeline_name, pipeline_counter, stage_name):
         return ""
 
-    def go_request_stages_history(self, pipeline_name, pipeline_id, stage, stage_name):
-        return ""
+    def go_request_stages_history(self, pipeline_name, pipeline_counter, stage_index, stage_name):
+        return open(self.directory + "/stages/" + pipeline_name + "_" + str(pipeline_counter) + "_" + stage_name + "_" + str(stage_index) + ".json").read()
 
     def go_get_agent_information(self, agent_uuid):
-        return ""
+        return open(self.directory + "/agents/" + agent_uuid + ".json").read()
 
     def go_request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name):
         return ""
@@ -114,8 +114,8 @@ def go_get_pipeline_status(pipeline_name):
     return _go_client.go_get_pipeline_status(pipeline_name)
 
 
-def go_request_stages_history(pipeline_name, pipeline_id, stage, stage_name):
-    return _go_client.go_request_stages_history(pipeline_name, pipeline_id, stage, stage_name)
+def go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name):
+    return _go_client.go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name)
 
 
 def go_get_agent_information(agent_uuid):
