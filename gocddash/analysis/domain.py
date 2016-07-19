@@ -24,15 +24,9 @@ def get_latest_passing_stage(pipeline_name):
         return None
 
 
-class Pipeline:
-    def __init__(self, pipeline_name, pipeline_id):
+class PipelineInstance:
+    def __init__(self, pipeline_name, pipeline_counter, trigger_message, instance_id):
         self.pipeline_name = pipeline_name
-        self.pipeline_id = pipeline_id
-        self.instances = {}
-
-
-class Instance:
-    def __init__(self, pipeline_counter, trigger_message, instance_id):
         self.pipeline_counter = pipeline_counter
         self.trigger_message = trigger_message
         self.instance_id = instance_id
