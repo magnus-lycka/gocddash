@@ -1,8 +1,8 @@
 {
   "name": "beta",
   "approved_by": "asdf",
-  "id": 647838,
-  "result": "Failed",
+  "id": 647836,
+  "result": "Passed",
   "jobs": [
     {
       "scheduled_date": 1436509518752,

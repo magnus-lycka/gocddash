@@ -105,7 +105,7 @@ class FileSource:
         return ""
 
     def go_request_comparison_html(self, pipeline_name, current, comparison):
-        return ""
+        return open(self.directory + "/compare.html").read()
 
     def go_get_cctray(self):
         return open(self.directory + "/config/cctray.xml").read()
