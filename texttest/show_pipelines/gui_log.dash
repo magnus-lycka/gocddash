@@ -1,11 +1,11 @@
-url: http://127.0.0.1:4777/dash/?which=all   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
+url: http://127.0.0.1:4594/dash/?which=all   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
      * [4]All
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 09:35:50 | 00 seconds
+     * Last refresh: 09:52:40 | 00 seconds
 
 [7]fnord 98 [8]2015-11-26
 
@@ -25,18 +25,27 @@ url: http://127.0.0.1:4777/dash/?which=all   (BUTTON) Toggle navigation [1]http:
    [23]delta 1 [24]defaultJob
    Breakers: Mary Wollstonecraft <maryw@example.com>
 
-[25]snafu-service 250 [26]2015-11-26
+[25]foo 382 [26]2015-11-26 [27]| Insights Available (382)
 
-   [27]build 1 [28]defaultJob
-   [29]test 1 [30]Integration_Tests [31]DB_Tests
+   [28]alpha 1 [29]defaultJob
 
-[32]snafu-transformation 100 [33]2015-11-25
+[30]snafu-service 250 [31]2015-11-26
 
-   [34]defaultStage 1 [35]defaultJob
+   [32]build 1 [33]defaultJob
+   [34]test 1 [35]Integration_Tests [36]DB_Tests
 
-[36]large-norf 13 [37]2015-11-20
+[37]snafu-transformation 100 [38]2015-11-25
 
-   [38]runTests 1 [39]defaultJob
+   [39]defaultStage 1 [40]defaultJob
+
+[41]large-norf 13 [42]2015-11-20
+
+   [43]runTests 1 [44]defaultJob
+
+[45]bar 57 [46]2015-11-03 [47]| Insights Available (57)
+
+   [48]beta 1 [49]defaultJob
+   Breakers: Willy Wonka <willyw@example.com>
      __________________________________________________________________
 
    System status
@@ -50,11 +59,11 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4777/dash/?which=failing
-   3. http://127.0.0.1:4777/dash/?which=progress
-   4. http://127.0.0.1:4777/dash/?which=all
-   5. http://127.0.0.1:4777/dash/select/
-   6. http://127.0.0.1:4777/dash/select_theme/
+   2. http://127.0.0.1:4594/dash/?which=failing
+   3. http://127.0.0.1:4594/dash/?which=progress
+   4. http://127.0.0.1:4594/dash/?which=all
+   5. http://127.0.0.1:4594/dash/select/
+   6. http://127.0.0.1:4594/dash/select_theme/
    7. http://go-server/go/pipelines/value_stream_map/fnord/98
    8. http://go-server/go/pipelines/value_stream_map/fnord/98
    9. http://go-server/go/pipelines/fnord/98/runTests/1
@@ -73,27 +82,39 @@ References
   22. http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob
   23. http://go-server/go/pipelines/baz/181/delta/1
   24. http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob
-  25. http://go-server/go/pipelines/value_stream_map/snafu-service/250
-  26. http://go-server/go/pipelines/value_stream_map/snafu-service/250
-  27. http://go-server/go/pipelines/snafu-service/250/build/1
-  28. http://go-server/go/tab/build/detail/snafu-service/250/build/1/defaultJob
-  29. http://go-server/go/pipelines/snafu-service/250/test/1
-  30. http://go-server/go/tab/build/detail/snafu-service/250/test/2/Integration_Tests
-  31. http://go-server/go/tab/build/detail/snafu-service/250/test/1/DB_Tests
-  32. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
-  33. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
-  34. http://go-server/go/pipelines/snafu-transformation/100/defaultStage/1
-  35. http://go-server/go/tab/build/detail/snafu-transformation/100/defaultStage/1/defaultJob
-  36. http://go-server/go/pipelines/value_stream_map/large-norf/13
-  37. http://go-server/go/pipelines/value_stream_map/large-norf/13
-  38. http://go-server/go/pipelines/large-norf/13/runTests/1
-  39. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
+  25. http://go-server/go/pipelines/value_stream_map/foo/382
+  26. http://go-server/go/pipelines/value_stream_map/foo/382
+  27. http://127.0.0.1:4594/dash/insights/foo
+  28. http://go-server/go/pipelines/foo/382/alpha/1
+  29. http://go-server/go/tab/build/detail/foo/382/alpha/1/defaultJob
+  30. http://go-server/go/pipelines/value_stream_map/snafu-service/250
+  31. http://go-server/go/pipelines/value_stream_map/snafu-service/250
+  32. http://go-server/go/pipelines/snafu-service/250/build/1
+  33. http://go-server/go/tab/build/detail/snafu-service/250/build/1/defaultJob
+  34. http://go-server/go/pipelines/snafu-service/250/test/1
+  35. http://go-server/go/tab/build/detail/snafu-service/250/test/2/Integration_Tests
+  36. http://go-server/go/tab/build/detail/snafu-service/250/test/1/DB_Tests
+  37. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
+  38. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
+  39. http://go-server/go/pipelines/snafu-transformation/100/defaultStage/1
+  40. http://go-server/go/tab/build/detail/snafu-transformation/100/defaultStage/1/defaultJob
+  41. http://go-server/go/pipelines/value_stream_map/large-norf/13
+  42. http://go-server/go/pipelines/value_stream_map/large-norf/13
+  43. http://go-server/go/pipelines/large-norf/13/runTests/1
+  44. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
+  45. http://go-server/go/pipelines/value_stream_map/bar/57
+  46. http://go-server/go/pipelines/value_stream_map/bar/57
+  47. http://127.0.0.1:4594/dash/insights/bar
+  48. http://go-server/go/pipelines/bar/57/runTests/1
+  49. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  41. http://127.0.0.1:4777/dash/?which=all#collapse1
-  42. http://127.0.0.1:4777/dash/?which=all#collapse2
-  43. http://127.0.0.1:4777/dash/?which=all#collapse3
-  44. http://127.0.0.1:4777/dash/?which=all#collapse4
-  45. http://127.0.0.1:4777/dash/?which=all#collapse5
-  46. http://127.0.0.1:4777/dash/?which=all#collapse6
-  47. http://127.0.0.1:4777/dash/?which=all#collapse7
+  51. http://127.0.0.1:4594/dash/?which=all#collapse1
+  52. http://127.0.0.1:4594/dash/?which=all#collapse2
+  53. http://127.0.0.1:4594/dash/?which=all#collapse3
+  54. http://127.0.0.1:4594/dash/?which=all#collapse4
+  55. http://127.0.0.1:4594/dash/?which=all#collapse5
+  56. http://127.0.0.1:4594/dash/?which=all#collapse6
+  57. http://127.0.0.1:4594/dash/?which=all#collapse7
+  58. http://127.0.0.1:4594/dash/?which=all#collapse8
+  59. http://127.0.0.1:4594/dash/?which=all#collapse9
