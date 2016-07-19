@@ -74,23 +74,26 @@ class FileSource:
     def __init__(self, directory):
         self.directory = directory
 
+    def read_file(self, path):
+        return open(self.directory + path).read()
+
     def go_request_pipeline_history(self, pipeline_name, offset=0):
-        return open(self.directory + "/history/" + pipeline_name + ".json").read()
+        return self.read_file("/history/" + pipeline_name + ".json")
 
     def go_get_pipeline_instance(self, pipeline_name, pipeline_counter):
         return ""
 
     def go_get_pipeline_status(self, pipeline_name):
-        return open(self.directory + "/status/" + pipeline_name + ".json").read()
+        return self.read_file("/status/" + pipeline_name + ".json")
 
     def go_get_stage_instance(self, pipeline_name, pipeline_counter, stage_name):
         return ""
 
     def go_request_stages_history(self, pipeline_name, pipeline_counter, stage_index, stage_name):
-        return open(self.directory + "/stages/" + pipeline_name + "_" + str(pipeline_counter) + "_" + stage_name + "_" + str(stage_index) + ".json").read()
+        return self.read_file("/stages/" + pipeline_name + "_" + str(pipeline_counter) + "_" + stage_name + "_" + str(stage_index) + ".json")
 
     def go_get_agent_information(self, agent_uuid):
-        return True, open(self.directory + "/agents/" + agent_uuid + ".json").read()
+        return True, self.read_file("/agents/" + agent_uuid + ".json")
 
     def go_request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name):
         return ""
@@ -99,16 +102,16 @@ class FileSource:
         return ""
 
     def go_get_pipeline_groups(self):
-        return open(self.directory + "/config/pipeline_groups.json").read()
+        return self.read_file("/config/pipeline_groups.json")
 
     def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name):
         return ""
 
     def go_request_comparison_html(self, pipeline_name, current, comparison):
-        return open(self.directory + "/compare.html").read()
+        return self.read_file("/compare.html")
 
     def go_get_cctray(self):
-        return open(self.directory + "/config/cctray.xml").read()
+        return self.read_file("/config/cctray.xml")
 
 
 def go_request_pipeline_history(pipeline_name, offset=0):
