@@ -57,8 +57,9 @@ def read_cfg(path=os.getcwd() + "/gocddash/application.cfg"):
     with open(path) as lines:
         lines = chain(("[top]",), lines)  # Reads cfg file without section headers
         parser.read_file(lines)
+
     cfg = dict(parser.items('top'))
-    return cfg['go_server_url'].strip('"'), cfg['go_server_user'].strip('"'), cfg['go_server_passwd'].strip('"')
+    return map(lambda s: cfg[s].strip('"'), ['go_server_url', 'go_server_user', 'go_server_passwd', 'db_port'])
 
 
 def parse_args():
@@ -73,7 +74,6 @@ def parse_args():
 
 def main():
     # Instantiate config, database and go client
-    data_access.create_connection()
     pargs_dict = parse_args()
 
     pipeline_cfg = pargs_dict['pipeline_cfg']
@@ -85,14 +85,15 @@ def main():
 
     app_cfg = pargs_dict['app_cfg']
     if app_cfg:
-        server_url, user, passwd = read_cfg(app_cfg)
+        server_url, user, passwd, db_port = read_cfg(app_cfg)
     else:
-        server_url, user, passwd = read_cfg()
+        server_url, user, passwd, db_port = read_cfg()
 
     file_source = pargs_dict['file_source']
     if file_source:
         server_url = file_source
 
+    data_access.create_connection(db_port)
     go_client.create_go_client(server_url, (user, passwd))
 
     with codecs.open(pipelines_path, encoding='utf-8') as input_reader: # TODO: does this mean that this is open through the entire lifecycle?

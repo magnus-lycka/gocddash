@@ -1,5 +1,6 @@
+2016-07-20 09:06:33.512698 Starting synchronization.
 starting docker container from image dockerregistry.pagero.local/go-analysis-db:1.1.1-GO
-started docker container with id=cc532aac9eb16f16cbd46c88204f914a3263f2c49000617429bb4f8715e29148
+started docker container with id=500119b4e50abf43c9b0ca19a3212d622e4bf5eb6dad6d61ee7cc76c2e938a2d
 Starting test workflow for GO CD Dashboard
 stopping docker container
 docker container stopped and removed
