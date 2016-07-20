@@ -16,7 +16,7 @@ steps = [
 #          "DROP VIEW run_info;"),
 #
     step("""CREATE VIEW failure_info AS
-            SELECT p.pipeline_name, p.pipelinecounter, s.stage_counter, s.id, s.name as stage_name, p.triggermessage, s.approvedby, s.result, f.failurestage
+            SELECT p.pipeline_name, p.pipelinecounter, s.stage_counter, s.id, s.name as stage_name, p.triggermessage, s.approvedby, s.result, f.failurestage, s.scheduled_date
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
             LEFT JOIN failureinformation f ON f.stageid = s.id

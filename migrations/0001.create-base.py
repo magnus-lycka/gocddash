@@ -19,6 +19,7 @@ steps = [
               stage_counter INTEGER,
               name TEXT,
               approvedby TEXT,
+              scheduled_date TIMESTAMP,
               result TEXT
             );""",
          "DROP TABLE stage;"),

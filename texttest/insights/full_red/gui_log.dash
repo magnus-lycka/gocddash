@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4773/dash/insights/bar
+url: http://127.0.0.1:4620/dash/insights/bar
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4773/dash/insights/bar
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 09:53:01 | 00 seconds
+     * Last refresh: 11:29:06 | 00 seconds
 
 Insights for bar
 
@@ -43,7 +43,7 @@ Last green
 
    Pipeline counter: 55 (2 pipelines ago)
 
-   At:
+   At: 2015-07-10 08:25:18
      __________________________________________________________________
 
    [7]Overview
@@ -68,11 +68,11 @@ Upstream git blame: (57 compared to 55) [10]Go to GO CD comparison page
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4773/dash/?which=failing
-   3. http://127.0.0.1:4773/dash/?which=progress
-   4. http://127.0.0.1:4773/dash/?which=all
-   5. http://127.0.0.1:4773/dash/select/
-   6. http://127.0.0.1:4773/dash/select_theme/
+   2. http://127.0.0.1:4620/dash/?which=failing
+   3. http://127.0.0.1:4620/dash/?which=progress
+   4. http://127.0.0.1:4620/dash/?which=all
+   5. http://127.0.0.1:4620/dash/select/
+   6. http://127.0.0.1:4620/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/bar
    8. http://go.pagero.local/go/pipelines/bar/57/beta/1
    9. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests

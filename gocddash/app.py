@@ -167,9 +167,8 @@ def insights(pipeline_name):
     if current_stage.is_success():
         git_blame_data = []
     elif latest_passing_stage is None:
-        first_synced = get_first_synced_stage(pipeline_name)
-        latest_passing_stage = first_synced
-        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, first_synced)
+        latest_passing_stage = get_first_synced_stage(pipeline_name)
+        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage)
     else:
         git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
 

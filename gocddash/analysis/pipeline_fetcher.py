@@ -2,11 +2,11 @@ import json
 from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
-from gocddash.util.get_failure_stage import get_failure_stage
 from gocddash.util.config import get_config
+from gocddash.util.get_failure_stage import get_failure_stage
 from .data_access import get_connection
+from .domain import PipelineInstance, Stage, create_stage
 from .go_client import *
-from .domain import PipelineInstance, Stage, Job, create_stage
 
 
 def download_and_store(pipeline_name, offset, run_times):
@@ -62,11 +62,12 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
         tree = json.loads(response)
         stageid = tree["id"]
         stage_result = tree["result"]
+        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
 
-        stage = Stage(stage_name, tree["approved_by"], stage_result, stageIndex, stageid)
+        stage = Stage(stage_name, tree["approved_by"], stage_result, stageIndex, stageid, timestamp)
         create_stage(pipeline_instance, stage)
 
-        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
+
         # job = Job()
         # TODO: Insert job
         # get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, stageIndex, stage_result, timestamp,

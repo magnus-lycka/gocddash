@@ -46,19 +46,20 @@ class PipelineInstance:
 
 
 class Stage:
-    def __init__(self, stage_name, approved_by, stage_result, stage_counter, stage_id):
+    def __init__(self, stage_name, approved_by, stage_result, stage_counter, stage_id, scheduled_date):
         self.stage_name = stage_name
         self.approved_by = approved_by
         self.stage_result = stage_result
         self.stage_counter = stage_counter
         self.stage_id = stage_id
+        self.scheduled_date = scheduled_date
 
     def is_success(self):
         return self.stage_result == "Passed"
 
 
 class StageFailureInfo:
-    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message, approved_by, result, failure_stage):
+    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message, approved_by, result, failure_stage, scheduled_date):
         self.pipeline_name = pipeline_name
         self.pipeline_counter = pipeline_counter
         self.stage_id = stage_id
@@ -66,8 +67,9 @@ class StageFailureInfo:
         self.trigger_message = trigger_message
         self.approved_by = approved_by
         self.stage_counter = stage_counter
-        self.failure_stage = failure_stage # Should be moved to job
+        self.failure_stage = failure_stage  # Should be moved to job
         self.result = result
+        self.scheduled_date = scheduled_date
 
     def is_success(self):
         return self.result == "Passed"

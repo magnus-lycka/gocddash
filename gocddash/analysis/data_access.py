@@ -21,13 +21,13 @@ class SQLConnection:
             (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
 
     def insert_stage(self, pipeline_instance_id, stage):
-        self.conn.execute(
-            """UPDATE stage SET id=%s, instance_id=%s, stage_counter=%s, name=%s, approvedby=%s, result=%s WHERE id=%s;""",
-            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
+        # self.conn.execute(
+        #     """UPDATE stage SET id=%s, instance_id=%s, stage_counter=%s, name=%s, approvedby=%s, result=%s WHERE id=%s;""",
+        #     (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
 
         self.conn.execute(
-            """INSERT INTO stage(id, instance_id, stage_counter, name, approvedby, result) SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
-            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
+            """INSERT INTO stage(id, instance_id, stage_counter, name, approvedby, scheduled_date, result) SELECT %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
+            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.scheduled_date, stage.stage_result, stage.stage_id))
 
     def insert_job(self, job):
         self.conn.execute(
