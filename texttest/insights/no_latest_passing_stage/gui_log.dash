@@ -1,0 +1,79 @@
+url: http://127.0.0.1:4652/dash/insights/bar
+   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
+     * [2]Failing
+     * [3]Progress
+     * [4]All
+
+     * [5]Select pipeline groups
+     * [6]Select theme
+     * Last refresh: 11:30:11 | 00 seconds
+
+Insights for bar
+
+Latest in Go
+
+   Pipeline counter: 57 , run 1
+
+   Result: Failure
+
+Latest analyzed
+
+   Pipeline counter:
+          57
+
+   Result:
+          Failure
+
+   Triggered by:
+          hej :)
+
+   Approved by:
+          asdf
+
+   Failure stage:
+          TEST
+
+   Recommendation:
+          Last pipeline was a failure. Potential for flickering but more
+          likely a real failure.
+
+   TODO: Test failure information
+
+Earliest available (No green pipeline synced)
+
+   Pipeline counter: 55 (2 pipelines ago)
+
+   At: 2015-07-10 08:25:18
+     __________________________________________________________________
+
+   [7]Overview
+   [8]RERUN beta
+   [9]Test Summary
+     __________________________________________________________________
+
+Upstream git blame: (57 compared to 55) [10]Go to GO CD comparison page
+
+   Pipeline Git URL Revision Modified by Comment
+   banana.git Git - URL: ssh://git@git/internet/services/banana/banana.git
+   87cfcf8f4655d8e5f2713636df26820b0cbd0513 A B <A.B@asdf.com> Grapefruit
+   pineapple.git Git - URL:
+   ssh://git@git/internet/services/pineapple/pineapple.git
+   261d2d6c3f0290729d2a60952120b4736c6ad1a5 X Y <X.Y@asdf.com> Pear
+   pineapple.git Git - URL:
+   ssh://git@git/internet/services/pineapple/pineapple.git
+   a6884dc475e20b8d69fbf588ad4aa9beef4c466e X Y <X.Y@asdf.com> Kiwi
+
+   ???
+
+References
+
+   1. http://go.pagero.local/go/
+   2. http://127.0.0.1:4652/dash/?which=failing
+   3. http://127.0.0.1:4652/dash/?which=progress
+   4. http://127.0.0.1:4652/dash/?which=all
+   5. http://127.0.0.1:4652/dash/select/
+   6. http://127.0.0.1:4652/dash/select_theme/
+   7. http://go.pagero.local/go/tab/pipeline/history/bar
+   8. http://go.pagero.local/go/pipelines/bar/57/beta/1
+   9. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests
+  10. http://go.pagero.local/go/compare/bar/57/with/55
