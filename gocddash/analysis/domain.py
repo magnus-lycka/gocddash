@@ -24,8 +24,17 @@ def get_latest_passing_stage(pipeline_name):
         return None
 
 
+def get_first_synced_stage(pipeline_name):
+    result = get_connection().fetch_first_synced(pipeline_name)
+    if result:
+        return StageFailureInfo(*result)
+    else:
+        return None
+
+
 def create_stage(pipeline_instance, stage):
     get_connection().insert_stage(pipeline_instance.instance_id, stage)
+
 
 class PipelineInstance:
     def __init__(self, pipeline_name, pipeline_counter, trigger_message, instance_id):

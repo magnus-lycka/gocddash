@@ -369,7 +369,6 @@ def main():
             create_pipeline_config(pargs_dict['pipeline_config'])
 
     create_connection(db_port=app.config['DB_PORT'])
-    print(app.config['DB_PORT'])
 
     app.run(port=app.config['BIND_PORT'])
 

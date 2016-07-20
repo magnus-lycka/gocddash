@@ -127,6 +127,12 @@ class SQLConnection:
             (pipeline_name,))
         return self.conn.fetchone()
 
+    def fetch_first_synced(self, pipeline_name):
+        self.conn.execute(
+            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter LIMIT 1;""",
+            (pipeline_name,))
+        return self.conn.fetchone()
+
 _connection = None
 
 

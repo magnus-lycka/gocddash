@@ -6,6 +6,7 @@ from docker_management import ContainerManager
 import os
 import random
 
+
 def start_servers(docker):
     db_port = 15550
     db_container = _start_db_docker(docker, db_port)

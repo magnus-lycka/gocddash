@@ -7,7 +7,6 @@
     },
     {
       "name": "another-pipeline",
-      "begin_at": 900,
       "log_parser": "junit"
     }
   ]
