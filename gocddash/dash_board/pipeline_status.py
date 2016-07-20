@@ -57,25 +57,26 @@ class TestFailure(StageFailure):
         return True
 
 
-def create_stage_info(stage):
-    log_parser = get_config().get_log_parser(stage.pipeline_name)
+def create_stage_info(stage_failure_info):
+    log_parser = get_config().get_log_parser(stage_failure_info.pipeline_name)
 
-    if stage.is_success():
-        result = StageSuccess(stage)
+    if stage_failure_info.is_success():
+        result = StageSuccess(stage_failure_info)
 
     # TODO: Think about this
-    elif stage.failure_stage == "TEST" and log_parser == "characterize":
-        failure_signatures_and_index_dict = get_failure_stage_signature(stage.stage_id)
-        failure_signatures = failure_signatures_and_index_dict.values()
-        failure_indices = failure_signatures_and_index_dict[stage.stage_id].keys()
-        result = TestFailure(stage, failure_signatures, failure_indices)
+    elif stage_failure_info.failure_stage == "TEST" and log_parser == "characterize":
+        failure_signatures_and_index_dict = get_failure_stage_signature(stage_failure_info.stage_id)
 
-    elif stage.failure_stage == "TEST" and log_parser == "junit":
-        failure_tuples = get_connection().get_junit_failure_signature(stage.stage_id)
+        failure_signatures = failure_signatures_and_index_dict.values()
+        failure_indices = failure_signatures_and_index_dict[stage_failure_info.stage_id].keys()
+        result = TestFailure(stage_failure_info, failure_signatures, failure_indices)
+
+    elif stage_failure_info.failure_stage == "TEST" and log_parser == "junit":
+        failure_tuples = get_connection().get_junit_failure_signature(stage_failure_info.stage_id)
         failure_signatures = [item[0] for item in failure_tuples]
         failure_indices = [item[1] for item in failure_tuples]
-        result = TestFailure(stage, failure_signatures, failure_indices)
+        result = TestFailure(stage_failure_info, failure_signatures, failure_indices)
 
     else:
-        result = StageFailure(stage)
+        result = StageFailure(stage_failure_info)
     return result

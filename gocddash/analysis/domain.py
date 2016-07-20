@@ -47,6 +47,7 @@ class Stage:
     def is_success(self):
         return self.stage_result == "Passed"
 
+
 class StageFailureInfo:
     def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message, approved_by, result, failure_stage):
         self.pipeline_name = pipeline_name
