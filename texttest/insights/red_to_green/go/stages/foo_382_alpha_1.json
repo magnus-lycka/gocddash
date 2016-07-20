@@ -5,6 +5,9 @@
   "result": "Passed",
   "jobs": [
     {
+      "name": "defaultJob",
+      "result": "Passed",
+      "id": 1235,
       "scheduled_date": 1436509518752,
       "agent_uuid": "1"
     }
