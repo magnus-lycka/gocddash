@@ -15,7 +15,7 @@ sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash import parse_cctray
 from gocddash.util.config import create_pipeline_config
-from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, go_get_pipeline_status, create_go_client, get_client
+from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
@@ -168,6 +168,7 @@ def insights(pipeline_name):
         git_blame_data = []
     elif latest_passing_stage is None:
         first_synced = get_first_synced_stage(pipeline_name)
+        latest_passing_stage = first_synced
         git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, first_synced)
     else:
         git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
@@ -247,6 +248,10 @@ def bootstrap_building(cctray_status):
 @app.template_filter('build_outcome')
 def build_outcome(build_passed):
     return "text-success" if build_passed else "text-danger"
+
+@app.template_filter('build_outcome_panel')
+def build_outcome_panel(build_passed):
+    return "success" if build_passed else "danger"
 
 
 @app.template_filter('failure_stage')
