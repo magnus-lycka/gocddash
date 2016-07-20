@@ -15,6 +15,7 @@ steps = [
 
     step("""CREATE TABLE stage(
               id INTEGER NOT NULL PRIMARY KEY,
+              instance_id INTEGER,
               stage_counter INTEGER,
               name TEXT,
               approvedby TEXT,
@@ -24,6 +25,7 @@ steps = [
 
     step("""CREATE TABLE job(
               id INTEGER NOT NULL PRIMARY KEY,
+              stage_id INTEGER,
               name TEXT,
               agent_uuid TEXT,
               scheduled_date TIMESTAMP,

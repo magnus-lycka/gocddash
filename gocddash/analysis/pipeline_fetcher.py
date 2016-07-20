@@ -6,7 +6,7 @@ from gocddash.util.get_failure_stage import get_failure_stage
 from gocddash.util.config import get_config
 from .data_access import get_connection
 from .go_client import *
-from .domain import PipelineInstance, Stage, Job
+from .domain import PipelineInstance, Stage, Job, create_stage
 
 
 def download_and_store(pipeline_name, offset, run_times):
@@ -33,7 +33,7 @@ def parse_pipeline_info(pipelines):
             stage_name = pipeline["stages"][0]["name"]
             instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
             get_connection().insert_pipeline_instance(instance)
-            parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name)
+            parse_stage_info(stage_count, stage_name, instance)
         else:
             print("This pipeline index (" + str(pipeline_counter) + ") is not finished yet.")
     fetch_new_agents()
@@ -53,15 +53,20 @@ def agent_uuid_to_hostname(agent_uuid):
     return json.loads(agent_information)["hostname"]
 
 
-def parse_stage_info(stage_count, pipeline_name, pipeline_counter, stage_name):
+def parse_stage_info(stage_count, stage_name, pipeline_instance):
     for stageIndex in range(int(stage_count), 0, -1):
+        pipeline_name = pipeline_instance.pipeline_name
+        pipeline_counter = pipeline_instance.pipeline_counter
+
         response = go_request_stages_history(pipeline_name, pipeline_counter, stageIndex, stage_name)
         tree = json.loads(response)
-        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
         stageid = tree["id"]
         stage_result = tree["result"]
+
         stage = Stage(stage_name, tree["approved_by"], stage_result, stageIndex, stageid)
-        get_connection().insert_stage(stage)
+        create_stage(pipeline_instance, stage)
+
+        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
         # job = Job()
         # TODO: Insert job
         # get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, stageIndex, stage_result, timestamp,

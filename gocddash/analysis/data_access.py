@@ -16,15 +16,6 @@ class SQLConnection:
         conn.autocommit = True
         self.conn = conn.cursor()
 
-    def insert_pipeline(self, pipeline):
-        self.conn.execute(
-            """UPDATE pipeline SET pipelinename=%s WHERE id=%s""",
-            (pipeline.pipeline_name, pipeline.pipeline_id))
-
-        self.conn.execute(
-            """INSERT INTO pipeline(pipelinename, id) SELECT %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline WHERE id=%s);""",
-            (pipeline.pipeline_name, pipeline.pipeline_id, pipeline.pipeline_id))
-
     def insert_pipeline_instance(self, instance):
         self.conn.execute(
             """UPDATE pipeline_instance SET id=%s, pipeline_name=%s, pipelinecounter=%s, triggermessage=%s WHERE id=%s;""",
@@ -34,14 +25,14 @@ class SQLConnection:
             """INSERT INTO pipeline_instance(id, pipeline_name, pipelinecounter, triggermessage) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
             (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
 
-    def insert_stage(self, stage):
+    def insert_stage(self, pipeline_instance_id, stage):
         self.conn.execute(
-            """UPDATE stage SET id=%s, stage_counter=%s, name=%s, approvedby=%s, result=%s WHERE id=%s;""",
-            (stage.stage_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
+            """UPDATE stage SET id=%s, instance_id=%s, stage_counter=%s, name=%s, approvedby=%s, result=%s WHERE id=%s;""",
+            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
 
         self.conn.execute(
-            """INSERT INTO stage(id, stage_counter, name, approvedby, result) SELECT %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
-            (stage.stage_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
+            """INSERT INTO stage(id, instance_id, stage_counter, name, approvedby, result) SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
+            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
 
     def insert_job(self, job):
         self.conn.execute(
@@ -116,7 +107,7 @@ class SQLConnection:
 
     def fetch_current_stage(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipelinename = %s ORDER BY counter DESC, stageindex DESC;""",
+            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter DESC, stage_counter DESC;""",
             (pipeline_name,))
 
         return self.conn.fetchone()
@@ -125,10 +116,10 @@ class SQLConnection:
         self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index):
-        sql = """(SELECT * FROM failure_info WHERE pipelinename = %s AND counter = %s AND stageindex < %s
+        sql = """(SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s AND stage_counter< %s
             UNION
-            SELECT * FROM failure_info WHERE pipelinename = %s AND counter = %s - 1)
-            ORDER BY counter DESC, stageindex DESC;"""
+            SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s - 1)
+            ORDER BY pipelinecounter DESC, stage_counter DESC;"""
 
         query_tuple = (pipeline_name, pipeline_counter, current_stage_index, pipeline_name, pipeline_counter)
 
@@ -137,7 +128,7 @@ class SQLConnection:
 
     def fetch_latest_passing_stage(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipelinename = %s AND result = 'Passed' ORDER BY counter DESC, stageindex DESC;""",
+            """SELECT * FROM failure_info WHERE pipeline_name = %s AND result = 'Passed' ORDER BY pipelinecounter DESC, stage_counter DESC;""",
             (pipeline_name,))
         return self.conn.fetchone()
 
