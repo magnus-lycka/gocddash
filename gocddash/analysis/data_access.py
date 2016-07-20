@@ -111,13 +111,6 @@ class SQLConnection:
         self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index, current_stage_name):
-        # sql = """(SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s AND stage_name = %s AND stage_counter< %s
-        #     UNION
-        #     SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s - 1)
-        #     ORDER BY pipelinecounter DESC, stage_counter DESC;"""
-        #
-        # query_tuple = (pipeline_name, pipeline_counter, current_stage_name, current_stage_index, pipeline_name, pipeline_counter)
-
         sql = """SELECT *
                     FROM failure_info
                     WHERE pipeline_name = %s
@@ -128,10 +121,14 @@ class SQLConnection:
 
         query_tuple = (pipeline_name, current_stage_name, pipeline_counter, current_stage_index)
 
-
-
         self.conn.execute(sql, query_tuple)
         return self.conn.fetchone()
+
+    def get_stage_order(self, pipeline_name):
+        self.conn.execute(
+            """SELECT stage_name FROM failure_info WHERE pipeline_name = %s GROUP BY stage_name ORDER BY min(scheduled_date) ASC;""",
+            (pipeline_name,))
+        return list(map(lambda x: x[0], self.conn.fetchall()))
 
     def fetch_latest_passing_stage(self, pipeline_name):
         self.conn.execute(

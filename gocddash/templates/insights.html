@@ -6,7 +6,7 @@
 
             <h2 class="text-center">Insights for {{ pipeline_status.stage.pipeline_name }}
             </h2>
-            {% if (live_info.label|int != pipeline_status.stage.pipeline_counter or live_info.stages[0].counter|int != pipeline_status.stage.stage_counter) and live_info.status != "Building" %}
+            {% if (live_info.label|int != pipeline_status.stage.pipeline_counter or live_info.stages[stage_name_index].counter|int != pipeline_status.stage.stage_counter) and live_info.status != "Building" %}
                 <div class="col-md-12">
                     <div class="alert alert-info" role="alert">
                         <strong>Information:</strong> Latest pipeline in GO is not the same as the latest analysed. Waiting for
@@ -25,7 +25,7 @@
                     </div>
                     <div class="panel-body">
                         <p><strong>Pipeline counter:</strong> {{ live_info.label }}
-                            , <strong>run </strong> {{ live_info.stages[0].counter }}
+                            , <strong>run </strong> {{ live_info.stages[stage_name_index].counter }}
                         </p>
                         <p>
                             {% if pipeline_status.stage.pipeline_counter == live_info.label|int and pipeline_status.stage.stage_counter == live_info.stages[0].counter|int %}
