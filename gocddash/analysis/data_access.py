@@ -138,8 +138,7 @@ _connection = None
 
 def create_connection(db_port=15554):
     global _connection
-    if not _connection:
-        _connection = SQLConnection(db_port)
+    _connection = SQLConnection(db_port)
     return _connection
 
 
