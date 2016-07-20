@@ -12,6 +12,7 @@
       },
       "stages": [
         {
+          "scheduled": true,
           "result": "Success",
           "counter": 1,
           "name": "alpha"
@@ -27,6 +28,7 @@
       },
       "stages": [
         {
+          "scheduled": true,
           "result": "Success",
           "counter": 1,
           "name": "alpha"
