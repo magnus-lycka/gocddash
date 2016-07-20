@@ -160,7 +160,7 @@ def insights(pipelinename):
         abort(500, "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
-                                    current_stage.stage_index)
+                                    current_stage.stage_counter)
     previous_status = pipeline_status.create_stage_info(last_stage)
     latest_passing_stage = get_latest_passing_stage(pipelinename)
 
@@ -174,10 +174,10 @@ def insights(pipelinename):
     rerun_link = base_url + "pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
                                                                           current_stage.pipeline_counter,
                                                                           current_stage.stage_name,
-                                                                          current_stage.stage_index)
+                                                                          current_stage.stage_counter)
     log_link = base_url + "tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
         current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
-        current_stage.stage_index, "defaultJob")
+        current_stage.stage_counter, "defaultJob")
 
     main_pipeline_link = base_url + "tab/pipeline/history/{}".format(current_stage.pipeline_name)
 

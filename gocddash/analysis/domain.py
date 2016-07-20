@@ -56,7 +56,7 @@ class StageFailureInfo:
         self.stage_name = stage_name
         self.trigger_message = trigger_message
         self.approved_by = approved_by
-        self.stage_index = stage_counter
+        self.stage_counter = stage_counter
         self.failure_stage = failure_stage # Should be moved to job
         self.result = result
 
