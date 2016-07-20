@@ -2,8 +2,8 @@ from gocddash.analysis.go_client import *
 from gocddash.util.config import get_config
 
 
-def get_failure_stage(pipeline_name, pipeline_id, stage, stage_name):
-    response = go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name)
+def get_failure_stage(pipeline_name, pipeline_id, stage, stage_name, job_name):
+    response = go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name, job_name)
     log_parser = get_config().get_log_parser(pipeline_name)
 
     if check_if_started(response):

@@ -5,7 +5,7 @@ from gocddash.console_parsers.determine_parser import get_parser_info
 from gocddash.util.config import get_config
 from gocddash.util.get_failure_stage import get_failure_stage
 from .data_access import get_connection
-from .domain import PipelineInstance, Stage, create_stage
+from .domain import PipelineInstance, Stage, create_stage, Job, create_job
 from .go_client import *
 
 
@@ -25,17 +25,30 @@ def download_and_store(pipeline_name, offset, run_times):
 def parse_pipeline_info(pipelines):
     for pipeline in pipelines:
         pipeline_counter = pipeline["counter"]
-        if pipeline["stages"][0]["result"] != "Unknown":
-            print("Now fetching pipeline: " + str(pipeline_counter))
-            stage_count = pipeline["stages"][0]["counter"]
-            pipeline_name = pipeline["name"]
-            pipeline_id = pipeline["id"]
-            stage_name = pipeline["stages"][0]["name"]
-            instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
-            get_connection().insert_pipeline_instance(instance)
-            parse_stage_info(stage_count, stage_name, instance)
-        else:
-            print("This pipeline index (" + str(pipeline_counter) + ") is not finished yet.")
+        for stage in pipeline['stages']:
+            if stage['result'] != "Unknown":
+                stage_name = stage['name']
+                print("Now fetching pipeline: {} | Stage: {}".format(pipeline_counter, stage_name))
+                pipeline_name = pipeline["name"]
+                pipeline_id = pipeline["id"]
+                stage_count = stage['counter']
+                instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
+                get_connection().insert_pipeline_instance(instance)
+                parse_stage_info(stage_count, stage_name, instance)
+            else:
+                print("This pipeline index ({} | Stage: {}) is not finished yet.".format(pipeline_counter, stage_name))
+
+        # if pipeline["stages"][0]["result"] != "Unknown":
+        #     print("Now fetching pipeline: " + str(pipeline_counter))
+        #     stage_count = pipeline["stages"][0]["counter"]
+        #     pipeline_name = pipeline["name"]
+        #     pipeline_id = pipeline["id"]
+        #     stage_name = pipeline["stages"][0]["name"]
+        #     instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
+        #     get_connection().insert_pipeline_instance(instance)
+        #     parse_stage_info(stage_count, stage_name, instance)
+        # else:
+        #     print("This pipeline index (" + str(pipeline_counter) + ") is not finished yet.")
     fetch_new_agents()
 
 
@@ -54,37 +67,40 @@ def agent_uuid_to_hostname(agent_uuid):
 
 
 def parse_stage_info(stage_count, stage_name, pipeline_instance):
-    for stageIndex in range(int(stage_count), 0, -1):
+    for stage_index in range(int(stage_count), 0, -1):
         pipeline_name = pipeline_instance.pipeline_name
         pipeline_counter = pipeline_instance.pipeline_counter
 
-        response = go_request_stages_history(pipeline_name, pipeline_counter, stageIndex, stage_name)
+        response = go_request_stage_instance(pipeline_name, pipeline_counter, stage_index, stage_name)
         tree = json.loads(response)
         stageid = tree["id"]
         stage_result = tree["result"]
-        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
+        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)  # Leave for now but a Stage doesn't have a scheduled_date in the API
 
-        stage = Stage(stage_name, tree["approved_by"], stage_result, stageIndex, stageid, timestamp)
+        stage = Stage(stage_name, tree["approved_by"], stage_result, stage_index, stageid, timestamp)
         create_stage(pipeline_instance, stage)
 
+        for job in tree['jobs']:
+            job_name = job['name']
+            agent_uuid = job['agent_uuid']
+            scheduled_date = ms_timestamp_to_date(job['scheduled_date']).replace(microsecond=0)
+            job_id = job['id']
+            job_result = job['result']
+            job = Job(job_name, agent_uuid, scheduled_date, job_id, job_result)
+            create_job(stage, job)
 
-        # job = Job()
-        # TODO: Insert job
-        # get_connection().insert_stage(stageid, tree["approved_by"], pipeline_counter, pipeline_name, stageIndex, stage_result, timestamp,
-        #              tree["jobs"][0]["agent_uuid"], stage_name)
-
-        fetch_failure_info(stageIndex, pipeline_counter, pipeline_name, stage_result, stageid, stage_name)
+            fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stageid, stage_name, job_name)
 
 
-def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stage_id, stage_name):
+def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stage_id, stage_name, job_name):
     if stage_result == "Failed" and not get_connection().is_failure_downloaded(stage_id):
 
         log_parser = get_config().get_log_parser(pipeline_name)
 
-        failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name)
+        failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         get_connection().insert_failure_information(stage_id, failure_stage)
 
-        failures = get_parser_info(log_parser)(pipeline_name, pipeline_counter, stage_index, stage_name)
+        failures = get_parser_info(log_parser)(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         failures.insert_info(stage_id)
 
 

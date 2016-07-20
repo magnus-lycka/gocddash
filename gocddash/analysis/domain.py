@@ -1,8 +1,8 @@
 from .data_access import get_connection
 
 
-def get_previous_stage(pipeline_name, pipeline_counter, current_stage_index):
-    result = get_connection().fetch_previous_stage(pipeline_name, pipeline_counter, current_stage_index)
+def get_previous_stage(current_stage):
+    result = get_connection().fetch_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_counter, current_stage.stage_name)
     if result:
         return StageFailureInfo(*result)
     else:
@@ -36,6 +36,10 @@ def create_stage(pipeline_instance, stage):
     get_connection().insert_stage(pipeline_instance.instance_id, stage)
 
 
+def create_job(stage, job):
+    get_connection().insert_job(stage.stage_id, job)
+
+
 class PipelineInstance:
     def __init__(self, pipeline_name, pipeline_counter, trigger_message, instance_id):
         self.pipeline_name = pipeline_name
@@ -67,7 +71,7 @@ class StageFailureInfo:
         self.trigger_message = trigger_message
         self.approved_by = approved_by
         self.stage_counter = stage_counter
-        self.failure_stage = failure_stage  # Should be moved to job
+        self.failure_stage = failure_stage
         self.result = result
         self.scheduled_date = scheduled_date
 
@@ -82,3 +86,4 @@ class Job:
         self.scheduled_date = scheduled_date
         self.job_id = job_id
         self.job_result = job_result
+

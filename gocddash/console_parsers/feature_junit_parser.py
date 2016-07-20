@@ -1,11 +1,11 @@
-from gocddash.analysis.go_client import go_request_junit_report
 from gocddash.analysis.data_access import get_connection
+from gocddash.analysis.go_client import go_request_junit_report
 from .html_utils import remove_excessive_whitespace, clean_html
 
 
 class JunitConsoleParser:
-    def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name):
-        self.console_log = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name)
+    def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
+        self.console_log = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
 
     def parse_info(self):
         if "Artifact 'testoutput/index.html' is unavailable as it may have been purged by Go or deleted externally." not in self.console_log:

@@ -29,14 +29,14 @@ class SQLConnection:
             """INSERT INTO stage(id, instance_id, stage_counter, name, approvedby, scheduled_date, result) SELECT %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
             (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.scheduled_date, stage.stage_result, stage.stage_id))
 
-    def insert_job(self, job):
+    def insert_job(self, stage_id, job):
         self.conn.execute(
-            """UPDATE job SET id=%s, name=%s, agent_uuid=%s, scheduled_date=%s, result=%s WHERE id=%s;""",
-            (job.job_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
+            """UPDATE job SET id=%s, stage_id=%s, name=%s, agent_uuid=%s, scheduled_date=%s, result=%s WHERE id=%s;""",
+            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
 
         self.conn.execute(
-            """INSERT INTO job(id, name, agent_uuid, scheduled_date, result) SELECT %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM job WHERE id=%s);""",
-            (job.job_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
+            """INSERT INTO job(id, stage_id, name, agent_uuid, scheduled_date, result) SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM job WHERE id=%s);""",
+            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
 
 
     def insert_agent(self, id, agent_name):
@@ -102,7 +102,7 @@ class SQLConnection:
 
     def fetch_current_stage(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter DESC, stage_counter DESC;""",
+            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter DESC, stage_counter DESC, scheduled_date DESC;""",
             (pipeline_name,))
 
         return self.conn.fetchone()
@@ -110,13 +110,13 @@ class SQLConnection:
     def truncate_tables(self):
         self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure")
 
-    def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index):
-        sql = """(SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s AND stage_counter< %s
+    def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index, current_stage_name):
+        sql = """(SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s AND stage_name = %s AND stage_counter< %s
             UNION
             SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s - 1)
             ORDER BY pipelinecounter DESC, stage_counter DESC;"""
 
-        query_tuple = (pipeline_name, pipeline_counter, current_stage_index, pipeline_name, pipeline_counter)
+        query_tuple = (pipeline_name, pipeline_counter, current_stage_name, current_stage_index, pipeline_name, pipeline_counter)
 
         self.conn.execute(sql, query_tuple)
         return self.conn.fetchone()

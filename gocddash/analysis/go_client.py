@@ -53,15 +53,15 @@ class GoSource:
     def go_get_pipeline_groups(self):
         return self.simple_api_request("config/pipeline_groups")
 
-    def go_request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name):
+    def go_request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name, job_name):
         return self.simple_request("files/" + pipeline_name + "/" + str(pipeline_id)
                                  + "/" + stage_name + "/" + str(
-            stage) + "/defaultJob/testoutput/index.html")
+            stage) + "/" + job_name + "/testoutput/index.html")
 
-    def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name):
+    def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name, job_name):
         return self.simple_request("files/" + pipeline_name + "/" + str(pipeline_id)
                                  + "/" + stage_name + "/" + str(
-            stage_index) + "/defaultJob/cruise-output/console.log")
+            stage_index) + "/" + job_name + "/cruise-output/console.log")
 
     def go_request_comparison_html(self, pipeline_name, current, comparison):
         return self.simple_request("compare/{}/{}/with/{}".format(pipeline_name, current, comparison))
@@ -130,7 +130,7 @@ def go_get_pipeline_status(pipeline_name):
     return _go_client.go_get_pipeline_status(pipeline_name)
 
 
-def go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name):
+def go_request_stage_instance(pipeline_name, pipeline_counter, stage_index, stage_name):
     return _go_client.go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name)
 
 
@@ -142,16 +142,16 @@ def go_get_pipeline_groups():
     return _go_client.go_get_pipeline_groups()
 
 
-def go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name):
-    return _go_client.go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name)
+def go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name, job_name):
+    return _go_client.go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name, job_name)
 
 
 def go_request_job_history(pipeline_name, stage_name, offset=0):
     return _go_client.go_request_job_history(pipeline_name, stage_name, offset)
 
 
-def go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name):
-    return _go_client.go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name)
+def go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name, job_name):
+    return _go_client.go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name, job_name)
 
 
 def go_request_comparison_html(pipeline_name, current, comparison):

@@ -1,14 +1,14 @@
 import re
 
-from gocddash.analysis.go_client import go_request_console_log
 from gocddash.analysis.data_access import get_connection
+from gocddash.analysis.go_client import go_request_console_log
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
 
 
 class TexttestConsoleParser:
-    def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name):
-        self.console_log = go_request_console_log(pipeline_name, pipeline_counter, stage_index, stage_name)
+    def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
+        self.console_log = go_request_console_log(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
 
     def parse_info(self):
         """
