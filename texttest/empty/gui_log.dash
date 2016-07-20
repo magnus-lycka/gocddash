@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4874/dash/?which=failing
+url: http://127.0.0.1:4670/dash/?which=failing
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4874/dash/?which=failing
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 11:32:46 | 00 seconds
+     * Last refresh: 11:11:09 | 00 seconds
 
 [7]qux 240 [8]2015-11-26
 
@@ -22,9 +22,9 @@ url: http://127.0.0.1:4874/dash/?which=failing
 
    [19]runTests 1 [20]defaultJob
 
-[21]bar 57 [22]2015-11-03 [23]| Insights Available (57)
+[21]bar 57 [22]2015-11-03
 
-   [24]beta 1 [25]defaultJob
+   [23]beta 1 [24]defaultJob
    Breakers: Willy Wonka <willyw@example.com>
      __________________________________________________________________
 
@@ -39,11 +39,11 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4874/dash/?which=failing
-   3. http://127.0.0.1:4874/dash/?which=progress
-   4. http://127.0.0.1:4874/dash/?which=all
-   5. http://127.0.0.1:4874/dash/select/
-   6. http://127.0.0.1:4874/dash/select_theme/
+   2. http://127.0.0.1:4670/dash/?which=failing
+   3. http://127.0.0.1:4670/dash/?which=progress
+   4. http://127.0.0.1:4670/dash/?which=all
+   5. http://127.0.0.1:4670/dash/select/
+   6. http://127.0.0.1:4670/dash/select_theme/
    7. http://go-server/go/pipelines/value_stream_map/qux/240
    8. http://go-server/go/pipelines/value_stream_map/qux/240
    9. http://go-server/go/pipelines/qux/240/defaultStage/1
@@ -60,12 +60,11 @@ References
   20. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
   21. http://go-server/go/pipelines/value_stream_map/bar/57
   22. http://go-server/go/pipelines/value_stream_map/bar/57
-  23. http://127.0.0.1:4874/dash/insights/bar
-  24. http://go-server/go/pipelines/bar/57/runTests/1
-  25. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
+  23. http://go-server/go/pipelines/bar/57/runTests/1
+  24. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  27. http://127.0.0.1:4874/dash/?which=failing#collapse1
-  28. http://127.0.0.1:4874/dash/?which=failing#collapse2
-  29. http://127.0.0.1:4874/dash/?which=failing#collapse3
-  30. http://127.0.0.1:4874/dash/?which=failing#collapse4
+  26. http://127.0.0.1:4670/dash/?which=failing#collapse1
+  27. http://127.0.0.1:4670/dash/?which=failing#collapse2
+  28. http://127.0.0.1:4670/dash/?which=failing#collapse3
+  29. http://127.0.0.1:4670/dash/?which=failing#collapse4
