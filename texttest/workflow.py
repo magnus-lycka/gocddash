@@ -9,8 +9,15 @@ import random
 def start_servers(docker):
     db_port = 15550
     db_container = _start_db_docker(docker, db_port)
-    application_port = random.randrange(4545, 4999)
     gocd_dash_path = os.environ['gocd_dash']
+
+    from yoyo import read_migrations, get_backend
+    backend = get_backend('postgresql://analysisappluser:analysisappluser@dev.localhost:15550/go-analysis')
+
+    migrations = read_migrations(gocd_dash_path + '/migrations')
+    backend.apply_migrations(backend.to_apply(migrations))
+
+    application_port = random.randrange(4545, 4999)
     application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "gocddash/app.py", "-b", str(application_port), "--db-port", str(db_port), "--file-client",
                                             os.getcwd()])
 

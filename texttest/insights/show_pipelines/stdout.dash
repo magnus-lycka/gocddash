@@ -1,6 +1,13 @@
-2016-07-20 09:06:33.512698 Starting synchronization.
+2016-07-20 09:27:55.720673 Starting synchronization.
+2016-07-20 09:27:55.722219 Will synchronize foo from 380 onwards.
+Requested pipelines = 2 (from 380 to 382)
+Now fetching pipeline: 382
+Now fetching pipeline: 381
+2016-07-20 09:27:55.725039 Will synchronize bar from 50 onwards.
+Requested pipelines = 7 (from 50 to 57)
+Now fetching pipeline: 57
 starting docker container from image dockerregistry.pagero.local/go-analysis-db:1.1.1-GO
-started docker container with id=500119b4e50abf43c9b0ca19a3212d622e4bf5eb6dad6d61ee7cc76c2e938a2d
+started docker container with id=a3ce471dc8e5302747b1ee4d7c0a7326086275b5b577ed1c150a8fca62b49f16
 Starting test workflow for GO CD Dashboard
 stopping docker container
 docker container stopped and removed

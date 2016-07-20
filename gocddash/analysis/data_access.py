@@ -5,11 +5,6 @@ class SQLConnection:
     def __init__(self, db_port):
         self.conn = None
         self.db_port = db_port
-        
-        # from yoyo import read_migrations, get_backend
-        # backend = get_backend('postgresql://analysisappluser:analysisappluser@dev.localhost:15554/go-analysis')
-        # migrations = read_migrations('migrations')
-        # backend.apply_migrations(backend.to_apply(migrations))
 
         conn_string = "host='dev.localhost' dbname='go-analysis' user='analysisappluser' password='analysisappluser' port='{}'".format(self.db_port)
         conn = psycopg2.connect(conn_string)
