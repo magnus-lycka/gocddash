@@ -102,7 +102,7 @@ class SQLConnection:
 
     def fetch_current_stage(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter DESC, stage_counter DESC, scheduled_date DESC;""",
+            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter DESC, scheduled_date DESC, stage_counter DESC;""",
             (pipeline_name,))
 
         return self.conn.fetchone()
@@ -111,12 +111,24 @@ class SQLConnection:
         self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index, current_stage_name):
-        sql = """(SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s AND stage_name = %s AND stage_counter< %s
-            UNION
-            SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s - 1)
-            ORDER BY pipelinecounter DESC, stage_counter DESC;"""
+        # sql = """(SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s AND stage_name = %s AND stage_counter< %s
+        #     UNION
+        #     SELECT * FROM failure_info WHERE pipeline_name = %s AND pipelinecounter = %s - 1)
+        #     ORDER BY pipelinecounter DESC, stage_counter DESC;"""
+        #
+        # query_tuple = (pipeline_name, pipeline_counter, current_stage_name, current_stage_index, pipeline_name, pipeline_counter)
 
-        query_tuple = (pipeline_name, pipeline_counter, current_stage_name, current_stage_index, pipeline_name, pipeline_counter)
+        sql = """SELECT *
+                    FROM failure_info
+                    WHERE pipeline_name = %s
+                    AND stage_name = %s
+                    AND not (pipelinecounter = %s
+                    AND stage_counter = %s)
+                    ORDER BY pipelinecounter DESC, stage_counter DESC;"""
+
+        query_tuple = (pipeline_name, current_stage_name, pipeline_counter, current_stage_index)
+
+
 
         self.conn.execute(sql, query_tuple)
         return self.conn.fetchone()

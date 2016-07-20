@@ -26,17 +26,18 @@ def parse_pipeline_info(pipelines):
     for pipeline in pipelines:
         pipeline_counter = pipeline["counter"]
         for stage in pipeline['stages']:
-            if stage['result'] != "Unknown":
-                stage_name = stage['name']
-                print("Now fetching pipeline: {} | Stage: {}".format(pipeline_counter, stage_name))
-                pipeline_name = pipeline["name"]
-                pipeline_id = pipeline["id"]
-                stage_count = stage['counter']
-                instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
-                get_connection().insert_pipeline_instance(instance)
-                parse_stage_info(stage_count, stage_name, instance)
-            else:
-                print("This pipeline index ({} | Stage: {}) is not finished yet.".format(pipeline_counter, stage_name))
+            if stage['scheduled']:
+                if stage['result'] != "Unknown":
+                    stage_name = stage['name']
+                    print("Now fetching pipeline: {} | Stage: {}".format(pipeline_counter, stage_name))
+                    pipeline_name = pipeline["name"]
+                    pipeline_id = pipeline["id"]
+                    stage_count = stage['counter']
+                    instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
+                    get_connection().insert_pipeline_instance(instance)
+                    parse_stage_info(stage_count, stage_name, instance)
+                else:
+                    print("This pipeline index ({} | Stage: {}) is not finished yet.".format(pipeline_counter, stage_name))
 
         # if pipeline["stages"][0]["result"] != "Unknown":
         #     print("Now fetching pipeline: " + str(pipeline_counter))
