@@ -19,7 +19,7 @@ from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, g
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
-from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage
 
 group_of_pipeline = defaultdict(str)
 
@@ -153,21 +153,24 @@ def select_theme():
     return response
 
 
-@gocddash.route("/insights/<pipelinename>", methods=['GET'])
-def insights(pipelinename):
-    current_stage = get_current_stage(pipelinename)
+@gocddash.route("/insights/<pipeline_name>", methods=['GET'])
+def insights(pipeline_name):
+    current_stage = get_current_stage(pipeline_name)
     if current_stage is None:
         abort(500, "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
                                     current_stage.stage_counter)
     previous_status = pipeline_status.create_stage_info(last_stage)
-    latest_passing_stage = get_latest_passing_stage(pipelinename)
+    latest_passing_stage = get_latest_passing_stage(pipeline_name)
 
     if current_stage.is_success():
         git_blame_data = []
+    elif latest_passing_stage is None:
+        first_synced = get_first_synced_stage(pipeline_name)
+        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, first_synced)
     else:
-        git_blame_data = get_git_comparison(pipelinename, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
+        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
 
     base_url = app.config['PUBLIC_GO_SERVER_URL']
 
@@ -197,7 +200,7 @@ def insights(pipelinename):
         gitblame=git_blame_data,
         rerun_link=rerun_link,
         comparison_link=comparison_link,
-        live_info=dash_status.pipelines[pipelinename],
+        live_info=dash_status.pipelines[pipeline_name],
         latest_passing_stage=latest_passing_stage,
         previous_status=previous_status,
         failure_tip=failure_tip.get_failure_tip(current_status, previous_status, latest_passing_stage.pipeline_counter),
@@ -364,6 +367,9 @@ def main():
     if pipeline_path:
         if os.path.isfile(pargs_dict['pipeline_config']):
             create_pipeline_config(pargs_dict['pipeline_config'])
+
+    create_connection(db_port=app.config['DB_PORT'])
+    print(app.config['DB_PORT'])
 
     app.run(port=app.config['BIND_PORT'])
 
