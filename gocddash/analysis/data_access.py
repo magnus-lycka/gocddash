@@ -12,9 +12,9 @@ class SQLConnection:
         self.conn = conn.cursor()
 
     def insert_pipeline_instance(self, instance):
-        self.conn.execute(
-            """UPDATE pipeline_instance SET id=%s, pipeline_name=%s, pipelinecounter=%s, triggermessage=%s WHERE id=%s;""",
-            (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
+        # self.conn.execute(
+        #     """UPDATE pipeline_instance SET id=%s, pipeline_name=%s, pipelinecounter=%s, triggermessage=%s WHERE id=%s;""",
+        #     (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
 
         self.conn.execute(
             """INSERT INTO pipeline_instance(id, pipeline_name, pipelinecounter, triggermessage) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
