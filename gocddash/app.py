@@ -153,6 +153,12 @@ def select_theme():
     return response
 
 
+@gocddash.route("/claim/<stage_id>", methods=['POST'])
+def claim_stage(stage_id):
+    responsible = request.form.get('responsible')
+    description = request.form.get('description')
+    return "For " + str(stage_id) + ": " + responsible + "/" + description + "\n"
+
 @gocddash.route("/insights/<pipeline_name>", methods=['GET'])
 def insights(pipeline_name):
     current_stage = get_current_stage(pipeline_name)
