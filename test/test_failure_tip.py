@@ -16,7 +16,7 @@ class TestFailureTip(unittest.TestCase):
         else:
             pipeline_counter = 2000
 
-        return StageFailureInfo("characterize", pipeline_counter, 1, stage_id, "runTests", "triggered by x", "changes", "Passed" if passed else "Failed", failure_stage, 2014)
+        return StageFailureInfo("characterize", pipeline_counter, 1, stage_id, "runTests", "triggered by x", "changes", "Passed" if passed else "Failed", failure_stage, "resp", "desc", 2014)
 
     def test_current_passing(self):
 
