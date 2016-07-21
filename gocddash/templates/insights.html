@@ -7,7 +7,7 @@
             <h2 class="text-center">Insights for {{ current_status.stage.pipeline_name }} </h2>
             <hr>
             <h4 class="text-center">
-                {% if not current_status.is_success() and current_status.stage.is_claimed() or true %}
+                {% if not current_status.is_success() and current_status.stage.is_claimed() %}
                     Claimed by {{ current_status.stage.responsible }}: {{ current_status.stage.description }}
                 {% endif %}
             </h4>
@@ -111,7 +111,7 @@
             </div>
 
         </div>
-        {% if not current_status.is_success() and not current_status.stage.is_claimed() or true %}
+        {% if not (current_status.is_success() and current_status.stage.is_claimed()) %}
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
                     <button type="button" class="btn btn-danger btn-lg btn-block" id="claim-button" data-toggle="modal" data-target="#myModal">
@@ -190,7 +190,6 @@
                 </div>
             {% endif %}
         </div>
-
         <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -221,7 +220,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 {% endblock %}

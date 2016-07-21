@@ -53,7 +53,11 @@ class SQLConnection:
 
     def insert_junit_failure_information(self, stageid, failure_type, failure_test):
         self.conn.execute("""INSERT INTO junitfailure(stageid, failuretype, failuretest) VALUES (%s, %s, %s);""",
-                                (stageid, failure_type, failure_test))
+                          (stageid, failure_type, failure_test))
+
+    def insert_stage_claim(self, stageid, responsible, desc):
+        self.conn.execute("""INSERT INTO stage_claim(stage_id, responsible, description) VALUES (%s, %s, %s);""",
+                          (stageid, responsible, desc))
 
     def get_highest_pipeline_count(self, pipeline_name):
         self.conn.execute("""SELECT COALESCE(max(pipelinecounter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
