@@ -62,5 +62,12 @@ steps = [
               failuretype TEXT,
               failuretest TEXT
             );""",
-         "DROP TABLE junitfailure;")
+         "DROP TABLE junitfailure;"),
+
+    step("""CREATE TABLE stage_claim(
+              id SERIAL PRIMARY KEY ,
+              stage_id INTEGER,
+              responsible TEXT,
+              description TEXT);""",
+         "DROP TABLE stage_claim;")
 ]

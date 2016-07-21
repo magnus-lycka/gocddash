@@ -63,7 +63,7 @@ class Stage:
 
 
 class StageFailureInfo:
-    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message, approved_by, result, failure_stage, scheduled_date):
+    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message, approved_by, result, failure_stage, responsible, description, scheduled_date):
         self.pipeline_name = pipeline_name
         self.pipeline_counter = pipeline_counter
         self.stage_id = stage_id
@@ -73,10 +73,15 @@ class StageFailureInfo:
         self.stage_counter = stage_counter
         self.failure_stage = failure_stage
         self.result = result
+        self.responsible = responsible
+        self.description = description
         self.scheduled_date = scheduled_date
 
     def is_success(self):
         return self.result == "Passed"
+
+    def is_claimed(self):
+        return self.responsible is not None
 
 
 class Job:
