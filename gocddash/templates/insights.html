@@ -213,9 +213,9 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Claim stage</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -225,9 +225,29 @@
 
     <!-- Refresh every minute -->
     <script type="text/javascript">
-        window.setTimeout(function () {
-            document.location.reload(true);
-        }, 60000);
+        var shouldReload = true;
+
+        reload_in_a_minute();
+
+        function reload_in_a_minute() {
+            window.setTimeout(function () {
+                if (shouldReload) {
+                    document.location.reload(true);
+                }
+            }, 60000);
+        }
+
+        $('#myModal').on('show.bs.modal', function (e) {
+            console.log("No more reloads!");
+            shouldReload = false;
+        });
+
+        $('#myModal').on('hide.bs.modal', function (e) {
+            console.log("More reloads!");
+            shouldReload = true;
+            reload_in_a_minute();
+        });
+
     </script>
 
 {% endblock %}
