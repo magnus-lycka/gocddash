@@ -34,6 +34,6 @@ class TestReadFile(unittest.TestCase):
         ]
 
         pipelines = read_config.parse_config(input)
-        self.assertEqual(pipelines, [("characterize", 1500), ("feature", 1800)])
+        self.assertEqual(pipelines, [("characterize", 1500), ("feature", 2180)])
 
         read_config.get_max_pipeline_status = saved

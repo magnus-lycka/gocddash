@@ -27,8 +27,8 @@ def parse_pipeline_info(pipelines):
         pipeline_counter = pipeline["counter"]
         for stage in pipeline['stages']:
             if stage['scheduled']:
+                stage_name = stage['name']
                 if stage['result'] != "Unknown":
-                    stage_name = stage['name']
                     print("Now fetching pipeline: {} | Stage: {}".format(pipeline_counter, stage_name))
                     pipeline_name = pipeline["name"]
                     pipeline_id = pipeline["id"]
@@ -38,18 +38,6 @@ def parse_pipeline_info(pipelines):
                     parse_stage_info(stage_count, stage_name, instance)
                 else:
                     print("This pipeline index ({} | Stage: {}) is not finished yet.".format(pipeline_counter, stage_name))
-
-        # if pipeline["stages"][0]["result"] != "Unknown":
-        #     print("Now fetching pipeline: " + str(pipeline_counter))
-        #     stage_count = pipeline["stages"][0]["counter"]
-        #     pipeline_name = pipeline["name"]
-        #     pipeline_id = pipeline["id"]
-        #     stage_name = pipeline["stages"][0]["name"]
-        #     instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
-        #     get_connection().insert_pipeline_instance(instance)
-        #     parse_stage_info(stage_count, stage_name, instance)
-        # else:
-        #     print("This pipeline index (" + str(pipeline_counter) + ") is not finished yet.")
     fetch_new_agents()
 
 
