@@ -19,7 +19,7 @@ from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, g
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
-from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads
 
 group_of_pipeline = defaultdict(str)
 
@@ -61,8 +61,8 @@ def dashboard():
             pipeline.messages['PausedBy'].add(whom)
 
     synced_pipelines = dict()
-    for name, max_counter in get_connection().get_synced_pipelines():
-        synced_pipelines[name] = max_counter
+    for pipeline_head in get_pipeline_heads():
+        synced_pipelines[pipeline_head.pipeline_name] = pipeline_head
 
     return render_template('index.html',
                            go_server_url=app.config['PUBLIC_GO_SERVER_URL'],

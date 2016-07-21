@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 
+import argparse
 import codecs
 import datetime
 import json
+import os
 import time
 from configparser import ConfigParser
 from itertools import chain
-import os
-import argparse
 
-from gocddash.analysis import data_access, actions, go_request, go_client
+from gocddash.analysis import data_access, actions, go_request, go_client, domain
 from gocddash.dash_board import read_config
 from gocddash.util import config
 
 
 def parse_pipeline_availability(pipelines):
-    synced_pipelines = data_access.get_connection().get_synced_pipelines()
+    synced_pipelines = list(map(lambda phs: (phs.pipeline_name, phs.latest_synced), domain.get_pipeline_heads()))
     local_pipelines, local_pipeline_counters = zip(*synced_pipelines) if synced_pipelines else ([], [])
 
     available_pipelines = []

@@ -100,8 +100,8 @@ class SQLConnection:
         self.conn.execute("""SELECT * FROM texttestfailure WHERE stageid=%s;""", (stage_id,))
         return self.conn.fetchall()
 
-    def get_synced_pipelines(self):
-        self.conn.execute("""SELECT pipeline_name, max(pipelinecounter) FROM pipeline_instance GROUP BY pipeline_name;""")
+    def get_synced_pipelines_status(self):
+        self.conn.execute("""SELECT pipeline_name, max(pipelinecounter), responsible, description FROM failure_info GROUP BY pipeline_name, responsible, description;""")
         return self.conn.fetchall()
 
     def fetch_current_stage(self, pipeline_name):
@@ -112,7 +112,7 @@ class SQLConnection:
         return self.conn.fetchone()
 
     def truncate_tables(self):
-        self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure")
+        self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure, stage_claim")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index, current_stage_name):
         sql = """SELECT *

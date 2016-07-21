@@ -24,9 +24,9 @@
                         {% if pipeline.name in synced_pipelines.keys() %}
                         <a href="{{ application_root }}/insights/{{pipeline.name}}"> <span id="glyph{{ insights }}"
                                                                           class="glyphicon glyphicon-stats"
-                                                                          aria-hidden="true"></span> | <i> Insights
-                            Available </i>
-                            ({{synced_pipelines[pipeline.name]}})
+                                                                          aria-hidden="true"></span> |
+                            <i> Insights Available </i>
+                            ({{synced_pipelines[pipeline.name].latest_synced}})
                         </a>
                         {% endif %}
                     </h3>
