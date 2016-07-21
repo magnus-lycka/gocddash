@@ -196,7 +196,7 @@ def insights(pipeline_name):
         now=datetime.now(),
         theme=get_bootstrap_theme(),
         footer=get_footer(),
-        pipeline_status=current_status,
+        current_status=current_status,
         gitblame=git_blame_data,
         rerun_link=rerun_link,
         comparison_link=comparison_link,

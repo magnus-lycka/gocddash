@@ -1,5 +1,5 @@
-from ..analysis.data_munging import get_failure_stage_signature
 from ..analysis.data_access import get_connection
+from ..analysis.data_munging import get_failure_stage_signature
 from ..util.config import get_config
 
 
