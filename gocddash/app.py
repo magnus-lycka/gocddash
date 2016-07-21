@@ -155,10 +155,13 @@ def select_theme():
 
 @gocddash.route("/claim/<stage_id>", methods=['POST'])
 def claim_stage(stage_id):
-    responsible = request.form.get('responsible')
-    description = request.form.get('description')
-    get_connection().insert_stage_claim(stage_id, responsible, description)
-    return "Done."
+    if not get_connection().claim_exists(stage_id):
+        responsible = request.form.get('responsible')
+        description = request.form.get('description')
+        get_connection().insert_stage_claim(stage_id, responsible, description)
+        return "OK."
+    else:
+        abort(409, "Already claimed.")
 
 
 @gocddash.route("/insights/<pipeline_name>", methods=['GET'])

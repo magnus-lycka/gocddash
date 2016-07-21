@@ -146,6 +146,12 @@ class SQLConnection:
             (pipeline_name,))
         return self.conn.fetchone()
 
+    def claim_exists(self, stage_id):
+        self.conn.execute(
+            """SELECT * FROM stage_claim WHERE stage_id = %s""", (stage_id,)
+        )
+        return self.conn.fetchone() is not None
+
 _connection = None
 
 
