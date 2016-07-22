@@ -38,7 +38,7 @@
                             , <strong>run </strong> {{ live_info.stages[stage_name_index].counter }}
                         </p>
                         <p>
-                            {% if current_status.stage.pipeline_counter == live_info.label|int and current_status.stage.stage_counter == live_info.stages[stage_name_index].counter|int %}
+                            {% if current_status.stage.pipeline_counter == live_info.label|int and current_status.stage.stage_counter == live_info.stages[stage_name_index].counter|int and live_info.stages[stage_name_index].name == current_status.stage.stage_name %}
                                 <strong>Result:</strong>
                                 <span class="{{ current_status.is_success() | build_outcome }}">{{ current_status.describe_run_outcome() }}</span>
                             {% endif %}
