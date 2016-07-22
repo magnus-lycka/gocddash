@@ -10,6 +10,10 @@
     <meta name="author" content="magnus@thinkware.se">
     <title>Go.CD Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{ theme }}/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .claim-stage-flag { cursor: pointer; visibility: hidden; }
+        .panel-heading:hover > h3 > .claim-stage-flag { visibility: visible; }
+    </style>
     {% block bokehstuff %}{% endblock %}
 </head>
 

@@ -33,7 +33,9 @@
                                 <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="{{ synced_pipelines[pipeline.name].responsible }} {{ synced_pipelines[pipeline.name].description }}"></span>
                             {% endif %}
                             {% if not synced_pipelines[pipeline.name].is_success() and not synced_pipelines[pipeline.name].responsible %}
-                                <span class="glyphicon glyphicon-flag pull-right" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Claim this stage">
+                                <span class="glyphicon glyphicon-flag pull-right claim-stage-flag" data-stageid="{{ synced_pipelines[pipeline.name].stage_id }}" data-target="#myModal" data-toggle="modal" data-placement="top" title="Claim this stage" id="claim-button">
+
+                                </span>
                             {% endif %}
                         {% endif %}
                     </h3>
@@ -66,6 +68,36 @@
     </div>
     {% endif %}
     {% endfor %}
+    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title"><strong>Claim failing stage</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="claimForm">
+                        <div class="form-group">
+                            <label for="responsible" class="col-sm-2 control-label">Responsible</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="responsible" name="responsible" placeholder="Responsible">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="postClaim">Claim stage</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <hr>
@@ -97,15 +129,62 @@
         </div>
     </div>
 </div>
+
+
 </div>
 {% endblock %}
 
 {% block scripts %}
 
-<!-- Refresh every minute -->
-<script type="text/javascript">
-  window.setTimeout(function(){ document.location.reload(true); }, 60000);
-</script>
+    <!-- Refresh every minute -->
+    <script type="text/javascript">
+        var stageid = null;
+        var shouldReload = true;
+        reload_in_a_minute();
+
+        function reload_in_a_minute() {
+            window.setTimeout(function () {
+                if (shouldReload) {
+                    document.location.reload(true);
+                }
+            }, 60000);
+        }
+        $('#myModal').on('show.bs.modal', function (event) {
+            console.log("No more reloads!");
+            var icon = $(event.relatedTarget);
+            console.log(icon);
+            stageid = icon.data('stageid');
+            console.log(stageid);
+            shouldReload = false;
+        });
+
+        $('#myModal').on('hide.bs.modal', function (e) {
+            console.log("More reloads!");
+            shouldReload = true;
+            reload_in_a_minute();
+        });
+
+        $('#postClaim').click(function () {
+            console.log('hej');
+            console.log(stageid);
+            $.post("/dash/claim/" + stageid, $('#claimForm').serialize()).done(function () {
+                $('#myModal').modal('hide');
+                document.location.reload(true);
+            }).fail(function () {
+                $('#myModal').modal('hide');
+                claim_fail_alert()
+            })
+        });
+
+
+        function claim_fail_alert() {
+            $("#claim-fail-alert").removeClass('hidden')
+            $("#claim-fail-alert").fadeTo(3000, 500).slideUp(500, function () {
+                $("#claim-fail-alert").alert('close');
+                document.location.reload(true);
+            });
+        }
+    </script>
 
 <script type="text/javascript">
 {% for pipeline in pipelines %}
@@ -127,6 +206,10 @@
         }
 
     })
+</script>
+
+<script type="text/javascript">
+
 </script>
 
 {% endblock %}
