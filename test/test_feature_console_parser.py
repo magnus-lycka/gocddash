@@ -38,7 +38,7 @@ _junit_report = """<table class="section-table" cellpadding="2" cellspacing="0" 
 
 class TestConsoleFetcher(unittest.TestCase):
     def test_po_webtest(self):
-        feature_junit_parser.go_request_junit_report = MagicMock(return_value=_junit_report)
+        feature_junit_parser.go_request_junit_report = MagicMock(return_value=(True, _junit_report))
         parser = feature_junit_parser.JunitConsoleParser("test-interface", 1872, 1, "defaultStage", 'defaultJob')
 
         output_list = parser.parse_info()

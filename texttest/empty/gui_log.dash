@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4670/dash/?which=failing
+url: http://127.0.0.1:4672/dash/?which=failing
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4670/dash/?which=failing
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 11:11:09 | 00 seconds
+     * Last refresh: 10:30:46 | 00 seconds
 
 [7]qux 240 [8]2015-11-26
 
@@ -26,6 +26,15 @@ url: http://127.0.0.1:4670/dash/?which=failing
 
    [23]beta 1 [24]defaultJob
    Breakers: Willy Wonka <willyw@example.com>
+   (BUTTON) ×
+
+Claim failing stage
+
+   Responsible
+   ____________________
+   Description
+   ____________________
+   (BUTTON) Close (BUTTON) Claim stage
      __________________________________________________________________
 
    System status
@@ -39,11 +48,11 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4670/dash/?which=failing
-   3. http://127.0.0.1:4670/dash/?which=progress
-   4. http://127.0.0.1:4670/dash/?which=all
-   5. http://127.0.0.1:4670/dash/select/
-   6. http://127.0.0.1:4670/dash/select_theme/
+   2. http://127.0.0.1:4672/dash/?which=failing
+   3. http://127.0.0.1:4672/dash/?which=progress
+   4. http://127.0.0.1:4672/dash/?which=all
+   5. http://127.0.0.1:4672/dash/select/
+   6. http://127.0.0.1:4672/dash/select_theme/
    7. http://go-server/go/pipelines/value_stream_map/qux/240
    8. http://go-server/go/pipelines/value_stream_map/qux/240
    9. http://go-server/go/pipelines/qux/240/defaultStage/1
@@ -64,7 +73,7 @@ References
   24. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  26. http://127.0.0.1:4670/dash/?which=failing#collapse1
-  27. http://127.0.0.1:4670/dash/?which=failing#collapse2
-  28. http://127.0.0.1:4670/dash/?which=failing#collapse3
-  29. http://127.0.0.1:4670/dash/?which=failing#collapse4
+  26. http://127.0.0.1:4672/dash/?which=failing#collapse1
+  27. http://127.0.0.1:4672/dash/?which=failing#collapse2
+  28. http://127.0.0.1:4672/dash/?which=failing#collapse3
+  29. http://127.0.0.1:4672/dash/?which=failing#collapse4
