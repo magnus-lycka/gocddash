@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4801/dash/insights/bar
+url: http://127.0.0.1:4738/dash/insights/bar
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4801/dash/insights/bar
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 11:24:40 | 00 seconds
+     * Last refresh: 16:15:26 | 00 seconds
 
    Information: Someone has already claimed this stage. Refreshing page...
 
@@ -40,8 +40,7 @@ Latest analyzed
           TEST
 
    Recommendation:
-          Last pipeline was a failure. Potential for flickering but more
-          likely a real failure.
+          Last pipeline was a failure.
 
    TODO: Test failure information
 
@@ -84,11 +83,11 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4801/dash/?which=failing
-   3. http://127.0.0.1:4801/dash/?which=progress
-   4. http://127.0.0.1:4801/dash/?which=all
-   5. http://127.0.0.1:4801/dash/select/
-   6. http://127.0.0.1:4801/dash/select_theme/
+   2. http://127.0.0.1:4738/dash/?which=failing
+   3. http://127.0.0.1:4738/dash/?which=progress
+   4. http://127.0.0.1:4738/dash/?which=all
+   5. http://127.0.0.1:4738/dash/select/
+   6. http://127.0.0.1:4738/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/bar
    8. http://go.pagero.local/go/pipelines/bar/57/beta/1
    9. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests

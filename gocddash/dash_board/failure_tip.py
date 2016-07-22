@@ -26,8 +26,8 @@ def handle_test_failure(current, previous, last_success):
         if initial_tip:
             return initial_tip
 
-    if len(current.test_names) == 1:
-        return "Only one test failure. Potential for flickering."
+    # if len(current.test_names) == 1:
+    #     return "Only one test failure. Potential for flickering." # RUN TEXTTEST AND FIX
 
     fallback_tip = failure_recommendation.get_fallback_recommendation()
 
