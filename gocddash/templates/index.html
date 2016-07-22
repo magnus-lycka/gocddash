@@ -32,6 +32,9 @@
                             {% if synced_pipelines[pipeline.name].responsible %}
                                 <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="{{ synced_pipelines[pipeline.name].responsible }} {{ synced_pipelines[pipeline.name].description }}"></span>
                             {% endif %}
+                            {% if not synced_pipelines[pipeline.name].is_success() and not synced_pipelines[pipeline.name].responsible %}
+                                <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="{{ synced_pipelines[pipeline.name].responsible }} {{ synced_pipelines[pipeline.name].description }}">
+                            {% endif %}
                         {% endif %}
                     </h3>
                 </div>
