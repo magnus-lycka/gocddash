@@ -15,7 +15,7 @@ from gocddash.util import config
 
 
 def parse_pipeline_availability(pipelines):
-    synced_pipelines = list(map(lambda phs: (phs.pipeline_name, phs.latest_synced), domain.get_pipeline_heads()))
+    synced_pipelines = list(map(lambda phs: (phs.pipeline_name, phs.pipeline_counter), domain.get_pipeline_heads()))
     local_pipelines, local_pipeline_counters = zip(*synced_pipelines) if synced_pipelines else ([], [])
 
     available_pipelines = []

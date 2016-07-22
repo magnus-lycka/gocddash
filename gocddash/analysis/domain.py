@@ -93,13 +93,5 @@ class Job:
         self.job_result = job_result
 
 
-class PipelineHeadStatus:
-    def __init__(self, pipeline_name, latest_synced, responsible, description):
-        self.pipeline_name = pipeline_name
-        self.latest_synced = latest_synced
-        self.responsible = responsible
-        self.description = description
-
-
 def get_pipeline_heads():
-    return list(map(lambda phs: PipelineHeadStatus(*phs), get_connection().get_synced_pipelines_status()))
+    return list(map(lambda phs: StageFailureInfo(*phs), get_connection().get_synced_pipeline_heads()))

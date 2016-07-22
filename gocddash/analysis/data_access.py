@@ -100,8 +100,8 @@ class SQLConnection:
         self.conn.execute("""SELECT * FROM texttestfailure WHERE stageid=%s;""", (stage_id,))
         return self.conn.fetchall()
 
-    def get_synced_pipelines_status(self):
-        self.conn.execute("""SELECT s.pipeline_name, pipelinecounter, responsible, description FROM
+    def get_synced_pipeline_heads(self):
+        self.conn.execute("""SELECT f.* FROM
                             (SELECT pipeline_name, max(id) as stage_id FROM failure_info GROUP BY pipeline_name) s
                             JOIN failure_info f
                             ON s.stage_id = f.id;""")
