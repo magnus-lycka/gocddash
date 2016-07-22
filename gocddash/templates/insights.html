@@ -64,7 +64,10 @@
                     <div class="panel-body">
                         <dl class="dl-horizontal">
                             <dt>Pipeline counter:</dt>
-                            <dd>{{ current_status.stage.pipeline_counter }}
+                            <dd>{{ current_status.stage.pipeline_counter }}</dd>
+
+                            <dt>Stage:</dt>
+                            <dd>{{ current_status.stage.stage_name }}
                                 {% if current_status.stage.stage_counter > 1 %}
                                     , <strong>run </strong> {{ current_status.stage.stage_counter }}
                                 {% endif %}
