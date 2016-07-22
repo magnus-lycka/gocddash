@@ -177,18 +177,17 @@ def insights(pipeline_name):
 
     if current_stage.is_success():
         git_blame_data = []
-    elif latest_passing_stage is None:
-        latest_passing_stage = get_first_synced_stage(pipeline_name)
-        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
     else:
+        if latest_passing_stage is None:
+            latest_passing_stage = get_first_synced_stage(pipeline_name)
         git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
 
     base_url = app.config['PUBLIC_GO_SERVER_URL']
 
     rerun_link = base_url + "pipelines/{}/{}/{}/{}".format(current_stage.pipeline_name,
-                                                                          current_stage.pipeline_counter,
-                                                                          current_stage.stage_name,
-                                                                          current_stage.stage_counter)
+                                                           current_stage.pipeline_counter,
+                                                           current_stage.stage_name,
+                                                           current_stage.stage_counter)
     log_link = base_url + "tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
         current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
         current_stage.stage_counter, "defaultJob")
@@ -196,8 +195,8 @@ def insights(pipeline_name):
     main_pipeline_link = base_url + "tab/pipeline/history/{}".format(current_stage.pipeline_name)
 
     comparison_link = base_url + "compare/{}/{}/with/{}".format(current_stage.pipeline_name,
-                                                                               current_stage.pipeline_counter,
-                                                                               latest_passing_stage.pipeline_counter)
+                                                                current_stage.pipeline_counter,
+                                                                latest_passing_stage.pipeline_counter)
 
     dash_status = get_cctray_status()
 
