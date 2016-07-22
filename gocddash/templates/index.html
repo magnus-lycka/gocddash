@@ -152,22 +152,17 @@
         $('#myModal').on('show.bs.modal', function (event) {
             console.log("No more reloads!");
             var icon = $(event.relatedTarget);
-            console.log(icon);
             stageid = icon.data('stageid');
-            console.log(stageid);
             shouldReload = false;
         });
 
         $('#myModal').on('hide.bs.modal', function (e) {
-            console.log("More reloads!");
             shouldReload = true;
             reload_in_a_minute();
         });
 
         $('#postClaim').click(function () {
-            console.log('hej');
-            console.log(stageid);
-            $.post("/dash/claim/" + stageid, $('#claimForm').serialize()).done(function () {
+            $.post("{{ application_root }}/claim/" + stageid, $('#claimForm').serialize()).done(function () {
                 $('#myModal').modal('hide');
                 document.location.reload(true);
             }).fail(function () {
