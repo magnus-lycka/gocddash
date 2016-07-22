@@ -256,7 +256,7 @@
         });
 
         $('#postClaim').click(function () {
-            $.post("/dash/claim/{{ current_status.stage.stage_id }}", $('#claimForm').serialize()).done(function () {
+            $.post("{{ application_root }}/claim/{{ current_status.stage.stage_id }}", $('#claimForm').serialize()).done(function () {
                 $('#myModal').modal('hide');
                 document.location.reload(true);
             }).fail(function () {

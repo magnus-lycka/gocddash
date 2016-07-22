@@ -216,7 +216,8 @@ def insights(pipeline_name):
         failure_tip=failure_tip.get_failure_tip(current_status, previous_status, latest_passing_stage.pipeline_counter),
         log_link=log_link,
         main_pipeline_link=main_pipeline_link,
-        stage_name_index=stage_name_index
+        stage_name_index=stage_name_index,
+        application_root=app.config['APPLICATION_ROOT']
     )
     return make_response(template)
 
