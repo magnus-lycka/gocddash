@@ -113,6 +113,6 @@ class GraphData:
 def get_graph_data(pipeline_name):
     result = get_connection().get_graph_data(pipeline_name)
     if result:
-        return list(map(lambda gd: GraphData(*result), result))
+        return list(map(lambda gd: GraphData(*gd), result))
     else:
         return None
