@@ -24,7 +24,7 @@ def handle_test_failure(current, previous, last_success):
     if failure_recommendation.initial_tip_available():
 
         if len(current.test_names) == 1:
-            return "Only one test failure. Potential for flickering." # RUN TEXTTEST AND FIX
+            return "Only one test failure. Potential for flickering."
 
         initial_tip = failure_recommendation.get_initial_recommendation()
         if initial_tip:

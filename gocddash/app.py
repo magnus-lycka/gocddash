@@ -164,6 +164,25 @@ def claim_stage(stage_id):
         abort(409, "Already claimed.")
 
 
+@gocddash.route("/graphs/<pipeline_name>", methods=['GET'])
+def graphs(pipeline_name):
+
+
+    template = render_template(
+        'graphs.html',  # Defined in the templates folder
+        go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
+        now=datetime.now(),
+        theme=get_bootstrap_theme(),
+        footer=get_footer(),
+        application_root=app.config['APPLICATION_ROOT']
+    )
+
+    return make_response(template)
+
+
+
+
+
 @gocddash.route("/insights/<pipeline_name>", methods=['GET'])
 def insights(pipeline_name):
     current_stage = get_current_stage(pipeline_name)

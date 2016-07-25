@@ -34,3 +34,9 @@ class JunitConsoleParser:
         if failures:
             for error in failures:
                 get_connection().insert_junit_failure_information(stage_id, error[0], error[1])
+
+
+
+if __name__ == '__main__':
+    test = JunitConsoleParser('', 2064, 1, 'runTests')
+    print(test.parse_info())

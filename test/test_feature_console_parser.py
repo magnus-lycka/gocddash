@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from gocddash.console_parsers import feature_junit_parser
+from gocddash.console_parsers import junit_report_parser
 
 _junit_report = """<table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 <div class="tests">
@@ -38,8 +38,8 @@ _junit_report = """<table class="section-table" cellpadding="2" cellspacing="0" 
 
 class TestConsoleFetcher(unittest.TestCase):
     def test_po_webtest(self):
-        feature_junit_parser.go_request_junit_report = MagicMock(return_value=(True, _junit_report))
-        parser = feature_junit_parser.JunitConsoleParser("test-interface", 1872, 1, "defaultStage", 'defaultJob')
+        junit_report_parser.go_request_junit_report = MagicMock(return_value=(True, _junit_report))
+        parser = junit_report_parser.JunitConsoleParser("test-interface", 1872, 1, "defaultStage", 'defaultJob')
 
         output_list = parser.parse_info()
 

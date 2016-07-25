@@ -1,6 +1,6 @@
 from .characterize_console_parser import TexttestConsoleParser
 from .default_console_parser import DefaultConsoleParser
-from .feature_junit_parser import JunitConsoleParser
+from .junit_report_parser import JunitConsoleParser
 
 parser_info = {'junit': JunitConsoleParser, 'characterize': TexttestConsoleParser}
 
