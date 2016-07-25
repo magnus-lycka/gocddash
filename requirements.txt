@@ -3,3 +3,4 @@ requests>=2.8.1
 psycopg2>=2.6.2
 pandas>=0.18.1
 yoyo-migrations>=5.0.3
+bokeh>=0.12.0

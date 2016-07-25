@@ -159,6 +159,14 @@
         </div>
         <hr>
         <div class="row">
+            <div class="col-md-12">
+                <a class="pull-right" href="{{ application_root }}/graphs/{{ current_status.stage.pipeline_name }}">
+                    <span class="glyphicon glyphicon-tasks pull-left" aria-hidden="true"></span>
+                        Go to Graphs page
+                </a>
+            </div>
+        </div>
+        <div class="row">
             {% if not current_status.is_success() %}
                 <div class="col-md-12">
                     <h4>Upstream git blame:

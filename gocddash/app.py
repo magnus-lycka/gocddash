@@ -19,7 +19,8 @@ from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, g
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
-from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display
+from gocddash.dash_board.graph import create_agent_html_graph
 
 group_of_pipeline = defaultdict(str)
 
@@ -167,20 +168,23 @@ def claim_stage(stage_id):
 @gocddash.route("/graphs/<pipeline_name>", methods=['GET'])
 def graphs(pipeline_name):
 
+    agent_graph, js_resources, css_resources, script, div = create_agent_html_graph(pipeline_name, "Historical agent success rate for {}".format(pipeline_name))
 
     template = render_template(
         'graphs.html',  # Defined in the templates folder
+        plot_script=script,
+        plot_div=div,
+        js_resources=js_resources,
+        css_resources=css_resources,
         go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
         now=datetime.now(),
         theme=get_bootstrap_theme(),
         footer=get_footer(),
-        application_root=app.config['APPLICATION_ROOT']
+        application_root=app.config['APPLICATION_ROOT'],
+
     )
 
     return make_response(template)
-
-
-
 
 
 @gocddash.route("/insights/<pipeline_name>", methods=['GET'])
@@ -209,7 +213,7 @@ def insights(pipeline_name):
                                                            current_stage.stage_counter)
     log_link = base_url + "tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
         current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
-        current_stage.stage_counter, "defaultJob")
+        current_stage.stage_counter, get_job_to_display(current_stage.stage_id).job_name)
 
     main_pipeline_link = base_url + "tab/pipeline/history/{}".format(current_stage.pipeline_name)
 

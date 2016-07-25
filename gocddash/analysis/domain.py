@@ -91,6 +91,7 @@ class Job:
         self.job_name = job_name
         self.agent_uuid = agent_uuid
         self.scheduled_date = scheduled_date
+        self.job_id = job_id
         self.job_result = job_result
 
     def is_success(self):
@@ -113,8 +114,8 @@ class GraphData:
         self.agent_name = agent_name
 
 
-def get_graph_data(pipeline_name):
-    result = get_connection().get_graph_data(pipeline_name)
+def get_graph_statistics(pipeline_name):
+    result = get_connection().get_graph_statistics(pipeline_name)
     if result:
         return list(map(lambda gd: GraphData(*gd), result))
     else:
