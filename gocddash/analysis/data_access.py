@@ -30,13 +30,13 @@ class SQLConnection:
             (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.scheduled_date, stage.stage_result, stage.stage_id))
 
     def insert_job(self, stage_id, job):
-        self.conn.execute(
-            """UPDATE job SET id=%s, stage_id=%s, name=%s, agent_uuid=%s, scheduled_date=%s, result=%s WHERE id=%s;""",
-            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
+        # self.conn.execute(
+        #     """UPDATE job SET id=%s, stage_id=%s, name=%s, agent_uuid=%s, scheduled_date=%s, result=%s WHERE id=%s;""",
+        #     (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
 
         self.conn.execute(
-            """INSERT INTO job(id, stage_id, name, agent_uuid, scheduled_date, result) SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM job WHERE id=%s);""",
-            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
+            """INSERT INTO job(id, stage_id, name, agent_uuid, scheduled_date, result, tests_run, tests_failed, tests_skipped) SELECT %s, %s, %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM job WHERE id=%s);""",
+            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.tests_run, job.tests_failed, job.tests_skipped, job.job_id))
 
 
     def insert_agent(self, id, agent_name):

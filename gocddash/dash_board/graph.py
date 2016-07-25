@@ -119,5 +119,5 @@ if __name__ == '__main__':
     from gocddash.analysis.data_access import create_connection
 
     create_connection()
-    plot = create_agent_html_graph("po-characterize-tests", "yololololo")
+    plot = create_agent_html_graph("protocol-rosettanet", "yololololo")
     # show_graph(plot)
