@@ -110,6 +110,10 @@ def create_agent_html_graph(pipeline_name, title):
 
     return agent_bar_chart, js_resources, css_resources, script, div
 
+def create_job_test_html_graph(pipeline_name, job_id):
+    pass
+
+
 
 if __name__ == '__main__':
     from gocddash.analysis.data_access import create_connection

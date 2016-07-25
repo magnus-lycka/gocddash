@@ -1,16 +1,24 @@
 from gocddash.analysis.data_access import get_connection
-from gocddash.analysis.go_client import go_request_junit_report
-from .html_utils import remove_excessive_whitespace, clean_html
+from gocddash.analysis.go_client import create_go_client, get_client
+from gocddash.util.html_utils import remove_excessive_whitespace, clean_html
 
 
 class JunitConsoleParser:
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
-        success, response = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+        success, response = get_client().go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         self.console_log = response
 
     def parse_info(self):
         if "Artifact 'testoutput/index.html' is unavailable as it may have been purged by Go or deleted externally." not in self.console_log:
             failure_information = self.extract_failure_info(self.console_log)
+        else:
+            failure_information = None
+
+        return failure_information
+
+    def parse_bar_chart_info(self):
+        if "Artifact 'testoutput/index.html' is unavailable as it may have been purged by Go or deleted externally." not in self.console_log:
+            failure_information = self.extract_bar_chart_data(self.console_log)
         else:
             failure_information = None
 
@@ -35,8 +43,16 @@ class JunitConsoleParser:
             for error in failures:
                 get_connection().insert_junit_failure_information(stage_id, error[0], error[1])
 
+    def extract_bar_chart_data(self, console_log):
+        console_log = console_log.split("Unit Test Failure and Error Details")[0]
+        splitted_console_log_list = remove_excessive_whitespace(clean_html(console_log)).split()
+        total_tests_run = splitted_console_log_list[2]
+        failures = splitted_console_log_list[5]
+        not_run = splitted_console_log_list[9]
+        return total_tests_run, failures, not_run
 
 
 if __name__ == '__main__':
-    test = JunitConsoleParser('', 2064, 1, 'runTests')
-    print(test.parse_info())
+    create_go_client("http://go.pagero.local/go/", ("dash", "board"))
+    test = JunitConsoleParser('paysol-feature-tests', 2064, 1, 'runTests', 'defaultJob')
+    print(test.parse_bar_chart_info())

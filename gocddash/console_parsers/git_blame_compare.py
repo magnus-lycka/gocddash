@@ -2,7 +2,8 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from gocddash.analysis.go_client import go_request_comparison_html
-from gocddash.console_parsers.html_utils import *
+from gocddash.util.html_utils import *
+
 
 def open_html(pipeline_name, current, comparison):
     html = go_request_comparison_html(pipeline_name, current, comparison)

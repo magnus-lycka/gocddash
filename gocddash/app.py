@@ -181,7 +181,6 @@ def graphs(pipeline_name):
         theme=get_bootstrap_theme(),
         footer=get_footer(),
         application_root=app.config['APPLICATION_ROOT'],
-
     )
 
     return make_response(template)
