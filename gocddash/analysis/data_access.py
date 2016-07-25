@@ -161,6 +161,12 @@ class SQLConnection:
         )
         return self.conn.fetchall()
 
+    def get_jobs_by_stage_id(self, stage_id):
+        self.conn.execute(
+            """SELECT * FROM job WHERE stage_id = %s ORDER BY id""", (stage_id,)
+        )
+        return self.conn.fetchall()
+
 _connection = None
 
 

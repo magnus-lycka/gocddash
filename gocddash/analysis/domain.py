@@ -85,13 +85,16 @@ class StageFailureInfo:
 
 
 class Job:
-    def __init__(self, job_name, agent_uuid, scheduled_date, job_id, job_result):
+    def __init__(self, job_id, stage_id, job_name, agent_uuid, scheduled_date, job_result):
+        self.job_id = job_id
+        self.stage_id = stage_id
         self.job_name = job_name
         self.agent_uuid = agent_uuid
         self.scheduled_date = scheduled_date
-        self.job_id = job_id
         self.job_result = job_result
 
+    def is_success(self):
+        return self.job_result == "Passed"
 
 def get_pipeline_heads():
     return list(map(lambda phs: StageFailureInfo(*phs), get_connection().get_synced_pipeline_heads()))
@@ -114,5 +117,17 @@ def get_graph_data(pipeline_name):
     result = get_connection().get_graph_data(pipeline_name)
     if result:
         return list(map(lambda gd: GraphData(*gd), result))
+    else:
+        return None
+
+
+def get_job_to_display(stage_id):
+    result = get_connection().get_jobs_by_stage_id(stage_id)
+    if result:
+        jobs = list(map(lambda job: Job(*job), result))
+        for job in jobs:
+            if not job.is_success():
+                return job
+        return jobs[0]
     else:
         return None

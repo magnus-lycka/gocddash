@@ -75,7 +75,7 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
             scheduled_date = ms_timestamp_to_date(job['scheduled_date']).replace(microsecond=0)
             job_id = job['id']
             job_result = job['result']
-            job = Job(job_name, agent_uuid, scheduled_date, job_id, job_result)
+            job = Job(job_id, stageid, job_name, agent_uuid, scheduled_date, job_result)
             create_job(stage, job)
 
             fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stageid, stage_name, job_name)
