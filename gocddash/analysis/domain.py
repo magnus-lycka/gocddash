@@ -95,3 +95,24 @@ class Job:
 
 def get_pipeline_heads():
     return list(map(lambda phs: StageFailureInfo(*phs), get_connection().get_synced_pipeline_heads()))
+
+
+class GraphData:
+    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_name, stage_result, job_name, scheduled_date, job_result, agent_name):
+        self.pipeline_name = pipeline_name
+        self.pipeline_counter = pipeline_counter
+        self.stage_counter = stage_counter
+        self.stage_name = stage_name
+        self.stage_result = stage_result
+        self.job_name = job_name
+        self.scheduled_date = scheduled_date
+        self.job_result = job_result
+        self.agent_name = agent_name
+
+
+def get_graph_data(pipeline_name):
+    result = get_connection().get_graph_data(pipeline_name)
+    if result:
+        return GraphData(*result)
+    else:
+        return None

@@ -62,17 +62,6 @@ def create_agent_html_graph(pipeline_name, title):
 def show_graph(plot):
     show(plot)
 
-class GraphData:
-    def __init__(self, pipeline_name, agent_id, result, stage_id, failure_stage):
-        self.pipeline_name = pipeline_name
-        self.agent_id = agent_id
-        self.result = result
-        self.stage_id = stage_id
-        self.failure_stage = failure_stage
-
-
-
-
 
 def new_agent_html_graph(pipeline_name, title):
 

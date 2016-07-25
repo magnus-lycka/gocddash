@@ -24,6 +24,14 @@ steps = [
             WHERE s.result <> 'Cancelled'
             ORDER BY p.pipelinecounter DESC, s.stage_counter DESC;""",
          "DROP VIEW failure_info;"),
+
+    step("""CREATE VIEW graph_statistics AS
+            SELECT p.pipeline_name, p.pipelinecounter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, a.agentname
+            FROM pipeline_instance p
+            JOIN stage s ON s.instance_id = p.id
+            JOIN job j ON j.stage_id = s.id
+            JOIN agent a ON a.id = j.agent_uuid;""",
+         "DROP VIEW graph_statistics;")
 #
 #     step("""CREATE VIEW texttest_failures AS
 #             SELECT p.pipelinename, p.counter, p.triggermessage, s.approvedby, s.stageindex, t.testindex, t.failuretype, t.documentname

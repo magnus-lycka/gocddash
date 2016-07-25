@@ -155,6 +155,12 @@ class SQLConnection:
         )
         return self.conn.fetchone() is not None
 
+    def get_graph_statistics(self, pipeline_name):
+        self.conn.execute(
+            """SELECT * FROM graph_statistics WHERE pipeline_name = %s""", (pipeline_name,)
+        )
+        return self.conn.fetchall()
+
 _connection = None
 
 
