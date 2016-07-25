@@ -75,7 +75,9 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
             scheduled_date = ms_timestamp_to_date(job['scheduled_date']).replace(microsecond=0)
             job_id = job['id']
             job_result = job['result']
-            job = Job(job_id, stageid, job_name, agent_uuid, scheduled_date, job_result)
+            parser = get_parser_info("junit")(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+            tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
+            job = Job(job_id, stageid, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed, tests_skipped)
             create_job(stage, job)
 
             fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stageid, stage_name, job_name)

@@ -7,6 +7,7 @@ class JunitConsoleParser:
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
         success, response = get_client().go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         self.console_log = response
+        self.success = success
 
     def parse_info(self):
         if "Artifact 'testoutput/index.html' is unavailable as it may have been purged by Go or deleted externally." not in self.console_log:
@@ -17,12 +18,10 @@ class JunitConsoleParser:
         return failure_information
 
     def parse_bar_chart_info(self):
-        if "Artifact 'testoutput/index.html' is unavailable as it may have been purged by Go or deleted externally." not in self.console_log:
-            failure_information = self.extract_bar_chart_data(self.console_log)
+        if self.success:
+            return self.extract_bar_chart_data(self.console_log)
         else:
-            failure_information = None
-
-        return failure_information
+            return 0, 0, 0
 
     def extract_failure_info(self, console_log):
         console_log = console_log.split("Unit Test Failure and Error Details")[0]
@@ -42,6 +41,7 @@ class JunitConsoleParser:
         if failures:
             for error in failures:
                 get_connection().insert_junit_failure_information(stage_id, error[0], error[1])
+
 
     def extract_bar_chart_data(self, console_log):
         console_log = console_log.split("Unit Test Failure and Error Details")[0]
