@@ -7,8 +7,9 @@ def get_failure_tip(current, previous, last_success):
 
 def handle_failure(current, previous, last_success):
     desc = ""
-    if previous.stage.description and previous.stage.responsible:
-        desc = "Last claim: {}: {}".format(previous.stage.responsible, previous.stage.description)
+    if previous and current:
+        if previous.stage.description and previous.stage.responsible:
+            desc = "Last claim: {}: {}".format(previous.stage.responsible, previous.stage.description)
     if current.stage.failure_stage == "POST":
         return "All tests passed, but the build failed. {}".format(desc)
     elif current.stage.failure_stage == "STARTUP":
@@ -22,12 +23,12 @@ def handle_test_failure(current, previous, last_success):
     failure_recommendation = FailureRecommendation(current, previous, last_success)
     if failure_recommendation.initial_tip_available():
 
+        if len(current.test_names) == 1:
+            return "Only one test failure. Potential for flickering." # RUN TEXTTEST AND FIX
+
         initial_tip = failure_recommendation.get_initial_recommendation()
         if initial_tip:
             return initial_tip
-
-    # if len(current.test_names) == 1:
-    #     return "Only one test failure. Potential for flickering." # RUN TEXTTEST AND FIX
 
     fallback_tip = failure_recommendation.get_fallback_recommendation()
 

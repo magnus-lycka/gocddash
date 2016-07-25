@@ -35,7 +35,7 @@ class TestFailureTip(unittest.TestCase):
         post_stage = self.create_stage_failure_info(None, False, "POST")
         current = pipeline_status.create_stage_info(post_stage)
         result = failure_tip.get_failure_tip(current, None, 0)
-        self.assertEqual(result, "All tests passed, but the build failed.")
+        self.assertEqual(result, "All tests passed, but the build failed. ")
 
     def test_error_introduced(self):
         pipeline_status.get_failure_stage_signature = MagicMock(return_value={2000: {}})
@@ -45,7 +45,7 @@ class TestFailureTip(unittest.TestCase):
         current = pipeline_status.create_stage_info(failed_stage)
         previous = pipeline_status.create_stage_info(passed_stage)
         result = failure_tip.get_failure_tip(current, previous, 0)
-        self.assertEqual(result, "Last pipeline was a success. Potential for flickering but needs further investigation.")
+        self.assertEqual(result, "Last pipeline was a success. Potential for flickering but needs further investigation. Last claim: resp: desc")
 
     def test_error_unchanged(self):
         pipeline_status.get_failure_stage_signature = MagicMock(side_effect=[{2000: {}}, {1999: {}}])
@@ -56,4 +56,4 @@ class TestFailureTip(unittest.TestCase):
         current = pipeline_status.create_stage_info(this_stage)
         previous = pipeline_status.create_stage_info(previous_stage)
         result = failure_tip.get_failure_tip(current, previous, 0)
-        self.assertEqual(result, "Same failure indices as last test. Unlikely flickering.")
+        self.assertEqual(result, "Same failure indices as last test. Unlikely flickering. Last claim: resp: desc")
