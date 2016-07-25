@@ -30,7 +30,10 @@ steps = [
               name TEXT,
               agent_uuid TEXT,
               scheduled_date TIMESTAMP,
-              result TEXT
+              result TEXT,
+              tests_run INTEGER,
+              tests_failed INTEGER,
+              tests_skipped INTEGER
             );""",
          "DROP TABLE job;"),
 

@@ -26,7 +26,7 @@ steps = [
          "DROP VIEW failure_info;"),
 
     step("""CREATE VIEW graph_statistics AS
-            SELECT p.pipeline_name, p.pipelinecounter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, a.agentname
+            SELECT p.pipeline_name, p.pipelinecounter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, a.agentname, j.tests_run, j.tests_failed, j.tests_skipped
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
             JOIN job j ON j.stage_id = s.id

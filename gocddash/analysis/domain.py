@@ -85,7 +85,7 @@ class StageFailureInfo:
 
 
 class Job:
-    def __init__(self, job_id, stage_id, job_name, agent_uuid, scheduled_date, job_result):
+    def __init__(self, job_id, stage_id, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed, tests_skipped):
         self.job_id = job_id
         self.stage_id = stage_id
         self.job_name = job_name
@@ -93,6 +93,9 @@ class Job:
         self.scheduled_date = scheduled_date
         self.job_id = job_id
         self.job_result = job_result
+        self.tests_run = tests_run
+        self.tests_failed = tests_failed
+        self.tests_skipped = tests_skipped
 
     def is_success(self):
         return self.job_result == "Passed"
@@ -102,7 +105,7 @@ def get_pipeline_heads():
 
 
 class GraphData:
-    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_name, stage_result, job_name, scheduled_date, job_result, agent_name):
+    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_name, stage_result, job_name, scheduled_date, job_result, agent_name, tests_run, tests_failed, tests_skipped):
         self.pipeline_name = pipeline_name
         self.pipeline_counter = pipeline_counter
         self.stage_counter = stage_counter
@@ -112,6 +115,9 @@ class GraphData:
         self.scheduled_date = scheduled_date
         self.job_result = job_result
         self.agent_name = agent_name
+        self.tests_run = tests_run
+        self.tests_failed = tests_failed
+        self.tests_skipped = tests_skipped
 
 
 def get_graph_statistics(pipeline_name):
