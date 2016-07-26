@@ -36,9 +36,14 @@ _junit_report = """<table class="section-table" cellpadding="2" cellspacing="0" 
 <tr>"""
 
 
+class MockClient:
+    def go_request_junit_report(self, *args):
+        return True, _junit_report
+
+
 class TestConsoleFetcher(unittest.TestCase):
     def test_po_webtest(self):
-        junit_report_parser.go_request_junit_report = MagicMock(return_value=(True, _junit_report))
+        junit_report_parser.get_client = MagicMock(return_value=MockClient())
         parser = junit_report_parser.JunitConsoleParser("test-interface", 1872, 1, "defaultStage", 'defaultJob')
 
         output_list = parser.parse_info()

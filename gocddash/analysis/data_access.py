@@ -38,7 +38,6 @@ class SQLConnection:
             """INSERT INTO job(id, stage_id, name, agent_uuid, scheduled_date, result, tests_run, tests_failed, tests_skipped) SELECT %s, %s, %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM job WHERE id=%s);""",
             (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.tests_run, job.tests_failed, job.tests_skipped, job.job_id))
 
-
     def insert_agent(self, id, agent_name):
         self.conn.execute("""INSERT INTO agent(id, agentname) VALUES (%s, %s);""", (id, agent_name))
 

@@ -33,11 +33,13 @@ def parse_pipeline_info(pipelines):
                     pipeline_name = pipeline["name"]
                     pipeline_id = pipeline["id"]
                     stage_count = stage['counter']
-                    instance = PipelineInstance(pipeline_name, pipeline_counter, pipeline["build_cause"]["trigger_message"], pipeline_id)
+                    instance = PipelineInstance(pipeline_name, pipeline_counter,
+                                                pipeline["build_cause"]["trigger_message"], pipeline_id)
                     get_connection().insert_pipeline_instance(instance)
                     parse_stage_info(stage_count, stage_name, instance)
                 else:
-                    print("This pipeline index ({} | Stage: {}) is not finished yet.".format(pipeline_counter, stage_name))
+                    print("This pipeline index ({} | Stage: {}) is not finished yet.".format(pipeline_counter,
+                                                                                             stage_name))
     fetch_new_agents()
 
 
@@ -64,7 +66,8 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
         tree = json.loads(response)
         stageid = tree["id"]
         stage_result = tree["result"]
-        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)  # Leave for now but a Stage doesn't have a scheduled_date in the API
+        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(
+            microsecond=0)  # Leave for now but a Stage doesn't have a scheduled_date in the API
 
         stage = Stage(stage_name, tree["approved_by"], stage_result, stage_index, stageid, timestamp)
         create_stage(pipeline_instance, stage)
@@ -77,15 +80,16 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
             job_result = job['result']
             parser = get_parser_info("junit")(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
             tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
-            job = Job(job_id, stageid, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed, tests_skipped)
+            job = Job(job_id, stageid, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed,
+                      tests_skipped)
             create_job(stage, job)
 
-            fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stageid, stage_name, job_name)
+            fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stageid, stage_name,
+                               job_name)
 
 
 def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stage_id, stage_name, job_name):
     if stage_result == "Failed" and not get_connection().is_failure_downloaded(stage_id):
-
         log_parser = get_config().get_log_parser(pipeline_name)
 
         failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
