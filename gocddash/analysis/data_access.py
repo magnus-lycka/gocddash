@@ -12,31 +12,19 @@ class SQLConnection:
         self.conn = conn.cursor()
 
     def insert_pipeline_instance(self, instance):
-        # self.conn.execute(
-        #     """UPDATE pipeline_instance SET id=%s, pipeline_name=%s, pipelinecounter=%s, triggermessage=%s WHERE id=%s;""",
-        #     (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
-
         self.conn.execute(
             """INSERT INTO pipeline_instance(id, pipeline_name, pipelinecounter, triggermessage) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
             (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
 
     def insert_stage(self, pipeline_instance_id, stage):
-        # self.conn.execute(
-        #     """UPDATE stage SET id=%s, instance_id=%s, stage_counter=%s, name=%s, approvedby=%s, result=%s WHERE id=%s;""",
-        #     (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.stage_result, stage.stage_id))
-
         self.conn.execute(
-            """INSERT INTO stage(id, instance_id, stage_counter, name, approvedby, scheduled_date, result) SELECT %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM stage WHERE id=%s);""",
-            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.scheduled_date, stage.stage_result, stage.stage_id))
+            """INSERT INTO stage(id, instance_id, stage_counter, name, approvedby, scheduled_date, result) VALUES (%s, %s, %s, %s, %s, %s, %s);""",
+            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.scheduled_date, stage.stage_result))
 
     def insert_job(self, stage_id, job):
-        # self.conn.execute(
-        #     """UPDATE job SET id=%s, stage_id=%s, name=%s, agent_uuid=%s, scheduled_date=%s, result=%s WHERE id=%s;""",
-        #     (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.job_id))
-
         self.conn.execute(
-            """INSERT INTO job(id, stage_id, name, agent_uuid, scheduled_date, result, tests_run, tests_failed, tests_skipped) SELECT %s, %s, %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM job WHERE id=%s);""",
-            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.tests_run, job.tests_failed, job.tests_skipped, job.job_id))
+            """INSERT INTO job(id, stage_id, name, agent_uuid, scheduled_date, result, tests_run, tests_failed, tests_skipped) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);""",
+            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.tests_run, job.tests_failed, job.tests_skipped))
 
     def insert_agent(self, id, agent_name):
         self.conn.execute("""INSERT INTO agent(id, agentname) VALUES (%s, %s);""", (id, agent_name))
@@ -165,6 +153,16 @@ class SQLConnection:
             """SELECT * FROM job WHERE stage_id = %s ORDER BY id""", (stage_id,)
         )
         return self.conn.fetchall()
+
+    def get_latest_synced_stage(self, pipeline_instance_id, stage_name):
+        self.conn.execute(
+            """SELECT COALESCE(max(stage_counter), 0)
+                FROM pipeline_instance p
+                JOIN stage s
+                ON p.id = s.instance_id
+                WHERE p.id = %s AND s.name = %s""", (pipeline_instance_id, stage_name)
+        )
+        return self.conn.fetchone()[0]
 
 _connection = None
 

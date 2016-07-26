@@ -29,7 +29,7 @@ def parse_pipeline_info(pipelines):
             if stage['scheduled']:
                 stage_name = stage['name']
                 if stage['result'] != "Unknown":
-                    print("Now fetching pipeline: {} | Stage: {}".format(pipeline_counter, stage_name))
+                    print("Pipeline counter: {}".format(pipeline_counter))
                     pipeline_name = pipeline["name"]
                     pipeline_id = pipeline["id"]
                     stage_count = stage['counter']
@@ -58,7 +58,9 @@ def agent_uuid_to_hostname(agent_uuid):
 
 
 def parse_stage_info(stage_count, stage_name, pipeline_instance):
-    for stage_index in range(int(stage_count), 0, -1):
+    latest_synced_stage = get_connection().get_latest_synced_stage(pipeline_instance.instance_id, stage_name)
+    for stage_index in range(int(stage_count), latest_synced_stage, -1):
+        print("  Fetching stage: {} / {}".format(stage_name, stage_index))
         pipeline_name = pipeline_instance.pipeline_name
         pipeline_counter = pipeline_instance.pipeline_counter
 
