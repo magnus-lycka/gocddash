@@ -2,6 +2,8 @@ from collections import OrderedDict
 
 import pandas as pd
 from bokeh.charts import Bar
+from bokeh.charts.attributes import cat
+from bokeh.charts.operations import blend
 from bokeh.embed import components
 from bokeh.models import GlyphRenderer
 from bokeh.models import HoverTool
@@ -70,7 +72,10 @@ def show_graph(plot):
 def create_agent_html_graph(pipeline_name, title):
     graph_data = get_graph_statistics(pipeline_name)
 
-    result_list = [row.job_result.replace("Passed", str(1)) if row.job_result == "Passed" else row.job_result.replace("Failed", str(0)) for row in graph_data]
+    result_list = [
+        row.job_result.replace("Passed", str(1)) if row.job_result == "Passed" else row.job_result.replace("Failed",
+                                                                                                           str(0)) for
+        row in graph_data]
 
     agent_list = [row.agent_name for row in graph_data]
 
@@ -104,20 +109,54 @@ def create_agent_html_graph(pipeline_name, title):
         ("Number of records", "@NoR"),
     ])
 
-    js_resources = INLINE.render_js()
-    css_resources = INLINE.render_css()
-    script, div = components(agent_bar_chart, INLINE)
+    js_resources, css_resources, script, div = get_bokeh_embed_resources(agent_bar_chart)
 
     return agent_bar_chart, js_resources, css_resources, script, div
 
-def create_job_test_html_graph(pipeline_name, job_id):
-    pass
+
+def create_job_test_html_graph(pipeline_name, title):
+    graph_data = get_graph_statistics(pipeline_name)
+    panda_frame = pd.DataFrame(
+        columns=['pipeline_name', 'pipeline_counter', 'stage_counter', 'stage_name', 'stage_result', 'job_name',
+                 'scheduled_date', 'job_result', 'agent_name', 'tests_run', 'tests_failed', 'tests_skipped'])
+
+    for index, row in enumerate(graph_data):
+        panda_frame.loc[index] = [row.pipeline_name, row.pipeline_counter, row.stage_counter, row.stage_name,
+                                  row.stage_result, row.job_name, row.scheduled_date, row.job_result, row.agent_name,
+                                  row.tests_run, row.tests_failed, row.tests_skipped]
+
+    panda_frame = panda_frame.groupby(panda_frame['pipeline_counter']).agg(
+        {'tests_run': 'sum', 'tests_failed': 'sum', 'tests_skipped': 'sum'}).reset_index()
+    panda_frame = panda_frame.astype(int)
+
+    output_file(title + ".html", title=title)
+
+    bar = Bar(panda_frame,
+              values=blend('tests_run', 'tests_failed', 'tests_skipped', name='tests', labels_name='test'),
+              label=cat(columns='pipeline_counter', sort=False),
+              stack=cat(columns='test', sort=False),
+              tooltips=[('Test category', '@test'), ('Number of tests', '@height'), ('Pipeline counter', '@pipeline_counter')],
+              )
+    bar.legend.orientation = "horizontal"
+    bar.legend.location = "top_right"
+
+    js_resources, css_resources, script, div = get_bokeh_embed_resources(bar)
+
+    return bar, js_resources, css_resources, script, div
 
 
+def get_bokeh_embed_resources(chart):
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+    script, div = components(chart, INLINE)
+
+    return js_resources, css_resources, script, div
 
 if __name__ == '__main__':
     from gocddash.analysis.data_access import create_connection
 
+    pd.set_option('display.width', 300)
     create_connection()
-    plot = create_agent_html_graph("protocol-rosettanet", "yololololo")
+    # plot = create_agent_html_graph("protocol-rosettanet", "yololololo")
+    plot = create_job_test_html_graph("paysol-transformation-new", "yololololo")
     # show_graph(plot)

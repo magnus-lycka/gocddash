@@ -120,6 +120,15 @@ class GraphData:
         self.tests_skipped = tests_skipped
 
 
+class EmbeddedChart:
+    def __init__(self, chart, js_resources, css_resources, script, div):
+        self.chart = chart
+        self.js_resources = js_resources
+        self.css_resources = css_resources
+        self.script = script
+        self.div = div
+
+
 def get_graph_statistics(pipeline_name):
     result = get_connection().get_graph_statistics(pipeline_name)
     if result:

@@ -20,7 +20,7 @@ from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display
-from gocddash.dash_board.graph import create_agent_html_graph
+from gocddash.dash_board.graph import create_agent_html_graph, create_job_test_html_graph
 
 group_of_pipeline = defaultdict(str)
 
@@ -170,12 +170,13 @@ def graphs(pipeline_name):
 
     agent_graph, js_resources, css_resources, script, div = create_agent_html_graph(pipeline_name, "Historical agent success rate for {}".format(pipeline_name))
 
+    from gocddash.analysis.domain import EmbeddedChart
+    agent_graph = EmbeddedChart(*create_agent_html_graph(pipeline_name, "Historical agent success rate for {}".format(pipeline_name)))
+    tests_run_graph = EmbeddedChart(*create_job_test_html_graph(pipeline_name, "Historical tests run for {}".format(pipeline_name)))
     template = render_template(
         'graphs.html',  # Defined in the templates folder
-        plot_script=script,
-        plot_div=div,
-        js_resources=js_resources,
-        css_resources=css_resources,
+        agent_graph=agent_graph,
+        tests_run_graph=tests_run_graph,
         go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
         now=datetime.now(),
         theme=get_bootstrap_theme(),
