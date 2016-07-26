@@ -77,7 +77,7 @@ def create_agent_html_graph(pipeline_name, title):
                                                                                                            str(0)) for
         row in graph_data]
 
-    agent_list = [row.agent_name for row in graph_data]
+    agent_list = [row.agent_name[9:] for row in graph_data]
 
     panda_frame = pd.DataFrame(columns=['agent_name', 'result', 'number_of_records'])
     panda_frame['agent_name'] = agent_list
@@ -90,8 +90,8 @@ def create_agent_html_graph(pipeline_name, title):
     output_file(title + ".html", title=title)
     tools = "hover,previewsave"
 
-    agent_bar_chart = Bar(panda_frame, label='agent_name', values='result', width=600, height=400,
-                          legend=None, tools=tools, title=title, agg='mean', color='#2196f3')
+    agent_bar_chart = Bar(panda_frame, label='agent_name', values='result', width=500, height=400,
+                          legend=None, tools=tools, title=title, agg='mean', color='#2196f3', toolbar_location="above")
 
     hover = agent_bar_chart.select(dict(type=HoverTool))
 
@@ -118,7 +118,7 @@ def create_job_test_html_graph(pipeline_name, title):
     graph_data = get_graph_statistics(pipeline_name)
     panda_frame = pd.DataFrame(
         columns=['pipeline_name', 'pipeline_counter', 'stage_counter', 'stage_name', 'stage_result', 'job_name',
-                 'scheduled_date', 'job_result', 'agent_name', 'tests_run', 'tests_failed', 'tests_skipped'])
+                 'scheduled_date', 'job_result', 'agent_name', 'Tests run', 'Tests failed', 'Tests skipped'])
 
     for index, row in enumerate(graph_data):
         panda_frame.loc[index] = [row.pipeline_name, row.pipeline_counter, row.stage_counter, row.stage_name,
@@ -126,19 +126,20 @@ def create_job_test_html_graph(pipeline_name, title):
                                   row.tests_run, row.tests_failed, row.tests_skipped]
 
     panda_frame = panda_frame.groupby(panda_frame['pipeline_counter']).agg(
-        {'tests_run': 'sum', 'tests_failed': 'sum', 'tests_skipped': 'sum'}).reset_index()
+        {'Tests run': 'sum', 'Tests failed': 'sum', 'Tests skipped': 'sum'}).reset_index()
     panda_frame = panda_frame.astype(int)
 
     output_file(title + ".html", title=title)
+    tools = "previewsave"
 
     bar = Bar(panda_frame,
-              values=blend('tests_run', 'tests_failed', 'tests_skipped', name='tests', labels_name='test'),
+              values=blend('Tests run', 'Tests failed', 'Tests skipped', name='tests', labels_name='test'),
               label=cat(columns='pipeline_counter', sort=False),
               stack=cat(columns='test', sort=False),
               tooltips=[('Test category', '@test'), ('Number of tests', '@height'), ('Pipeline counter', '@pipeline_counter')],
-              )
+              width=500, height=400, tools=tools, toolbar_location="above", title=title)
     bar.legend.orientation = "horizontal"
-    bar.legend.location = "top_right"
+    bar.legend.location = "top_left"
 
     js_resources, css_resources, script, div = get_bokeh_embed_resources(bar)
 
@@ -157,6 +158,6 @@ if __name__ == '__main__':
 
     pd.set_option('display.width', 300)
     create_connection()
-    # plot = create_agent_html_graph("protocol-rosettanet", "yololololo")
-    plot = create_job_test_html_graph("paysol-transformation-new", "yololololo")
+    # plot, js_resources, css_resources, script, div = create_agent_html_graph("protocol-rosettanet", "yololololo")
+    plot, js_resources, css_resources, script, div = create_job_test_html_graph("paysol-transformation-new", "yololololo")
     # show_graph(plot)
