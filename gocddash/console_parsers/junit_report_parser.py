@@ -1,11 +1,12 @@
 from gocddash.analysis.data_access import get_connection
-from gocddash.analysis.go_client import create_go_client, get_client
+from gocddash.analysis.go_client import get_client
 from gocddash.util.html_utils import remove_excessive_whitespace, clean_html
 
 
 class JunitConsoleParser:
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
-        success, response = get_client().go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+        success, response = get_client().go_request_junit_report(pipeline_name, pipeline_counter, stage_index,
+                                                                 stage_name, job_name)
         self.console_log = response
         self.success = success
 
@@ -42,7 +43,6 @@ class JunitConsoleParser:
             for error in failures:
                 get_connection().insert_junit_failure_information(stage_id, error[0], error[1])
 
-
     def extract_bar_chart_data(self, console_log):
         console_log = console_log.split("Unit Test Failure and Error Details")[0]
         splitted_console_log_list = remove_excessive_whitespace(clean_html(console_log)).split()
@@ -53,6 +53,5 @@ class JunitConsoleParser:
 
 
 if __name__ == '__main__':
-    create_go_client("http://go.pagero.local/go/", ("dash", "board"))
     test = JunitConsoleParser('paysol-feature-tests', 2064, 1, 'runTests', 'defaultJob')
     print(test.parse_bar_chart_info())
