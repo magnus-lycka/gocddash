@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4990/dash/insights/foo
+url: http://127.0.0.1:4824/dash/insights/foo
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4990/dash/insights/foo
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 14:45:15 | 00 seconds
+     * Last refresh: 14:41:07 | 00 seconds
 
    Information: Someone has already claimed this stage. Refreshing page...
 
@@ -54,7 +54,7 @@ Last green
 Claim failing stage
 
    Responsible
-   ____________________
+   ____________________ Please fill in this required field.
    Description
    ____________________
    (BUTTON) Close (BUTTON) Claim stage
@@ -64,12 +64,12 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4990/dash/?which=failing
-   3. http://127.0.0.1:4990/dash/?which=progress
-   4. http://127.0.0.1:4990/dash/?which=all
-   5. http://127.0.0.1:4990/dash/select/
-   6. http://127.0.0.1:4990/dash/select_theme/
+   2. http://127.0.0.1:4824/dash/?which=failing
+   3. http://127.0.0.1:4824/dash/?which=progress
+   4. http://127.0.0.1:4824/dash/?which=all
+   5. http://127.0.0.1:4824/dash/select/
+   6. http://127.0.0.1:4824/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/foo
    8. http://go.pagero.local/go/pipelines/foo/382/alpha/1
    9. http://go.pagero.local/go/tab/build/detail/foo/382/alpha/1/defaultJob#tab-tests
-  10. http://127.0.0.1:4990/dash/graphs/foo
+  10. http://127.0.0.1:4824/dash/graphs/foo
