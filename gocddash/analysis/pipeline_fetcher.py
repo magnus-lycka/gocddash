@@ -66,12 +66,12 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
 
         response = go_request_stage_instance(pipeline_name, pipeline_counter, stage_index, stage_name)
         tree = json.loads(response)
-        stageid = tree["id"]
+        stage_id = tree["id"]
         stage_result = tree["result"]
         timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(
             microsecond=0)  # Leave for now but a Stage doesn't have a scheduled_date in the API
 
-        stage = Stage(stage_name, tree["approved_by"], stage_result, stage_index, stageid, timestamp)
+        stage = Stage(stage_name, tree["approved_by"], stage_result, stage_index, stage_id, timestamp)
         create_stage(pipeline_instance, stage)
 
         for job in tree['jobs']:
@@ -82,23 +82,23 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
             job_result = job['result']
             parser = get_parser_info("junit")(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
             tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
-            job = Job(job_id, stageid, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed,
+            job = Job(job_id, stage_id, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed,
                       tests_skipped)
             create_job(stage, job)
 
-            fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stageid, stage_name,
-                               job_name)
+            if job_result == 'Failed' and not get_connection().is_failure_downloaded(stage_id):
+                fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, stage_name,
+                                   job_name)
 
 
-def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_result, stage_id, stage_name, job_name):
-    if stage_result == "Failed" and not get_connection().is_failure_downloaded(stage_id):
-        log_parser = get_config().get_log_parser(pipeline_name)
+def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, stage_name, job_name):
+    log_parser = get_config().get_log_parser(pipeline_name)
 
-        failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
-        get_connection().insert_failure_information(stage_id, failure_stage)
+    failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+    get_connection().insert_failure_information(stage_id, failure_stage)
 
-        failures = get_parser_info(log_parser)(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
-        failures.insert_info(stage_id)
+    failures = get_parser_info(log_parser)(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+    failures.insert_info(stage_id)
 
 
 def ms_timestamp_to_date(ms):
