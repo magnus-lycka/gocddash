@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
+import os
+import random
 import subprocess
 
 from docker_management import ContainerManager
-import os
-import random
 
 
 def start_servers(docker):
@@ -22,13 +22,14 @@ def start_servers(docker):
     application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "gocddash/app.py", "-b", str(application_port), "--db-port", str(db_port), "--file-client",
                                             os.getcwd()])
 
-    subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "sync_pipelines.py", "-a", os.getcwd() + "/application.cfg", "-p", os.getcwd() + "/pipelines.json", "-f", os.getcwd()])
+    sync_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "sync_pipelines.py", "-a", os.getcwd() + "/application.cfg", "-p", os.getcwd() + "/pipelines.json", "-f", os.getcwd()])
 
-    return db_container, application_port, application_process
+    return db_container, application_port, application_process, sync_process
 
 
-def stop_servers(docker, db, application):
+def stop_servers(docker, db, application, sync_process):
     application.kill()
+    sync_process.kill()
     docker.stop_container(db)
 
 
@@ -53,13 +54,13 @@ def perform_testcase(port):
 def main():
     docker = ContainerManager(
         "dockerregistry.pagero.local")  # TODO: Put this image on docker hub instead of our internal docker registry
-    db, app_port, application = start_servers(docker)
+    db, app_port, application, sync_process = start_servers(docker)
     import time
     try:
         time.sleep(2)
         perform_testcase(app_port)
     finally:
-        stop_servers(docker, db, application)
+        stop_servers(docker, db, application, sync_process)
 
 
 def _start_db_docker(docker, dbport):
