@@ -411,6 +411,7 @@ def main():
 
     # create_connection(db_port=app.config['DB_PORT'])
 
-    app.run(port=app.config['BIND_PORT'])
-
 main()
+
+if __name__ == '__main__':
+    app.run(port=app.config['BIND_PORT'])
