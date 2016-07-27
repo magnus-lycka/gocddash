@@ -95,7 +95,9 @@ class FileSource:
     def go_get_agent_information(self, agent_uuid):
         return True, self.read_file("/agents/" + agent_uuid + ".json")
 
-    def go_request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name, job_name):
+    def go_request_junit_report(self, pipeline_name, pipeline_counter, stage_counter, stage_name, job_name):
+        if job_name == "specialJob":
+            return True, self.read_file("/junit_passed.html")
         return True, self.read_file("/junit.html")
 
     def go_request_job_history(self, pipeline_name, stage_name, offset=0):

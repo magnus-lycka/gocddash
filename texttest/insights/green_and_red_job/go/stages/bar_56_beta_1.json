@@ -5,7 +5,7 @@
   "result": "Passed",
   "jobs": [
     {
-      "name": "defaultJob",
+      "name": "specialJob",
       "result": "Passed",
       "id": 2345,
       "scheduled_date": 1436509518752,

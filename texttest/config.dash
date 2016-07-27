@@ -15,6 +15,7 @@ link_test_path:urls.txt
 link_test_path:go/application.cfg
 link_test_path:go/compare.html
 link_test_path:go/junit.html
+link_test_path:go/junit_passed.html
 link_test_path:go/pipelines.json
 link_test_path:go/agents
 link_test_path:go/config
