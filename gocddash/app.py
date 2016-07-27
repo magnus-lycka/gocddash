@@ -248,9 +248,6 @@ def insights(pipeline_name):
 app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
-create_pipeline_config()
-create_connection(db_port=app.config['DB_PORT'])
-create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
 
 
 @app.template_filter('bootstrap_status')
@@ -389,6 +386,7 @@ def parse_args():
 
 
 def main():
+
     if not os.path.isfile(os.path.dirname(abspath(getsourcefile(lambda: 0))) + '/application.cfg'):
         print("Error: Missing application.cfg file in {}/".format(os.path.dirname((abspath(getsourcefile(lambda: 0))))))
         quit()
@@ -400,6 +398,10 @@ def main():
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
 
+    create_pipeline_config()
+    create_connection(db_port=app.config['DB_PORT'])
+    create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
+
     if pargs_dict['file_client']:
         create_go_client(pargs_dict['file_client'], auth=None)
     pipeline_path = pargs_dict['pipeline_config']
@@ -407,9 +409,8 @@ def main():
         if os.path.isfile(pargs_dict['pipeline_config']):
             create_pipeline_config(pargs_dict['pipeline_config'])
 
-    create_connection(db_port=app.config['DB_PORT'])
+    # create_connection(db_port=app.config['DB_PORT'])
 
     app.run(port=app.config['BIND_PORT'])
 
-if __name__ == "__main__":
-    main()
+main()

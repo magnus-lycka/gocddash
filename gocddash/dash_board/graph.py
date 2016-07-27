@@ -105,7 +105,6 @@ if __name__ == '__main__':
 
     pd.set_option('display.width', 300)
     create_connection()
-    # plot, js_resources, css_resources, script, div = create_agent_html_graph("protocol-rosettanet", "yololololo")
-    plot, js_resources, css_resources, script, div = create_job_test_html_graph("paysol-transformation-new",
-                                                                                "yololololo")
+    plot, js_resources, css_resources, script, div = create_agent_html_graph("protocol-rosettanet", "yololololo")
+    # plot, js_resources, css_resources, script, div = create_job_test_html_graph("paysol-transformation-new", "yololololo")
     # show_graph(plot)
