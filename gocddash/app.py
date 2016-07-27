@@ -159,6 +159,8 @@ def claim_stage(stage_id):
     if not get_connection().claim_exists(stage_id):
         responsible = request.form.get('responsible')
         description = request.form.get('description')
+        if not responsible:
+            abort(400, "You need something responsible.")
         get_connection().insert_stage_claim(stage_id, responsible, description)
         return "OK."
     else:

@@ -77,10 +77,11 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="claimForm">
-                        <div class="form-group">
+                        <div class="form-group" id="responsibleFormGroup">
                             <label for="responsible" class="col-sm-2 control-label">Responsible</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="responsible" name="responsible" placeholder="Responsible">
+                                <span id="responsibleHelpBlock" class="help-block hidden">Please fill in this required field.</span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -157,18 +158,28 @@
         });
 
         $('#myModal').on('hide.bs.modal', function (e) {
+            console.log("More reloads!");
             shouldReload = true;
             reload_in_a_minute();
         });
 
         $('#postClaim').click(function () {
-            $.post("{{ application_root }}/claim/" + stageid, $('#claimForm').serialize()).done(function () {
-                $('#myModal').modal('hide');
-                document.location.reload(true);
-            }).fail(function () {
-                $('#myModal').modal('hide');
-                claim_fail_alert()
-            })
+            console.log($('#responsible').val());
+            if ($('#responsible').val() === "") {
+                $('#responsibleHelpBlock').removeClass('hidden');
+                $('#responsibleFormGroup').addClass('has-error');
+                return false;
+            }
+            else {
+                $.post("{{ application_root }}/claim/" + stageid, $('#claimForm').serialize()).done(function () {
+                    $('#myModal').modal('hide');
+                    console.log("mannen")
+                    document.location.reload(true);
+                }).fail(function () {
+                    $('#myModal').modal('hide');
+                    claim_fail_alert()
+                })
+            }
         });
 
 

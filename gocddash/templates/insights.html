@@ -205,33 +205,37 @@
                 </div>
             {% endif %}
         </div>
-        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h5 class="modal-title"><strong>Claim failing stage</strong></h5>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" id="claimForm">
-                            <div class="form-group">
-                                <label for="responsible" class="col-sm-2 control-label">Responsible</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="responsible" name="responsible" placeholder="Responsible">
-                                </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title"><strong>Claim failing stage</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="claimForm">
+                        <div class="form-group" id="responsibleFormGroup">
+                            <label for="responsible" class="col-sm-2 control-label">Responsible</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="responsible" name="responsible"
+                                       placeholder="Responsible">
+                                <span id="responsibleHelpBlock" class="help-block hidden">Please fill in this required field.</span>
                             </div>
-                            <div class="form-group">
-                                <label for="description" class="col-sm-2 control-label">Description</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="description" name="description" placeholder="Description">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="description" name="description"
+                                       placeholder="Description">
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="postClaim">Claim stage</button>
-                    </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="postClaim">Claim stage</button>
                 </div>
             </div>
         </div>
@@ -267,15 +271,21 @@
         });
 
         $('#postClaim').click(function () {
-            $.post("{{ application_root }}/claim/{{ current_status.stage.stage_id }}", $('#claimForm').serialize()).done(function () {
-                $('#myModal').modal('hide');
-                document.location.reload(true);
-            }).fail(function () {
-                $('#myModal').modal('hide');
-                claim_fail_alert()
-            })
+            if ($('#responsible').val() === "") {
+                $('#responsibleHelpBlock').removeClass('hidden');
+                $('#responsibleFormGroup').addClass('has-error');
+                return false;
+            }
+            else {
+                $.post("{{ application_root }}/claim/{{ current_status.stage.stage_id }}", $('#claimForm').serialize()).done(function () {
+                    $('#myModal').modal('hide');
+                    document.location.reload(true);
+                }).fail(function () {
+                    $('#myModal').modal('hide');
+                    claim_fail_alert()
+                })
+            }
         });
-
 
         function claim_fail_alert() {
             $("#claim-fail-alert").removeClass('hidden')
