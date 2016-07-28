@@ -28,18 +28,14 @@ def parse_pipeline_info(pipelines):
         for stage in pipeline['stages']:
             if stage['scheduled']:
                 stage_name = stage['name']
-                if stage['result'] != "Unknown":
-                    print("Pipeline counter: {}".format(pipeline_counter))
-                    pipeline_name = pipeline["name"]
-                    pipeline_id = pipeline["id"]
-                    stage_count = stage['counter']
-                    instance = PipelineInstance(pipeline_name, pipeline_counter,
-                                                pipeline["build_cause"]["trigger_message"], pipeline_id)
-                    get_connection().insert_pipeline_instance(instance)
-                    parse_stage_info(stage_count, stage_name, instance)
-                else:
-                    print("This pipeline index ({} | Stage: {}) is not finished yet.".format(pipeline_counter,
-                                                                                             stage_name))
+                print("Pipeline counter: {}".format(pipeline_counter))
+                pipeline_name = pipeline["name"]
+                pipeline_id = pipeline["id"]
+                stage_count = stage['counter']
+                instance = PipelineInstance(pipeline_name, pipeline_counter,
+                                            pipeline["build_cause"]["trigger_message"], pipeline_id)
+                get_connection().insert_pipeline_instance(instance)
+                parse_stage_info(stage_count, stage_name, instance)
     fetch_new_agents()
 
 
@@ -60,35 +56,42 @@ def agent_uuid_to_hostname(agent_uuid):
 def parse_stage_info(stage_count, stage_name, pipeline_instance):
     latest_synced_stage = get_connection().get_latest_synced_stage(pipeline_instance.instance_id, stage_name)
     for stage_index in range(int(stage_count), latest_synced_stage, -1):
-        print("  Fetching stage: {} / {}".format(stage_name, stage_index))
         pipeline_name = pipeline_instance.pipeline_name
         pipeline_counter = pipeline_instance.pipeline_counter
 
-        response = go_request_stage_instance(pipeline_name, pipeline_counter, stage_index, stage_name)
-        tree = json.loads(response)
-        stage_id = tree["id"]
+        stage_instance_response = go_request_stage_instance(pipeline_name, pipeline_counter, stage_index, stage_name)
+        tree = json.loads(stage_instance_response)
         stage_result = tree["result"]
-        timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(
-            microsecond=0)  # Leave for now but a Stage doesn't have a scheduled_date in the API
+        if stage_result != "Unknown":
+            print("  Fetching stage: {} / {}".format(stage_name, stage_index))
+            stage_id = tree["id"]
 
-        stage = Stage(stage_name, tree["approved_by"], stage_result, stage_index, stage_id, timestamp)
-        create_stage(pipeline_instance, stage)
+            # Leave for now but a Stage doesn't have a scheduled_date in the API
+            timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
+            stage = Stage(stage_name, tree["approved_by"], stage_result, stage_index, stage_id, timestamp)
+            create_stage(pipeline_instance, stage)
 
-        for job in tree['jobs']:
-            job_name = job['name']
-            agent_uuid = job['agent_uuid']
-            scheduled_date = ms_timestamp_to_date(job['scheduled_date']).replace(microsecond=0)
-            job_id = job['id']
-            job_result = job['result']
-            parser = get_parser_info("junit")(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
-            tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
-            job = Job(job_id, stage_id, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed,
-                      tests_skipped)
-            create_job(stage, job)
+            fetch_job(pipeline_counter, pipeline_name, stage, stage_index, tree['jobs'])
+        else:
+            print("  Skipping stage: {} / {} - still in progress".format(stage_name, stage_index))
 
-            if job_result == 'Failed' and not get_connection().is_failure_downloaded(stage_id):
-                fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, stage_name,
-                                   job_name)
+
+def fetch_job(pipeline_counter, pipeline_name, stage, stage_index, jobs):
+    for job in jobs:
+        job_name = job['name']
+        agent_uuid = job['agent_uuid']
+        scheduled_date = ms_timestamp_to_date(job['scheduled_date']).replace(microsecond=0)
+        job_id = job['id']
+        job_result = job['result']
+        parser = get_parser_info("junit")(pipeline_name, pipeline_counter, stage_index, stage.stage_name, job_name)
+        tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
+        job = Job(job_id, stage.stage_id, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed,
+                  tests_skipped)
+        create_job(stage, job)
+
+        if job_result == 'Failed' and not get_connection().is_failure_downloaded(stage.stage_id):
+            fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage.stage_id, stage.stage_name,
+                               job_name)
 
 
 def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, stage_name, job_name):
