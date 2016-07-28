@@ -136,6 +136,13 @@ def get_graph_statistics(pipeline_name):
     else:
         return None
 
+def get_graph_statistics_for_final_stages(pipeline_name):
+    result = get_connection().get_graph_statistics_for_final_stages(pipeline_name)
+    if result:
+        return list(map(lambda gd: GraphData(*gd), result))
+    else:
+        return None
+
 
 def get_job_to_display(stage_id):
     result = get_connection().get_jobs_by_stage_id(stage_id)

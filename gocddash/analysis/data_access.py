@@ -148,6 +148,12 @@ class SQLConnection:
         )
         return self.conn.fetchall()
 
+    def get_graph_statistics_for_final_stages(self, pipeline_name):
+        self.conn.execute(
+            """SELECT * FROM graph_statistics_final_stages WHERE pipeline_name = %s""", (pipeline_name,)
+        )
+        return self.conn.fetchall()
+
     def get_jobs_by_stage_id(self, stage_id):
         self.conn.execute(
             """SELECT * FROM job WHERE stage_id = %s ORDER BY id""", (stage_id,)
@@ -163,17 +169,6 @@ class SQLConnection:
                 WHERE p.id = %s AND s.name = %s""", (pipeline_instance_id, stage_name)
         )
         return self.conn.fetchone()[0]
-
-    def get_last_stages(self, pipeline_name):
-        self.conn.execute(
-            """SELECT p.pipeline_name, p.pipelinecounter, s.stage_counter, s.name as stage_name, s.result as stage_result
-                FROM pipeline_instance p
-                JOIN stage s ON s.instance_id = p.id
-                JOIN (select instance_id, name, max(stage_counter) as stage_counter from stage s group by instance_id, name) sa
-                ON s.instance_id = sa.instance_id AND s.name = sa.name AND s.stage_counter = sa.stage_counter
-                WHERE p.pipeline_name = %s""", (pipeline_name,)
-        )
-        return self.conn.fetchall()
 
 _connection = None
 
