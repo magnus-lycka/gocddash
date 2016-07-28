@@ -136,7 +136,6 @@ def get_graph_statistics(pipeline_name):
     return fold(result, GraphData)
 
 
-
 def get_graph_statistics_for_final_stages(pipeline_name):
     result = get_connection().get_graph_statistics_for_final_stages(pipeline_name)
     return fold(result, GraphData)

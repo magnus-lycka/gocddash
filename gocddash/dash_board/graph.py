@@ -10,7 +10,7 @@ from bokeh.models import HoverTool
 from bokeh.plotting import *
 from bokeh.resources import INLINE
 
-from gocddash.analysis.domain import get_graph_statistics
+from gocddash.analysis.domain import get_graph_statistics, get_graph_statistics_for_final_stages
 
 
 def show_graph(plot):
@@ -63,22 +63,22 @@ def create_agent_html_graph(pipeline_name, title):
 
 
 def create_job_test_html_graph(pipeline_name, title):
-    graph_data = get_graph_statistics(pipeline_name)
+    graph_data = get_graph_statistics_for_final_stages(pipeline_name)
     panda_frame = pd.DataFrame(
-        columns=['pipeline_counter', 'Tests run', 'Tests failed', 'Tests skipped'])
+        columns=['pipeline_counter', 'Tests passed', 'Tests failed', 'Tests skipped'])
 
     for index, row in enumerate(graph_data):
-        panda_frame.loc[index] = [row.pipeline_counter, row.tests_run, row.tests_failed, row.tests_skipped]
+        panda_frame.loc[index] = [row.pipeline_counter, row.tests_run - row.tests_failed - row.tests_skipped, row.tests_failed, row.tests_skipped]
 
     panda_frame = panda_frame.groupby(panda_frame['pipeline_counter']).agg(
-        {'Tests run': 'sum', 'Tests failed': 'sum', 'Tests skipped': 'sum'}).reset_index()
+        {'Tests passed': 'sum', 'Tests failed': 'sum', 'Tests skipped': 'sum'}).reset_index()
     panda_frame = panda_frame.astype(int)
 
     output_file(title + ".html", title=title)
     tools = "previewsave"
 
     bar = Bar(panda_frame,
-              values=blend('Tests run', 'Tests failed', 'Tests skipped', name='tests', labels_name='test'),
+              values=blend('Tests passed', 'Tests failed', 'Tests skipped', name='tests', labels_name='test'),
               label=cat(columns='pipeline_counter', sort=False),
               stack=cat(columns='test', sort=False),
               tooltips=[('Test category', '@test'), ('Number of tests', '@height'),
