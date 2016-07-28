@@ -96,6 +96,9 @@ class Pipeline(object):
         for message in project.findall('messages/message'):
             self.messages[message.attrib['kind']].add(message.attrib['text'])
 
+    def is_success(self):
+        return self.status == "Success"
+
 
 class Entity(object):
     def __init__(self, project):

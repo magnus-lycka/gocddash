@@ -21,7 +21,7 @@ from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart
 from gocddash.dash_board.graph import create_agent_html_graph, create_job_test_html_graph
-
+from gocddash.pipeline_status_cache import create_cache, get_cache
 group_of_pipeline = defaultdict(str)
 
 # Use a blueprint to allow URLs to be prefixed through
@@ -29,6 +29,7 @@ group_of_pipeline = defaultdict(str)
 # sub-mounted WSGI environment. See
 # http://stackoverflow.com/questions/18967441/add-a-prefix-to-all-flask-routes
 gocddash = Blueprint('gocddash', __name__)
+
 
 
 def get_bootstrap_theme():
@@ -50,8 +51,21 @@ def dashboard():
     progress_bar_data = get_progress_bar_data(project)
     groups = request.cookies.get(
         'checked_pipeline_groups_cookie', '').split(',')
+
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
+
+    previous_pipelines = get_cache().get_pipelines()
+    print(pipelines)
+    print(previous_pipelines)
+    finished_pipelines = []
+    if which == 'failing':
+        pipeline_names = [pipeline.name for pipeline in pipelines]
+        # pipeline_names = pipeline_names[1:]    # Remove after testing
+        finished_pipelines = [pipeline for pipeline in previous_pipelines if pipeline.name not in pipeline_names]
+
+    print(finished_pipelines)
+
     for pipeline in pipelines:
         pipeline_name = pipeline.name
         message, whom = pipeline_is_paused(pipeline_name)
@@ -74,7 +88,8 @@ def dashboard():
                            footer=get_footer(),
                            synced_pipelines=synced_pipelines,
                            progress_bar_data=progress_bar_data,
-                           application_root=app.config['APPLICATION_ROOT'])
+                           application_root=app.config['APPLICATION_ROOT'],
+                           finished_pipelines=finished_pipelines)
 
 
 def get_progress_bar_data(project):
@@ -160,7 +175,7 @@ def claim_stage(stage_id):
         responsible = request.form.get('responsible')
         description = request.form.get('description')
         if not responsible:
-            abort(400, "You need something responsible.")
+            abort(400, "You need someone responsible.")
         get_connection().insert_stage_claim(stage_id, responsible, description)
         return "OK."
     else:
@@ -250,6 +265,7 @@ def insights(pipeline_name):
 app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
+
 
 
 @app.template_filter('bootstrap_status')
@@ -411,6 +427,7 @@ def main():
         if os.path.isfile(pargs_dict['pipeline_config']):
             create_pipeline_config(pargs_dict['pipeline_config'])
 
+    create_cache()
     # create_connection(db_port=app.config['DB_PORT'])
 
 main()

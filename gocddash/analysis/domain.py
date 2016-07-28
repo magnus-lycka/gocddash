@@ -136,6 +136,7 @@ def get_graph_statistics(pipeline_name):
     else:
         return None
 
+
 def get_graph_statistics_for_final_stages(pipeline_name):
     result = get_connection().get_graph_statistics_for_final_stages(pipeline_name)
     if result:

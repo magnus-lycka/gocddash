@@ -131,8 +131,16 @@
     </div>
 </div>
 
+    <div class="container">
+        {% for pipeline in finished_pipelines %}
+            <div class="col-md-4">
+                <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}" role="alert" id="job-complete-alert">
+                    <strong>Information:</strong> {{ pipeline.name }} just finished with status: {{ pipeline.status }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
-</div>
 {% endblock %}
 
 {% block scripts %}
@@ -183,12 +191,22 @@
         });
 
 
-        function claim_fail_alert() {
-            $("#claim-fail-alert").removeClass('hidden')
-            $("#claim-fail-alert").fadeTo(3000, 500).slideUp(500, function () {
-                $("#claim-fail-alert").alert('close');
-                document.location.reload(true);
+{#        function claim_fail_alert() {#}
+{#            $("#claim-fail-alert").removeClass('hidden');#}
+{#            $("#claim-fail-alert").fadeTo(3000, 500).slideUp(500, function () {#}
+{#                $("#claim-fail-alert").alert('close');#}
+{#                document.location.reload(true);#}
+{#            });#}
+{#        }#}
+
+        function job_complete_alert() {
+            shouldReload = false;
+            $("#job-complete-alert").removeClass('hidden');
+            $("#job-complete-alert").fadeTo(3000, 500).slideUp(500, function () {
+                $("#job-complete-alert").alert('close');
+
             });
+            shouldReload = true;
         }
     </script>
 
