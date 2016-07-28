@@ -100,8 +100,10 @@ class Job:
     def is_success(self):
         return self.job_result == "Passed"
 
+
 def get_pipeline_heads():
-    return list(map(lambda phs: StageFailureInfo(*phs), get_connection().get_synced_pipeline_heads()))
+    result = get_connection().get_synced_pipeline_heads()
+    return fold(result, StageFailureInfo, [])
 
 
 class GraphData:
@@ -131,27 +133,29 @@ class EmbeddedChart:
 
 def get_graph_statistics(pipeline_name):
     result = get_connection().get_graph_statistics(pipeline_name)
-    if result:
-        return list(map(lambda gd: GraphData(*gd), result))
-    else:
-        return None
+    return fold(result, GraphData)
+
 
 
 def get_graph_statistics_for_final_stages(pipeline_name):
     result = get_connection().get_graph_statistics_for_final_stages(pipeline_name)
-    if result:
-        return list(map(lambda gd: GraphData(*gd), result))
-    else:
-        return None
+    return fold(result, GraphData)
 
 
 def get_job_to_display(stage_id):
     result = get_connection().get_jobs_by_stage_id(stage_id)
     if result:
-        jobs = list(map(lambda job: Job(*job), result))
+        jobs = fold(result, Job)
         for job in jobs:
             if not job.is_success():
                 return job
         return jobs[0]
     else:
         return None
+
+
+def fold(rows, class_to_instantiate, default=None):
+    if rows:
+        return list(map(lambda row: class_to_instantiate(*row), rows))
+    else:
+        return default
