@@ -56,15 +56,11 @@ def dashboard():
         which, groups=groups, group_map=group_of_pipeline)
 
     previous_pipelines = get_cache().get_pipelines()
-    print(pipelines)
-    print(previous_pipelines)
     finished_pipelines = []
     if which == 'failing':
         pipeline_names = [pipeline.name for pipeline in pipelines]
-        # pipeline_names = pipeline_names[1:]    # Remove after testing
+        # pipeline_names = pipeline_names[2:]    # Remove after testing
         finished_pipelines = [pipeline for pipeline in previous_pipelines if pipeline.name not in pipeline_names]
-
-    print(finished_pipelines)
 
     for pipeline in pipelines:
         pipeline_name = pipeline.name

@@ -134,8 +134,12 @@
     <div class="container">
         {% for pipeline in finished_pipelines %}
             <div class="col-md-4">
-                <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}" role="alert" id="job-complete-alert">
-                    <strong>Information:</strong> {{ pipeline.name }} just finished with status: {{ pipeline.status }}
+                <div class="pipeline-alert" style="display:none">
+                    <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}"
+                         role="alert" id="pipeline-status-cache">
+                        <strong>Information:</strong> {{ pipeline.name }} just finished with
+                        status: {{ pipeline.status }}
+                    </div>
                 </div>
             </div>
         {% endfor %}
@@ -181,7 +185,7 @@
             else {
                 $.post("{{ application_root }}/claim/" + stageid, $('#claimForm').serialize()).done(function () {
                     $('#myModal').modal('hide');
-                    console.log("mannen")
+                    console.log("mannen");
                     document.location.reload(true);
                 }).fail(function () {
                     $('#myModal').modal('hide');
@@ -198,16 +202,10 @@
 {#                document.location.reload(true);#}
 {#            });#}
 {#        }#}
-
-        function job_complete_alert() {
-            shouldReload = false;
-            $("#job-complete-alert").removeClass('hidden');
-            $("#job-complete-alert").fadeTo(3000, 500).slideUp(500, function () {
-                $("#job-complete-alert").alert('close');
-
-            });
+        $(function () {
+            $(".pipeline-alert").fadeIn(1000);
             shouldReload = true;
-        }
+        });
     </script>
 
 <script type="text/javascript">
