@@ -9,18 +9,17 @@
             </div>
 
             <h2 class="text-center">Insights for {{ current_status.stage.pipeline_name }} </h2>
-            <hr>
-            <h4 class="text-center">
-                {% if not current_status.is_success() and current_status.stage.is_claimed() %}
+
+            {% if not current_status.is_success() and current_status.stage.is_claimed() %}
+                <h4 class="text-center">
                     Claimed by {{ current_status.stage.responsible }}: {{ current_status.stage.description }}
-                {% endif %}
-            </h4>
-            <br>
+                </h4>
+            {% endif %}
+
             {% if (live_info.label|int != current_status.stage.pipeline_counter or live_info.stages[stage_name_index].counter|int != current_status.stage.stage_counter) and "Building" not in live_info.status %}
                 <div class="alert alert-info" role="alert">
                     <strong>Information:</strong> Latest pipeline in GO is not the same as the latest analysed.
-                    Waiting for
-                    sync (~1min).
+                    Waiting for sync (~1min).
                 </div>
             {% endif %}
 
