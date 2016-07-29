@@ -412,19 +412,20 @@ def main():
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
 
-    create_pipeline_config()
     create_connection(db_port=app.config['DB_PORT'])
-    create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
 
     if pargs_dict['file_client']:
         create_go_client(pargs_dict['file_client'], auth=None)
+    else:
+        create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
+
     pipeline_path = pargs_dict['pipeline_config']
-    if pipeline_path:
-        if os.path.isfile(pargs_dict['pipeline_config']):
-            create_pipeline_config(pargs_dict['pipeline_config'])
+    if pipeline_path and os.path.isfile(pargs_dict['pipeline_config']):
+        create_pipeline_config(pargs_dict['pipeline_config'])
+    else:
+        create_pipeline_config()
 
     create_cache()
-    # create_connection(db_port=app.config['DB_PORT'])
 
 main()
 

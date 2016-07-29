@@ -97,13 +97,3 @@ def get_bokeh_embed_resources(chart):
     script, div = components(chart, INLINE)
 
     return js_resources, css_resources, script, div
-
-
-if __name__ == '__main__':
-    from gocddash.analysis.data_access import create_connection
-
-    pd.set_option('display.width', 300)
-    create_connection()
-    plot, js_resources, css_resources, script, div = create_agent_html_graph("protocol-rosettanet", "yololololo")
-    # plot, js_resources, css_resources, script, div = create_job_test_html_graph("paysol-transformation-new", "yololololo")
-    # show_graph(plot)

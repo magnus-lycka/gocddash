@@ -175,8 +175,10 @@ _connection = None
 
 def create_connection(db_port=15554):
     global _connection
-    _connection = SQLConnection(db_port)
-    return _connection
+    if not _connection:
+        _connection = SQLConnection(db_port)
+        return _connection
+    raise ValueError("Database connection already instantiated - will not instantiate again.")
 
 
 def get_connection():

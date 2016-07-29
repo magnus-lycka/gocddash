@@ -24,12 +24,10 @@ _pipeline_config = None
 
 def create_pipeline_config(path=str(Path(__file__).parents[1]) + "/pipelines.json"):
     global _pipeline_config
-    # if not _pipeline_config:
-    # This line was removed in order for UWSGI to work properly as UWSGI doesn't call the main method in app.py
-    # Make sure not to call create_config in other places than when it first needs to be instantiated.
-    # Otherwise you might run into problems.
-    _pipeline_config = PipelineConfig(path)
-    return _pipeline_config
+    if not _pipeline_config:
+        _pipeline_config = PipelineConfig(path)
+        return _pipeline_config
+    raise ValueError("PipelineConfig already instantiated - will not instantiate again.")
 
 
 def get_config():
