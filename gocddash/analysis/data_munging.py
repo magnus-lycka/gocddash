@@ -36,8 +36,8 @@ def binary_dependent_variable(result_column):
     return map(lambda s: 0 if s == "Failed" else 1, result_column)
 
 
-def get_failure_stage_signature(stageid):
-    return texttest_failure_group_by_stage(get_connection().get_stage_texttest_failures(stageid))
+def get_failure_stage_signature(stage_id):
+    return texttest_failure_group_by_stage(get_connection().get_stage_texttest_failures(stage_id))
 
 
 def get_failure_signatures(pipeline_name):
@@ -87,8 +87,8 @@ def export_data_to_pandas_df(pipeline_name):
     """ Exports the desired pipeline data from the postgresql database and returns a pandas dataframe """
 
     collated_data = read_data(get_connection().get_failure_statistics(pipeline_name),
-                              ["Pipelinename", "counter", "triggermessage", "approvedby", "stageindex", "scheduleddate",
-                               "agentname", "failurestage", "result", "id", "stagename"])
+                              ["Pipelinename", "counter", "trigger_message", "approved_by", "stageindex", "scheduleddate",
+                               "agent_name", "failure_stage", "result", "id", "stagename"])
     binary_result_column = binary_dependent_variable(collated_data.result)
     collated_data.result = binary_result_column
 

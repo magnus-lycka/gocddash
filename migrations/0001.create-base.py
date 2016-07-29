@@ -7,8 +7,8 @@ steps = [
     step("""CREATE TABLE pipeline_instance(
               id INTEGER NOT NULL PRIMARY KEY,
               pipeline_name TEXT,
-              pipelinecounter INTEGER,
-              triggermessage TEXT
+              pipeline_counter INTEGER,
+              trigger_message TEXT
             );
     """,
          "DROP TABLE pipeline_instance;"),
@@ -18,7 +18,7 @@ steps = [
               instance_id INTEGER,
               stage_counter INTEGER,
               name TEXT,
-              approvedby TEXT,
+              approved_by TEXT,
               scheduled_date TIMESTAMP,
               result TEXT
             );""",
@@ -39,31 +39,31 @@ steps = [
 
     step("""CREATE TABLE agent(
               id TEXT NOT NULL PRIMARY KEY,
-              agentname TEXT
+              agent_name TEXT
             );""",
          "DROP TABLE agent;"),
 
     step("""CREATE TABLE texttestfailure(
               id SERIAL PRIMARY KEY,
-              stageid INTEGER,
-              testindex INTEGER,
-              failuretype TEXT,
-              documentname TEXT
+              stage_id INTEGER,
+              test_index INTEGER,
+              failure_type TEXT,
+              document_name TEXT
             );""",
          "DROP TABLE texttestfailure;"),
 
     step("""CREATE TABLE failureinformation(
               id SERIAL PRIMARY KEY,
-              stageid INTEGER,
-              failurestage TEXT
+              stage_id INTEGER,
+              failure_stage TEXT
             );""",
          "DROP TABLE failureinformation;"),
 
     step("""CREATE TABLE junitfailure(
               id SERIAL PRIMARY KEY,
-              stageid INTEGER,
-              failuretype TEXT,
-              failuretest TEXT
+              stage_id INTEGER,
+              failure_type TEXT,
+              failure_test TEXT
             );""",
          "DROP TABLE junitfailure;"),
 

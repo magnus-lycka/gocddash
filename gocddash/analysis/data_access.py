@@ -13,12 +13,12 @@ class SQLConnection:
 
     def insert_pipeline_instance(self, instance):
         self.conn.execute(
-            """INSERT INTO pipeline_instance(id, pipeline_name, pipelinecounter, triggermessage) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
+            """INSERT INTO pipeline_instance(id, pipeline_name, pipeline_counter, trigger_message) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
             (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
 
     def insert_stage(self, pipeline_instance_id, stage):
         self.conn.execute(
-            """INSERT INTO stage(id, instance_id, stage_counter, name, approvedby, scheduled_date, result) VALUES (%s, %s, %s, %s, %s, %s, %s);""",
+            """INSERT INTO stage(id, instance_id, stage_counter, name, approved_by, scheduled_date, result) VALUES (%s, %s, %s, %s, %s, %s, %s);""",
             (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.scheduled_date, stage.stage_result))
 
     def insert_job(self, stage_id, job):
@@ -27,27 +27,27 @@ class SQLConnection:
             (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.tests_run, job.tests_failed, job.tests_skipped))
 
     def insert_agent(self, id, agent_name):
-        self.conn.execute("""INSERT INTO agent(id, agentname) VALUES (%s, %s);""", (id, agent_name))
+        self.conn.execute("""INSERT INTO agent(id, agent_name) VALUES (%s, %s);""", (id, agent_name))
 
-    def insert_texttest_failure(self, stageid, testindex, failuretype, documentname):
+    def insert_texttest_failure(self, stage_id, test_index, failure_type, document_name):
         self.conn.execute(
-            """INSERT INTO texttestfailure(stageid, testindex, failuretype, documentname) VALUES (%s, %s, %s, %s);""",
-            (stageid, testindex, failuretype, documentname))
+            """INSERT INTO texttestfailure(stage_id, test_index, failure_type, document_name) VALUES (%s, %s, %s, %s);""",
+            (stage_id, test_index, failure_type, document_name))
 
-    def insert_failure_information(self, stageid, failurestage):
-        self.conn.execute("""INSERT INTO failureinformation(stageid, failurestage) VALUES (%s, %s);""",
-                                (stageid, failurestage))
+    def insert_failure_information(self, stage_id, failure_stage):
+        self.conn.execute("""INSERT INTO failureinformation(stage_id, failure_stage) VALUES (%s, %s);""",
+                                (stage_id, failure_stage))
 
-    def insert_junit_failure_information(self, stageid, failure_type, failure_test):
-        self.conn.execute("""INSERT INTO junitfailure(stageid, failuretype, failuretest) VALUES (%s, %s, %s);""",
-                          (stageid, failure_type, failure_test))
+    def insert_junit_failure_information(self, stage_id, failure_type, failure_test):
+        self.conn.execute("""INSERT INTO junitfailure(stage_id, failure_type, failure_test) VALUES (%s, %s, %s);""",
+                          (stage_id, failure_type, failure_test))
 
-    def insert_stage_claim(self, stageid, responsible, desc):
+    def insert_stage_claim(self, stage_id, responsible, desc):
         self.conn.execute("""INSERT INTO stage_claim(stage_id, responsible, description) VALUES (%s, %s, %s);""",
-                          (stageid, responsible, desc))
+                          (stage_id, responsible, desc))
 
     def get_highest_pipeline_count(self, pipeline_name):
-        self.conn.execute("""SELECT COALESCE(max(pipelinecounter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
+        self.conn.execute("""SELECT COALESCE(max(pipeline_counter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
                                 (pipeline_name,))
         return self.conn.fetchone()[0]
 
@@ -57,7 +57,7 @@ class SQLConnection:
         return map(lambda x: x[0], self.conn.fetchall())
 
     def is_failure_downloaded(self, stage_id):
-        self.conn.execute("""SELECT * FROM failureinformation WHERE stageid=%s ;""", (stage_id,))
+        self.conn.execute("""SELECT * FROM failureinformation WHERE stage_id=%s ;""", (stage_id,))
         return self.conn.fetchone()
 
     def get_failure_statistics(self, pipeline_name, months_back=1):
@@ -66,9 +66,9 @@ class SQLConnection:
             (pipeline_name, months_back))
         return self.conn.fetchall()
 
-    def get_junit_failure_signature(self, stageid):
+    def get_junit_failure_signature(self, stage_id):
         self.conn.execute(
-            """SELECT failuretype, failuretest FROM junitfailure WHERE stageid=%s ORDER BY failuretest ;""", (stageid,))
+            """SELECT failure_type, failure_test FROM junitfailure WHERE stage_id=%s ORDER BY failure_test ;""", (stage_id,))
         return self.conn.fetchall()
 
     def get_texttest_document_statistics(self, pipeline_name):
@@ -76,7 +76,7 @@ class SQLConnection:
         return self.conn.fetchall()
 
     def get_texttest_document_names(self, pipeline_name):
-        self.conn.execute("""SELECT documentname FROM all_data WHERE pipelinename=%s;""", (pipeline_name,))
+        self.conn.execute("""SELECT document_name FROM all_data WHERE pipelinename=%s;""", (pipeline_name,))
         return map(lambda x: x[0], self.conn.fetchall())
 
     def get_texttest_failures(self, pipeline_name):
@@ -84,7 +84,7 @@ class SQLConnection:
         return self.conn.fetchall()
 
     def get_stage_texttest_failures(self, stage_id):
-        self.conn.execute("""SELECT * FROM texttestfailure WHERE stageid=%s;""", (stage_id,))
+        self.conn.execute("""SELECT * FROM texttestfailure WHERE stage_id=%s;""", (stage_id,))
         return self.conn.fetchall()
 
     def get_synced_pipeline_heads(self):
@@ -96,7 +96,7 @@ class SQLConnection:
 
     def fetch_current_stage(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter DESC, scheduled_date DESC, stage_counter DESC;""",
+            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipeline_counter DESC, scheduled_date DESC, stage_counter DESC;""",
             (pipeline_name,))
 
         return self.conn.fetchone()
@@ -109,9 +109,9 @@ class SQLConnection:
                     FROM failure_info
                     WHERE pipeline_name = %s
                     AND stage_name = %s
-                    AND not (pipelinecounter = %s
+                    AND not (pipeline_counter = %s
                     AND stage_counter = %s)
-                    ORDER BY pipelinecounter DESC, stage_counter DESC;"""
+                    ORDER BY pipeline_counter DESC, stage_counter DESC;"""
 
         query_tuple = (pipeline_name, current_stage_name, pipeline_counter, current_stage_index)
 
@@ -126,13 +126,13 @@ class SQLConnection:
 
     def fetch_latest_passing_stage(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s AND result = 'Passed' ORDER BY pipelinecounter DESC, stage_counter DESC;""",
+            """SELECT * FROM failure_info WHERE pipeline_name = %s AND result = 'Passed' ORDER BY pipeline_counter DESC, stage_counter DESC;""",
             (pipeline_name,))
         return self.conn.fetchone()
 
     def fetch_first_synced(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipelinecounter LIMIT 1;""",
+            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipeline_counter LIMIT 1;""",
             (pipeline_name,))
         return self.conn.fetchone()
 
@@ -150,7 +150,7 @@ class SQLConnection:
 
     def get_graph_statistics_for_final_stages(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM graph_statistics_final_stages WHERE pipeline_name = %s ORDER BY pipelinecounter ASC LIMIT 20""", (pipeline_name,)
+            """SELECT * FROM graph_statistics_final_stages WHERE pipeline_name = %s ORDER BY pipeline_counter ASC LIMIT 20""", (pipeline_name,)
         )
         return self.conn.fetchall()
 
