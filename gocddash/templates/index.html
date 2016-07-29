@@ -131,7 +131,7 @@
     </div>
 </div>
 
-    <div class="container">
+    <div class="container hidden" id="status-popup">
         {% for pipeline in finished_pipelines %}
             <div class="col-md-4">
                 <div class="pipeline-alert" style="display:none">
@@ -225,6 +225,13 @@
     $(function () {
         if (window.localStorage.getItem("show-mgmt-bar") === "true") {
             $('#mgmt-bar').removeClass("hidden")
+        }
+
+    })
+
+    $(function () {
+        if (window.localStorage.getItem("show-status-popups") === "true") {
+            $('#status-popup').removeClass("hidden")
         }
 
     })

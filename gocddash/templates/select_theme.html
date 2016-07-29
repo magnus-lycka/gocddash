@@ -16,10 +16,16 @@
 
   <div class="checkbox">
     <label>
-      <input type="checkbox" id="boss-key" value="">
+      <input type="checkbox" id="boss-key" value=""/>
       Management dashboard
     </label>
   </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="status-box" value=""/>
+                Status box popups
+        </label>
+    </div>
 </div>
 
 
@@ -33,5 +39,14 @@
     console.log(this.checked);
   });
   bossKey.prop('checked', window.localStorage.getItem("show-mgmt-bar") === "true");
+</script>
+
+<script type="text/javascript">
+    var statusBox = $('#status-box');
+    statusBox.change(function () {
+        window.localStorage.setItem("show-status-popups", this.checked);
+        console.log(this.checked);
+    });
+    statusBox.prop('checked', window.localStorage.getItem("show-status-popups") === "true");
 </script>
 {% endblock %}
