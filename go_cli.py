@@ -39,7 +39,7 @@ Sample usage: go_cli pull -p pipeline-name
         if not pargs.pipeline:
             raise ValueError("No pipeline specified.")
         if pargs.next is None:
-            pargs.next = go_request.get_max_pipeline_status(pargs.pipeline)[1] - pargs.start
+            pargs.next = go_request.get_max_pipeline_status(pargs.pipeline)[0] - pargs.start
         actions.pull(pargs.pipeline, pargs.next, pargs.start, pargs.dry_run)
     elif pargs.action == 'export':
         if not pargs.pipeline:
