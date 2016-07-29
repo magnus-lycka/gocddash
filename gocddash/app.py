@@ -13,13 +13,12 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
-from gocddash import parse_cctray
 from gocddash.util.config import create_pipeline_config
-from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_cctray, go_get_pipeline_status, create_go_client
+from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
-from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status
 from gocddash.dash_board.graph import create_agent_html_graph, create_job_test_html_graph
 from gocddash.pipeline_status_cache import create_cache, get_cache
 group_of_pipeline = defaultdict(str)
@@ -106,15 +105,6 @@ def get_progress_bar_data(project):
 
     return [success_percentage, progress_percentage, failing_percentage]
 
-
-def get_cctray_status():
-    xml = go_get_cctray()
-    """ Below code snippet is for testing purposes """
-    # with open('/home/eliasd/development/gocddash/gocddash/cctray.xml') as cctray:
-    #     xml = cctray
-    #     project = parse_cctray.Projects(xml)
-    project = parse_cctray.Projects(xml)
-    return project
 
 
 @gocddash.app_errorhandler(500)
