@@ -191,8 +191,8 @@ def claim_stage(stage_id):
 
 @gocddash.route("/graphs/<pipeline_name>", methods=['GET'])
 def graphs(pipeline_name):
-    agent_graph = EmbeddedChart(*create_agent_html_graph(pipeline_name, "Historical agent success rate for {}".format(pipeline_name)))
-    tests_run_graph = EmbeddedChart(*create_job_test_html_graph(pipeline_name, "Historical tests run for {}".format(pipeline_name)))
+    agent_graph = EmbeddedChart(*create_agent_html_graph(pipeline_name, "Historical agent success rate for {} (last month)".format(pipeline_name)))
+    tests_run_graph = EmbeddedChart(*create_job_test_html_graph(pipeline_name, "Historical tests run for {} (last 20 pipelines)".format(pipeline_name)))
     app_root = app.config['APPLICATION_ROOT']
     back_to_insights_link = app_root + "/insights/{}".format(pipeline_name)
 
