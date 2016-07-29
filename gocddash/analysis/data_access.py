@@ -150,7 +150,7 @@ class SQLConnection:
 
     def get_graph_statistics_for_final_stages(self, pipeline_name):
         self.conn.execute(
-            """SELECT * FROM graph_statistics_final_stages WHERE pipeline_name = %s ORDER BY pipelinecounter DESC LIMIT 20""", (pipeline_name,)
+            """SELECT * FROM graph_statistics_final_stages WHERE pipeline_name = %s ORDER BY pipelinecounter ASC LIMIT 20""", (pipeline_name,)
         )
         return self.conn.fetchall()
 

@@ -70,8 +70,8 @@ def create_job_test_html_graph(pipeline_name, title):
     for index, row in enumerate(graph_data):
         panda_frame.loc[index] = [row.pipeline_counter, row.tests_run - row.tests_failed - row.tests_skipped, row.tests_failed, row.tests_skipped]
 
-    panda_frame = panda_frame.groupby(panda_frame['pipeline_counter']).agg(
-        {'Tests passed': 'sum', 'Tests failed': 'sum', 'Tests skipped': 'sum'}).reset_index()
+    # panda_frame = panda_frame.groupby(panda_frame['pipeline_counter']).agg(
+    #     {'Tests passed': 'sum', 'Tests failed': 'sum', 'Tests skipped': 'sum'}).reset_index()
     panda_frame = panda_frame.astype(int)
 
     output_file(title + ".html", title=title)
@@ -83,9 +83,8 @@ def create_job_test_html_graph(pipeline_name, title):
               stack=cat(columns='test', sort=False),
               tooltips=[('Test category', '@test'), ('Number of tests', '@height'),
                         ('Pipeline counter', '@pipeline_counter')],
-              width=500, height=400, tools=tools, toolbar_location="above", title=title)
+              width=500, height=400, tools=tools, toolbar_location="above", title=title, legend=None)
     bar.legend.orientation = "horizontal"
-    bar.legend.location = "top_left"
 
     js_resources, css_resources, script, div = get_bokeh_embed_resources(bar)
 
