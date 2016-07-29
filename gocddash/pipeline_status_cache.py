@@ -10,7 +10,7 @@ class PipelineStatusCache:
 
     def get_pipelines(self):
         current_time = int(round(time.time() * 1000))
-        if current_time - self.latest_synced > 6000000:
+        if current_time - self.latest_synced > 60 * 1000:
             project = get_cctray_status()
             self.pipelines = project.select(
                 'failing')
