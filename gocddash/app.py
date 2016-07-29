@@ -59,8 +59,15 @@ def dashboard():
     finished_pipelines = []
     if which == 'failing':
         pipeline_names = [pipeline.name for pipeline in pipelines]
-        # pipeline_names = pipeline_names[2:]    # Remove after testing
         finished_pipelines = [pipeline for pipeline in previous_pipelines if pipeline.name not in pipeline_names]
+        new_failing_pipelines = [pipeline for pipeline in pipelines if pipeline not in previous_pipelines]
+        if new_failing_pipelines:
+            for pipeline in new_failing_pipelines:
+                finished_pipelines.append(pipeline)
+
+    all_pipelines = project.select('all')
+
+    finished_pipelines = [pipeline for pipeline in all_pipelines if pipeline in finished_pipelines]
 
     for pipeline in pipelines:
         pipeline_name = pipeline.name
@@ -102,6 +109,10 @@ def get_progress_bar_data(project):
 
 def get_cctray_status():
     xml = go_get_cctray()
+    """ Below code snippet is for testing purposes """
+    # with open('/home/eliasd/development/gocddash/gocddash/cctray.xml') as cctray:
+    #     xml = cctray
+    #     project = parse_cctray.Projects(xml)
     project = parse_cctray.Projects(xml)
     return project
 

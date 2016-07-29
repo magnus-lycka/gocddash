@@ -17,15 +17,11 @@ class Projects(object):
         for project in self.tree.findall('Project'):
             name_parts = [n.strip() for n in project.attrib['name'].split('::')]
             project.set("pipeline_name", name_parts[0])
-            # project.pipeline_name = name_parts[0]  # Old python 2 code...
             project.set("stage_name", name_parts[1])
-            # project.stage_name = name_parts[1]  # Python 2 etc...
             if len(name_parts) > 2:
                 project.set("job_name", name_parts[2])
-                # project.job_name = name_parts[2]
             else:
                 project.set("job_name", None)
-                # project.job_name = None
             if project.get("pipeline_name") not in self.pipelines:
                 self.pipelines[project.get("pipeline_name")] = Pipeline()
             self.pipelines[project.get("pipeline_name")].add_facts(project)
@@ -98,6 +94,9 @@ class Pipeline(object):
 
     def is_success(self):
         return self.status == "Success"
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.name == other.name
 
 
 class Entity(object):

@@ -11,7 +11,7 @@ class PipelineStatusCache:
 
     def get_pipelines(self):
         current_time = int(round(time.time() * 1000))
-        if current_time - self.latest_synced > 60000:
+        if current_time - self.latest_synced > 6000:
             project = get_cctray_status()
             self.pipelines = project.select(
                 'failing')
@@ -22,8 +22,13 @@ class PipelineStatusCache:
 
 _pipeline_status_cache = None
 
+
 def get_cctray_status():
     xml = get_client().go_get_cctray()
+    """ Below code snippet is for testing purposes """
+    # with open('/home/eliasd/development/gocddash/gocddash/cctray.xml') as cctray:
+    #     xml = cctray
+    #     project = parse_cctray.Projects(xml)
     project = parse_cctray.Projects(xml)
     return project
 
