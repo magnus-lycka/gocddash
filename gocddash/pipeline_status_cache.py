@@ -2,6 +2,8 @@ import time
 
 from gocddash.analysis.domain import get_cctray_status
 
+cache_age = 60 * 1000
+
 
 class PipelineStatusCache:
     def __init__(self):
@@ -10,7 +12,7 @@ class PipelineStatusCache:
 
     def get_pipelines(self):
         current_time = int(round(time.time() * 1000))
-        if current_time - self.latest_synced > 60 * 1000000:
+        if current_time - self.latest_synced > cache_age:
             project = get_cctray_status()
             self.pipelines = project.select(
                 'failing')
