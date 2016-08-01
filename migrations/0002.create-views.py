@@ -15,11 +15,12 @@ steps = [
          "DROP VIEW failure_info;"),
 
     step("""CREATE VIEW graph_statistics AS
-            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
+            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, f.failure_stage, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
             JOIN job j ON j.stage_id = s.id
-            JOIN agent a ON a.id = j.agent_uuid;""",
+            JOIN agent a ON a.id = j.agent_uuid
+            LEFT JOIN failureinformation f ON f.stage_id = s.id;""",
          "DROP VIEW graph_statistics;"),
 
     step("""CREATE VIEW final_stages AS
@@ -33,10 +34,11 @@ steps = [
          "DROP VIEW final_stages;"),
 
     step("""CREATE VIEW graph_statistics_final_stages AS
-            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
+            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, f.failure_stage, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
             FROM pipeline_instance p
             JOIN final_stages s ON s.instance_id = p.id
             JOIN job j ON j.stage_id = s.id
-            JOIN agent a ON a.id = j.agent_uuid;""",
+            JOIN agent a ON a.id = j.agent_uuid
+            LEFT JOIN failureinformation f ON f.stage_id = s.id;""",
          "DROP VIEW graph_statistics_final_stages")
 ]

@@ -109,7 +109,7 @@ def get_pipeline_heads():
 
 
 class GraphData:
-    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_name, stage_result, job_name, scheduled_date, job_result, agent_name, tests_run, tests_failed, tests_skipped):
+    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_name, stage_result, job_name, scheduled_date, job_result, failure_stage, agent_name, tests_run, tests_failed, tests_skipped):
         self.pipeline_name = pipeline_name
         self.pipeline_counter = pipeline_counter
         self.stage_counter = stage_counter
@@ -118,6 +118,7 @@ class GraphData:
         self.job_name = job_name
         self.scheduled_date = scheduled_date
         self.job_result = job_result
+        self.failure_stage = failure_stage
         self.agent_name = agent_name
         self.tests_run = tests_run
         self.tests_failed = tests_failed
