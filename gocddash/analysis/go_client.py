@@ -174,9 +174,3 @@ def create_go_client(base_go_url, auth):
     else:
         _go_client = FileSource(base_go_url)
     return _go_client
-
-
-def get_client():
-    if not _go_client:
-        raise ValueError("GO client not instantiated")
-    return _go_client

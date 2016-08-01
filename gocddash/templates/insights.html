@@ -136,8 +136,7 @@
                 {% if "Building" in live_info.status %}
                     {% set disabled="disabled" %}
                 {% endif %}
-                <a type="button" class="{{ live_info.status | rerun_valid }} {{ disabled }}" href="{{ rerun_link }}"
-                   target="_blank">
+                <a type="button" class="{{ live_info.status | rerun_valid }} {{ disabled }}" href="#" id="rerun-button">
                     <span id="glyph-rerun" class="glyphicon glyphicon-repeat pull-left" aria-hidden="true"></span>
                     Rerun {{ current_status.stage.stage_name }}
                     {% if "Building" in live_info.status %}
@@ -290,8 +289,27 @@
             });
         }
 
-        var rerunUrl = "/go/run/PIPELINE_NAME/PIPELINE_COUNTER/STAGE_NAME";
-        // Post there with params authenticity_token=uri_encode(access_token)
+        var rerunUrl = "{{ go_server_url }}run/{{ current_status.stage.pipeline_name }}/{{ current_status.stage.pipeline_counter }}/{{ current_status.stage.stage_name }}";
+        $('#rerun-button').click(function () {
+            shouldReload = false;
+            var encodedToken = encodeURIComponent("{{ rerun_token }}");
+            var payload = {authenticity_token: encodedToken};
+            var usr = "{{ username }}";
+            var passwd = "{{ passwd }}";
+            $.ajax({
+                type: "POST",
+                url: rerunUrl,
+                data: payload,
+                username: usr,
+                password: passwd,
+                crossDomain: true
+            })
+            .done(function () {
+                document.location.reload(true);
+            }).fail(function (data) {
+                console.log(data)
+            });
+        });
     </script>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 from . import parse_cctray
 from .data_access import get_connection
-from .go_client import get_client
+from .go_client import go_get_cctray
 
 
 def get_previous_stage(current_stage):
@@ -161,11 +161,8 @@ def fold(rows, class_to_instantiate, default=None):
     else:
         return default
 
+
 def get_cctray_status():
-    xml = get_client().go_get_cctray()
-    """ Below code snippet is for testing purposes """
-    # with open('/home/eliasd/development/gocddash/gocddash/cctray.xml') as cctray:
-    #     xml = cctray
-    #     project = parse_cctray.Projects(xml)
+    xml = go_get_cctray()
     project = parse_cctray.Projects(xml)
     return project

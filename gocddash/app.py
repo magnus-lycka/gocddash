@@ -254,7 +254,10 @@ def insights(pipeline_name):
         log_link=log_link,
         main_pipeline_link=main_pipeline_link,
         stage_name_index=stage_name_index,
-        application_root=app.config['APPLICATION_ROOT']
+        application_root=app.config['APPLICATION_ROOT'],
+        username=app.config['GO_SERVER_USER'],
+        passwd=app.config['GO_SERVER_PASSWD'],
+        rerun_token=app.config['RERUN_TOKEN']
     )
     return make_response(template)
 

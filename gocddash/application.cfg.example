@@ -1,6 +1,7 @@
 GO_SERVER_URL = "http://localhost:8153/go/"
 GO_SERVER_USER = "change to go user name"
 GO_SERVER_PASSWD = "change to go password"
+RERUN_TOKEN = "change to go authentication token"
 
 PUBLIC_GO_SERVER_URL = "http://localhost:8153/go/"
 PIPELINE_COLUMNS = 2
