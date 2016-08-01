@@ -5,8 +5,7 @@ from gocddash.util.html_utils import remove_excessive_whitespace, clean_html
 
 class JunitConsoleParser:
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
-        success, response = go_request_junit_report(pipeline_name, pipeline_counter, stage_index,
-                                                                 stage_name, job_name)
+        success, response = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         self.console_log = response
         self.success = success
 
