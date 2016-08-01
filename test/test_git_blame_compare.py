@@ -214,6 +214,7 @@ git_blame = """
 </div>
 """
 
+
 class TestGitBlame(unittest.TestCase):
     def test_git_blame(self):
         pipeline_name = "banana"

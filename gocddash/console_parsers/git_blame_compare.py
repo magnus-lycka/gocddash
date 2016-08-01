@@ -36,11 +36,11 @@ def extract_list_of_lists_from_html_table(git_sections):
         for index in indices:
             modified_by.append(clean_html(' '.join(list_of_words[index + 1:index + 4])))
 
-        start_indices = [i for i, x in enumerate(list_of_words) if """"><p>""" in x]
-        end_indices = [i for i, x in enumerate(list_of_words) if "</p>" in x]
+        start_indices = [i for i, x in enumerate(list_of_words) if """class="comment"><p>""" in x]  # Every comment starts with this
+        end_indices = [i for i, x in enumerate(list_of_words) if "</td></tr>" in x]  # Every comments ends with this
 
         for i, index in enumerate(start_indices):
-            comments.append((clean_html(' '.join(list_of_words[index:end_indices[i] + 1]))).split(">")[1])
+            comments.append((clean_html(' '.join(list_of_words[index:end_indices[i]]))).split(">")[1])
 
         for i, revision in enumerate(revisions):
             final_list.append([pipeline_name, git_url, revision, modified_by[i], comments[i]])
