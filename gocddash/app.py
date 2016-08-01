@@ -20,7 +20,7 @@ from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status
 from gocddash.dash_board.graph import create_agent_html_graph, create_job_test_html_graph
-from gocddash.pipeline_status_cache import create_cache, get_cache
+from gocddash.dash_board.pipeline_status_cache import create_cache, get_cache
 group_of_pipeline = defaultdict(str)
 
 # Use a blueprint to allow URLs to be prefixed through
