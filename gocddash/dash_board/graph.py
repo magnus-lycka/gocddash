@@ -60,7 +60,8 @@ def create_agent_html_graph(pipeline_name, title):
               ylabel='Agent success rate (%)')
     bar.legend.orientation = "horizontal"
 
-    bar.set(y_range=Range1d(0, 135))
+    height, height_increase = calculate_height_increase()
+    bar.set(y_range=Range1d(0, height + height_increase))
 
     hover = bar.select(dict(type=HoverTool))
 
@@ -114,9 +115,12 @@ def create_job_test_html_graph(pipeline_name, title):
     return bar, js_resources, css_resources, script, div
 
 
-def calculate_height_increase(dataframe):
-    height = dataframe['Tests passed'] + dataframe['Tests failed'] + dataframe['Tests skipped']
-    height = max(height)
+def calculate_height_increase(dataframe=None):
+    if dataframe is not None:  # Empty dataframes are not False in pandas
+        height = dataframe['Tests passed'] + dataframe['Tests failed'] + dataframe['Tests skipped']
+        height = max(height)
+    else:
+        height = 100
     height_increase = 0.35 * height
     return height, height_increase
 
