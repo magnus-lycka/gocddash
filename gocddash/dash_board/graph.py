@@ -11,7 +11,6 @@ from bokeh.models import Range1d
 from bokeh.plotting import *
 from bokeh.resources import INLINE
 
-from gocddash.analysis.data_access import create_connection
 from gocddash.analysis.domain import get_graph_statistics, get_graph_statistics_for_final_stages
 
 
@@ -72,16 +71,17 @@ def create_agent_html_graph(pipeline_name, title):
 
     for index, row in enumerate(graph_data):
         f_stage = row.failure_stage
-        panda_frame.loc[index] = [row.agent_name, 1 if f_stage == "TEST" else 0, 1 if f_stage == "STARTUP" else 0, 1 if f_stage == "POST" else 0]
+        panda_frame.loc[index] = [row.agent_name, 1 if f_stage == "TEST" else 0, 1 if f_stage == "STARTUP" else 0,
+                                  1 if f_stage == "POST" else 0]
 
     panda_frame = panda_frame.groupby(['agent_name']).agg(['sum', 'size']).reset_index()
     panda_frame.columns = panda_frame.columns.droplevel(1)
     panda_frame.columns = ['agent_name', 'Test', 'drop', 'Startup', 'drop', 'Post', 'NoR']
     panda_frame = panda_frame.drop('drop', 1)
 
-    panda_frame['Test'] = round(panda_frame['Test'].astype(int)/panda_frame['NoR'] * 100, 1)
-    panda_frame['Startup'] = round(panda_frame['Startup'].astype(int)/panda_frame['NoR'] * 100, 1)
-    panda_frame['Post'] = round(panda_frame['Post'].astype(int)/panda_frame['NoR'] * 100, 1)
+    panda_frame['Test'] = round(panda_frame['Test'].astype(int) / panda_frame['NoR'] * 100, 1)
+    panda_frame['Startup'] = round(panda_frame['Startup'].astype(int) / panda_frame['NoR'] * 100, 1)
+    panda_frame['Post'] = round(panda_frame['Post'].astype(int) / panda_frame['NoR'] * 100, 1)
     panda_frame['Success'] = round(100 - (panda_frame['Test'] + panda_frame['Startup'] + panda_frame['Post']), 1)
 
     output_file(title + ".html", title=title)
@@ -91,7 +91,8 @@ def create_agent_html_graph(pipeline_name, title):
               values=blend('Success', 'Test', 'Startup', 'Post', name='tests', labels_name='test'),
               label=cat(columns='agent_name', sort=False),
               stack=cat(columns='test', sort=False),
-              width=500, height=400, tools=tools, toolbar_location="above", title=title, ylabel='Agent success rate (%)')
+              width=500, height=400, tools=tools, toolbar_location="above", title=title,
+              ylabel='Agent success rate (%)')
     bar.legend.orientation = "horizontal"
 
     bar.set(y_range=Range1d(0, 135))
@@ -121,13 +122,14 @@ def create_job_test_html_graph(pipeline_name, title):
         columns=['pipeline_counter', 'Tests passed', 'Tests failed', 'Tests skipped'])
 
     for index, row in enumerate(graph_data):
-        panda_frame.loc[index] = [row.pipeline_counter, row.tests_run - row.tests_failed - row.tests_skipped, row.tests_failed, row.tests_skipped]
+        panda_frame.loc[index] = [row.pipeline_counter, row.tests_run - row.tests_failed - row.tests_skipped,
+                                  row.tests_failed, row.tests_skipped]
 
     panda_frame = panda_frame.astype(int)
 
     output_file(title + ".html", title=title)
     tools = "previewsave"
-    # print(panda_frame)
+    panda_frame = panda_frame.groupby(['pipeline_counter']).sum().reset_index()
     bar = Bar(panda_frame,
               values=blend('Tests passed', 'Tests failed', 'Tests skipped', name='tests', labels_name='test'),
               label=cat(columns='pipeline_counter', sort=False),
@@ -138,11 +140,8 @@ def create_job_test_html_graph(pipeline_name, title):
     bar.legend.orientation = "horizontal"
 
     height = panda_frame['Tests passed'] + panda_frame['Tests failed'] + panda_frame['Tests skipped']
-    # print(height)
     height = max(height)
-    # print(height)
     height_increase = 0.35 * height
-    # print(height_increase)
 
     bar.set(y_range=Range1d(0, height + height_increase))
 
@@ -157,9 +156,3 @@ def get_bokeh_embed_resources(chart):
     script, div = components(chart, INLINE)
 
     return js_resources, css_resources, script, div
-
-
-if __name__ == '__main__':
-    create_connection()
-    create_agent_html_graph('po-characterize-tests', "yolyoloylyo")
-    # create_job_test_html_graph('old-system-tests', "yolyoloylyo")
