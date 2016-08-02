@@ -91,7 +91,7 @@ def create_agent_html_graph(pipeline_name, title):
               values=blend('Success', 'Test', 'Startup', 'Post', name='tests', labels_name='test'),
               label=cat(columns='agent_name', sort=False),
               stack=cat(columns='test', sort=False),
-              width=500, height=400, tools=tools, toolbar_location="above", title=title,
+              width=500, height=400, tools=tools, toolbar_location="right", title=title,
               ylabel='Agent success rate (%)')
     bar.legend.orientation = "horizontal"
 
@@ -136,7 +136,7 @@ def create_job_test_html_graph(pipeline_name, title):
               stack=cat(columns='test', sort=False),
               tooltips=[('Test category', '@test'), ('Number of tests', '@height'),
                         ('Pipeline counter', '@pipeline_counter')],
-              width=500, height=400, tools=tools, toolbar_location="above", title=title)
+              width=500, height=400, tools=tools, toolbar_location="right", title=title)
     bar.legend.orientation = "horizontal"
 
     height = panda_frame['Tests passed'] + panda_frame['Tests failed'] + panda_frame['Tests skipped']
