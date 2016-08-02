@@ -18,54 +18,9 @@ def show_graph(plot):
     show(plot)
 
 
-def create_agent_html_graph_deprecated(pipeline_name, title):
-    graph_data = get_graph_statistics(pipeline_name)
-
-    result_list = [
-        row.job_result.replace("Passed", str(1)) if row.job_result == "Passed" else row.job_result.replace("Failed",
-                                                                                                           str(0)) for
-        row in graph_data]
-
-    agent_list = [row.agent_name[9:] for row in graph_data]
-
-    panda_frame = pd.DataFrame(columns=['agent_name', 'result', 'number_of_records'])
-    panda_frame['agent_name'] = agent_list
-
-    panda_frame['result'] = result_list
-    panda_frame['result'] = pd.to_numeric(panda_frame['result'])
-    panda_frame = panda_frame.groupby(panda_frame['agent_name']).agg(['mean', 'size']).reset_index()
-    panda_frame.columns = ['agent_name', 'result', 'NoR']
-
-    output_file(title + ".html", title=title)
-    tools = "hover,previewsave"
-
-    agent_bar_chart = Bar(panda_frame, label='agent_name', values='result', width=500, height=400,
-                          legend=None, tools=tools, title=title, agg='mean', color='#2196f3', toolbar_location="above")
-
-    hover = agent_bar_chart.select(dict(type=HoverTool))
-
-    # Manually map Number of Records (NoR) to correct ColumnDataSource
-    # See https://github.com/bokeh/bokeh/issues/2965 for details and possible workaround if they update the module
-    glyphs = agent_bar_chart.select(GlyphRenderer)
-    for item in glyphs:
-        panda_index = panda_frame['agent_name'].str.contains(item.data_source.data['agent_name'][0])
-        panda_index = panda_index[panda_index == True].index[0]  # Pandas specific syntax. Ignore IDEA warning.
-        item.data_source.data['NoR'] = [panda_frame.get_value(index=panda_index, col='NoR')]
-
-    hover.tooltips = OrderedDict([
-        ("Success rate", "@height"),
-        ("Agent Name", "@agent_name"),
-        ("Number of records", "@NoR"),
-    ])
-
-    js_resources, css_resources, script, div = get_bokeh_embed_resources(agent_bar_chart)
-
-    return agent_bar_chart, js_resources, css_resources, script, div
-
-
 def create_agent_html_graph(pipeline_name, title):
     pd.set_option("display.width", 300)
-    graph_data = get_graph_statistics_for_final_stages(pipeline_name)
+    graph_data = get_graph_statistics(pipeline_name)
 
     panda_frame = pd.DataFrame(columns=['agent_name', 'Test', 'Startup', 'Post'])
 
@@ -99,6 +54,8 @@ def create_agent_html_graph(pipeline_name, title):
 
     hover = bar.select(dict(type=HoverTool))
 
+    # Manually map Number of Records (NoR) to correct ColumnDataSource
+    # See https://github.com/bokeh/bokeh/issues/2965 for details and possible workaround if they update the module
     glyphs = bar.select(GlyphRenderer)
     for item in glyphs:
         panda_index = panda_frame['agent_name'].str.contains(item.data_source.data['agent_name'][0])
