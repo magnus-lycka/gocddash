@@ -18,6 +18,21 @@ def show_graph(plot):
     show(plot)
 
 
+def convert_to_percentages(dataframe, column_names):
+    for name in column_names:
+        dataframe[name] = round(dataframe[name].astype(int) / dataframe['NoR'] * 100, 1)
+
+    dataframe['Success'] = round(100 - (dataframe['Test'] + dataframe['Startup'] + dataframe['Post']), 1)
+    return dataframe
+
+
+def arrange_agent_graph_indices(dataframe):
+    dataframe.columns = dataframe.columns.droplevel(1)
+    dataframe.columns = ['agent_name', 'Test', 'drop', 'Startup', 'drop', 'Post', 'NoR']
+    dataframe = dataframe.drop('drop', 1)
+    return dataframe
+
+
 def create_agent_html_graph(pipeline_name, title):
     pd.set_option("display.width", 300)
     graph_data = get_graph_statistics(pipeline_name)
@@ -30,16 +45,11 @@ def create_agent_html_graph(pipeline_name, title):
                                   1 if f_stage == "POST" else 0]
 
     panda_frame = panda_frame.groupby(['agent_name']).agg(['sum', 'size']).reset_index()
-    panda_frame.columns = panda_frame.columns.droplevel(1)
-    panda_frame.columns = ['agent_name', 'Test', 'drop', 'Startup', 'drop', 'Post', 'NoR']
-    panda_frame = panda_frame.drop('drop', 1)
+    panda_frame = arrange_agent_graph_indices(panda_frame)
 
-    panda_frame['Test'] = round(panda_frame['Test'].astype(int) / panda_frame['NoR'] * 100, 1)
-    panda_frame['Startup'] = round(panda_frame['Startup'].astype(int) / panda_frame['NoR'] * 100, 1)
-    panda_frame['Post'] = round(panda_frame['Post'].astype(int) / panda_frame['NoR'] * 100, 1)
-    panda_frame['Success'] = round(100 - (panda_frame['Test'] + panda_frame['Startup'] + panda_frame['Post']), 1)
+    panda_frame = convert_to_percentages(panda_frame, ['Test', 'Startup', 'Post'])
 
-    output_file(title + ".html", title=title)
+    # output_file(title + ".html", title=title)  # For saving as a html
     tools = "hover, previewsave"
 
     bar = Bar(panda_frame,
@@ -82,11 +92,11 @@ def create_job_test_html_graph(pipeline_name, title):
         panda_frame.loc[index] = [row.pipeline_counter, row.tests_run - row.tests_failed - row.tests_skipped,
                                   row.tests_failed, row.tests_skipped]
 
+    panda_frame = panda_frame.groupby(['pipeline_counter']).sum().reset_index()
     panda_frame = panda_frame.astype(int)
 
-    output_file(title + ".html", title=title)
+    # output_file(title + ".html", title=title)  # For saving as a html
     tools = "previewsave"
-    panda_frame = panda_frame.groupby(['pipeline_counter']).sum().reset_index()
     bar = Bar(panda_frame,
               values=blend('Tests passed', 'Tests failed', 'Tests skipped', name='tests', labels_name='test'),
               label=cat(columns='pipeline_counter', sort=False),
@@ -96,15 +106,19 @@ def create_job_test_html_graph(pipeline_name, title):
               width=500, height=400, tools=tools, toolbar_location="right", title=title)
     bar.legend.orientation = "horizontal"
 
-    height = panda_frame['Tests passed'] + panda_frame['Tests failed'] + panda_frame['Tests skipped']
-    height = max(height)
-    height_increase = 0.35 * height
-
+    height, height_increase = calculate_height_increase(panda_frame)
     bar.set(y_range=Range1d(0, height + height_increase))
 
     js_resources, css_resources, script, div = get_bokeh_embed_resources(bar)
 
     return bar, js_resources, css_resources, script, div
+
+
+def calculate_height_increase(dataframe):
+    height = dataframe['Tests passed'] + dataframe['Tests failed'] + dataframe['Tests skipped']
+    height = max(height)
+    height_increase = 0.35 * height
+    return height, height_increase
 
 
 def get_bokeh_embed_resources(chart):
