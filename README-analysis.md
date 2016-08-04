@@ -24,37 +24,17 @@ Run the migration script
 
     yoyo apply --database postgresql://analysisappluser:analysisappluser@localhost:15554/go-analysis -b
 
-Usage for the cli:
+Use ./sync_pipelines.py to fetch data for the pipelines specified in pipelines.json.
 
-    ./go_cli.py [pull|info|export] [-p PIPELINE] [-d] [-n PULL_COUNT] [-s START_COUNTER] [-f FILENAME]
+Stage failures will be parsed and categorized in the following three distinct phases in which the failure occurred:
 
-Modes:
-
-`info` lists metadata of the current state of the client database of the selected pipeline.
-
-`pull` synchronizes run information from GO into the client database.
-With only the `-n` flag, it synchronizes the input number of runs beginning from the last synchronized run.
-With both the `-s` and `-n` flags, it is possible to set the start run number, synchronizing the specified consecutive number of runs.
-
-
-Test log analysis is configured for the output format of texttest - but other formats could be included.
-The first consideration is during which part of the test run the test failed - split in three categories:
-
-* STARTUP: runDeployer did not finish
+* STARTUP: the job failed but the tests were not even started, no tests run according to JUnit
 * TEST: there were test failures according to JUnit
-* POST: all tests passed according to JUnit, but the process still returned an error code (meaning that post-test Git operation failed)
+* POST: all tests passed according to JUnit, but the job still failed
 
 For the runs that actually contain _test_ failures, additional information is gathered, which is then used for analysis:
 
-* Which index did the failing test(s) have?
-* Which documents were missing/new/differences
-
-
-Non-comprehensive list of indicators for flickering tests:
-
-* Green-red-green consecutive
-* Red-green in consecutive stages
-* First test in suite fails
+* Which tests failed, and how?
 
 
 Starting the Dashboard
@@ -69,4 +49,5 @@ Run `main.py` - this will serve the dashboard.
 The dashboard is available locally from http://127.0.0.1:5000/dash/
 1. Since by default no pipelines are shown, they must be enabled under "Select pipeline groups".
 2. Once data has been synchronized, pipelines (under the Failing/Progress/All tabs) with additional information are marked with "Insights available" along with the latest pipeline count for which the information pertains to.
-3. On the insights page for a pipeline, information is displayed in three panels. Failed pipelines contain more information and actions.
+3. On the Insights page for a pipeline, information is displayed in three panels. Failed pipelines contain more information and actions.
+4. On the Pipeline graphs page, success rate/failure type per agent and historical test count graphs are available.
