@@ -33,7 +33,7 @@ gocddash = Blueprint('gocddash', __name__)
 
 def get_bootstrap_theme():
     theme = request.cookies.get('theme_cookie')
-    return theme or 'paper'
+    return theme or 'cyborg'
 
 
 def get_footer():
@@ -65,8 +65,12 @@ def dashboard():
                 finished_pipelines.append(pipeline)
 
     all_pipelines = project.select('all')
+    unwanted_pipelines = []
+    for name, group in group_of_pipeline.items():
+        if group not in groups:
+            unwanted_pipelines.append(name)
 
-    finished_pipelines = [pipeline for pipeline in all_pipelines if pipeline in finished_pipelines]
+    finished_pipelines = [pipeline for pipeline in all_pipelines if pipeline in finished_pipelines and pipeline.name not in unwanted_pipelines]
 
     for pipeline in pipelines:
         pipeline_name = pipeline.name
