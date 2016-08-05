@@ -96,16 +96,16 @@ def main():
     data_access.create_connection(db_port)
     go_client.create_go_client(server_url, (user, passwd))
 
-    with codecs.open(pipelines_path, encoding='utf-8') as input_reader: # TODO: does this mean that this is open through the entire lifecycle?
+    with codecs.open(pipelines_path, encoding='utf-8') as input_reader:
         json_tree = json.load(input_reader)
         requested_pipelines = read_config.get_pipelines_to_sync(json_tree)
         log("Starting synchronization.")
         pipelines = parse_pipeline_availability(requested_pipelines)
         synchronize(pipelines)
 
-        print()
+        print("")
         log("Done with the backlog.")
-        print()
+        print("")
 
         last_sync = datetime.datetime.now()
         while True:

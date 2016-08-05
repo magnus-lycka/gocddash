@@ -18,7 +18,6 @@ def handle_failure(current, previous, last_success):
         return handle_test_failure(current, previous, last_success)
 
 
-# TODO: Really do something about the ordering here - maybe with composition of predicates.
 def handle_test_failure(current, previous, last_success):
     failure_recommendation = FailureRecommendation(current, previous, last_success)
     if failure_recommendation.initial_tip_available():
@@ -44,7 +43,6 @@ class FailureRecommendation:
         if previous.stage.description and previous.stage.responsible:
             desc = "Last claim: {}: {}".format(previous.stage.responsible, previous.stage.description)
 
-        # This is a bit hard to read
         self.statistics_actions = [
             (
                 lambda: self.current.stage.failure_stage == "STARTUP" and self.current.stage.failure_stage == self.previous.stage.failure_stage,
