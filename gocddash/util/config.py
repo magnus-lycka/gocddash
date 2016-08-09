@@ -8,7 +8,7 @@ class PipelineConfig:
     def __init__(self, path):
         self.path = path
         if not os.path.isfile(path):
-            raise FileNotFoundError("Error: Missing pipelines.json file in {}!".format(path))
+            raise FileNotFoundError("Error: Missing pipelines.json file in {}".format(path))
         with codecs.open(path, encoding="utf-8") as pipelines_json:
             self.pipelines = json.load(pipelines_json)
 
