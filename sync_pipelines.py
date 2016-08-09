@@ -110,7 +110,7 @@ def main():
         last_sync = datetime.datetime.now()
         while True:
             time_diff = millis_interval(last_sync, datetime.datetime.now())
-            if time_diff < 5*60*1000:
+            if time_diff < 2*60*1000:
                 time.sleep(10)
             else:
                 log("Starting synchronization.")
