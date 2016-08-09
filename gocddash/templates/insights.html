@@ -2,27 +2,28 @@
 
 {% block content %}
     <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-warning hidden" role="alert" id="claim-fail-alert">
-                <strong>Information:</strong> Someone has already claimed this stage. Refreshing page...
-            </div>
-
-            <h2 class="text-center">Insights for {{ current_status.stage.pipeline_name }} </h2>
-
-            {% if not current_status.is_success() and current_status.stage.is_claimed() %}
-                <h4 class="text-center">
-                    Claimed by {{ current_status.stage.responsible }}: {{ current_status.stage.description }}
-                </h4>
-            {% endif %}
-
-            {% if (live_info.label|int != current_status.stage.pipeline_counter or live_info.stages[stage_name_index].counter|int != current_status.stage.stage_counter) and "Building" not in live_info.status %}
-                <div class="alert alert-info" role="alert">
-                    <strong>Information:</strong> Latest pipeline in GO is not the same as the latest analysed.
-                    Waiting for sync (~1min).
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning hidden" role="alert" id="claim-fail-alert">
+                    <strong>Information:</strong> Someone has already claimed this stage. Refreshing page...
                 </div>
-            {% endif %}
 
+                <h2 class="text-center">Insights for {{ current_status.stage.pipeline_name }} </h2>
+
+                {% if not current_status.is_success() and current_status.stage.is_claimed() %}
+                    <h4 class="text-center">
+                        Claimed by {{ current_status.stage.responsible }}: {{ current_status.stage.description }}
+                    </h4>
+                {% endif %}
+
+                {% if (live_info.label|int != current_status.stage.pipeline_counter or live_info.stages[stage_name_index].counter|int != current_status.stage.stage_counter) and "Building" not in live_info.status %}
+                    <div class="alert alert-info" role="alert">
+                        <strong>Information:</strong> Latest pipeline in GO is not the same as the latest analysed.
+                        Waiting for sync (~1min).
+                    </div>
+                {% endif %}
+
+            </div>
         </div>
         <div class="row">
             <div class="col-md-4">
@@ -65,7 +66,7 @@
 
                             <dt>Stage:</dt>
                             <dd>{{ current_status.stage.stage_name }}
-                                    , <strong>run </strong> {{ current_status.stage.stage_counter }}
+                                , <strong>run </strong> {{ current_status.stage.stage_counter }}
                             </dd>
 
                             <dt>Result:</dt>
@@ -115,7 +116,8 @@
         {% if not current_status.is_success() and not current_status.stage.is_claimed() %}
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
-                    <button type="button" class="btn btn-danger btn-lg btn-block" id="claim-button" data-toggle="modal" data-target="#myModal">
+                    <button type="button" class="btn btn-danger btn-lg btn-block" id="claim-button" data-toggle="modal"
+                            data-target="#myModal">
                         <span class="glyphicon glyphicon-flag pull-left" aria-hidden="true"></span>
                         Claim failing stage
                     </button>
@@ -153,9 +155,10 @@
         <hr>
         <div class="row">
             <div class="col-md-12">
-                <a type="button" class="btn btn-default pull-right" href="{{ application_root }}/graphs/{{ current_status.stage.pipeline_name }}">
+                <a type="button" class="btn btn-default pull-right"
+                   href="{{ application_root }}/graphs/{{ current_status.stage.pipeline_name }}">
                     <span class="glyphicon glyphicon-object-align-bottom pull-left" aria-hidden="true"></span>
-                        Pipeline Graphs
+                    Pipeline Graphs
                 </a>
             </div>
         </div>
@@ -304,9 +307,9 @@
                 password: passwd,
                 crossDomain: true
             })
-            .done(function () {
-                document.location.reload(true);
-            }).fail(function (data) {
+                    .done(function () {
+                        document.location.reload(true);
+                    }).fail(function (data) {
                 console.log(data)
             });
         });
