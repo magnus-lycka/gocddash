@@ -62,21 +62,28 @@ def create_stage_info(stage_failure_info):
 
     if stage_failure_info.is_success():
         result = StageSuccess(stage_failure_info)
-
-    # TODO: Think about this
-    elif stage_failure_info.failure_stage == "TEST" and log_parser == "characterize":
-        failure_signatures_and_index_dict = get_failure_stage_signature(stage_failure_info.stage_id)
-
-        failure_signatures = failure_signatures_and_index_dict.values()
-        failure_indices = failure_signatures_and_index_dict[stage_failure_info.stage_id].keys()
-        result = TestFailure(stage_failure_info, failure_signatures, failure_indices)
-
-    elif stage_failure_info.failure_stage == "TEST" and log_parser == "junit":
-        failure_tuples = get_connection().get_junit_failure_signature(stage_failure_info.stage_id)
-        failure_signatures = [item[0] for item in failure_tuples]
-        failure_indices = [item[1] for item in failure_tuples]
-        result = TestFailure(stage_failure_info, failure_signatures, failure_indices)
-
+    elif stage_failure_info.failure_stage == "TEST":
+        result = failure_extractors[log_parser](stage_failure_info)
     else:
         result = StageFailure(stage_failure_info)
     return result
+
+
+def junit_failure_extraction(stage_failure_info):
+    failure_tuples = get_connection().get_junit_failure_signature(stage_failure_info.stage_id)
+    failure_signatures = [item[0] for item in failure_tuples]
+    failure_indices = [item[1] for item in failure_tuples]
+    return TestFailure(stage_failure_info, failure_signatures, failure_indices)
+
+
+def characterize_failure_extraction(stage_failure_info):
+    failure_signatures_and_index_dict = get_failure_stage_signature(stage_failure_info.stage_id)
+    failure_signatures = failure_signatures_and_index_dict.values()
+    failure_indices = failure_signatures_and_index_dict[stage_failure_info.stage_id].keys()
+    return TestFailure(stage_failure_info, failure_signatures, failure_indices)
+
+
+failure_extractors = {
+    "characterize": characterize_failure_extraction,
+    "junit": junit_failure_extraction
+}
