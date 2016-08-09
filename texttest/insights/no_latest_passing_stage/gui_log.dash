@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4789/dash/insights/bar
+url: http://127.0.0.1:4755/dash/insights/bar
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4789/dash/insights/bar
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 13:30:08 | 00 seconds
+     * Last refresh: 13:45:25 | 00 seconds
 
    Information: Someone has already claimed this stage. Refreshing page...
 
@@ -39,7 +39,7 @@ Latest analyzed
           TEST
 
    Recommendation:
-          Last pipeline was a failure.
+          Only one test failure. Potential for flickering.
 
 Earliest available (No green pipeline synced)
 
@@ -82,13 +82,13 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4789/dash/?which=failing
-   3. http://127.0.0.1:4789/dash/?which=progress
-   4. http://127.0.0.1:4789/dash/?which=all
-   5. http://127.0.0.1:4789/dash/select/
-   6. http://127.0.0.1:4789/dash/select_theme/
+   2. http://127.0.0.1:4755/dash/?which=failing
+   3. http://127.0.0.1:4755/dash/?which=progress
+   4. http://127.0.0.1:4755/dash/?which=all
+   5. http://127.0.0.1:4755/dash/select/
+   6. http://127.0.0.1:4755/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/bar
-   8. http://127.0.0.1:4789/dash/insights/bar
+   8. http://127.0.0.1:4755/dash/insights/bar
    9. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests
-  10. http://127.0.0.1:4789/dash/graphs/bar
+  10. http://127.0.0.1:4755/dash/graphs/bar
   11. http://go.pagero.local/go/compare/bar/57/with/55
