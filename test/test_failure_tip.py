@@ -39,6 +39,7 @@ class TestFailureTip(unittest.TestCase):
 
     def test_error_introduced(self):
         pipeline_status.get_failure_stage_signature = MagicMock(return_value={2000: {}})
+        pipeline_status.get_config().get_log_parser = MagicMock(return_value="characterize")
 
         failed_stage = self.create_stage_failure_info(None, False, "TEST")
         passed_stage = self.create_stage_failure_info(failed_stage, True)
