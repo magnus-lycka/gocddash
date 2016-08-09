@@ -48,6 +48,6 @@ Run `main.py` - this will serve the dashboard.
 
 The dashboard is available locally from http://127.0.0.1:5000/dash/
 1. Since by default no pipelines are shown, they must be enabled under "Select pipeline groups".
-2. Once data has been synchronized, pipelines (under the Failing/Progress/All tabs) with additional information are marked with "Insights available" along with the latest pipeline count for which the information pertains to.
+2. Once data has been synchronized, pipelines (under the Failing/Progress/All tabs) with additional information are marked with "Insights" along with the latest pipeline count for which the information pertains to.
 3. On the Insights page for a pipeline, information is displayed in three panels. Failed pipelines contain more information and actions.
 4. On the Pipeline graphs page, success rate/failure type per agent and historical test count graphs are available.

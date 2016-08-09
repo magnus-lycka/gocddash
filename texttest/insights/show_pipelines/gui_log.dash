@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4964/dash/?which=all
+url: http://127.0.0.1:4918/dash/?which=all
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4964/dash/?which=all
 
      * [5]Select pipeline groups
      * [6]Select theme
-     * Last refresh: 14:41:04 | 00 seconds
+     * Last refresh: 11:23:13 | 00 seconds
 
 [7]fnord 98 [8]2015-11-26
 
@@ -26,7 +26,7 @@ url: http://127.0.0.1:4964/dash/?which=all
    [23]delta 1 [24]defaultJob
    Breakers: Mary Wollstonecraft <maryw@example.com>
 
-[25]foo 382 [26]2015-11-26 [27]| Insights Available (382)
+[25]foo 382 [26]2015-11-26 [27]| Insights (382)
 
    [28]alpha 1 [29]defaultJob
 
@@ -43,7 +43,7 @@ url: http://127.0.0.1:4964/dash/?which=all
 
    [43]runTests 1 [44]defaultJob
 
-[45]bar 57 [46]2015-11-03 [47]| Insights Available (57)
+[45]bar 57 [46]2015-11-03 [47]| Insights (57)
 
    [48]beta 1 [49]defaultJob
    Breakers: Willy Wonka <willyw@example.com>
@@ -69,11 +69,11 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4964/dash/?which=failing
-   3. http://127.0.0.1:4964/dash/?which=progress
-   4. http://127.0.0.1:4964/dash/?which=all
-   5. http://127.0.0.1:4964/dash/select/
-   6. http://127.0.0.1:4964/dash/select_theme/
+   2. http://127.0.0.1:4918/dash/?which=failing
+   3. http://127.0.0.1:4918/dash/?which=progress
+   4. http://127.0.0.1:4918/dash/?which=all
+   5. http://127.0.0.1:4918/dash/select/
+   6. http://127.0.0.1:4918/dash/select_theme/
    7. http://go-server/go/pipelines/value_stream_map/fnord/98
    8. http://go-server/go/pipelines/value_stream_map/fnord/98
    9. http://go-server/go/pipelines/fnord/98/runTests/1
@@ -94,7 +94,7 @@ References
   24. http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob
   25. http://go-server/go/pipelines/value_stream_map/foo/382
   26. http://go-server/go/pipelines/value_stream_map/foo/382
-  27. http://127.0.0.1:4964/dash/insights/foo
+  27. http://127.0.0.1:4918/dash/insights/foo
   28. http://go-server/go/pipelines/foo/382/alpha/1
   29. http://go-server/go/tab/build/detail/foo/382/alpha/1/defaultJob
   30. http://go-server/go/pipelines/value_stream_map/snafu-service/250
@@ -114,17 +114,17 @@ References
   44. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
   45. http://go-server/go/pipelines/value_stream_map/bar/57
   46. http://go-server/go/pipelines/value_stream_map/bar/57
-  47. http://127.0.0.1:4964/dash/insights/bar
+  47. http://127.0.0.1:4918/dash/insights/bar
   48. http://go-server/go/pipelines/bar/57/runTests/1
   49. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  51. http://127.0.0.1:4964/dash/?which=all#collapse1
-  52. http://127.0.0.1:4964/dash/?which=all#collapse2
-  53. http://127.0.0.1:4964/dash/?which=all#collapse3
-  54. http://127.0.0.1:4964/dash/?which=all#collapse4
-  55. http://127.0.0.1:4964/dash/?which=all#collapse5
-  56. http://127.0.0.1:4964/dash/?which=all#collapse6
-  57. http://127.0.0.1:4964/dash/?which=all#collapse7
-  58. http://127.0.0.1:4964/dash/?which=all#collapse8
-  59. http://127.0.0.1:4964/dash/?which=all#collapse9
+  51. http://127.0.0.1:4918/dash/?which=all#collapse1
+  52. http://127.0.0.1:4918/dash/?which=all#collapse2
+  53. http://127.0.0.1:4918/dash/?which=all#collapse3
+  54. http://127.0.0.1:4918/dash/?which=all#collapse4
+  55. http://127.0.0.1:4918/dash/?which=all#collapse5
+  56. http://127.0.0.1:4918/dash/?which=all#collapse6
+  57. http://127.0.0.1:4918/dash/?which=all#collapse7
+  58. http://127.0.0.1:4918/dash/?which=all#collapse8
+  59. http://127.0.0.1:4918/dash/?which=all#collapse9
