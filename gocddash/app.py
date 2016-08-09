@@ -409,8 +409,9 @@ def parse_args():
 
 def main():
 
-    if not os.path.isfile(os.path.dirname(abspath(getsourcefile(lambda: 0))) + '/application.cfg'):
-        print("Error: Missing application.cfg file in {}/".format(os.path.dirname((abspath(getsourcefile(lambda: 0))))))
+    gocddash_directory = os.path.dirname(abspath(getsourcefile(lambda: 0)))
+    if not os.path.isfile(gocddash_directory + '/application.cfg'):
+        print("Error: Missing application.cfg file in {}/".format(gocddash_directory))
         quit()
     pargs_dict = parse_args()
     if 'GO_SERVER_URL' not in app.config:
