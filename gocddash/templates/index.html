@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        {% if loop.index is divisibleby(cols) %}
+        {% if loop.index is divisibleby(cols) or loop.index == pipelines|length %}
     </div>
     {% endif %}
     {% endfor %}
