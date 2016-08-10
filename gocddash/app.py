@@ -176,13 +176,13 @@ def select_theme():
 
 
 @gocddash.route("/claim", methods=['POST'])
-def claim_stage():
+def claim_instance():
     pipeline_name = request.form.get('pipelineName')
     pipeline_counter = request.form.get('pipelineCounter')
     responsible = request.form.get('responsible')
     description = request.form.get('description')
     if not responsible:
-        abort(400, "You need someone responsible.")
+        abort(400, "Someone must be responsible.")
     create_instance_claim(InstanceClaim(None, pipeline_name, pipeline_counter, responsible, description))
     return "OK."
     #     abort(409, "Already claimed.")

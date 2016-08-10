@@ -46,6 +46,12 @@ class SQLConnection:
         self.conn.execute("""INSERT INTO instance_claim(pipeline_name, pipeline_counter, responsible, description) VALUES (%s, %s, %s, %s);""",
                           (pipeline_name, pipeline_counter, responsible, desc))
 
+    def update_instance_claim(self, pipeline_name, pipeline_counter, responsible, desc):
+        self.conn.execute("""UPDATE instance_claim
+                             SET pipeline_name=%s, pipeline_counter=%s, responsible=%s, description=%s<
+                             WHERE pipeline_name = %s AND pipeline_counter = %s;""",
+                          (pipeline_name, pipeline_counter, responsible, desc, pipeline_name, pipeline_counter))
+
     def get_highest_pipeline_count(self, pipeline_name):
         self.conn.execute("""SELECT COALESCE(max(pipeline_counter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
                                 (pipeline_name,))
