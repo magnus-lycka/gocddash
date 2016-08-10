@@ -48,7 +48,7 @@ class SQLConnection:
 
     def update_instance_claim(self, pipeline_name, pipeline_counter, responsible, desc):
         self.conn.execute("""UPDATE instance_claim
-                             SET pipeline_name=%s, pipeline_counter=%s, responsible=%s, description=%s<
+                             SET pipeline_name=%s, pipeline_counter=%s, responsible=%s, description=%s
                              WHERE pipeline_name = %s AND pipeline_counter = %s;""",
                           (pipeline_name, pipeline_counter, responsible, desc, pipeline_name, pipeline_counter))
 

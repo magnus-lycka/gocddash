@@ -274,6 +274,13 @@
             }
             else {
                 payload = $('#claimForm').serialize() + '&pipelineName=' + "{{ current_status.stage.pipeline_name }}" + '&pipelineCounter=' + "{{ current_status.stage.pipeline_counter }}";
+                $.post("{{ application_root }}/claim", payload).done(function () {
+                    $('#myModal').modal('hide');
+                    document.location.reload(true);
+                }).fail(function () {
+                    $('#myModal').modal('hide');
+                    claim_fail_alert()
+                })
             }
         });
 
