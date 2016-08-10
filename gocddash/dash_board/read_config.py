@@ -10,6 +10,3 @@ def parse_config(json_config):
 
 def get_pipelines_to_sync(json_config):
     return parse_config(json_config)
-    # name, start =
-    # subsequent_pipelines = get_max_pipeline_status(name)[1] - start
-    # execute(name, subsequent_pipelines, start)

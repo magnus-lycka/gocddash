@@ -46,7 +46,8 @@ class FailureRecommendation:
         self.statistics_actions = [
             (
                 lambda: self.current.stage.failure_stage == "STARTUP" and self.current.stage.failure_stage == self.previous.stage.failure_stage,
-                "Tests have failed at STARTUP several times in a row. Recommend to rerun after investigation. {}".format(desc)),
+                "Tests have failed at STARTUP several times in a row. Recommend to rerun after investigation. {}".format(
+                    desc)),
             (
                 lambda: len(self.current.test_names) == 1 and 1 in current.test_names,  # Very specific for characterize
                 "Flickering. Recommend to rerun."),
