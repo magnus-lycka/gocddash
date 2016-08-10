@@ -33,7 +33,7 @@ gocddash = Blueprint('gocddash', __name__)
 
 def get_bootstrap_theme():
     theme = request.cookies.get('theme_cookie')
-    return theme or 'cyborg'
+    return theme or 'superhero'
 
 
 def get_footer():
