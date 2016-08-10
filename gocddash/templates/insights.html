@@ -18,7 +18,7 @@
 
                 {% if (live_info.label|int != current_status.stage.pipeline_counter or live_info.stages[stage_name_index].counter|int != current_status.stage.stage_counter) and "Building" not in live_info.status %}
                     <div class="alert alert-info" role="alert">
-                        <strong>Information:</strong> Latest pipeline in GO is not the same as the latest analysed.
+                        <strong>Information:</strong> Latest pipeline in GO has not been synced and analyzed yet.
                         Waiting for sync (~1min).
                     </div>
                 {% endif %}
