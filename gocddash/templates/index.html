@@ -30,7 +30,7 @@
                         </a>
 
                             {% if synced_pipelines[pipeline.name].responsible %}
-                                <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true" data-placement="top" title="{{ synced_pipelines[pipeline.name].responsible }} {{ synced_pipelines[pipeline.name].description }}"></span>
+                                <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true" data-placement="top" title="{{ synced_pipelines[pipeline.name].responsible }}: {{ synced_pipelines[pipeline.name].description }}"></span>
                             {% endif %}
                             {% if not synced_pipelines[pipeline.name].is_success() and not synced_pipelines[pipeline.name].responsible %}
                                 <span class="glyphicon glyphicon-flag pull-right claim-stage-flag" data-stageid="{{ synced_pipelines[pipeline.name].stage_id }}" data-target="#myModal" data-toggle="modal" data-placement="top" title="Claim this stage" id="claim-button">
