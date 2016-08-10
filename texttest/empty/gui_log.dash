@@ -1,12 +1,12 @@
-url: http://127.0.0.1:4948/dash/?which=failing
+url: http://127.0.0.1:4900/dash/?which=failing
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
      * [4]All
 
-     * [5]Select pipeline groups
+     * [5]Select pipeline groups / Config
      * [6]Select theme
-     * Last refresh: 14:41:01 | 00 seconds
+     * Last refresh: 12:09:51 | 00 seconds
 
 [7]qux 240 [8]2015-11-26
 
@@ -48,11 +48,11 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4948/dash/?which=failing
-   3. http://127.0.0.1:4948/dash/?which=progress
-   4. http://127.0.0.1:4948/dash/?which=all
-   5. http://127.0.0.1:4948/dash/select/
-   6. http://127.0.0.1:4948/dash/select_theme/
+   2. http://127.0.0.1:4900/dash/?which=failing
+   3. http://127.0.0.1:4900/dash/?which=progress
+   4. http://127.0.0.1:4900/dash/?which=all
+   5. http://127.0.0.1:4900/dash/select/
+   6. http://127.0.0.1:4900/dash/select_theme/
    7. http://go-server/go/pipelines/value_stream_map/qux/240
    8. http://go-server/go/pipelines/value_stream_map/qux/240
    9. http://go-server/go/pipelines/qux/240/defaultStage/1
@@ -73,7 +73,7 @@ References
   24. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  26. http://127.0.0.1:4948/dash/?which=failing#collapse1
-  27. http://127.0.0.1:4948/dash/?which=failing#collapse2
-  28. http://127.0.0.1:4948/dash/?which=failing#collapse3
-  29. http://127.0.0.1:4948/dash/?which=failing#collapse4
+  26. http://127.0.0.1:4900/dash/?which=failing#collapse1
+  27. http://127.0.0.1:4900/dash/?which=failing#collapse2
+  28. http://127.0.0.1:4900/dash/?which=failing#collapse3
+  29. http://127.0.0.1:4900/dash/?which=failing#collapse4
