@@ -171,18 +171,16 @@ def select_theme():
 
 
 @gocddash.route("/claim", methods=['POST'])
-def claim_stage(stage_id):
-    if not get_connection().claim_exists(stage_id):
-        pipeline_name = request.form.get('pipelineName')
-        pipeline_counter = request.form.get('pipelineCounter')
-        responsible = request.form.get('responsible')
-        description = request.form.get('description')
-        if not responsible:
-            abort(400, "You need someone responsible.")
-        create_instance_claim(InstanceClaim(pipeline_name, pipeline_counter, responsible, description))
-        return "OK."
-    else:
-        abort(409, "Already claimed.")
+def claim_stage():
+    pipeline_name = request.form.get('pipelineName')
+    pipeline_counter = request.form.get('pipelineCounter')
+    responsible = request.form.get('responsible')
+    description = request.form.get('description')
+    if not responsible:
+        abort(400, "You need someone responsible.")
+    create_instance_claim(InstanceClaim(pipeline_name, pipeline_counter, responsible, description))
+    return "OK."
+    #     abort(409, "Already claimed.")
 
 
 @gocddash.route("/graphs/<pipeline_name>", methods=['GET'])
