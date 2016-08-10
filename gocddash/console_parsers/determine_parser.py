@@ -9,7 +9,3 @@ def get_parser_info(parser):
     if parser in parser_info:
         return parser_info[parser]
     return DefaultConsoleParser
-
-
-
-

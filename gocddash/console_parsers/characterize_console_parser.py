@@ -69,8 +69,3 @@ class TexttestConsoleParser:
                 for failure in value:
                     index, failure_type, document_name = failure
                     get_connection().insert_texttest_failure(stage_id, index, failure_type, document_name)
-
-if __name__ == '__main__':
-    test = TexttestConsoleParser('po-characterize-tests', 2064, 1, 'runTests')
-    print(test.parse_info())
-

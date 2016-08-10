@@ -1,4 +1,3 @@
-import pandas as pd
 from bs4 import BeautifulSoup
 
 from gocddash.analysis.go_client import go_request_comparison_html
@@ -36,7 +35,8 @@ def extract_list_of_lists_from_html_table(git_sections):
         for index in indices:
             modified_by.append(clean_html(' '.join(list_of_words[index + 1:index + 4])))
 
-        start_indices = [i for i, x in enumerate(list_of_words) if """class="comment"><p>""" in x]  # Every comment starts with this
+        start_indices = [i for i, x in enumerate(list_of_words) if
+                         """class="comment"><p>""" in x]  # Every comment starts with this
         end_indices = [i for i, x in enumerate(list_of_words) if "</td></tr>" in x]  # Every comments ends with this
 
         for i, index in enumerate(start_indices):
@@ -77,14 +77,3 @@ def put_current_pipeline_at_top(git_blame_list, pipeline_name):
 
 def only_real_people(git_blame_list):
     return [item for item in git_blame_list if "go-agent" not in item[3]]
-
-
-if __name__ == '__main__':
-    pd.set_option("display.width", 600)
-    pipeline_name = "po-characterize-tests"
-    current = "2050"
-    comparison = "2025"
-    git_blame_list = get_git_comparison(pipeline_name, current, comparison)
-    print(git_blame_list)
-    for row in git_blame_list:
-        print(row)

@@ -49,8 +49,3 @@ class JunitConsoleParser:
         failures = splitted_console_log_list[5]
         not_run = splitted_console_log_list[9]
         return total_tests_run, failures, not_run
-
-
-if __name__ == '__main__':
-    test = JunitConsoleParser('paysol-feature-tests', 2064, 1, 'runTests', 'defaultJob')
-    print(test.parse_bar_chart_info())
