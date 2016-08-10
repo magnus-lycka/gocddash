@@ -1,7 +1,7 @@
 GO_SERVER_URL = "http://localhost:8153/go/"
 GO_SERVER_USER = "change to go user name"
 GO_SERVER_PASSWD = "change to go password"
-RERUN_TOKEN = "change to go authentication token"
+RERUN_TOKEN = "change to go authentication token, this is the value of authenticity_token - can be extracted from looking at the ajax request for rerunning a stage in Go"
 
 PUBLIC_GO_SERVER_URL = "http://localhost:8153/go/"
 PIPELINE_COLUMNS = 2
