@@ -1,14 +1,12 @@
-url: http://127.0.0.1:4706/dash/insights/bar
+url: http://127.0.0.1:4621/dash/insights/bar
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
      * [4]All
 
-     * [5]Select pipeline groups
+     * [5]Select pipeline groups / Config
      * [6]Select theme
-     * Last refresh: 15:38:29 | 00 seconds
-
-   Information: Someone has already claimed this stage. Refreshing page...
+     * Last refresh: 15:13:32 | 00 seconds
 
 Insights for bar
 
@@ -61,13 +59,16 @@ Upstream git blame: (57 compared to 56) [11]Go to GO CD comparison page
 
    Pipeline Git URL Revision Modified by Comment
    banana.git Git - URL: ssh://git@git/internet/services/banana/banana.git
-   87cfcf8f4655d8e5f2713636df26820b0cbd0513 A B <A.B@asdf.com> Grapefruit
+   87cfcf8f4655d8e5f2713636df26820b0cbd0513 A B <A.B@asdf.com>
+   2016-07-13T23:28:57+02:00 Grapefruit
    pineapple.git Git - URL:
    ssh://git@git/internet/services/pineapple/pineapple.git
-   261d2d6c3f0290729d2a60952120b4736c6ad1a5 X Y <X.Y@asdf.com> Pear
+   261d2d6c3f0290729d2a60952120b4736c6ad1a5 X Y <X.Y@asdf.com>
+   2016-07-14T05:31:31+02:00 Pear
    pineapple.git Git - URL:
    ssh://git@git/internet/services/pineapple/pineapple.git
-   a6884dc475e20b8d69fbf588ad4aa9beef4c466e X Y <X.Y@asdf.com> Kiwi
+   a6884dc475e20b8d69fbf588ad4aa9beef4c466e X Y <X.Y@asdf.com>
+   2016-07-13T23:09:02+02:00 Kiwi
 
    (BUTTON) ×
 
@@ -84,13 +85,13 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4706/dash/?which=failing
-   3. http://127.0.0.1:4706/dash/?which=progress
-   4. http://127.0.0.1:4706/dash/?which=all
-   5. http://127.0.0.1:4706/dash/select/
-   6. http://127.0.0.1:4706/dash/select_theme/
+   2. http://127.0.0.1:4621/dash/?which=failing
+   3. http://127.0.0.1:4621/dash/?which=progress
+   4. http://127.0.0.1:4621/dash/?which=all
+   5. http://127.0.0.1:4621/dash/select/
+   6. http://127.0.0.1:4621/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/bar
-   8. http://127.0.0.1:4706/dash/insights/bar
+   8. http://127.0.0.1:4621/dash/insights/bar
    9. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests
-  10. http://127.0.0.1:4706/dash/graphs/bar
+  10. http://127.0.0.1:4621/dash/graphs/bar
   11. http://go.pagero.local/go/compare/bar/57/with/56

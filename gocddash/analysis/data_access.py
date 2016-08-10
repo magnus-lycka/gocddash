@@ -13,8 +13,8 @@ class SQLConnection:
 
     def insert_pipeline_instance(self, instance):
         self.conn.execute(
-            """INSERT INTO pipeline_instance(id, pipeline_name, pipeline_counter, trigger_message) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
-            (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
+            """INSERT INTO pipeline_instance(id, pipeline_name, pipeline_counter, trigger_message) VALUES (%s, %s, %s, %s);""",
+            (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message))
 
     def insert_stage(self, pipeline_instance_id, stage):
         self.conn.execute(
@@ -45,6 +45,12 @@ class SQLConnection:
     def insert_instance_claim(self, pipeline_name, pipeline_counter, responsible, desc):
         self.conn.execute("""INSERT INTO instance_claim(pipeline_name, pipeline_counter, responsible, description) VALUES (%s, %s, %s, %s);""",
                           (pipeline_name, pipeline_counter, responsible, desc))
+
+    def update_instance_claim(self, pipeline_name, pipeline_counter, responsible, desc):
+        self.conn.execute("""UPDATE instance_claim
+                             SET pipeline_name=%s, pipeline_counter=%s, responsible=%s, description=%s
+                             WHERE pipeline_name = %s AND pipeline_counter = %s;""",
+                          (pipeline_name, pipeline_counter, responsible, desc, pipeline_name, pipeline_counter))
 
     def get_highest_pipeline_count(self, pipeline_name):
         self.conn.execute("""SELECT COALESCE(max(pipeline_counter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
@@ -173,6 +179,21 @@ class SQLConnection:
                 WHERE p.id = %s AND s.name = %s""", (pipeline_instance_id, stage_name)
         )
         return self.conn.fetchone()[0]
+
+    def get_claims_for_unsynced_pipelines(self):
+        self.conn.execute(
+            """SELECT i.pipeline_name, i.pipeline_counter, i.responsible, i.description
+                FROM instance_claim i
+                JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim WHERE pipeline_name NOT IN (
+                 SELECT pipeline_name FROM pipeline_instance
+                ) GROUP BY pipeline_name) gi
+                ON i.pipeline_name = gi.pipeline_name AND i.pipeline_counter = gi.pipeline_counter;"""
+        )
+        return self.conn.fetchall()
+
+    def pipeline_instance_exists(self, pipeline_name, pipeline_counter):
+        self.conn.execute("""SELECT * FROM pipeline_instance WHERE pipeline_name = %s AND pipeline_counter = %s""", (pipeline_name, pipeline_counter))
+        return self.conn.fetchone() is not None
 
 _connection = None
 

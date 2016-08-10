@@ -10,8 +10,8 @@ from configparser import ConfigParser
 from itertools import chain
 
 from gocddash.analysis import data_access, actions, go_request, go_client, domain
-from gocddash.dash_board import read_config
-from gocddash.util import config
+from gocddash.dash_board import read_pipeline_config
+from gocddash.util import pipeline_config
 
 
 def parse_pipeline_availability(pipelines):
@@ -76,10 +76,10 @@ def parse_args():
 def configure_from_args(pargs_dict):
     pipeline_cfg = pargs_dict['pipeline_cfg']
     if pipeline_cfg:
-        config.create_pipeline_config(pipeline_cfg)
+        pipeline_config.create_pipeline_config(pipeline_cfg)
     else:
-        config.create_pipeline_config()
-    pipelines_path = config.get_config().path
+        pipeline_config.create_pipeline_config()
+    pipelines_path = pipeline_config.get_pipeline_config().path
 
     app_cfg = pargs_dict['app_cfg']
     if app_cfg:
@@ -98,7 +98,7 @@ def configure_from_args(pargs_dict):
 
 
 def sync_backlog(json_tree):
-    requested_pipelines = read_config.get_pipelines_to_sync(json_tree)
+    requested_pipelines = read_pipeline_config.get_pipelines_to_sync(json_tree)
     log("Starting synchronization.")
     pipelines = parse_pipeline_availability(requested_pipelines)
     synchronize(pipelines)
@@ -131,7 +131,6 @@ def main():
 
     with codecs.open(pipelines_path, encoding='utf-8') as input_reader:
         json_tree = json.load(input_reader)
-
     pipelines = sync_backlog(json_tree)
 
     if pargs_dict["continuous_sync"]:

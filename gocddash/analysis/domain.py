@@ -108,6 +108,11 @@ def get_pipeline_heads():
     return fold(result, StageFailureInfo, [])
 
 
+def get_claims_for_unsynced_pipelines():
+    result = get_connection().get_claims_for_unsynced_pipelines()
+    return fold(result, InstanceClaim, [])
+
+
 class GraphData:
     def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_name, stage_result, job_name, scheduled_date, job_result, failure_stage, agent_name, tests_run, tests_failed, tests_skipped):
         self.pipeline_name = pipeline_name
@@ -178,5 +183,9 @@ class InstanceClaim:
 
 
 def create_instance_claim(instance_claim):
-    get_connection().insert_instance_claim(instance_claim.pipeline_name, instance_claim.pipeline_counter,
-                                           instance_claim.responsible, instance_claim.description)
+    if get_connection().claim_exists(instance_claim.pipeline_name, instance_claim.pipeline_counter):
+        get_connection().update_instance_claim(instance_claim.pipeline_name, instance_claim.pipeline_counter,
+                                               instance_claim.responsible, instance_claim.description)
+    else:
+        get_connection().insert_instance_claim(instance_claim.pipeline_name, instance_claim.pipeline_counter,
+                                               instance_claim.responsible, instance_claim.description)

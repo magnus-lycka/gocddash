@@ -1,14 +1,12 @@
-url: http://127.0.0.1:4898/dash/insights/bar
+url: http://127.0.0.1:4549/dash/insights/bar
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
      * [4]All
 
-     * [5]Select pipeline groups
+     * [5]Select pipeline groups / Config
      * [6]Select theme
-     * Last refresh: 15:38:38 | 00 seconds
-
-   Information: Someone has already claimed this stage. Refreshing page...
+     * Last refresh: 12:55:28 | 00 seconds
 
 Insights for bar
 
@@ -64,12 +62,12 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4898/dash/?which=failing
-   3. http://127.0.0.1:4898/dash/?which=progress
-   4. http://127.0.0.1:4898/dash/?which=all
-   5. http://127.0.0.1:4898/dash/select/
-   6. http://127.0.0.1:4898/dash/select_theme/
+   2. http://127.0.0.1:4549/dash/?which=failing
+   3. http://127.0.0.1:4549/dash/?which=progress
+   4. http://127.0.0.1:4549/dash/?which=all
+   5. http://127.0.0.1:4549/dash/select/
+   6. http://127.0.0.1:4549/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/bar
-   8. http://127.0.0.1:4898/dash/insights/bar
+   8. http://127.0.0.1:4549/dash/insights/bar
    9. http://go.pagero.local/go/tab/build/detail/bar/57/beta/2/defaultJob#tab-tests
-  10. http://127.0.0.1:4898/dash/graphs/bar
+  10. http://127.0.0.1:4549/dash/graphs/bar

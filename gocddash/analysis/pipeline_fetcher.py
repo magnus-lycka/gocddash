@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
-from gocddash.util.config import get_config
 from gocddash.util.get_failure_stage import get_failure_stage
+from gocddash.util.pipeline_config import get_pipeline_config
 from .data_access import get_connection
 from .domain import PipelineInstance, Stage, create_stage, Job, create_job
 from .go_client import *
@@ -26,15 +26,17 @@ def parse_pipeline_info(pipelines):
     for pipeline in pipelines:
         pipeline_counter = pipeline["counter"]
         print("Pipeline counter: {}".format(pipeline_counter))
+        pipeline_name = pipeline["name"]
+        pipeline_id = pipeline["id"]
+        instance = PipelineInstance(pipeline_name, pipeline_counter,
+                                    pipeline["build_cause"]["trigger_message"], pipeline_id)
+        if not get_connection().pipeline_instance_exists(pipeline_name, pipeline_counter):
+            get_connection().insert_pipeline_instance(instance)
+
         for stage in pipeline['stages']:
             if stage['scheduled']:
                 stage_name = stage['name']
-                pipeline_name = pipeline["name"]
-                pipeline_id = pipeline["id"]
                 stage_count = stage['counter']
-                instance = PipelineInstance(pipeline_name, pipeline_counter,
-                                            pipeline["build_cause"]["trigger_message"], pipeline_id)
-                get_connection().insert_pipeline_instance(instance)
                 parse_stage_info(stage_count, stage_name, instance)
     fetch_new_agents()
 
@@ -95,7 +97,7 @@ def fetch_job(pipeline_counter, pipeline_name, stage, stage_index, jobs):
 
 
 def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, stage_name, job_name):
-    log_parser = get_config().get_log_parser(pipeline_name)
+    log_parser = get_pipeline_config().get_log_parser(pipeline_name)
 
     failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
     get_connection().insert_failure_information(stage_id, failure_stage)

@@ -1,34 +1,51 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="container">
-  <form class="pipelinegroupsform" role="form" action="" method="post">
-    <input type="button" class="btn btn-default" id="allgroups" value="Select all groups">
-    <input type="button" class="btn btn-default" id="nogroups" value="Unselect all groups">
-    {% for pipelinegroup, checked, pipelines in pipelinegroups %}
-    <div class="checkbox">
-      <label><input type="checkbox" {{ checked }} name="{{ pipelinegroup }}">
-        {{ pipelinegroup }}</label>
+    <div class="container">
+        <form class="pipelinegroupsform" role="form" action="" method="post">
+            <input type="button" class="btn btn-default" id="allgroups" value="Select all groups">
+            <input type="button" class="btn btn-default" id="nogroups" value="Unselect all groups">
+            {% for pipelinegroup, checked, pipelines in pipelinegroups %}
+                <div class="checkbox">
+                    <label><input type="checkbox" {{ checked }} name="{{ pipelinegroup }}">
+                        {{ pipelinegroup }}</label>
+                </div>
+            {% endfor %}
+            <input type="submit" class="btn btn-default" value="Save pipeline-group selection">
+        </form>
+    <hr>
+        <div class="row">
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary" id="reloadconfig">Reload config</button>
+            </div>
+        </div>
     </div>
-    {% endfor %}
-    <input type="submit" class="btn btn-default" value="Save pipeline-group selection">
-  </form>
-</div>
+
 
 {% endblock %}
 
 {% block scripts %}
 
-<script type = "text/javascript" language = "javascript">
-  $("#allgroups").click(function() {
-    $(".pipelinegroupsform :checkbox").prop("checked", true);
-  });
-</script>
+    <script type="text/javascript" language="javascript">
+        $("#reloadconfig").click(function () {
+            $.post("{{ application_root }}/reloadconfig").done(function () {
+                document.location.reload(true);
+            }).fail(function () {
+                console.log("Something went wrong")
+            })
+        });
+    </script>
 
-<script type = "text/javascript" language = "javascript">
-  $("#nogroups").click(function() {
-    $(".pipelinegroupsform :checkbox").prop("checked", false);
-  });
-</script>
+    <script type="text/javascript" language="javascript">
+        $("#allgroups").click(function () {
+            $(".pipelinegroupsform :checkbox").prop("checked", true);
+        });
+    </script>
+
+    <script type="text/javascript" language="javascript">
+        $("#nogroups").click(function () {
+            $(".pipelinegroupsform :checkbox").prop("checked", false);
+        });
+    </script>
 
 {% endblock %}

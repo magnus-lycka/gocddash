@@ -225,13 +225,13 @@ class TestGitBlame(unittest.TestCase):
         output = git_blame_compare.get_git_comparison(pipeline_name, current, comparison)
         self.assertEqual(output, [
             [u'banana.git', u' Git - URL: ssh://git@git/internet/services/banana/banana.git',
-             u'87cfcf8f4655d8e5f2713636df26820b0cbd0513', u'A B <A.B@asdf.com>',
+             u'87cfcf8f4655d8e5f2713636df26820b0cbd0513', u'A B <A.B@asdf.com>  2016-07-13T23:28:57+02:00',
              u'Grapefruit'],
             [u'pineapple.git', u' Git - URL: ssh://git@git/internet/services/pineapple/pineapple.git',
-             u'261d2d6c3f0290729d2a60952120b4736c6ad1a5', u'X Y <X.Y@asdf.com>',
+             u'261d2d6c3f0290729d2a60952120b4736c6ad1a5', u'X Y <X.Y@asdf.com>  2016-07-14T05:31:31+02:00',
              u'Pear'],
             [u'pineapple.git', u' Git - URL: ssh://git@git/internet/services/pineapple/pineapple.git',
-             u'a6884dc475e20b8d69fbf588ad4aa9beef4c466e', u'X Y <X.Y@asdf.com>',
+             u'a6884dc475e20b8d69fbf588ad4aa9beef4c466e', u'X Y <X.Y@asdf.com>  2016-07-13T23:09:02+02:00',
              u'Kiwi']])
 
 

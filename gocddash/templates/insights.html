@@ -4,10 +4,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="alert alert-warning hidden" role="alert" id="claim-fail-alert">
-                    <strong>Information:</strong> Someone has already claimed this stage. Refreshing page...
-                </div>
-
                 <h2 class="text-center">Insights for {{ current_status.stage.pipeline_name }} </h2>
 
                 {% if not current_status.is_success() and current_status.stage.is_claimed() %}
@@ -113,7 +109,7 @@
             </div>
 
         </div>
-        {% if not current_status.is_success() and not current_status.stage.is_claimed() %}
+        {% if not current_status.is_success() %}
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
                     <button type="button" class="btn btn-danger btn-lg btn-block" id="claim-button" data-toggle="modal"
@@ -278,19 +274,10 @@
                     $('#myModal').modal('hide');
                     document.location.reload(true);
                 }).fail(function () {
-                    $('#myModal').modal('hide');
-                    claim_fail_alert()
+                    console.log("Something went wrong")
                 })
             }
         });
-
-        function claim_fail_alert() {
-            $("#claim-fail-alert").removeClass('hidden')
-            $("#claim-fail-alert").fadeTo(3000, 500).slideUp(500, function () {
-                $("#claim-fail-alert").alert('close');
-                document.location.reload(true);
-            });
-        }
 
         var rerunUrl = "{{ go_server_url }}run/{{ current_status.stage.pipeline_name }}/{{ current_status.stage.pipeline_counter }}/{{ current_status.stage.stage_name }}";
         $('#rerun-button').click(function () {
