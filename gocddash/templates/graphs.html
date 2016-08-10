@@ -18,14 +18,14 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                {{ agent_graph.div|indent(4)|safe }}
+            <div class="col-md-12">
+                {{ tests_run_graph.div|indent(4)|safe }}
             </div>
         </div>
         <hr>
         <div class="row">
-            <div class="col-md-12">
-                {{ tests_run_graph.div|indent(4)|safe }}
+            <div class="col-md-6 col-md-offset-3">
+                {{ agent_graph.div|indent(4)|safe }}
             </div>
         </div>
         <hr>
