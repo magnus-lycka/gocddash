@@ -65,6 +65,7 @@ def read_cfg(path=os.getcwd() + "/gocddash/application.cfg"):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--app-cfg', help='application config')
+    parser.add_argument('--db-port', help='database port, (overrides any value set in application config)')
     parser.add_argument('-p', '--pipeline-cfg', help='pipeline config')
     parser.add_argument('-f', '--file-source', help='go client file source')
     pargs = parser.parse_args()
@@ -88,6 +89,9 @@ def main():
         server_url, user, passwd, db_port = read_cfg(app_cfg)
     else:
         server_url, user, passwd, db_port = read_cfg()
+
+    if pargs_dict['db_port']:
+        db_port = pargs_dict['db_port']
 
     file_source = pargs_dict['file_source']
     if file_source:

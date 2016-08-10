@@ -11,6 +11,7 @@ psycopg2
 pandas
 yoyo-migrations
 beautifulsoup4
+bokeh
 
 (Don't be afraid if the pandas installation takes a while.)
 
