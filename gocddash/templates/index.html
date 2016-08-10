@@ -195,14 +195,6 @@
             }
         });
 
-        function claim_fail_alert() {
-            $("#claim-fail-alert").removeClass('hidden')
-            $("#claim-fail-alert").fadeTo(3000, 500).slideUp(500, function () {
-                $("#claim-fail-alert").alert('close');
-                document.location.reload(true);
-            });
-        }
-
         $(function () {
             $(".pipeline-alert").fadeIn(1000);
             shouldReload = true;
