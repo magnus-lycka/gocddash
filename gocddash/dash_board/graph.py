@@ -36,7 +36,6 @@ def arrange_agent_graph_indices(dataframe):
 def create_agent_html_graph(pipeline_name, title):
     pd.set_option("display.width", 300)
     graph_data = get_graph_statistics(pipeline_name)
-
     panda_frame = pd.DataFrame(columns=['agent_name', 'Test', 'Startup', 'Post'])
 
     for index, row in enumerate(graph_data):
@@ -56,7 +55,7 @@ def create_agent_html_graph(pipeline_name, title):
               values=blend('Success', 'Test', 'Startup', 'Post', name='tests', labels_name='test'),
               label=cat(columns='agent_name', sort=False),
               stack=cat(columns='test', sort=False),
-              width=500, height=400, tools=tools, toolbar_location="right", title=title,
+              width=500, height=400, tools=tools, toolbar_location="right", title=title, responsive=True,
               ylabel='Agent success rate (%)')
     bar.legend.orientation = "horizontal"
 
@@ -93,6 +92,9 @@ def create_job_test_html_graph(pipeline_name, title):
         panda_frame.loc[index] = [row.pipeline_counter, row.tests_run - row.tests_failed - row.tests_skipped,
                                   row.tests_failed, row.tests_skipped]
 
+    number_of_pipelines = len(set([row.pipeline_counter for row in graph_data]))
+    title += "(last {} pipelines)".format(number_of_pipelines)
+
     panda_frame = panda_frame.groupby(['pipeline_counter']).sum().reset_index()
     panda_frame = panda_frame.astype(int)
 
@@ -104,7 +106,7 @@ def create_job_test_html_graph(pipeline_name, title):
               stack=cat(columns='test', sort=False),
               tooltips=[('Test category', '@test'), ('Number of tests', '@height'),
                         ('Pipeline counter', '@pipeline_counter')],
-              width=500, height=400, tools=tools, toolbar_location="right", title=title)
+              width=1000, height=400, tools=tools, toolbar_location="right", title=title, responsive=True)
     bar.legend.orientation = "horizontal"
 
     height, height_increase = calculate_height_increase(panda_frame)

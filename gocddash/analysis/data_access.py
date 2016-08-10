@@ -153,9 +153,9 @@ class SQLConnection:
             """SELECT *
                 FROM graph_statistics_final_stages
                 WHERE pipeline_name = %s
-                AND pipeline_counter > (SELECT max(pipeline_counter) FROM pipeline_instance WHERE pipeline_name = %s)-20
-                ORDER BY pipeline_counter ASC""", (pipeline_name, pipeline_name)
+                ORDER BY pipeline_counter ASC""", (pipeline_name,)
         )
+        # Old 20 limit: AND pipeline_counter > (SELECT max(pipeline_counter) FROM pipeline_instance WHERE pipeline_name = %s)-20
         return self.conn.fetchall()
 
     def get_jobs_by_stage_id(self, stage_id):
