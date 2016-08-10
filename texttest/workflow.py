@@ -1,28 +1,38 @@
 #!/usr/bin/env python3
 
-import os
+import os, sys
 import random
 import subprocess
+import time
 
 from docker_management import ContainerManager
 
 
 def start_servers(docker):
-    db_port = 15550
+    db_port =  random.randrange(15550, 17550)
     db_container = _start_db_docker(docker, db_port)
-    gocd_dash_path = os.environ['gocd_dash']
+    gocd_dash_path = os.environ['TEXTTEST_CHECKOUT']
 
     from yoyo import read_migrations, get_backend
-    backend = get_backend('postgresql://analysisappluser:analysisappluser@dev.localhost:15550/go-analysis')
+    backend = get_backend('postgresql://analysisappluser:analysisappluser@dev.localhost:{}/go-analysis'.format(db_port))
 
     migrations = read_migrations(gocd_dash_path + '/migrations')
     backend.apply_migrations(backend.to_apply(migrations))
 
     application_port = random.randrange(4545, 4999)
-    application_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "gocddash/app.py", "-b", str(application_port), "--db-port", str(db_port), "--file-client",
-                                            os.getcwd(), "--pipeline-config", os.getcwd() + "/pipelines.json"])
+    application_process = subprocess.Popen(["/usr/bin/env", "python3",
+                                            gocd_dash_path + "/gocddash/app.py",
+                                            "-b", str(application_port),
+                                            "--db-port", str(db_port),
+                                            "--file-client", os.getcwd(),
+                                            "--pipeline-config", os.getcwd() + "/pipelines.json"])
 
-    sync_process = subprocess.Popen(["/usr/bin/env", "python3", gocd_dash_path + "sync_pipelines.py", "-a", os.getcwd() + "/application.cfg", "-p", os.getcwd() + "/pipelines.json", "-f", os.getcwd()])
+    sync_process = subprocess.Popen(["/usr/bin/env", "python3",
+                                     gocd_dash_path + "/sync_pipelines.py",
+                                     "--db-port", str(db_port),
+                                     "-a", os.getcwd() + "/application.cfg",
+                                     "-p", os.getcwd() + "/pipelines.json",
+                                     "-f", os.getcwd()])
 
     return db_container, application_port, application_process, sync_process
 
@@ -35,7 +45,7 @@ def stop_servers(docker, db, application, sync_process):
 
 def perform_testcase(port):
     print("Starting test workflow for GO CD Dashboard")
-    with open("gui_log.txt", "w") as log:
+    with open("gui_log.txt", "w", encoding="UTF-8") as log:
         with open("urls.txt") as urls:
             for url in urls:
                 url_contents = url.split(':')
@@ -48,14 +58,17 @@ def perform_testcase(port):
 
                 sprocess_call = subprocess.Popen(["/usr/bin/lynx", "-dump", url], stdout=subprocess.PIPE)
                 out = sprocess_call.communicate()[0]
-                log.write(out)
+                log.write(out.decode("UTF-8"))
 
 
 def main():
+    python_version = sys.version_info.major
+    if not (3 == python_version):
+        print("This code requires Python 3. Instead found version {}. Exiting.".format(python_version))
+        sys.exit(-1)
     docker = ContainerManager(
         "dockerregistry.pagero.local")  # TODO: Put this image on docker hub instead of our internal docker registry
     db, app_port, application, sync_process = start_servers(docker)
-    import time
     try:
         time.sleep(2)
         perform_testcase(app_port)

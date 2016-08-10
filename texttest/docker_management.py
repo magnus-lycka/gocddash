@@ -12,8 +12,7 @@ class ContainerManager:
     def start_db_container(self, db_image, db_image_tag, db_port):
         db_image_name = "{}/{}:{}".format(self.docker_registry, db_image, db_image_tag)
         print("starting docker container from image {}".format(db_image_name))
-        image_available = len(filter(lambda x: db_image_name in x, [image['RepoTags'] for image in self.docker_client.images()]))
-        if not image_available:
+        if not self.image_available(db_image_name):
             self.pull_image(db_image, db_image_tag)
 
         container = self.docker_client.create_container(image=db_image_name, ports=[5432])
@@ -34,3 +33,7 @@ class ContainerManager:
         for line in self.docker_client.pull(image, tag=tag, stream=True, insecure_registry=self.docker_registry):
             print(line)
         print("image pulled")
+
+    def image_available(self, image_name):
+        available_images = [image['RepoTags'] for image in self.docker_client.images()]
+        return image_name in available_images

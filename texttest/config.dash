@@ -1,5 +1,6 @@
 # Full path to the System Under Test
 executable:${TEXTTEST_CHECKOUT}/texttest/workflow.py
+interpreter:/usr/bin/env python3
 
 # Naming scheme to use for files for stdin,stdout and stderr
 filename_convention_scheme:standard
@@ -7,16 +8,14 @@ filename_convention_scheme:standard
 # Expanded name to use for application
 full_name:Go CD Dashboard
 
-queue_system_max_capacity:1
-
 default_checkout:gocddash
 
 link_test_path:urls.txt
-link_test_path:go/application.cfg
+link_test_path:application.cfg
+link_test_path:pipelines.json
 link_test_path:go/compare.html
 link_test_path:go/junit.html
 link_test_path:go/junit_passed.html
-link_test_path:go/pipelines.json
 link_test_path:go/agents
 link_test_path:go/config
 link_test_path:go/history
