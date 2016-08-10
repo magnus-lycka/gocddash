@@ -25,10 +25,10 @@ def download_and_store(pipeline_name, offset, run_times):
 def parse_pipeline_info(pipelines):
     for pipeline in pipelines:
         pipeline_counter = pipeline["counter"]
+        print("Pipeline counter: {}".format(pipeline_counter))
         for stage in pipeline['stages']:
             if stage['scheduled']:
                 stage_name = stage['name']
-                print("Pipeline counter: {}".format(pipeline_counter))
                 pipeline_name = pipeline["name"]
                 pipeline_id = pipeline["id"]
                 stage_count = stage['counter']
