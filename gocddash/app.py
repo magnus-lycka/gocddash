@@ -18,7 +18,7 @@ from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
-from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status, create_instance_claim, InstanceClaim
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status, create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
 from gocddash.dash_board.graph import create_job_test_html_graph, create_agent_html_graph
 from gocddash.dash_board.cc_tray_cache import create_cache, get_cache
 group_of_pipeline = defaultdict(str)
@@ -85,6 +85,10 @@ def dashboard():
     for pipeline_head in get_pipeline_heads():
         synced_pipelines[pipeline_head.pipeline_name] = pipeline_head
 
+    loose_claims = dict() # Loose meaning that the pipelines are not synced - but they can still be claimed.
+    for claim in get_claims_for_unsynced_pipelines():
+        loose_claims[claim.pipeline_name] = claim
+
     return render_template('index.html',
                            go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                            pipelines=pipelines,
@@ -93,6 +97,7 @@ def dashboard():
                            now=datetime.now(),
                            footer=get_footer(),
                            synced_pipelines=synced_pipelines,
+                           unsynced_claims=loose_claims,
                            progress_bar_data=progress_bar_data,
                            application_root=app.config['APPLICATION_ROOT'],
                            finished_pipelines=finished_pipelines)
@@ -178,7 +183,7 @@ def claim_stage():
     description = request.form.get('description')
     if not responsible:
         abort(400, "You need someone responsible.")
-    create_instance_claim(InstanceClaim(pipeline_name, pipeline_counter, responsible, description))
+    create_instance_claim(InstanceClaim(None, pipeline_name, pipeline_counter, responsible, description))
     return "OK."
     #     abort(409, "Already claimed.")
 

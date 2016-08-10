@@ -38,6 +38,11 @@
                                 </span>
                             {% endif %}
                         {% endif %}
+                        {% if pipeline.name in unsynced_claims.keys() %}
+                            {% if unsynced_claims[pipeline.name].responsible %}
+                                <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true" data-placement="top" title="{{ unsynced_claims[pipeline.name].responsible }}: {{ unsynced_claims[pipeline.name].description }}"></span>
+                            {% endif %}
+                        {% endif %}
                     </h3>
                 </div>
                 <div id="collapse{{ loop.index }}" class="panel-collapse collapse">

@@ -174,6 +174,12 @@ class SQLConnection:
         )
         return self.conn.fetchone()[0]
 
+    def get_claims_for_unsynced_pipelines(self):
+        self.conn.execute(
+            """SELECT * FROM instance_claim WHERE pipeline_name NOT IN (SELECT pipeline_name FROM pipeline_instance);"""
+        )
+        return self.conn.fetchall()
+
 _connection = None
 
 
