@@ -273,7 +273,8 @@
                 return false;
             }
             else {
-                $.post("{{ application_root }}/claim/{{ current_status.stage.stage_id }}", $('#claimForm').serialize()).done(function () {
+                payload = $('#claimForm').serialize() + '&pipelineName=' + "{{ current_status.stage.pipeline_name }}" + '&pipelineCounter=' + "{{ current_status.stage.pipeline_counter }}";
+                $.post("{{ application_root }}/claim", payload).done(function () {
                     $('#myModal').modal('hide');
                     document.location.reload(true);
                 }).fail(function () {
