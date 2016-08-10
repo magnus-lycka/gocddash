@@ -31,15 +31,15 @@ class SQLConnection:
 
     def insert_texttest_failure(self, stage_id, test_index, failure_type, document_name):
         self.conn.execute(
-            """INSERT INTO texttestfailure(stage_id, test_index, failure_type, document_name) VALUES (%s, %s, %s, %s);""",
+            """INSERT INTO texttest_failure(stage_id, test_index, failure_type, document_name) VALUES (%s, %s, %s, %s);""",
             (stage_id, test_index, failure_type, document_name))
 
     def insert_failure_information(self, stage_id, failure_stage):
-        self.conn.execute("""INSERT INTO failureinformation(stage_id, failure_stage) VALUES (%s, %s);""",
+        self.conn.execute("""INSERT INTO failure_information(stage_id, failure_stage) VALUES (%s, %s);""",
                                 (stage_id, failure_stage))
 
     def insert_junit_failure_information(self, stage_id, failure_type, failure_test):
-        self.conn.execute("""INSERT INTO junitfailure(stage_id, failure_type, failure_test) VALUES (%s, %s, %s);""",
+        self.conn.execute("""INSERT INTO junit_failure(stage_id, failure_type, failure_test) VALUES (%s, %s, %s);""",
                           (stage_id, failure_type, failure_test))
 
     def insert_stage_claim(self, stage_id, responsible, desc):
@@ -57,7 +57,7 @@ class SQLConnection:
         return map(lambda x: x[0], self.conn.fetchall())
 
     def is_failure_downloaded(self, stage_id):
-        self.conn.execute("""SELECT * FROM failureinformation WHERE stage_id=%s ;""", (stage_id,))
+        self.conn.execute("""SELECT * FROM failure_information WHERE stage_id=%s ;""", (stage_id,))
         return self.conn.fetchone()
 
     def get_failure_statistics(self, pipeline_name, months_back=1):
@@ -68,7 +68,7 @@ class SQLConnection:
 
     def get_junit_failure_signature(self, stage_id):
         self.conn.execute(
-            """SELECT failure_type, failure_test FROM junitfailure WHERE stage_id=%s ORDER BY failure_test ;""", (stage_id,))
+            """SELECT failure_type, failure_test FROM junit_failure WHERE stage_id=%s ORDER BY failure_test ;""", (stage_id,))
         return self.conn.fetchall()
 
     def get_texttest_document_statistics(self, pipeline_name):
@@ -80,11 +80,11 @@ class SQLConnection:
         return map(lambda x: x[0], self.conn.fetchall())
 
     def get_texttest_failures(self, pipeline_name):
-        self.conn.execute("""SELECT * FROM texttestfailure;""", (pipeline_name,))
+        self.conn.execute("""SELECT * FROM texttest_failure;""", (pipeline_name,))
         return self.conn.fetchall()
 
     def get_stage_texttest_failures(self, stage_id):
-        self.conn.execute("""SELECT * FROM texttestfailure WHERE stage_id=%s;""", (stage_id,))
+        self.conn.execute("""SELECT * FROM texttest_failure WHERE stage_id=%s;""", (stage_id,))
         return self.conn.fetchall()
 
     def get_synced_pipeline_heads(self):
@@ -102,7 +102,7 @@ class SQLConnection:
         return self.conn.fetchone()
 
     def truncate_tables(self):
-        self.conn.execute("TRUNCATE failureinformation, job, junitfailure, pipeline_instance, stage, texttestfailure, stage_claim")
+        self.conn.execute("TRUNCATE failure_information, job, junit_failure, pipeline_instance, stage, texttest_failure, stage_claim")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index, current_stage_name):
         sql = """SELECT *

@@ -8,7 +8,7 @@ steps = [
             SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.id, s.name as stage_name, p.trigger_message, s.approved_by, s.result, f.failure_stage, sc.responsible, sc.description, s.scheduled_date
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
-            LEFT JOIN failureinformation f ON f.stage_id = s.id
+            LEFT JOIN failure_information f ON f.stage_id = s.id
             LEFT JOIN stage_claim sc ON sc.stage_id = s.id
             WHERE s.result <> 'Cancelled'
             ORDER BY p.pipeline_counter DESC, s.stage_counter DESC;""",
@@ -20,7 +20,7 @@ steps = [
             JOIN stage s ON s.instance_id = p.id
             JOIN job j ON j.stage_id = s.id
             JOIN agent a ON a.id = j.agent_uuid
-            LEFT JOIN failureinformation f ON f.stage_id = s.id;""",
+            LEFT JOIN failure_information f ON f.stage_id = s.id;""",
          "DROP VIEW graph_statistics;"),
 
     step("""CREATE VIEW final_stages AS
@@ -39,6 +39,6 @@ steps = [
             JOIN final_stages s ON s.instance_id = p.id
             JOIN job j ON j.stage_id = s.id
             JOIN agent a ON a.id = j.agent_uuid
-            LEFT JOIN failureinformation f ON f.stage_id = s.id;""",
+            LEFT JOIN failure_information f ON f.stage_id = s.id;""",
          "DROP VIEW graph_statistics_final_stages")
 ]

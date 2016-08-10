@@ -43,29 +43,29 @@ steps = [
             );""",
          "DROP TABLE agent;"),
 
-    step("""CREATE TABLE texttestfailure(
+    step("""CREATE TABLE texttest_failure(
               id SERIAL PRIMARY KEY,
               stage_id INTEGER,
               test_index INTEGER,
               failure_type TEXT,
               document_name TEXT
             );""",
-         "DROP TABLE texttestfailure;"),
+         "DROP TABLE texttest_failure;"),
 
-    step("""CREATE TABLE failureinformation(
+    step("""CREATE TABLE failure_information(
               id SERIAL PRIMARY KEY,
               stage_id INTEGER,
               failure_stage TEXT
             );""",
-         "DROP TABLE failureinformation;"),
+         "DROP TABLE failure_information;"),
 
-    step("""CREATE TABLE junitfailure(
+    step("""CREATE TABLE junit_failure(
               id SERIAL PRIMARY KEY,
               stage_id INTEGER,
               failure_type TEXT,
               failure_test TEXT
             );""",
-         "DROP TABLE junitfailure;"),
+         "DROP TABLE junit_failure;"),
 
     step("""CREATE TABLE stage_claim(
               id SERIAL PRIMARY KEY ,
