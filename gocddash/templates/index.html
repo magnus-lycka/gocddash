@@ -171,7 +171,6 @@
         $('#myModal').on('show.bs.modal', function (event) {
             console.log("No more reloads!");
             var icon = $(event.relatedTarget);
-            stageid = icon.data('stageid');
             pipelineName = icon.data('pipeline_name');
             pipelineCounter = icon.data('pipeline_counter');
             shouldReload = false;
