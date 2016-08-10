@@ -182,7 +182,12 @@ class SQLConnection:
 
     def get_claims_for_unsynced_pipelines(self):
         self.conn.execute(
-            """SELECT * FROM instance_claim WHERE pipeline_name NOT IN (SELECT pipeline_name FROM pipeline_instance);"""
+            """SELECT i.pipeline_name, i.pipeline_counter, i.responsible, i.description
+                FROM instance_claim i
+                JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim WHERE pipeline_name NOT IN (
+                 SELECT pipeline_name FROM pipeline_instance
+                ) GROUP BY pipeline_name) gi
+                ON i.pipeline_name = gi.pipeline_name AND i.pipeline_counter = gi.pipeline_counter;"""
         )
         return self.conn.fetchall()
 

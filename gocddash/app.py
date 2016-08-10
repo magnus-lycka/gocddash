@@ -190,7 +190,7 @@ def claim_instance():
     description = request.form.get('description')
     if not responsible:
         abort(400, "Someone must be responsible.")
-    create_instance_claim(InstanceClaim(None, pipeline_name, pipeline_counter, responsible, description))
+    create_instance_claim(InstanceClaim(pipeline_name, pipeline_counter, responsible, description))
     return "OK."
     #     abort(409, "Already claimed.")
 

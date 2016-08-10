@@ -175,8 +175,7 @@ def get_cctray_status():
 
 
 class InstanceClaim:
-    def __init__(self, id, pipeline_name, pipeline_counter, responsible, description):
-        self.id = id
+    def __init__(self, pipeline_name, pipeline_counter, responsible, description):
         self.pipeline_name = pipeline_name
         self.pipeline_counter = pipeline_counter
         self.responsible = responsible
