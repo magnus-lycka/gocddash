@@ -153,7 +153,9 @@ def select():
                                    pipelinegroups=all_pipeline_groups,
                                    now=datetime.now(),
                                    theme=get_bootstrap_theme(),
-                                   footer=get_footer())
+                                   footer=get_footer(),
+                                   application_root=app.config['APPLICATION_ROOT'])
+
         response = make_response(template)
     return response
 
@@ -174,6 +176,11 @@ def select_theme():
         response = make_response(template)
     return response
 
+
+@gocddash.route("/reloadconfig", methods=['POST'])
+def reload_config():
+    create_pipeline_config()
+    return "OK."
 
 @gocddash.route("/claim", methods=['POST'])
 def claim_instance():
