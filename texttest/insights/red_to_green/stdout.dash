@@ -1,5 +1,25 @@
-starting docker container from image dockerregistry.pagero.local/go-analysis-db:1.1.1-GO
-started docker container with id=9ebb2bca33cfa633e2ba1ac15de4af5e4810519bb44e4f0fde21d7e9ca1c3f60
+starting servers, db on port 15761 and application on port 4614, using checkout /home/emilyb/workspace/gocddash
+starting docker container from image postgres:9.3
+pulling image for postgres
+b'{"status":"Pulling from library/postgres","id":"9.3"}\r\n'
+b'{"status":"Digest: sha256:5f9de2c1bcf6aff1f9d10eceb30c3b72057eacd14d3fd25a3bbf732e62e3be12"}\r\n'
+b'{"status":"Status: Image is up to date for postgres:9.3"}\r\n'
+image pulled
+docker container ready to accept connections
+2016-08-10 15:20:01.982406 Starting synchronization.
+2016-08-10 15:20:01.986015 Will synchronize foo from 380 onwards.
+Requested pipelines = 2 (from 380 to 382)
+Pipeline counter: 382
+  Fetching stage: alpha / 1
+Pipeline counter: 381
+  Fetching stage: alpha / 1
+
+2016-08-10 15:20:02.019536 Done with the backlog.
+
+started docker container with id=5a9f2ad3ab5b820ce2a161c7d6620836555e014d7de42d2ab96fa34dbb2eb768
+db is accepting connections
+application is started
+pipelines are synced
 Starting test workflow for GO CD Dashboard
 stopping docker container
 docker container stopped and removed

@@ -68,15 +68,12 @@ def parse_args():
     parser.add_argument('--db-port', help='database port, (overrides any value set in application config)')
     parser.add_argument('-p', '--pipeline-cfg', help='pipeline config')
     parser.add_argument('-f', '--file-source', help='go client file source')
+    parser.add_argument('-d', '--continuous-sync', action='store_true', help='run as a daemon and continually sync pipelines')
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     return pargs_dict
 
-
-def main():
-    # Instantiate config, database and go client
-    pargs_dict = parse_args()
-
+def configure_from_args(pargs_dict):
     pipeline_cfg = pargs_dict['pipeline_cfg']
     if pipeline_cfg:
         config.create_pipeline_config(pipeline_cfg)
@@ -97,30 +94,48 @@ def main():
     if file_source:
         server_url = file_source
 
+    return pipelines_path, server_url, user, passwd, db_port
+
+
+def sync_backlog(json_tree):
+    requested_pipelines = read_config.get_pipelines_to_sync(json_tree)
+    log("Starting synchronization.")
+    pipelines = parse_pipeline_availability(requested_pipelines)
+    synchronize(pipelines)
+
+    print("")
+    log("Done with the backlog.")
+    print("")
+    return pipelines
+
+def continuous_sync(pipelines):
+    last_sync = datetime.datetime.now()
+    while True:
+        time_diff = millis_interval(last_sync, datetime.datetime.now())
+        if time_diff < 2*60*1000:
+            time.sleep(10)
+        else:
+            log("Starting synchronization.")
+            last_sync = datetime.datetime.now()
+            synchronize(pipelines)
+            log("Synchronization finished.")
+
+def main():
+    # Instantiate config, database and go client
+    pargs_dict = parse_args()
+
+    pipelines_path, server_url, user, passwd, db_port = configure_from_args(pargs_dict)
+
     data_access.create_connection(db_port)
     go_client.create_go_client(server_url, (user, passwd))
 
     with codecs.open(pipelines_path, encoding='utf-8') as input_reader:
         json_tree = json.load(input_reader)
-        requested_pipelines = read_config.get_pipelines_to_sync(json_tree)
-        log("Starting synchronization.")
-        pipelines = parse_pipeline_availability(requested_pipelines)
-        synchronize(pipelines)
 
-        print("")
-        log("Done with the backlog.")
-        print("")
+    pipelines = sync_backlog(json_tree)
 
-        last_sync = datetime.datetime.now()
-        while True:
-            time_diff = millis_interval(last_sync, datetime.datetime.now())
-            if time_diff < 2*60*1000:
-                time.sleep(10)
-            else:
-                log("Starting synchronization.")
-                last_sync = datetime.datetime.now()
-                synchronize(pipelines)
-                log("Synchronization finished.")
+    if pargs_dict["continuous_sync"]:
+        continuous_sync(pipelines)
 
 
 def log(string):

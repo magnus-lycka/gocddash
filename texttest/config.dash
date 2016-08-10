@@ -27,6 +27,7 @@ gui_log:gui_log.txt
 [end]
 
 [run_dependent_text]
+stdout:starting servers
 stdout:(id=)[^\s]+{REPLACE \1<id>}
 stdout:pulling image for{[->]}image pulled
 stdout:\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{6}{REPLACE <time>}
