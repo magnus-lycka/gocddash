@@ -59,7 +59,7 @@ class TestFailure(StageFailure):
 
 def create_stage_info(stage_failure_info):
     log_parser = get_pipeline_config().get_log_parser(stage_failure_info.pipeline_name)
-    if log_parser is None:  # Log parser should almost always be junit. This fixes changing config without re-deploying
+    if log_parser is None:  # Log parser should almost always be junit. This fixes changing config without reloading the cfg
         log_parser = 'junit'
     if stage_failure_info.is_success():
         result = StageSuccess(stage_failure_info)
