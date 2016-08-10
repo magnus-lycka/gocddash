@@ -113,7 +113,7 @@
             </div>
 
         </div>
-        {% if not current_status.is_success() and not current_status.stage.is_claimed() %}
+        {% if not current_status.is_success() %}
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
                     <button type="button" class="btn btn-danger btn-lg btn-block" id="claim-button" data-toggle="modal"
@@ -274,13 +274,6 @@
             }
             else {
                 payload = $('#claimForm').serialize() + '&pipelineName=' + "{{ current_status.stage.pipeline_name }}" + '&pipelineCounter=' + "{{ current_status.stage.pipeline_counter }}";
-                $.post("{{ application_root }}/claim", payload).done(function () {
-                    $('#myModal').modal('hide');
-                    document.location.reload(true);
-                }).fail(function () {
-                    $('#myModal').modal('hide');
-                    claim_fail_alert()
-                })
             }
         });
 
