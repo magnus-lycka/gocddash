@@ -192,6 +192,12 @@
             }
             else {
                 payload = $('#claimForm').serialize() + '&pipelineName=' + pipelineName + '&pipelineCounter=' + pipelineCounter;
+                $.post("{{ application_root }}/claim", payload).done(function () {
+                    $('#myModal').modal('hide');
+                    document.location.reload(true);
+                }).fail(function () {
+                    console.log("Something went wrong")
+                })
             }
         });
 
