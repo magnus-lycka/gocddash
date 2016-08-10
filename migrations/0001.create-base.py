@@ -67,10 +67,11 @@ steps = [
             );""",
          "DROP TABLE junit_failure;"),
 
-    step("""CREATE TABLE stage_claim(
-              id SERIAL PRIMARY KEY ,
-              stage_id INTEGER,
+    step("""CREATE TABLE instance_claim(
+              id SERIAL PRIMARY KEY,
+              pipeline_name TEXT,
+              pipeline_counter INTEGER,
               responsible TEXT,
               description TEXT);""",
-         "DROP TABLE stage_claim;")
+         "DROP TABLE instance_claim;")
 ]

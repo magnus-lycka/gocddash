@@ -167,3 +167,16 @@ def get_cctray_status():
     xml = go_get_cctray()
     project = parse_cctray.Projects(xml)
     return project
+
+
+class InstanceClaim:
+    def __init__(self, pipeline_name, pipeline_counter, responsible, description):
+        self.pipeline_name = pipeline_name
+        self.pipeline_counter = pipeline_counter
+        self.responsible = responsible
+        self.description = description
+
+
+def create_instance_claim(instance_claim):
+    get_connection().insert_instance_claim(instance_claim.pipeline_name, instance_claim.pipeline_counter,
+                                           instance_claim.responsible, instance_claim.description)

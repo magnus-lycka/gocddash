@@ -42,9 +42,9 @@ class SQLConnection:
         self.conn.execute("""INSERT INTO junit_failure(stage_id, failure_type, failure_test) VALUES (%s, %s, %s);""",
                           (stage_id, failure_type, failure_test))
 
-    def insert_stage_claim(self, stage_id, responsible, desc):
-        self.conn.execute("""INSERT INTO stage_claim(stage_id, responsible, description) VALUES (%s, %s, %s);""",
-                          (stage_id, responsible, desc))
+    def insert_instance_claim(self, pipeline_name, pipeline_counter, responsible, desc):
+        self.conn.execute("""INSERT INTO instance_claim(pipeline_name, pipeline_counter, responsible, description) VALUES (%s, %s, %s, %s);""",
+                          (pipeline_name, pipeline_counter, responsible, desc))
 
     def get_highest_pipeline_count(self, pipeline_name):
         self.conn.execute("""SELECT COALESCE(max(pipeline_counter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
@@ -102,7 +102,7 @@ class SQLConnection:
         return self.conn.fetchone()
 
     def truncate_tables(self):
-        self.conn.execute("TRUNCATE failure_information, job, junit_failure, pipeline_instance, stage, texttest_failure, stage_claim")
+        self.conn.execute("TRUNCATE failure_information, job, junit_failure, pipeline_instance, stage, texttest_failure, instance_claim")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index, current_stage_name):
         sql = """SELECT *
@@ -136,9 +136,9 @@ class SQLConnection:
             (pipeline_name,))
         return self.conn.fetchone()
 
-    def claim_exists(self, stage_id):
+    def claim_exists(self, pipeline_name, pipeline_counter):
         self.conn.execute(
-            """SELECT * FROM stage_claim WHERE stage_id = %s""", (stage_id,)
+            """SELECT * FROM instance_claim WHERE pipeline_name = %s AND pipeline_counter = %s;""", (pipeline_name, pipeline_counter)
         )
         return self.conn.fetchone() is not None
 

@@ -9,7 +9,7 @@ steps = [
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
             LEFT JOIN failure_information f ON f.stage_id = s.id
-            LEFT JOIN stage_claim sc ON sc.stage_id = s.id
+            LEFT JOIN instance_claim sc ON sc.pipeline_name = p.pipeline_name AND sc.pipeline_counter = p.pipeline_counter
             WHERE s.result <> 'Cancelled'
             ORDER BY p.pipeline_counter DESC, s.stage_counter DESC;""",
          "DROP VIEW failure_info;"),
