@@ -30,10 +30,11 @@ def extract_list_of_lists_from_html_table(git_sections):
         for index in indices:
             revisions.append(clean_html(list_of_words[index + 1]))
 
-        indices = [i for i, x in enumerate(list_of_words) if x == """class="modified_by">"""]
-        # May need a simple change if anyones name is > 2 words
-        for index in indices:
-            modified_by.append(clean_html(' '.join(list_of_words[index + 1:index + 4])))
+        start_indices = [i for i, x in enumerate(list_of_words) if x == """class="modified_by">"""]
+        end_indices = [i-1 for i, x in enumerate(list_of_words) if """class="comment"><p>""" in x]
+
+        for i, index in enumerate(indices):
+            modified_by.append(clean_html(' '.join(list_of_words[start_indices[i] + 1:end_indices[i]])))
 
         start_indices = [i for i, x in enumerate(list_of_words) if
                          """class="comment"><p>""" in x]  # Every comment starts with this
