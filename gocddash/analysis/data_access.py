@@ -13,8 +13,8 @@ class SQLConnection:
 
     def insert_pipeline_instance(self, instance):
         self.conn.execute(
-            """INSERT INTO pipeline_instance(id, pipeline_name, pipeline_counter, trigger_message) SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT 1 FROM pipeline_instance WHERE id=%s);""",
-            (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message, instance.instance_id))
+            """INSERT INTO pipeline_instance(id, pipeline_name, pipeline_counter, trigger_message) VALUES (%s, %s, %s, %s);""",
+            (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message))
 
     def insert_stage(self, pipeline_instance_id, stage):
         self.conn.execute(

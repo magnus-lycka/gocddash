@@ -26,15 +26,16 @@ def parse_pipeline_info(pipelines):
     for pipeline in pipelines:
         pipeline_counter = pipeline["counter"]
         print("Pipeline counter: {}".format(pipeline_counter))
+        pipeline_name = pipeline["name"]
+        pipeline_id = pipeline["id"]
+        instance = PipelineInstance(pipeline_name, pipeline_counter,
+                                    pipeline["build_cause"]["trigger_message"], pipeline_id)
+        get_connection().insert_pipeline_instance(instance)
+
         for stage in pipeline['stages']:
             if stage['scheduled']:
                 stage_name = stage['name']
-                pipeline_name = pipeline["name"]
-                pipeline_id = pipeline["id"]
                 stage_count = stage['counter']
-                instance = PipelineInstance(pipeline_name, pipeline_counter,
-                                            pipeline["build_cause"]["trigger_message"], pipeline_id)
-                get_connection().insert_pipeline_instance(instance)
                 parse_stage_info(stage_count, stage_name, instance)
     fetch_new_agents()
 
