@@ -117,6 +117,7 @@ def create_job_test_html_graph(pipeline_name, title):
 
 def calculate_height_increase(dataframe=None):
     if dataframe is not None:  # Empty dataframes are not False in pandas
+        # Somewhat ugly solution for the two graphs currently implemented
         height = dataframe['Tests passed'] + dataframe['Tests failed'] + dataframe['Tests skipped']
         height = max(height)
     else:
