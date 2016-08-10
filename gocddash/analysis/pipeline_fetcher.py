@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
-from gocddash.util.config import get_config
 from gocddash.util.get_failure_stage import get_failure_stage
+from gocddash.util.pipeline_config import get_pipeline_config
 from .data_access import get_connection
 from .domain import PipelineInstance, Stage, create_stage, Job, create_job
 from .go_client import *
@@ -95,7 +95,7 @@ def fetch_job(pipeline_counter, pipeline_name, stage, stage_index, jobs):
 
 
 def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, stage_name, job_name):
-    log_parser = get_config().get_log_parser(pipeline_name)
+    log_parser = get_pipeline_config().get_log_parser(pipeline_name)
 
     failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
     get_connection().insert_failure_information(stage_id, failure_stage)

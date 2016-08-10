@@ -1,6 +1,6 @@
 import unittest
 
-from gocddash.dash_board import read_config
+from gocddash.dash_board import read_pipeline_config
 
 
 def get_max_mock(name):
@@ -18,14 +18,14 @@ class TestReadFile(unittest.TestCase):
             {"name": "feature", "begin_at": 100},
         ]
 
-        pipelines = read_config.parse_config(input)
+        pipelines = read_pipeline_config.parse_config(input)
         self.assertEqual(pipelines, [("characterize", 1500), ("feature", 100)])
 
 
 
     def testNoBeginAt(self):
-        saved = read_config.get_max_pipeline_status
-        read_config.get_max_pipeline_status = get_max_mock
+        saved = read_pipeline_config.get_max_pipeline_status
+        read_pipeline_config.get_max_pipeline_status = get_max_mock
 
         input = dict()
         input["pipelines"] = [
@@ -33,7 +33,7 @@ class TestReadFile(unittest.TestCase):
             {"name": "feature"},
         ]
 
-        pipelines = read_config.parse_config(input)
+        pipelines = read_pipeline_config.parse_config(input)
         self.assertEqual(pipelines, [("characterize", 1500), ("feature", 2180)])
 
-        read_config.get_max_pipeline_status = saved
+        read_pipeline_config.get_max_pipeline_status = saved

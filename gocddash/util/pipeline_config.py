@@ -33,7 +33,7 @@ def create_pipeline_config(path=str(Path(__file__).parents[1]) + "/pipelines.jso
         return _pipeline_config
 
 
-def get_config():
+def get_pipeline_config():
     if not _pipeline_config:
         raise ValueError("Pipeline config not instantiated")
     return _pipeline_config

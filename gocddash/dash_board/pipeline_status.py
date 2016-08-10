@@ -1,6 +1,6 @@
 from ..analysis.data_access import get_connection
 from ..analysis.data_munging import get_failure_stage_signature
-from ..util.config import get_config
+from ..util.pipeline_config import get_pipeline_config
 
 
 class StageSuccess:
@@ -58,7 +58,7 @@ class TestFailure(StageFailure):
 
 
 def create_stage_info(stage_failure_info):
-    log_parser = get_config().get_log_parser(stage_failure_info.pipeline_name)
+    log_parser = get_pipeline_config().get_log_parser(stage_failure_info.pipeline_name)
     if log_parser is None:  # Log parser should almost always be junit. This fixes changing config without re-deploying
         log_parser = 'junit'
     if stage_failure_info.is_success():

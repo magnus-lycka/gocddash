@@ -13,7 +13,7 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
-from gocddash.util.config import create_pipeline_config
+from gocddash.util.pipeline_config import create_pipeline_config
 from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
