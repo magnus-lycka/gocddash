@@ -74,7 +74,7 @@ def create_binary_test_index_list(failure_indices):
 
 def check_if_consecutive_failure_signature(failure_indices):
     consecutive_binary_list = []
-    od = collections.OrderedDict(sorted(failure_indices.items()))  # Bug in OrderedDict it seems. This works fine.
+    od = collections.OrderedDict(sorted(failure_indices.items()))
     for index, value in enumerate(od.items()):
         if value[1] == od.values()[index - 1]:
             consecutive_binary_list.append((value[0], 1))
@@ -87,13 +87,10 @@ def export_data_to_pandas_df(pipeline_name):
     """ Exports the desired pipeline data from the postgresql database and returns a pandas dataframe """
 
     collated_data = read_data(get_connection().get_failure_statistics(pipeline_name),
-                              ["Pipelinename", "counter", "trigger_message", "approved_by", "stageindex", "scheduleddate",
+                              ["Pipelinename", "counter", "trigger_message", "approved_by", "stageindex",
+                               "scheduleddate",
                                "agent_name", "failure_stage", "result", "id", "stagename"])
     binary_result_column = binary_dependent_variable(collated_data.result)
     collated_data.result = binary_result_column
 
     return collated_data
-
-
-if __name__ == '__main__':
-    pipeline_name = "po-characterize-tests"
