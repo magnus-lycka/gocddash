@@ -30,7 +30,7 @@ def parse_pipeline_info(pipelines):
         pipeline_id = pipeline["id"]
         instance = PipelineInstance(pipeline_name, pipeline_counter,
                                     pipeline["build_cause"]["trigger_message"], pipeline_id)
-        if get_connection().get_highest_pipeline_count(pipeline_name) == 0:
+        if not get_connection().pipeline_instance_exists(pipeline_name, pipeline_counter):
             get_connection().insert_pipeline_instance(instance)
 
         for stage in pipeline['stages']:

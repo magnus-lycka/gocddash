@@ -191,6 +191,10 @@ class SQLConnection:
         )
         return self.conn.fetchall()
 
+    def pipeline_instance_exists(self, pipeline_name, pipeline_counter):
+        self.conn.execute("""SELECT * FROM pipeline_instance WHERE pipeline_name = %s AND pipeline_counter = %s""", (pipeline_name, pipeline_counter))
+        return self.conn.fetchone() is not None
+
 _connection = None
 
 
