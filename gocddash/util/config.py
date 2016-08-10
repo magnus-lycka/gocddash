@@ -34,7 +34,3 @@ def get_config():
     if not _pipeline_config:
         raise ValueError("Pipeline config not instantiated")
     return _pipeline_config
-
-
-if __name__ == '__main__':
-    test = create_pipeline_config()
