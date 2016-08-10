@@ -4,10 +4,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="alert alert-warning hidden" role="alert" id="claim-fail-alert">
-                    <strong>Information:</strong> Someone has already claimed this stage. Refreshing page...
-                </div>
-
                 <h2 class="text-center">Insights for {{ current_status.stage.pipeline_name }} </h2>
 
                 {% if not current_status.is_success() and current_status.stage.is_claimed() %}
