@@ -27,7 +27,7 @@ group_of_pipeline = defaultdict(str)
 # APPLICATION_ROOT without running the app as a
 # sub-mounted WSGI environment. See
 # http://stackoverflow.com/questions/18967441/add-a-prefix-to-all-flask-routes
-gocddash = Blueprint('gocddash', __name__)
+gocddash = Blueprint('gocddash', __name__, static_folder='static')
 
 
 

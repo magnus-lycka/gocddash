@@ -10,7 +10,7 @@
     <meta name="author" content="magnus@thinkware.se">
     <title>Go.CD Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{ theme }}/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='dash.css') }}" rel="stylesheet">
+    <link href="{{ url_for('gocddash.static', filename='dash.css') }}" rel="stylesheet">
 
     {% block bokehstuff %}{% endblock %}
 </head>
@@ -56,7 +56,7 @@
 {% block content %}{% endblock %}
 
 <div class="container">
-    <p></p> <!-- no space between the well below and the button in the bottom of the forms??? -->
+    <p></p>
     <div class="row">
         <div class="col-md-12">
             <div class="well well-sm small text-center">{{ footer }}</div>
@@ -64,7 +64,6 @@
     </div>
 </div>
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
