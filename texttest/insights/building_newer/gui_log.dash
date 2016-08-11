@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4768/dash/insights/foo
+url: http://127.0.0.1:4707/dash/insights/foo
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -6,7 +6,7 @@ url: http://127.0.0.1:4768/dash/insights/foo
 
      * [5]Select pipeline groups / Config
      * [6]Select theme
-     * Last refresh: 12:55:25 | 00 seconds
+     * Last refresh: 10:01:28 | 00 seconds
 
 Insights for foo
 
@@ -15,7 +15,7 @@ Insights for foo
 
 Latest in Go
 
-   Pipeline counter: 383 , run 1
+   Pipeline counter: 383, run 1
 
    Status: Success
 
@@ -39,6 +39,8 @@ Latest analyzed
 Last green
 
    Pipeline counter: 382 (0 pipelines ago)
+
+   Stage: alpha
 
    At: 2015-07-10 08:25:18
      __________________________________________________________________
@@ -65,12 +67,12 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4768/dash/?which=failing
-   3. http://127.0.0.1:4768/dash/?which=progress
-   4. http://127.0.0.1:4768/dash/?which=all
-   5. http://127.0.0.1:4768/dash/select/
-   6. http://127.0.0.1:4768/dash/select_theme/
+   2. http://127.0.0.1:4707/dash/?which=failing
+   3. http://127.0.0.1:4707/dash/?which=progress
+   4. http://127.0.0.1:4707/dash/?which=all
+   5. http://127.0.0.1:4707/dash/select/
+   6. http://127.0.0.1:4707/dash/select_theme/
    7. http://go.pagero.local/go/tab/pipeline/history/foo
-   8. http://127.0.0.1:4768/dash/insights/foo
+   8. http://127.0.0.1:4707/dash/insights/foo
    9. http://go.pagero.local/go/tab/build/detail/foo/382/alpha/1/defaultJob#tab-tests
-  10. http://127.0.0.1:4768/dash/graphs/foo
+  10. http://127.0.0.1:4707/dash/graphs/foo
