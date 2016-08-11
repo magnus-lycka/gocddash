@@ -28,8 +28,7 @@
                         <h3 class="panel-title">{{ live_info.status | building_panel_label }}</h3>
                     </div>
                     <div class="panel-body">
-                        <p><strong>Pipeline counter:</strong> {{ live_info.label }}
-                            , <strong>run </strong> {{ live_info.stages[stage_name_index].counter }}
+                        <p><strong>Pipeline counter:</strong> {{ live_info.label }}, <strong>run </strong> {{ live_info.stages[stage_name_index].counter }}
                         </p>
                         <p>
                             {% if current_status.stage.pipeline_counter == live_info.label|int and current_status.stage.stage_counter == live_info.stages[stage_name_index].counter|int and live_info.stages[stage_name_index].name == current_status.stage.stage_name %}
@@ -103,6 +102,7 @@
                         {% set count = current_status.stage.pipeline_counter - latest_passing_stage.pipeline_counter %}
                         <p><strong>Pipeline counter:</strong> {{ latest_passing_stage.pipeline_counter }} ({{ count }}
                             pipeline{{ count | pluralize }} ago)</p>
+                        <p><strong>Stage:</strong> {{ latest_passing_stage.stage_name }}</p>
                         <p><strong>At:</strong> {{ latest_passing_stage.scheduled_date }}</p>
                     </div>
                 </div>

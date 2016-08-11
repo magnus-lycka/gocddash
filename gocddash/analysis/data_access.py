@@ -130,10 +130,10 @@ class SQLConnection:
             (pipeline_name,))
         return list(map(lambda x: x[0], self.conn.fetchall()))
 
-    def fetch_latest_passing_stage(self, pipeline_name):
+    def fetch_latest_passing_stage(self, pipeline_name, stage_name):
         self.conn.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s AND result = 'Passed' ORDER BY pipeline_counter DESC, stage_counter DESC;""",
-            (pipeline_name,))
+            """SELECT * FROM failure_info WHERE pipeline_name = %s AND stage_name = %s AND result = 'Passed' ORDER BY pipeline_counter DESC, stage_counter DESC;""",
+            (pipeline_name, stage_name))
         return self.conn.fetchone()
 
     def fetch_first_synced(self, pipeline_name):

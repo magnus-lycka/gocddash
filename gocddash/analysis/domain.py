@@ -18,8 +18,8 @@ def get_current_stage(pipeline_name):
     return None
 
 
-def get_latest_passing_stage(pipeline_name):
-    result = get_connection().fetch_latest_passing_stage(pipeline_name)
+def get_latest_passing_stage(pipeline_name, stage_name):
+    result = get_connection().fetch_latest_passing_stage(pipeline_name, stage_name)
     if result:
         return StageFailureInfo(*result)
     else:

@@ -225,7 +225,7 @@ def insights(pipeline_name):
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage)
     previous_status = pipeline_status.create_stage_info(last_stage)
-    latest_passing_stage = get_latest_passing_stage(pipeline_name)
+    latest_passing_stage = get_latest_passing_stage(pipeline_name, current_stage.stage_name)
     stage_name_index = (get_connection().get_stage_order(pipeline_name)).index(current_stage.stage_name)
 
     if current_stage.is_success():
