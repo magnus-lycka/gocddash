@@ -71,22 +71,13 @@
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
+
+<script type="text/javascript">
+    var applicationRoot = "{{ application_root }}";
 </script>
 
-<script>
-    var sec = 0;
-    setInterval(function () {
-        if (++sec < 10) {
-            $("#seconds").html("0" + sec);
-        } else {
-            $("#seconds").html(sec);
-        }
-    }, 1000);
-</script>
+<script src="{{ url_for('static', filename='dash.js') }}"></script>
+
 
 {% block scripts %}{% endblock %}
 
