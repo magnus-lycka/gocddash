@@ -441,10 +441,7 @@ def main():
         create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
 
     pipeline_path = pargs_dict['pipeline_config']
-    if pipeline_path and os.path.isfile(pipeline_path):
-        create_pipeline_config(pipeline_path)
-    else:
-        create_pipeline_config()
+    create_pipeline_config(pipeline_path)
 
     create_cache()
 

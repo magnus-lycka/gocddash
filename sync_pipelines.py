@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-import codecs
 import datetime
-import json
 import os
 import time
 from configparser import ConfigParser
@@ -50,7 +48,9 @@ def millis_interval(start, end):
     return millis
 
 
-def read_cfg(path=os.getcwd() + "/gocddash/application.cfg"):
+def read_cfg(path=None):
+    if not path:
+        path = os.getcwd() + "/gocddash/application.cfg"
     parser = ConfigParser()
     if not os.path.exists(path):
         raise FileNotFoundError("Error: Missing application.cfg file in {}".format(path))
@@ -73,19 +73,13 @@ def parse_args():
     pargs_dict = vars(pargs)
     return pargs_dict
 
+
 def configure_from_args(pargs_dict):
-    pipeline_cfg = pargs_dict['pipeline_cfg']
-    if pipeline_cfg:
-        pipeline_config.create_pipeline_config(pipeline_cfg)
-    else:
-        pipeline_config.create_pipeline_config()
-    pipelines_path = pipeline_config.get_pipeline_config().path
+    pipeline_cfg_path = pargs_dict['pipeline_cfg']
+    pipeline_config.create_pipeline_config(pipeline_cfg_path)
 
     app_cfg = pargs_dict['app_cfg']
-    if app_cfg:
-        server_url, user, passwd, db_port = read_cfg(app_cfg)
-    else:
-        server_url, user, passwd, db_port = read_cfg()
+    server_url, user, passwd, db_port = read_cfg(app_cfg)
 
     if pargs_dict['db_port']:
         db_port = pargs_dict['db_port']
@@ -94,7 +88,7 @@ def configure_from_args(pargs_dict):
     if file_source:
         server_url = file_source
 
-    return pipelines_path, server_url, user, passwd, db_port
+    return server_url, user, passwd, db_port
 
 
 def sync_backlog(json_tree):
@@ -108,6 +102,7 @@ def sync_backlog(json_tree):
     print("")
     return pipelines
 
+
 def continuous_sync(pipelines):
     last_sync = datetime.datetime.now()
     while True:
@@ -120,18 +115,17 @@ def continuous_sync(pipelines):
             synchronize(pipelines)
             log("Synchronization finished.")
 
+
 def main():
     # Instantiate config, database and go client
     pargs_dict = parse_args()
 
-    pipelines_path, server_url, user, passwd, db_port = configure_from_args(pargs_dict)
+    server_url, user, passwd, db_port = configure_from_args(pargs_dict)
 
     data_access.create_connection(db_port)
     go_client.create_go_client(server_url, (user, passwd))
 
-    with codecs.open(pipelines_path, encoding='utf-8') as input_reader:
-        json_tree = json.load(input_reader)
-    pipelines = sync_backlog(json_tree)
+    pipelines = sync_backlog(pipeline_config.get_pipeline_config().pipelines)
 
     if pargs_dict["continuous_sync"]:
         continuous_sync(pipelines)
