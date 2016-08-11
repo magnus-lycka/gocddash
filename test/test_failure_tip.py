@@ -8,7 +8,8 @@ from gocddash.util.pipeline_config import create_pipeline_config
 
 
 class TestFailureTip(unittest.TestCase):
-    create_pipeline_config()
+    path = "data/pipelines.json"
+    create_pipeline_config(path)
 
     def create_stage_failure_info(self, parent=None, passed=False, failure_stage=None, stage_id=2000):
         if parent:
@@ -19,6 +20,7 @@ class TestFailureTip(unittest.TestCase):
         return StageFailureInfo("characterize", pipeline_counter, 1, stage_id, "runTests", "triggered by x", "changes", "Passed" if passed else "Failed", failure_stage, "resp", "desc", 2014)
 
     def test_current_passing(self):
+        pipeline_status.get_pipeline_config().get_log_parser = MagicMock(return_value="characterize")
 
         passed_stage = self.create_stage_failure_info(None, True)
         current = pipeline_status.create_stage_info(passed_stage)
