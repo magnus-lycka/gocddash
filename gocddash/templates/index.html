@@ -45,7 +45,6 @@
                         {% endif %}
                         {% if not "Success" in pipeline.status and not "Building" in pipeline.status %}
                             {% set claimed_counter = synced_pipelines[pipeline.name].pipeline_counter if (pipeline.name in synced_pipelines.keys() and synced_pipelines[pipeline.name].pipeline_counter < pipeline.label|int) else pipeline.label %}
-                            {{ claimed_counter }}
                             <span class="glyphicon glyphicon-flag pull-right claim-stage-flag"
                                   data-pipeline_name="{{ pipeline.name }}" data-pipeline_counter="{{ claimed_counter }}"
                                   data-target="#myModal" data-toggle="modal" data-placement="top"
