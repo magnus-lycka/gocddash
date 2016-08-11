@@ -31,14 +31,14 @@
                             </a>
 
                             {% if not "Success" in pipeline.status and not "Building" in pipeline.status and synced_pipelines[pipeline.name].responsible %}
-                                <span class="glyphicon glyphicon-lock pull-right" style="padding-left:5px"
+                                <span class="glyphicon glyphicon-lock pull-right claimed-lock"
                                       aria-hidden="true" data-placement="top"
                                       title="{{ synced_pipelines[pipeline.name].responsible }}: {{ synced_pipelines[pipeline.name].description }}"></span>
                             {% endif %}
                         {% endif %}
                         {% if not "Success" in pipeline.status and not "Building" in pipeline.status and pipeline.name in unsynced_claims.keys() %}
                             {% if unsynced_claims[pipeline.name].responsible and unsynced_claims[pipeline.name].pipeline_counter|string == pipeline.label %}
-                                <span class="glyphicon glyphicon-lock pull-right" style="padding-left:5px"
+                                <span class="glyphicon glyphicon-lock pull-right claimed-lock"
                                       aria-hidden="true" data-placement="top"
                                       title="{{ unsynced_claims[pipeline.name].responsible }}: {{ unsynced_claims[pipeline.name].description }}"></span>
                             {% endif %}

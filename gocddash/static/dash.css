@@ -1,0 +1,11 @@
+.claim-stage-flag {
+    cursor: pointer; visibility: hidden;
+}
+
+.panel-heading:hover > h3 > .claim-stage-flag {
+    visibility: visible;
+}
+
+.claimed-lock {
+    padding-left: 5px;
+}
