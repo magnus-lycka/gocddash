@@ -4,12 +4,22 @@
 from yoyo import step
 #
 steps = [
+    step("""CREATE VIEW active_claims AS
+            SELECT i.*
+            FROM instance_claim i
+            JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim GROUP BY pipeline_name) ia
+            ON i.pipeline_name = ia.pipeline_name AND i.pipeline_counter = ia.pipeline_counter
+            JOIN pipeline_instance p ON p.pipeline_name = i.pipeline_name AND p.pipeline_counter = i.pipeline_counter
+            JOIN final_stages s ON s.instance_id = p.id
+            WHERE result <> 'Passed';""",
+         "DROP VIEW latest_claims;"),
+
     step("""CREATE VIEW failure_info AS
-            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.id, s.name as stage_name, p.trigger_message, s.approved_by, s.result, f.failure_stage, sc.responsible, sc.description, s.scheduled_date
+            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.id, s.name as stage_name, p.trigger_message, s.approved_by, s.result, f.failure_stage, ac.responsible, ac.description, s.scheduled_date
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
             LEFT JOIN failure_information f ON f.stage_id = s.id
-            LEFT JOIN instance_claim sc ON sc.pipeline_name = p.pipeline_name AND sc.pipeline_counter = p.pipeline_counter
+            LEFT JOIN active_claims ac ON ac.pipeline_name = p.pipeline_name AND ac.pipeline_counter <= p.pipeline_counter
             WHERE s.result <> 'Cancelled'
             ORDER BY p.pipeline_counter DESC, s.stage_counter DESC;""",
          "DROP VIEW failure_info;"),
