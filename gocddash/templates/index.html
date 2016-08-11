@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container">
-    {% for pipeline in pipelines %}
-    {% if (loop.index - 1) is divisibleby(cols) %}
-    <div class="row">
-        {% endif %}
+    <div class="container">
+        {% for pipeline in pipelines %}
+            {% if (loop.index - 1) is divisibleby(cols) %}
+                <div class="row">
+            {% endif %}
         <div class="col-md-{{ 12 // cols }}">
             <div class="panel panel-{{ pipeline.status | bootstrap_status }}">
                 <div class="panel-heading {{ pipeline.status | bootstrap_building }}">
@@ -22,132 +22,142 @@
                             {{ pipeline.changed | time_or_date }}
                         </a>
                         {% if pipeline.name in synced_pipelines.keys() %}
-                        <a href="{{ application_root }}/insights/{{pipeline.name}}"> <span id="glyph{{ insights }}"
-                                                                          class="glyphicon glyphicon-stats"
-                                                                          aria-hidden="true"></span> |
-                            <i> Insights </i>
-                            ({{synced_pipelines[pipeline.name].pipeline_counter}})
-                        </a>
+                            <a href="{{ application_root }}/insights/{{ pipeline.name }}"> <span
+                                    id="glyph{{ insights }}"
+                                    class="glyphicon glyphicon-stats"
+                                    aria-hidden="true"></span> |
+                                <i> Insights </i>
+                                ({{ synced_pipelines[pipeline.name].pipeline_counter }})
+                            </a>
 
-                            {% if not "Success" in pipeline.status and synced_pipelines[pipeline.name].responsible %}
-                                <span class="glyphicon glyphicon-lock pull-right" style="padding-left:5px" aria-hidden="true" data-placement="top" title="{{ synced_pipelines[pipeline.name].responsible }}: {{ synced_pipelines[pipeline.name].description }}"></span>
+                            {% if not "Success" in pipeline.status and not "Building" in pipeline.status and synced_pipelines[pipeline.name].responsible %}
+                                <span class="glyphicon glyphicon-lock pull-right" style="padding-left:5px"
+                                      aria-hidden="true" data-placement="top"
+                                      title="{{ synced_pipelines[pipeline.name].responsible }}: {{ synced_pipelines[pipeline.name].description }}"></span>
                             {% endif %}
                         {% endif %}
-                        {% if not "Success" in pipeline.status and pipeline.name in unsynced_claims.keys() %}
+                        {% if not "Success" in pipeline.status and not "Building" in pipeline.status and pipeline.name in unsynced_claims.keys() %}
                             {% if unsynced_claims[pipeline.name].responsible and unsynced_claims[pipeline.name].pipeline_counter == pipeline.label %}
-                                <span class="glyphicon glyphicon-lock pull-right" style="padding-left:5px" aria-hidden="true" data-placement="top" title="{{ unsynced_claims[pipeline.name].responsible }}: {{ unsynced_claims[pipeline.name].description }}"></span>
+                                <span class="glyphicon glyphicon-lock pull-right" style="padding-left:5px"
+                                      aria-hidden="true" data-placement="top"
+                                      title="{{ unsynced_claims[pipeline.name].responsible }}: {{ unsynced_claims[pipeline.name].description }}"></span>
                             {% endif %}
                         {% endif %}
-
-                        {% if not "Success" in pipeline.status %}
-                            <span class="glyphicon glyphicon-flag pull-right claim-stage-flag" data-pipeline_name="{{ pipeline.name }}" data-pipeline_counter="{{ pipeline.label }}" data-target="#myModal" data-toggle="modal" data-placement="top" title="Claim this stage" id="claim-button"></span>
+                        {% if not "Success" in pipeline.status and not "Building" in pipeline.status %}
+                            <span class="glyphicon glyphicon-flag pull-right claim-stage-flag"
+                                  data-pipeline_name="{{ pipeline.name }}" data-pipeline_counter="{{ pipeline.label }}"
+                                  data-target="#myModal" data-toggle="modal" data-placement="top"
+                                  title="Claim this stage" id="claim-button"></span>
                         {% endif %}
                     </h3>
                 </div>
                 <div id="collapse{{ loop.index }}" class="panel-collapse collapse">
                     <div class="panel-body">
                         {% for stage in pipeline.stages %}
-                        <div class="btn-group-vertical">
-                            <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}"
-                               role="button" href="{{ stage.url }}">{{ stage.name }}
-                                <span class="badge">{{ stage.counter }}</span></a>
-                            {% for job in stage.jobs %}
-                            <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
-                               href="{{ job.url }}">{{ job.name }}</a>
-                            {% endfor %}
-                        </div>
+                            <div class="btn-group-vertical">
+                                <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}"
+                                   role="button" href="{{ stage.url }}">{{ stage.name }}
+                                    <span class="badge">{{ stage.counter }}</span></a>
+                                {% for job in stage.jobs %}
+                                    <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
+                                       href="{{ job.url }}">{{ job.name }}</a>
+                                {% endfor %}
+                            </div>
                         {% endfor %}
                         {% for kind in pipeline.messages | sort %}
-                        <br>
-                        {{ kind }}:
-                        {% for message in pipeline.messages[kind] | sort %}
-                        {{ message }}
-                        {% endfor %}
+                            <br>
+                            {{ kind }}:
+                            {% for message in pipeline.messages[kind] | sort %}
+                                {{ message }}
+                            {% endfor %}
                         {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
         {% if loop.index is divisibleby(cols) or loop.index == pipelines|length %}
-    </div>
-    {% endif %}
-    {% endfor %}
-    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h5 class="modal-title"><strong>Claim failing stage</strong></h5>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" id="claimForm">
-                        <div class="form-group" id="responsibleFormGroup">
-                            <label for="responsible" class="col-sm-2 control-label">Responsible</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="responsible" name="responsible" placeholder="Responsible">
-                                <span id="responsibleHelpBlock" class="help-block hidden">Please fill in this required field.</span>
+            </div>
+        {% endif %}
+        {% endfor %}
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h5 class="modal-title"><strong>Claim failing stage</strong></h5>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="claimForm">
+                            <div class="form-group" id="responsibleFormGroup">
+                                <label for="responsible" class="col-sm-2 control-label">Responsible</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="responsible" name="responsible"
+                                           placeholder="Responsible">
+                                    <span id="responsibleHelpBlock" class="help-block hidden">Please fill in this required field.</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="description" class="col-sm-2 control-label">Description</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                            <div class="form-group">
+                                <label for="description" class="col-sm-2 control-label">Description</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="description" name="description"
+                                           placeholder="Description">
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="postClaim">Claim stage</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<hr>
-
-<div id="mgmt-bar" class="container hidden">
-    <div class="row">
-        <div class="col-md-12">
-            <span>System status</span>
-            {{ total_pipelines }}
-            <div class="progress">
-                <div class="progress-bar progress-bar-success" aria-valuenow="{{ progress_bar_data[0] }}"
-                     style="width: {{ progress_bar_data[0] }}%">
-                    {% if progress_bar_data[0] > 5 %}
-                    {{ progress_bar_data[0] | round | int}} %
-                    {% endif %}
-                </div>
-                <div class="progress-bar progress-bar-info progress-bar-striped"
-                     style="width: {{ progress_bar_data[1] }}%">
-                    {% if progress_bar_data[1] > 5 %}
-                    {{ progress_bar_data[1] | round | int }} %
-                    {% endif %}
-                </div>
-                <div class="progress-bar progress-bar-danger" style="width: {{ progress_bar_data[2] }}%">
-                    {% if progress_bar_data[2] %}
-                    {{ progress_bar_data[2] | round | int }} %
-                    {% endif %}
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="postClaim">Claim stage</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container hidden" id="status-popup">
-    {% for pipeline in finished_pipelines %}
-        <div class="col-md-4">
-            <div class="pipeline-alert" style="display:none">
-                <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}"
-                     role="alert" id="pipeline-status-cache">
-                    <strong>Info:</strong> {{ pipeline.name }} just finished with
-                    status: {{ pipeline.status }}
+    <hr>
+
+    <div id="mgmt-bar" class="container hidden">
+        <div class="row">
+            <div class="col-md-12">
+                <span>System status</span>
+                {{ total_pipelines }}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" aria-valuenow="{{ progress_bar_data[0] }}"
+                         style="width: {{ progress_bar_data[0] }}%">
+                        {% if progress_bar_data[0] > 5 %}
+                            {{ progress_bar_data[0] | round | int }} %
+                        {% endif %}
+                    </div>
+                    <div class="progress-bar progress-bar-info progress-bar-striped"
+                         style="width: {{ progress_bar_data[1] }}%">
+                        {% if progress_bar_data[1] > 5 %}
+                            {{ progress_bar_data[1] | round | int }} %
+                        {% endif %}
+                    </div>
+                    <div class="progress-bar progress-bar-danger" style="width: {{ progress_bar_data[2] }}%">
+                        {% if progress_bar_data[2] %}
+                            {{ progress_bar_data[2] | round | int }} %
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
-</div>
+    </div>
+
+    <div class="container hidden" id="status-popup">
+        {% for pipeline in finished_pipelines %}
+            <div class="col-md-4">
+                <div class="pipeline-alert" style="display:none">
+                    <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}"
+                         role="alert" id="pipeline-status-cache">
+                        <strong>Info:</strong> {{ pipeline.name }} just finished with
+                        status: {{ pipeline.status }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
 
@@ -206,33 +216,33 @@
         });
     </script>
 
-<script type="text/javascript">
-{% for pipeline in pipelines %}
-    $("#collapse{{ loop.index }}").on('shown.bs.collapse', function () {
-       $("#glyph{{ loop.index }}").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-    });
-    $("#collapse{{ loop.index }}").on('hidden.bs.collapse', function () {
-       $("#glyph{{ loop.index }}").removeClass("glyphicon-minus").addClass("glyphicon-plus");
-    });
+    <script type="text/javascript">
+        {% for pipeline in pipelines %}
+            $("#collapse{{ loop.index }}").on('shown.bs.collapse', function () {
+                $("#glyph{{ loop.index }}").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+            });
+            $("#collapse{{ loop.index }}").on('hidden.bs.collapse', function () {
+                $("#glyph{{ loop.index }}").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+            });
 
 
-{% endfor %}
-</script>
+        {% endfor %}
+    </script>
 
-<script type="text/javascript">
-    $(function () {
-        if (window.localStorage.getItem("show-mgmt-bar") === "true") {
-            $('#mgmt-bar').removeClass("hidden")
-        }
+    <script type="text/javascript">
+        $(function () {
+            if (window.localStorage.getItem("show-mgmt-bar") === "true") {
+                $('#mgmt-bar').removeClass("hidden")
+            }
 
-    });
+        });
 
-    $(function () {
-        if (window.localStorage.getItem("show-status-popups") === "true") {
-            $('#status-popup').removeClass("hidden")
-        }
+        $(function () {
+            if (window.localStorage.getItem("show-status-popups") === "true") {
+                $('#status-popup').removeClass("hidden")
+            }
 
-    })
-</script>
+        })
+    </script>
 
 {% endblock %}
