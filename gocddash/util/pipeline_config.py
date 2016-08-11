@@ -22,7 +22,9 @@ class PipelineConfig:
 _pipeline_config = None
 
 
-def create_pipeline_config(path=str(Path(__file__).parents[1]) + "/pipelines.json"):
+def create_pipeline_config(path=None):
+    if not path:
+        path = str(Path(__file__).parents[1]) + "/pipelines.json"
     global _pipeline_config
     if not _pipeline_config:
         _pipeline_config = PipelineConfig(path)
