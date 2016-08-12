@@ -22,7 +22,10 @@ def roundup(x):
 
 
 def get_max_pipeline_status(pipeline_name):
-    pipeline_request = go_request_pipeline_history(pipeline_name, 0)
+    if pipeline_exists_in_go(pipeline_name):
+        pipeline_request = go_request_pipeline_history(pipeline_name, 0)
+    else:
+        pipeline_request = None
 
     if pipeline_request:
         pipeline_history = json.loads(pipeline_request)
