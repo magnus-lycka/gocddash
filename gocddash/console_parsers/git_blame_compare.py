@@ -71,9 +71,9 @@ def get_git_comparison(pipeline_name, current, comparison):
 
 
 def put_current_pipeline_at_top(git_blame_list, pipeline_name):
-    sorted_list = sorted(git_blame_list, key=lambda x: pipeline_name not in x[
-        0])  # Not all pipeline names are the same as their git repo names. Possible fix is to do NLP similarity comparisons.
-    return sorted_list
+    # Not all pipeline names are the same as their git repo names. Possible fix is to do NLP similarity comparisons.
+    git_blame_list.sort(key=lambda x: (pipeline_name not in x[0], "paysol" not in x[0]))
+    return git_blame_list
 
 
 def only_real_people(git_blame_list):
