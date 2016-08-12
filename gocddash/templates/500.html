@@ -14,12 +14,10 @@
             <div class="jumbotron">
                 <h1>500: Internal Server Error</h1>
                 <p>{{ statuscode }} / {{ statuscode.description }}: </p>
-                    <p>The server could not handle your request at this moment. This may be caused by
-                    various reasons including:</p>
+                    <p>Your request could not be handled.</p>
                         <ul class="list-group">
-                            <li class="list-group-item"> The GO server is down</li>
-                            <li class="list-group-item"> WSGI is behaving differently than expected</li>
-                            <li class="list-group-item"> There's some mistake in the code</li>
+                            <li class="list-group-item"> Is Go down?</li>
+                            <li class="list-group-item"> Is the pipeline synchronization working?</li>
                         </ul>
                 <p><a class="btn btn-primary btn-lg" href="{{ dashboard_link }}" role="button">Go back to the dashboard</a>
             </div>
