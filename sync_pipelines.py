@@ -7,18 +7,16 @@ import time
 from configparser import ConfigParser
 from itertools import chain
 
-from gocddash.analysis import data_access, actions, go_request, go_client, domain
+from gocddash.analysis import data_access, actions, go_request, go_client
 from gocddash.dash_board import read_pipeline_config
 from gocddash.util import pipeline_config
 
 
 def parse_pipeline_availability(pipelines):
-    synced_pipelines = list(map(lambda phs: (phs.pipeline_name, phs.pipeline_counter), domain.get_pipeline_heads()))
-    local_pipelines, local_pipeline_counters = zip(*synced_pipelines) if synced_pipelines else ([], [])
 
     available_pipelines = []
     for pipeline, begin_index in pipelines:
-        if pipeline in local_pipelines or go_request.pipeline_exists_in_go(pipeline):
+        if go_request.pipeline_exists_in_go(pipeline):
             available_pipelines.append((pipeline, begin_index))
         else:
             log("Pipeline " + pipeline + " is not available. This pipeline will be skipped.")
