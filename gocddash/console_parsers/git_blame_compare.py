@@ -71,7 +71,6 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
     return final_list
 
 
-# TODO: Fix preferred pipeline sorting in config file
 def sort_by_current_then_preferred(git_blame_list, pipeline_name, preferred_upstream):
     # Not all pipeline names are the same as their git repo names. Possible fix is to do NLP similarity comparisons.
     git_blame_list.sort(key=lambda x: (pipeline_name not in x[0], preferred_upstream not in x[0]))  # x[0] is the pipeline column
@@ -81,23 +80,3 @@ def sort_by_current_then_preferred(git_blame_list, pipeline_name, preferred_upst
 def only_real_people(git_blame_list):
     return [item for item in git_blame_list if "go-agent" not in item[3]]
 
-
-def get_latest_failures(pipeline_name):
-    return [["failure 1"], ["failure 1", "failure 2"], ["failure 1", "failure 2"], ["failure 1"], ["failure 3"]]
-
-
-def find_perpetrator(git_blame_list, pipeline_name):
-    # Do you see the perpetrator? Yeah, I'm right here!
-    latest_failures = get_latest_failures(pipeline_name)
-    for index, failure in enumerate(latest_failures):
-        failure = set(failure)
-        if index + 1 != len(latest_failures):
-            next_failure = set(latest_failures[index + 1])
-            setty = set.intersection(failure, next_failure)
-            if not setty:
-                print(setty)
-                print(failure)
-
-
-                # return git commits between failure and next_failure
-    return None
