@@ -8,15 +8,24 @@ $('#myModal').on('show.bs.modal', function (e) {
     shouldReload = false;
 });
 
-
-
-$('#postClaim').on('keypress click', function (e) {
-    console.log(e);
-    if (e.which === 13 || e.type === 'click'){
-        payload = $('#claimForm').serialize() + '&pipelineName=' + current_stage.pipeline_name + '&pipelineCounter=' + current_stage.pipeline_counter;
-        ajaxPostClaim(payload);
+$("#responsible").keypress(function (e) {
+    if(e.which === 13){
+        postPayload()
     }
 });
+
+$("#description").keypress(function (e) {
+    if(e.which === 13){
+        postPayload()
+    }
+});
+
+function postPayload() {
+    payload = $('#claimForm').serialize() + '&pipelineName=' + current_stage.pipeline_name + '&pipelineCounter=' + current_stage.pipeline_counter;
+    ajaxPostClaim(payload);
+}
+
+$('#postClaim').on('keypress click', postPayload);
 
 
 

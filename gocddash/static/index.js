@@ -25,12 +25,26 @@ $('#myModal').on('show.bs.modal', function (event) {
     shouldReload = false;
 });
 
-
-$('#postClaim').click(function () {
-    payload = $('#claimForm').serialize() + '&pipelineName=' + pipelineName + '&pipelineCounter=' + pipelineCounter;
-    ajaxPostClaim(payload);
+$("#responsible").keypress(function (e) {
+    if(e.which === 13){
+        postPayload()
+    }
 });
 
+$("#description").keypress(function (e) {
+    if(e.which === 13){
+        postPayload()
+    }
+});
+
+
+function postPayload() {
+    payload = $('#claimForm').serialize() + '&pipelineName=' + pipelineName + '&pipelineCounter=' + pipelineCounter;
+    ajaxPostClaim(payload);
+}
+
+
+$('#postClaim').on('keypress click', postPayload);
 
 $(function () {
     $(".pipeline-alert").fadeIn(1000);
