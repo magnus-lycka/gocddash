@@ -41,4 +41,4 @@ def get_diff(from_counter, to_counter, size):
 
 
 def pipeline_exists_in_go(pipeline_name):
-    return go_get_pipeline_status(pipeline_name) is not None
+    return "Pipeline not found" not in go_get_pipeline_status(pipeline_name)
