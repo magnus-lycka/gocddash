@@ -66,17 +66,16 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
 
     final_list = only_real_people(final_list)
     final_list = sort_by_current_then_preferred(final_list, pipeline_name, preferred_upstream)
-    # find_perpetrator(final_list, pipeline_name)
 
     return final_list
 
 
 def sort_by_current_then_preferred(git_blame_list, pipeline_name, preferred_upstream):
     # Not all pipeline names are the same as their git repo names. Possible fix is to do NLP similarity comparisons.
-    git_blame_list.sort(key=lambda x: (pipeline_name not in x[0], preferred_upstream not in x[0]))  # x[0] is the pipeline column
+    git_blame_list.sort(
+        key=lambda x: (pipeline_name not in x[0], preferred_upstream not in x[0]))  # x[0] is the pipeline column
     return git_blame_list
 
 
 def only_real_people(git_blame_list):
     return [item for item in git_blame_list if "go-agent" not in item[3]]
-
