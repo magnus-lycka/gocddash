@@ -31,7 +31,7 @@ def extract_list_of_lists_from_html_table(git_sections):
             revisions.append(clean_html(list_of_words[index + 1]))
 
         start_indices = [i for i, x in enumerate(list_of_words) if x == """class="modified_by">"""]
-        end_indices = [i-1 for i, x in enumerate(list_of_words) if """class="comment"><p>""" in x]
+        end_indices = [i - 1 for i, x in enumerate(list_of_words) if """class="comment"><p>""" in x]
 
         for i, index in enumerate(indices):
             modified_by.append(clean_html(' '.join(list_of_words[start_indices[i] + 1:end_indices[i]])))
@@ -72,7 +72,7 @@ def get_git_comparison(pipeline_name, current, comparison):
 
 def put_current_pipeline_at_top(git_blame_list, pipeline_name):
     # Not all pipeline names are the same as their git repo names. Possible fix is to do NLP similarity comparisons.
-    git_blame_list.sort(key=lambda x: (pipeline_name not in x[0], "paysol" not in x[0]))
+    git_blame_list.sort(key=lambda x: (pipeline_name not in x[0], "paysol" not in x[0]))  # x[0] is the pipeline column
     return git_blame_list
 
 
