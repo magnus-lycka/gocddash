@@ -228,14 +228,15 @@ def insights(pipeline_name):
     latest_passing_stage = get_latest_passing_stage(pipeline_name, current_stage.stage_name)
     stage_name_index = (get_connection().get_stage_order(pipeline_name)).index(current_stage.stage_name)
 
-    if current_stage.is_success():
-        git_blame_data = []
-        prime_suspect_data = []
-    else:
+    git_blame_data = []
+    perpetrator_data = []
+
+    if not current_stage.is_success():
         if latest_passing_stage is None:
             latest_passing_stage = get_first_synced_stage(pipeline_name)
+        if not current_stage.pipeline_counter - latest_passing_stage.pipeline_counter == 1:
+            perpetrator_data = get_git_comparison(pipeline_name, latest_passing_stage.pipeline_counter+1, latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
         git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
-        prime_suspect_data = get_git_comparison(pipeline_name, latest_passing_stage.pipeline_counter+1, latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
 
     base_url = app.config['PUBLIC_GO_SERVER_URL']
 
@@ -275,7 +276,8 @@ def insights(pipeline_name):
         application_root=app.config['APPLICATION_ROOT'],
         username=app.config['GO_SERVER_USER'],
         passwd=app.config['GO_SERVER_PASSWD'],
-        rerun_token=app.config['RERUN_TOKEN']
+        rerun_token=app.config['RERUN_TOKEN'],
+        perpretrator_data=perpetrator_data
     )
     return make_response(template)
 
@@ -315,6 +317,7 @@ def bootstrap_building(cctray_status):
 @app.template_filter('build_outcome')
 def build_outcome(build_passed):
     return "text-success" if build_passed else "text-danger"
+
 
 @app.template_filter('build_outcome_panel')
 def build_outcome_panel(build_passed):
