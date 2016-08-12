@@ -32,7 +32,8 @@ class GoSource:
         return self.simple_api_request("pipelines/" + pipeline_name + "/instance/" + str(pipeline_counter) + "/")
 
     def go_get_pipeline_status(self, pipeline_name):
-        return self.simple_api_request("pipelines/" + pipeline_name + "/status")
+        response = self.api_request("pipelines/" + pipeline_name + "/status")
+        return response.content.decode("utf-8")
 
     def go_get_stage_instance(self, pipeline_name, pipeline_counter, stage_name):
         return self.simple_api_request(
