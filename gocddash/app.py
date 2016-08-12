@@ -233,7 +233,7 @@ def insights(pipeline_name):
     else:
         if latest_passing_stage is None:
             latest_passing_stage = get_first_synced_stage(pipeline_name)
-        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter)
+        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
 
     base_url = app.config['PUBLIC_GO_SERVER_URL']
 
