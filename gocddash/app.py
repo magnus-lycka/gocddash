@@ -18,9 +18,12 @@ from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_
 from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
-from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status, create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, \
+    get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status, \
+    create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
 from gocddash.dash_board.graph import create_job_test_html_graph, single_pipeline_html_graph, all_pipelines_html_graph
 from gocddash.dash_board.cc_tray_cache import create_cache, get_cache
+
 group_of_pipeline = defaultdict(str)
 
 # Use a blueprint to allow URLs to be prefixed through
@@ -28,7 +31,6 @@ group_of_pipeline = defaultdict(str)
 # sub-mounted WSGI environment. See
 # http://stackoverflow.com/questions/18967441/add-a-prefix-to-all-flask-routes
 gocddash = Blueprint('gocddash', __name__, static_folder='static')
-
 
 
 def get_bootstrap_theme():
@@ -70,7 +72,8 @@ def dashboard():
         if group not in groups:
             unwanted_pipelines.append(name)
 
-    finished_pipelines = [pipeline for pipeline in all_pipelines if pipeline in finished_pipelines and pipeline.name not in unwanted_pipelines]
+    finished_pipelines = [pipeline for pipeline in all_pipelines if
+                          pipeline in finished_pipelines and pipeline.name not in unwanted_pipelines]
 
     for pipeline in pipelines:
         pipeline_name = pipeline.name
@@ -85,7 +88,7 @@ def dashboard():
     for pipeline_head in get_pipeline_heads():
         synced_pipelines[pipeline_head.pipeline_name] = pipeline_head
 
-    loose_claims = dict() # Loose meaning that the pipelines are not synced - but they can still be claimed.
+    loose_claims = dict()  # Loose meaning that the pipelines are not synced - but they can still be claimed.
     for claim in get_claims_for_unsynced_pipelines():
         loose_claims[claim.pipeline_name] = claim
 
@@ -115,15 +118,17 @@ def get_progress_bar_data(project):
     return [success_percentage, progress_percentage, failing_percentage]
 
 
-
 @gocddash.app_errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html', statuscode=e, now=datetime.now(), footer=get_footer(), theme=get_bootstrap_theme(), dashboard_link=url_for('gocddash.dashboard')), 500
+    return render_template('500.html', statuscode=e, now=datetime.now(), footer=get_footer(),
+                           theme=get_bootstrap_theme(), dashboard_link=url_for('gocddash.dashboard')), 500
 
 
 @gocddash.app_errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', statuscode=e, dashboard_link=url_for('gocddash.dashboard'), now=datetime.now(), footer=get_footer(), theme=get_bootstrap_theme()), 404
+    return render_template('404.html', statuscode=e, dashboard_link=url_for('gocddash.dashboard'), now=datetime.now(),
+                           footer=get_footer(), theme=get_bootstrap_theme()), 404
+
 
 # Catches all errors - a bit too trigger happy
 # @gocddash.app_errorhandler(Exception)
@@ -182,6 +187,7 @@ def reload_config():
     create_pipeline_config()
     return "OK."
 
+
 @gocddash.route("/claim", methods=['POST'])
 def claim_instance():
     pipeline_name = request.form.get('pipelineName')
@@ -196,7 +202,8 @@ def claim_instance():
 
 @gocddash.route("/stats", methods=['GET'])
 def stats():
-    all_pipelines_agent_graph = EmbeddedChart(*all_pipelines_html_graph("Historical agent success rate for all pipelines. "))
+    all_pipelines_agent_graph = EmbeddedChart(
+        *all_pipelines_html_graph("Historical agent success rate for all pipelines. "))
 
     template = render_template(
         'stats.html',  # Defined in the templates folder
@@ -213,8 +220,11 @@ def stats():
 
 @gocddash.route("/graphs/<pipeline_name>", methods=['GET'])
 def graphs(pipeline_name):
-    agent_graph = EmbeddedChart(*single_pipeline_html_graph(pipeline_name, "Historical agent success rate for {} (last month)".format(pipeline_name)))
-    tests_run_graph = EmbeddedChart(*create_job_test_html_graph(pipeline_name, "Historical tests run for {} ".format(pipeline_name)))
+    agent_graph = EmbeddedChart(*single_pipeline_html_graph(pipeline_name,
+                                                            "Historical agent success rate for {} (last month)".format(
+                                                                pipeline_name)))
+    tests_run_graph = EmbeddedChart(
+        *create_job_test_html_graph(pipeline_name, "Historical tests run for {} ".format(pipeline_name)))
     app_root = app.config['APPLICATION_ROOT']
     back_to_insights_link = app_root + "/insights/{}".format(pipeline_name)
 
@@ -237,7 +247,8 @@ def graphs(pipeline_name):
 def insights(pipeline_name):
     current_stage = get_current_stage(pipeline_name)
     if current_stage is None:
-        abort(500, "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
+        abort(500,
+              "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage)
     previous_status = pipeline_status.create_stage_info(last_stage)
@@ -251,8 +262,12 @@ def insights(pipeline_name):
         if latest_passing_stage is None:
             latest_passing_stage = get_first_synced_stage(pipeline_name)
         if not current_stage.pipeline_counter - latest_passing_stage.pipeline_counter == 1:
-            perpetrator_data = get_git_comparison(pipeline_name, latest_passing_stage.pipeline_counter+1, latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
-        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter, latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
+            perpetrator_data = get_git_comparison(pipeline_name, latest_passing_stage.pipeline_counter + 1,
+                                                  latest_passing_stage.pipeline_counter,
+                                                  app.config['PREFERRED_UPSTREAM'])
+
+        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter,
+                                            latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
 
     base_url = app.config['PUBLIC_GO_SERVER_URL']
 
@@ -301,7 +316,6 @@ def insights(pipeline_name):
 app = Flask(__name__)
 app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
-
 
 
 @app.template_filter('bootstrap_status')
@@ -390,10 +404,8 @@ def setup():
 
 
 def pipeline_is_paused(pipeline_name):
-    kwargs = {}
     if 'GO_SERVER_USER' in app.config:
         response = go_get_pipeline_status(pipeline_name)
-        # status = json.loads(response.text.replace("\\'", ""))
         status = json.loads(response)
         if status["paused"]:
             return status.get("pausedCause") or 'Paused', status.get("pausedBy")
@@ -441,7 +453,6 @@ def parse_args():
 
 
 def main():
-
     gocddash_directory = os.path.dirname(abspath(getsourcefile(lambda: 0)))
     if not os.path.isfile(gocddash_directory + '/application.cfg'):
         print("Error: Missing application.cfg file in {}/".format(gocddash_directory))
@@ -465,6 +476,7 @@ def main():
     create_pipeline_config(pipeline_path)
 
     create_cache()
+
 
 main()
 
