@@ -82,4 +82,4 @@ def sort_by_current_then_preferred(git_blame_list, pipeline_name, preferred_upst
 
 
 def only_real_people(git_blame_list):
-    return [item for item in git_blame_list if "go-agent" not in item[3]]
+    return [item for item in git_blame_list if "go-agent" not in item[3]]  # x[3] is the Modified by column
