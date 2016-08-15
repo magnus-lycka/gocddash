@@ -165,7 +165,7 @@
                     {% if not gitblame %}
                         <h4>Upstream git blame: </h4>
                         <i>This comparison involves a pipeline instance that was triggered with a non-sequential material revision. Go to GOCD for further info.</i>
-                        <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}">Go to
+                        <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}" target="_blank">Go to
                             GO CD
                             comparison page</a>
                     {% endif %}
@@ -212,7 +212,7 @@
                         <small>({{ current_status.stage.pipeline_counter }} compared
                             to {{ latest_passing_stage.pipeline_counter }})
                         </small>
-                        <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}">Go to
+                        <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}" target="_blank">Go to
                             GO CD
                             comparison page</a>
                     </h4>
