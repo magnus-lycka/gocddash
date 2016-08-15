@@ -19,7 +19,7 @@ function reload_in_a_minute() {
     }, 60000);
 }
 
-$('#myModal').on('hide.bs.modal', function (e) {
+$('#myModal').on('hide.bs.modal', function () {
     console.log("More reloads!");
     shouldReload = true;
     reload_in_a_minute();

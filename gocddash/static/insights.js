@@ -3,7 +3,7 @@ var shouldReload = true;
 reload_in_a_minute();
 
 
-$('#myModal').on('show.bs.modal', function (e) {
+$('#myModal').on('show.bs.modal', function () {
     console.log("No more reloads!");
     shouldReload = false;
 });
@@ -21,7 +21,7 @@ $("#description").keypress(function (e) {
 });
 
 function postPayload() {
-    payload = $('#claimForm').serialize() + '&pipelineName=' + current_stage.pipeline_name + '&pipelineCounter=' + current_stage.pipeline_counter;
+    var payload = $('#claimForm').serialize() + '&pipelineName=' + current_stage.pipeline_name + '&pipelineCounter=' + current_stage.pipeline_counter;
     ajaxPostClaim(payload);
 }
 

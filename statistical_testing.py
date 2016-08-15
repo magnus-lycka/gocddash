@@ -2,13 +2,12 @@ from scipy.stats import mannwhitneyu
 
 
 def mann_whitneyu_test(x, y):
-    '''
+    """
     Performs a mann_whitney statistical test on the two arrays
     :param x: one-dimensional array (length n)
     :param y: one-dimensional array (length n)
-    '''
-    print (mannwhitneyu(x, y))
-
+    """
+    print(mannwhitneyu(x, y))
 
 
 if __name__ == '__main__':

@@ -39,7 +39,7 @@ $("#description").keypress(function (e) {
 
 
 function postPayload() {
-    payload = $('#claimForm').serialize() + '&pipelineName=' + pipelineName + '&pipelineCounter=' + pipelineCounter;
+    var payload = $('#claimForm').serialize() + '&pipelineName=' + pipelineName + '&pipelineCounter=' + pipelineCounter;
     ajaxPostClaim(payload);
 }
 

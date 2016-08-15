@@ -46,12 +46,12 @@ Sample usage: go_cli pull -p pipeline-name
             raise ValueError("No pipeline specified.")
         actions.export(pargs.pipeline, "~/GO_CSV/" + pargs.filename + ".csv", pargs.dry_run)
     elif pargs.action == 'info':
-        if (pargs.pipeline):
+        if pargs.pipeline:
             actions.info(pargs.pipeline)
         else:
             actions.all_info()
     else:
-        print ("I have nothing to do.")
+        print("I have nothing to do.")
 
 if __name__ == '__main__':
     main()

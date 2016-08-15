@@ -21,8 +21,6 @@ class TestReadFile(unittest.TestCase):
         pipelines = read_pipeline_config.parse_config(input)
         self.assertEqual(pipelines, [("characterize", 1500), ("feature", 100)])
 
-
-
     def testNoBeginAt(self):
         saved = read_pipeline_config.get_max_pipeline_status
         read_pipeline_config.get_max_pipeline_status = get_max_mock

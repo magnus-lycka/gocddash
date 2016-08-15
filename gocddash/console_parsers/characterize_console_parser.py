@@ -13,8 +13,6 @@ class TexttestConsoleParser:
     def parse_info(self):
         """
         Parses the console.log from GO.CD and indexes the test-cases in the order they were run
-        :param failure_stage:
-        :param console_log:
         :return: Dictionary in {Test_Name : [index, error_type, document]} form
         """
         console_log_start_split = self.console_log.split('Using Application', 1)[-1]
