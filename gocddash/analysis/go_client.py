@@ -8,14 +8,16 @@ class GoSource:
 
     def simple_api_request(self, url, headers=None):
         response = self.api_request(url, headers)
-        if response.status_code != 200:
-            raise ValueError("Got response code " + str(response.status_code) + " when requesting " + url)
-        return response.content.decode("utf-8")
+        return self.unwrap_response(response)
 
     def simple_request(self, url, headers=None):
         response = self.base_request(url, headers)
+        return self.unwrap_response(response)
+
+    @staticmethod
+    def unwrap_response(response):
         if response.status_code != 200:
-            raise ValueError("Got response code " + str(response.status_code) + " when requesting " + url)
+            raise ValueError("Got response code " + str(response.status_code) + " when requesting " + response.url)
         return response.content.decode("utf-8")
 
     def api_request(self, url, headers=None):
