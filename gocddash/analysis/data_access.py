@@ -156,7 +156,7 @@ class SQLConnection:
 
     def get_graph_statistics(self):
         self.conn.execute(
-            """SELECT * FROM graph_statistics;"""
+            """SELECT * FROM graph_statistics WHERE agent_name NOT LIKE 'UNKNOWN%';"""
         )
         return self.conn.fetchall()
 
