@@ -11,7 +11,8 @@ from bokeh.models import Range1d
 from bokeh.plotting import *
 from bokeh.resources import INLINE
 
-from gocddash.analysis.domain import get_graph_statistics_for_pipeline, get_graph_statistics_for_final_stages, get_graph_statistics
+from gocddash.analysis.domain import get_graph_statistics_for_pipeline, get_graph_statistics_for_final_stages, \
+    get_graph_statistics
 
 
 def show_graph(plot):
