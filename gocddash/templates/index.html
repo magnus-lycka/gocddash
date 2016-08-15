@@ -1,6 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container">
+        {% if not pipelines %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="jumbotron">
+                        <h2>No pipeline groups selected.</h2>
+                     <p><a href="{{ application_root }}/select">Select pipeline groups here.
+                     </a></p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         {% for pipeline in pipelines %}
             {% if (loop.index - 1) is divisibleby(cols) %}
                 <div class="row">
