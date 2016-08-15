@@ -139,7 +139,12 @@ class EmbeddedChart:
         self.div = div
 
 
-def get_graph_statistics(pipeline_name):
+def get_graph_statistics():
+    result = get_connection().get_graph_statistics()
+    return fold(result, GraphData)
+
+
+def get_graph_statistics_for_pipeline(pipeline_name):
     result = get_connection().get_graph_statistics_for_pipeline(pipeline_name)
     return fold(result, GraphData)
 

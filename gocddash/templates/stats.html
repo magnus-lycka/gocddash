@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block bokehstuff %}
+    {{ agent_graph.js_resources|indent(4)|safe }}
+
+    {{ agent_graph.css_resources|indent(4)|safe }}
+
+    {{ agent_graph.script|indent(4)|safe }}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {{ agent_graph.div|indent(4)|safe }}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <a type="button" class="btn btn-info btn-lg btn-block pull-left" href="{{ application_root }}">
+                    <span class="glyphicon glyphicon-circle-arrow-left pull-left" aria-hidden="true"></span>
+                        Back to index
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

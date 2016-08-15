@@ -11,7 +11,7 @@ from bokeh.models import Range1d
 from bokeh.plotting import *
 from bokeh.resources import INLINE
 
-from gocddash.analysis.domain import get_graph_statistics, get_graph_statistics_for_final_stages
+from gocddash.analysis.domain import get_graph_statistics_for_pipeline, get_graph_statistics_for_final_stages, get_graph_statistics
 
 
 def show_graph(plot):
@@ -33,9 +33,18 @@ def arrange_agent_graph_indices(dataframe):
     return dataframe
 
 
-def create_agent_html_graph(pipeline_name, title):
+def single_pipeline_html_graph(pipeline_name, title):
+    graph_data = get_graph_statistics_for_pipeline(pipeline_name)
+    return create_agent_html_graph(graph_data, title)
+
+
+def all_pipelines_html_graph(title):
+    graph_data = get_graph_statistics()
+    return create_agent_html_graph(graph_data, title)
+
+
+def create_agent_html_graph(graph_data, title):
     pd.set_option("display.width", 300)
-    graph_data = get_graph_statistics(pipeline_name)
     panda_frame = pd.DataFrame(columns=['agent_name', 'Test', 'Startup', 'Post'])
 
     for index, row in enumerate(graph_data):
