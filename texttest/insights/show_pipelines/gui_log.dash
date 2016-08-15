@@ -1,51 +1,54 @@
-url: http://127.0.0.1:4927/dash/?which=all
+url: http://127.0.0.1:4688/dash/?which=all
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
      * [4]All
 
-     * [5]Select pipeline groups / Config
-     * [6]Select theme
-     * Last refresh: 12:09:54 | 00 seconds
+     * [5]More/Config
+          + [6]Graph overview
+          +
+          + [7]Select pipeline groups / Config
+          + [8]Select theme
+     * Last refresh: 11:33:29 | 00 seconds
 
-[7]fnord 98 [8]2015-11-26
+[9]fnord 98 [10]2015-11-26
 
-   [9]runTests 1 [10]defaultJob
+   [11]runTests 1 [12]defaultJob
 
-[11]qux 240 [12]2015-11-26
+[13]qux 240 [14]2015-11-26
 
-   [13]defaultStage 1 [14]defaultJob
+   [15]defaultStage 1 [16]defaultJob
 
-[15]norf 190 [16]2015-11-26
+[17]norf 190 [18]2015-11-26
 
-   [17]runTests 1 [18]defaultJob
+   [19]runTests 1 [20]defaultJob
 
-[19]baz 203 [20]2015-11-26
+[21]baz 203 [22]2015-11-26
 
-   [21]gamma 1 [22]defaultJob
-   [23]delta 1 [24]defaultJob
+   [23]gamma 1 [24]defaultJob
+   [25]delta 1 [26]defaultJob
    Breakers: Mary Wollstonecraft <maryw@example.com>
 
-[25]foo 382 [26]2015-11-26 [27]| Insights (382)
+[27]foo 382 [28]2015-11-26 [29]| Insights (382)
 
-   [28]alpha 1 [29]defaultJob
+   [30]alpha 1 [31]defaultJob
 
-[30]snafu-service 250 [31]2015-11-26
+[32]snafu-service 250 [33]2015-11-26
 
-   [32]build 1 [33]defaultJob
-   [34]test 1 [35]Integration_Tests [36]DB_Tests
+   [34]build 1 [35]defaultJob
+   [36]test 1 [37]Integration_Tests [38]DB_Tests
 
-[37]snafu-transformation 100 [38]2015-11-25
+[39]snafu-transformation 100 [40]2015-11-25
 
-   [39]defaultStage 1 [40]defaultJob
+   [41]defaultStage 1 [42]defaultJob
 
-[41]large-norf 13 [42]2015-11-20
+[43]large-norf 13 [44]2015-11-20
 
-   [43]runTests 1 [44]defaultJob
+   [45]runTests 1 [46]defaultJob
 
-[45]bar 57 [46]2015-11-03 [47]| Insights (57)
+[47]bar 57 [48]2015-11-03 [49]| Insights (57)
 
-   [48]beta 1 [49]defaultJob
+   [50]beta 1 [51]defaultJob
    Breakers: Willy Wonka <willyw@example.com>
    (BUTTON) ×
 
@@ -69,62 +72,64 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4927/dash/?which=failing
-   3. http://127.0.0.1:4927/dash/?which=progress
-   4. http://127.0.0.1:4927/dash/?which=all
-   5. http://127.0.0.1:4927/dash/select/
-   6. http://127.0.0.1:4927/dash/select_theme/
-   7. http://go-server/go/pipelines/value_stream_map/fnord/98
-   8. http://go-server/go/pipelines/value_stream_map/fnord/98
-   9. http://go-server/go/pipelines/fnord/98/runTests/1
-  10. http://go-server/go/tab/build/detail/fnord/98/runTests/1/defaultJob
-  11. http://go-server/go/pipelines/value_stream_map/qux/240
-  12. http://go-server/go/pipelines/value_stream_map/qux/240
-  13. http://go-server/go/pipelines/qux/240/defaultStage/1
-  14. http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob
-  15. http://go-server/go/pipelines/value_stream_map/norf/190
-  16. http://go-server/go/pipelines/value_stream_map/norf/190
-  17. http://go-server/go/pipelines/norf/190/runTests/1
-  18. http://go-server/go/tab/build/detail/norf/190/runTests/1/defaultJob
-  19. http://go-server/go/pipelines/value_stream_map/baz/203
-  20. http://go-server/go/pipelines/value_stream_map/baz/203
-  21. http://go-server/go/pipelines/baz/203/readyToTest/1
-  22. http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob
-  23. http://go-server/go/pipelines/baz/181/delta/1
-  24. http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob
-  25. http://go-server/go/pipelines/value_stream_map/foo/382
-  26. http://go-server/go/pipelines/value_stream_map/foo/382
-  27. http://127.0.0.1:4927/dash/insights/foo
-  28. http://go-server/go/pipelines/foo/382/alpha/1
-  29. http://go-server/go/tab/build/detail/foo/382/alpha/1/defaultJob
-  30. http://go-server/go/pipelines/value_stream_map/snafu-service/250
-  31. http://go-server/go/pipelines/value_stream_map/snafu-service/250
-  32. http://go-server/go/pipelines/snafu-service/250/build/1
-  33. http://go-server/go/tab/build/detail/snafu-service/250/build/1/defaultJob
-  34. http://go-server/go/pipelines/snafu-service/250/test/1
-  35. http://go-server/go/tab/build/detail/snafu-service/250/test/2/Integration_Tests
-  36. http://go-server/go/tab/build/detail/snafu-service/250/test/1/DB_Tests
-  37. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
-  38. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
-  39. http://go-server/go/pipelines/snafu-transformation/100/defaultStage/1
-  40. http://go-server/go/tab/build/detail/snafu-transformation/100/defaultStage/1/defaultJob
-  41. http://go-server/go/pipelines/value_stream_map/large-norf/13
-  42. http://go-server/go/pipelines/value_stream_map/large-norf/13
-  43. http://go-server/go/pipelines/large-norf/13/runTests/1
-  44. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
-  45. http://go-server/go/pipelines/value_stream_map/bar/57
-  46. http://go-server/go/pipelines/value_stream_map/bar/57
-  47. http://127.0.0.1:4927/dash/insights/bar
-  48. http://go-server/go/pipelines/bar/57/runTests/1
-  49. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
+   2. http://127.0.0.1:4688/dash/?which=failing
+   3. http://127.0.0.1:4688/dash/?which=progress
+   4. http://127.0.0.1:4688/dash/?which=all
+   5. http://127.0.0.1:4688/dash/?which=all
+   6. http://127.0.0.1:4688/dash/stats
+   7. http://127.0.0.1:4688/dash/select/
+   8. http://127.0.0.1:4688/dash/select_theme/
+   9. http://go-server/go/pipelines/value_stream_map/fnord/98
+  10. http://go-server/go/pipelines/value_stream_map/fnord/98
+  11. http://go-server/go/pipelines/fnord/98/runTests/1
+  12. http://go-server/go/tab/build/detail/fnord/98/runTests/1/defaultJob
+  13. http://go-server/go/pipelines/value_stream_map/qux/240
+  14. http://go-server/go/pipelines/value_stream_map/qux/240
+  15. http://go-server/go/pipelines/qux/240/defaultStage/1
+  16. http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob
+  17. http://go-server/go/pipelines/value_stream_map/norf/190
+  18. http://go-server/go/pipelines/value_stream_map/norf/190
+  19. http://go-server/go/pipelines/norf/190/runTests/1
+  20. http://go-server/go/tab/build/detail/norf/190/runTests/1/defaultJob
+  21. http://go-server/go/pipelines/value_stream_map/baz/203
+  22. http://go-server/go/pipelines/value_stream_map/baz/203
+  23. http://go-server/go/pipelines/baz/203/readyToTest/1
+  24. http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob
+  25. http://go-server/go/pipelines/baz/181/delta/1
+  26. http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob
+  27. http://go-server/go/pipelines/value_stream_map/foo/382
+  28. http://go-server/go/pipelines/value_stream_map/foo/382
+  29. http://127.0.0.1:4688/dash/insights/foo
+  30. http://go-server/go/pipelines/foo/382/alpha/1
+  31. http://go-server/go/tab/build/detail/foo/382/alpha/1/defaultJob
+  32. http://go-server/go/pipelines/value_stream_map/snafu-service/250
+  33. http://go-server/go/pipelines/value_stream_map/snafu-service/250
+  34. http://go-server/go/pipelines/snafu-service/250/build/1
+  35. http://go-server/go/tab/build/detail/snafu-service/250/build/1/defaultJob
+  36. http://go-server/go/pipelines/snafu-service/250/test/1
+  37. http://go-server/go/tab/build/detail/snafu-service/250/test/2/Integration_Tests
+  38. http://go-server/go/tab/build/detail/snafu-service/250/test/1/DB_Tests
+  39. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
+  40. http://go-server/go/pipelines/value_stream_map/snafu-transformation/100
+  41. http://go-server/go/pipelines/snafu-transformation/100/defaultStage/1
+  42. http://go-server/go/tab/build/detail/snafu-transformation/100/defaultStage/1/defaultJob
+  43. http://go-server/go/pipelines/value_stream_map/large-norf/13
+  44. http://go-server/go/pipelines/value_stream_map/large-norf/13
+  45. http://go-server/go/pipelines/large-norf/13/runTests/1
+  46. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
+  47. http://go-server/go/pipelines/value_stream_map/bar/57
+  48. http://go-server/go/pipelines/value_stream_map/bar/57
+  49. http://127.0.0.1:4688/dash/insights/bar
+  50. http://go-server/go/pipelines/bar/57/runTests/1
+  51. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  51. http://127.0.0.1:4927/dash/?which=all#collapse1
-  52. http://127.0.0.1:4927/dash/?which=all#collapse2
-  53. http://127.0.0.1:4927/dash/?which=all#collapse3
-  54. http://127.0.0.1:4927/dash/?which=all#collapse4
-  55. http://127.0.0.1:4927/dash/?which=all#collapse5
-  56. http://127.0.0.1:4927/dash/?which=all#collapse6
-  57. http://127.0.0.1:4927/dash/?which=all#collapse7
-  58. http://127.0.0.1:4927/dash/?which=all#collapse8
-  59. http://127.0.0.1:4927/dash/?which=all#collapse9
+  53. http://127.0.0.1:4688/dash/?which=all#collapse1
+  54. http://127.0.0.1:4688/dash/?which=all#collapse2
+  55. http://127.0.0.1:4688/dash/?which=all#collapse3
+  56. http://127.0.0.1:4688/dash/?which=all#collapse4
+  57. http://127.0.0.1:4688/dash/?which=all#collapse5
+  58. http://127.0.0.1:4688/dash/?which=all#collapse6
+  59. http://127.0.0.1:4688/dash/?which=all#collapse7
+  60. http://127.0.0.1:4688/dash/?which=all#collapse8
+  61. http://127.0.0.1:4688/dash/?which=all#collapse9

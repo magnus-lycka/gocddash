@@ -1,12 +1,15 @@
-url: http://127.0.0.1:4616/dash/insights/bar
+url: http://127.0.0.1:4766/dash/insights/bar
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
      * [4]All
 
-     * [5]Select pipeline groups / Config
-     * [6]Select theme
-     * Last refresh: 10:01:27 | 00 seconds
+     * [5]More/Config
+          + [6]Graph overview
+          +
+          + [7]Select pipeline groups / Config
+          + [8]Select theme
+     * Last refresh: 11:33:29 | 00 seconds
 
 Insights for bar
 
@@ -42,12 +45,12 @@ Last green
    At: 2015-07-10 08:25:18
      __________________________________________________________________
 
-   [7]Overview
-   [8]Rerun beta
-   [9]Test Summary
+   [9]Overview
+   [10]Rerun beta
+   [11]Test Summary
      __________________________________________________________________
 
-   [10]Pipeline Graphs
+   [12]Pipeline Graphs
 
    (BUTTON) ×
 
@@ -64,12 +67,14 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4616/dash/?which=failing
-   3. http://127.0.0.1:4616/dash/?which=progress
-   4. http://127.0.0.1:4616/dash/?which=all
-   5. http://127.0.0.1:4616/dash/select/
-   6. http://127.0.0.1:4616/dash/select_theme/
-   7. http://go.pagero.local/go/tab/pipeline/history/bar
-   8. http://127.0.0.1:4616/dash/insights/bar
-   9. http://go.pagero.local/go/tab/build/detail/bar/57/beta/2/defaultJob#tab-tests
-  10. http://127.0.0.1:4616/dash/graphs/bar
+   2. http://127.0.0.1:4766/dash/?which=failing
+   3. http://127.0.0.1:4766/dash/?which=progress
+   4. http://127.0.0.1:4766/dash/?which=all
+   5. http://127.0.0.1:4766/dash/insights/bar
+   6. http://127.0.0.1:4766/dash/stats
+   7. http://127.0.0.1:4766/dash/select/
+   8. http://127.0.0.1:4766/dash/select_theme/
+   9. http://go.pagero.local/go/tab/pipeline/history/bar
+  10. http://127.0.0.1:4766/dash/insights/bar
+  11. http://go.pagero.local/go/tab/build/detail/bar/57/beta/2/defaultJob#tab-tests
+  12. http://127.0.0.1:4766/dash/graphs/bar
