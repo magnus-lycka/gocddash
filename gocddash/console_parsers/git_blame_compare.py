@@ -52,6 +52,10 @@ def extract_list_of_lists_from_html_table(git_sections):
 def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
     soup = open_html(pipeline_name, current, comparison)
 
+    # Material revision diff test
+    if "pipeline instance that was triggered with a non-sequential material revision." in str(soup):
+        return None
+
     table = soup.find('div', {"style": "padding: 1em;"})
     unicode_table = [str(item) for item in table]
     git_sections = []

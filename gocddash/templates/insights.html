@@ -161,6 +161,15 @@
         <div class="row">
             {% if not current_status.is_success() %}
                 <div class="col-md-12">
+
+                    {% if not gitblame %}
+                        <h4>Upstream git blame: </h4>
+                        <i>This comparison involves a pipeline instance that was triggered with a non-sequential material revision. Go to GOCD for further info.</i>
+                        <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}">Go to
+                            GO CD
+                            comparison page</a>
+                    {% endif %}
+
                     {% if perpretrator_data %}
 
                         <h4>Prime suspect:
@@ -198,8 +207,7 @@
                     {% endif %}
 
 
-
-
+                    {% if gitblame %}
                     <h4>Upstream git blame:
                         <small>({{ current_status.stage.pipeline_counter }} compared
                             to {{ latest_passing_stage.pipeline_counter }})
@@ -233,6 +241,7 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

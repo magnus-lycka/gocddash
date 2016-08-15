@@ -214,6 +214,150 @@ git_blame = """
 </div>
 """
 
+material_revision_diff = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="pipeline_header">
+    <div class="entity_status_wrapper page_header">
+        <ul class="entity_title">
+            <!--<li><a href="/go/pipelines">Pipelines</a></li>-->
+            <li class="name"><a href="/go/tab/pipeline/history/ct-t">ct-t</a></li>
+
+            <li class="last"><h1>Compare</h1></li>
+
+        </ul>
+    </div>
+</div>
+<div class="content_wrapper_outer">
+    <div class="content_wrapper_inner">
+        <div id="pipeline_status_bar" class="pipeline_flow">
+            <table>
+                <tbody>
+                <tr>
+                    <td width="360px" valign="top">
+                        <div class="compare_pipeline_page pipeline">
+                            <div class="current_instance" id='compare_pipeline_from'>
+                                <input class="compare_pipeline_input" id="from_pipeline" name="from_pipeline"
+                                       type="text" value="2076"/>
+                                <div class="autocomplete"></div>
+                                <div class="enhanced_dropdown from hidden">
+                                    <div class="compare_search_instructions">
+                                        <p>Search for a pipeline instance by label, commiter, date, etc.</p>
+                                        <p>or</p>
+                                        <p><a class="more_pipelines" id="browse_timeline_link_from">
+                                            Browse the timeline
+                                        </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="selected_pipeline_from stages">
+                                <div class="pipeline_details">
+
+                                    <div style='width: 97.0%' class="stage">
+                                        <div class="stage_bar_wrapper">
+                                            <a href="/go/pipelines/ct-t/2076/runTests/1">
+                                                <div class="stage_bar Passed" title="runTests (Passed)">
+
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="triggered_by">
+                                        <span class='label'>Automatically triggered</span>&nbsp;on&nbsp;<span
+                                            class='time'>14 Jul, 2016 at 06:34:55 [+0200]</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td valign="top">
+                        <div class="compared_to">compared to</div>
+                    </td>
+                    <td width="360px" valign="top">
+                        <div class="compare_pipeline_page pipeline">
+                            <div class="current_instance" id='compare_pipeline_to'>
+                                <input class="compare_pipeline_input" id="to_pipeline" name="to_pipeline" type="text"
+                                       value="2076"/>
+                                <div class="autocomplete"></div>
+                                <div class="enhanced_dropdown to hidden">
+                                    <div class="compare_search_instructions">
+                                        <p>Search for a pipeline instance by label, commiter, date, etc.</p>
+                                        <p>or</p>
+                                        <p><a class="more_pipelines" id="browse_timeline_link_to">
+                                            Browse the timeline
+                                        </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="selected_pipeline_to stages">
+                                <div class="pipeline_details">
+
+                                    <div style='width: 97.0%' class="stage">
+                                        <div class="stage_bar_wrapper">
+                                            <a href="/go/pipelines/ct-t/2076/runTests/1">
+                                                <div class="stage_bar Passed" title="runTests (Passed)">
+
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="triggered_by">
+                                        <span class='label'>Automatically triggered</span>&nbsp;on&nbsp;<span
+                                            class='time'>14 Jul, 2016 at 06:34:55 [+0200]</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="clear-float"></div>
+        <div class="sub_tab_container rounded-corner-for-tab-container">
+            <div class="sub_tabs_container">
+                <ul>
+                    <li class="checkins current_tab">
+                        <a class="tab_button_body_match_text">checkins</a>
+                        <a>Changes</a>
+                    </li>
+                    <li class="card_activity">
+                        <a class="tab_button_body_match_text">card_activity</a>
+                        <a>Card Activity</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sub_tab_container_content">
+                <div id="tab-content-of-card_activity">
+                    <div id="card_activity_gadget" class="gadget-container">
+                        <div class="information">No mingle project configured for this pipeline. <a
+                                href="http://www.go.cd/documentation/user/current/integration/mingle_card_activity_gadget.html"
+                                target="_blank">More Information</a></div>
+                        <!-- gadget goes here -->
+                    </div>
+                </div>
+                <div id="tab-content-of-checkins" class="material_revision_diff">
+                    <div class="information">
+                        <div class="message">
+                <span>
+                    This comparison involves a pipeline instance that was triggered with a non-sequential material revision.                </span>
+                <span class="prompt">
+                    <a class="link_as_header_button" href="/go/compare/ct-t/295/with/294?show_bisect=true">Continue</a>                </span>
+                        </div>
+                    </div>
+                    <div style="padding: 1em;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>"""
+
 
 class TestGitBlame(unittest.TestCase):
     def test_git_blame(self):
@@ -222,7 +366,7 @@ class TestGitBlame(unittest.TestCase):
         comparison = "2029"
 
         git_blame_compare.go_request_comparison_html = MagicMock(return_value=git_blame)
-        output = git_blame_compare.get_git_comparison(pipeline_name, current, comparison)
+        output = git_blame_compare.get_git_comparison(pipeline_name, current, comparison, 'banana')
         self.assertEqual(output, [
             [u'banana.git', u' Git - URL: ssh://git@git/internet/services/banana/banana.git',
              u'87cfcf8f4655d8e5f2713636df26820b0cbd0513', u'A B <A.B@asdf.com>  2016-07-13T23:28:57+02:00',
@@ -233,6 +377,15 @@ class TestGitBlame(unittest.TestCase):
             [u'pineapple.git', u' Git - URL: ssh://git@git/internet/services/pineapple/pineapple.git',
              u'a6884dc475e20b8d69fbf588ad4aa9beef4c466e', u'X Y <X.Y@asdf.com>  2016-07-13T23:09:02+02:00',
              u'Kiwi']])
+
+    def test_material_revision_diff(self):
+        pipeline_name = "banana"
+        current = "295"
+        comparison = "294"
+
+        git_blame_compare.go_request_comparison_html = MagicMock(return_value=material_revision_diff)
+        output = git_blame_compare.get_git_comparison(pipeline_name, current, comparison, 'banana')
+        self.assertEqual(output, None)
 
 
 if __name__ == '__main__':
