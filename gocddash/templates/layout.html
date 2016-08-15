@@ -41,8 +41,15 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li title="Select which pipeline groups to monitor"><a href="{{ url_for('gocddash.select') }}">Select pipeline groups / Config</a></li>
-                <li title="Select which bootstrap theme to use"><a href="{{ url_for('gocddash.select_theme') }}">Select theme</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More/Config <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('gocddash.stats') }}">Graph overview</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li title="Select which pipeline groups to monitor"><a href="{{ url_for('gocddash.select') }}">Select pipeline groups / Config</a></li>
+                        <li title="Select which bootstrap theme to use"><a href="{{ url_for('gocddash.select_theme') }}">Select theme</a></li>
+                    </ul>
+                </li>
                 <li>
                     <p class="navbar-text navbar-right">Last refresh: {{ now | tm }} | <span id="seconds">00</span> seconds</p>
                 </li>
