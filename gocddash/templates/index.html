@@ -163,8 +163,8 @@
                 <div class="pipeline-alert" style="display:none">
                     <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}"
                          role="alert" id="pipeline-status-cache">
-                        <strong>Info:</strong> {{ pipeline.name }} just finished with
-                        status: {{ pipeline.status }}
+                        <strong>Info:</strong> {{ pipeline.name }} just finished.
+                        New status: {{ pipeline.status }}
                     </div>
                 </div>
             </div>
