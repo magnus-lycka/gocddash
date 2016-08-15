@@ -45,7 +45,6 @@ def all_pipelines_html_graph(title):
 
 
 def create_agent_html_graph(graph_data, title):
-    pd.set_option("display.width", 300)
     panda_frame = pd.DataFrame(columns=['agent_name', 'Test', 'Startup', 'Post'])
 
     for index, row in enumerate(graph_data):
