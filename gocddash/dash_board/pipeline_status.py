@@ -1,5 +1,5 @@
+from ..analysis.characterize_data_munging import get_failure_stage_signature
 from ..analysis.data_access import get_connection
-from ..analysis.data_munging import get_failure_stage_signature
 from ..util.pipeline_config import get_pipeline_config
 
 

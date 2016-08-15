@@ -1,8 +1,10 @@
 import collections
 import re
 
-from gocddash.util.file_storage import read_data
 from .data_access import get_connection
+
+
+# Most of the methods in this file are old development for the characterize specific ML algorithms
 
 
 def filter_docnames(pipeline_name):
@@ -42,16 +44,11 @@ def get_failure_stage_signature(stage_id):
 
 def get_failure_signatures(pipeline_name):
     failure_information = texttest_failure_group_by_stage(get_connection().get_texttest_failures(pipeline_name))
-    failure_signatures = []
-    # print failure_information
-
-    # for stage_id, test_map in failure_information.items():
-    #     failure_signatures.append(construct_failure_signature(stage_id, test_map))
-
     return failure_information
 
 
 def construct_failure_signature(stage_id, test_map):
+    """ Old characterize specific ML method """
     signature = ""
     for test_index, document_list in test_map.items():
         signature += str(test_index)
@@ -61,6 +58,7 @@ def construct_failure_signature(stage_id, test_map):
 
 
 def create_binary_test_index_list(failure_indices):
+    """ Old characterize specific ML method """
     id_index_pair = []
     for key, value in failure_indices.items():
         zero_list = [0 for _ in range(13)]
@@ -73,6 +71,7 @@ def create_binary_test_index_list(failure_indices):
 
 
 def check_if_consecutive_failure_signature(failure_indices):
+    """ Old characterize specific ML method """
     consecutive_binary_list = []
     od = collections.OrderedDict(sorted(failure_indices.items()))
     for index, value in enumerate(od.items()):
@@ -81,16 +80,3 @@ def check_if_consecutive_failure_signature(failure_indices):
         else:
             consecutive_binary_list.append((value[0], 0))
     return consecutive_binary_list
-
-
-def export_data_to_pandas_df(pipeline_name):
-    """ Exports the desired pipeline data from the postgresql database and returns a pandas dataframe """
-
-    collated_data = read_data(get_connection().get_failure_statistics(pipeline_name),
-                              ["Pipelinename", "counter", "trigger_message", "approved_by", "stageindex",
-                               "scheduleddate",
-                               "agent_name", "failure_stage", "result", "id", "stagename"])
-    binary_result_column = binary_dependent_variable(collated_data.result)
-    collated_data.result = binary_result_column
-
-    return collated_data

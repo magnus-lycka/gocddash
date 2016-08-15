@@ -1,6 +1,6 @@
 import unittest
 
-from gocddash.analysis.data_munging import document_filter, texttest_failure_group_by_stage, create_binary_test_index_list
+from gocddash.analysis.characterize_data_munging import document_filter, texttest_failure_group_by_stage, create_binary_test_index_list
 
 document_names = ['catalogue', 'documentMetadata1782638714687', 'eventsLog', 'exitcode', 'internalxml_OR-1782638714687', 'primarypres1782638714687', 'routingLog', 'stderr', 'catalogue', 'documentMetadata1782638714687', 'eventsLog', 'exitcode', 'internalxml_OR-1782638714687', 'primarypres1782638714687', 'routingLog', 'stderr']
 
