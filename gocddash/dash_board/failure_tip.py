@@ -22,9 +22,6 @@ def handle_test_failure(current, previous, last_success):
     failure_recommendation = FailureRecommendation(current, previous, last_success)
     if failure_recommendation.initial_tip_available():
 
-        if len(current.test_names) == 1:
-            return "Only one test failure. Potential for flickering."
-
         initial_tip = failure_recommendation.get_initial_recommendation()
         if initial_tip:
             return initial_tip
@@ -50,7 +47,7 @@ class FailureRecommendation:
                     desc)),
             (
                 lambda: len(self.current.test_names) == 1 and 1 in current.test_names,  # Very specific for characterize
-                "Flickering. Recommend to rerun."),
+                "Recommend to rerun."),
             (
                 lambda: self.current.failure_signature == self.previous.failure_signature and self.current.test_names == self.previous.test_names,
                 "Same failure signature and same failure indices as last failure. {}".format(desc)),
@@ -66,12 +63,12 @@ class FailureRecommendation:
 
         self.fallback_actions = [
             (lambda: self.previous.is_success(),
-             "Last pipeline was a success. Potential for flickering but needs further investigation. {}".format(desc)),
+             "Last pipeline was a success. Potential for flickering but may need further investigation. {}".format(desc)),
             (lambda: self.current.stage.pipeline_counter - last_success >= 3,
              "Pipeline hasn't been green in a long time. Not flickering. {}".format(desc)),
         ]
 
-        self.default = "Last pipeline was a failure. {}".format(desc)
+        self.default = "Last pipeline was a failure. Recommend to investigate further. {}".format(desc)
 
     def get_initial_recommendation(self):
         statistics_match = self.any_match()
