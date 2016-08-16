@@ -45,7 +45,7 @@ Before it will work you need some configuration. Create a file 'application.cfg'
 
 The synchronization of run data from Go is done through `sync_pipelines.py`. Synchronization of data will be done for pipelines specified in `pipelines.json`. Look at `sample_pipelines.json` to see what format this file should have.
 
-Run `main.py` - this will serve the dashboard.
+Run `app.py` in the gocddash directory - this will serve the dashboard.
 
 The dashboard is available locally from http://127.0.0.1:5000/dash/
 1. Since by default no pipelines are shown, they must be enabled under "Select pipeline groups".
