@@ -25,7 +25,7 @@ Run the migration script
 
     yoyo apply --database postgresql://analysisappluser:analysisappluser@localhost:15554/go-analysis -b
 
-Use ./sync_pipelines.py to fetch data for the pipelines specified in pipelines.json.
+Use ./sync_pipelines.py ('-d' for continuous sync) to fetch data for the pipelines specified in pipelines.json.
 
 Stage failures will be parsed and categorized in the following three distinct phases in which the failure occurred:
 
@@ -52,3 +52,4 @@ The dashboard is available locally from http://127.0.0.1:5000/dash/
 2. Once data has been synchronized, pipelines (under the Failing/Progress/All tabs) with additional information are marked with "Insights" along with the latest pipeline count for which the information pertains to.
 3. On the Insights page for a pipeline, information is displayed in three panels. Failed pipelines contain more information and actions.
 4. On the Pipeline graphs page, success rate/failure type per agent and historical test count graphs are available.
+5. A graph of system wide historical success rate per agent is also available through the More/Config dropdown menu at the top.
