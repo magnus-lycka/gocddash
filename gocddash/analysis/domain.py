@@ -108,6 +108,11 @@ def get_pipeline_heads():
     return fold(result, StageFailureInfo, [])
 
 
+def get_pipeline_head(pipeline_name):
+    result = get_connection().get_pipeline_head(pipeline_name)
+    return StageFailureInfo(*result)
+
+
 def get_claims_for_unsynced_pipelines():
     result = get_connection().get_claims_for_unsynced_pipelines()
     return fold(result, InstanceClaim, [])
