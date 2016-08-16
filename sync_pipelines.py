@@ -2,14 +2,11 @@
 
 import argparse
 import datetime
-import os
 import time
-from configparser import ConfigParser
-from itertools import chain
 
 from gocddash.analysis import data_access, actions, go_request, go_client
 from gocddash.dash_board import read_pipeline_config
-from gocddash.util import pipeline_config
+from gocddash.util import pipeline_config, app_config
 
 
 def parse_pipeline_availability(pipelines):
@@ -46,20 +43,6 @@ def millis_interval(start, end):
     return millis
 
 
-def read_cfg(path=None):
-    if not path:
-        path = os.getcwd() + "/gocddash/application.cfg"
-    parser = ConfigParser()
-    if not os.path.exists(path):
-        raise FileNotFoundError("Error: Missing application.cfg file in {}".format(path))
-    with open(path) as lines:
-        lines = chain(("[top]",), lines)  # Reads cfg file without section headers
-        parser.read_file(lines)
-
-    cfg = dict(parser.items('top'))
-    return map(lambda s: cfg[s].strip('"'), ['go_server_url', 'go_server_user', 'go_server_passwd', 'db_port'])
-
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--app-cfg', help='application config')
@@ -76,17 +59,18 @@ def configure_from_args(pargs_dict):
     pipeline_cfg_path = pargs_dict['pipeline_cfg']
     pipeline_config.create_pipeline_config(pipeline_cfg_path)
 
-    app_cfg = pargs_dict['app_cfg']
-    server_url, user, passwd, db_port = read_cfg(app_cfg)
+    application_cfg_path = pargs_dict['app_cfg']
+    app_config.create_app_config(application_cfg_path)
 
-    if pargs_dict['db_port']:
-        db_port = pargs_dict['db_port']
+    db_port = pargs_dict['db_port']
+    if db_port:
+        app_config.get_app_config().cfg['DB_PORT'] = db_port
 
     file_source = pargs_dict['file_source']
     if file_source:
-        server_url = file_source
+        app_config.get_app_config().cfg['GO_SERVER_URL'] = file_source
 
-    return server_url, user, passwd, db_port
+    return app_config.get_app_config().cfg['GO_SERVER_URL'], app_config.get_app_config().cfg['GO_SERVER_USER'], app_config.get_app_config().cfg['GO_SERVER_PASSWD'], app_config.get_app_config().cfg['DB_PORT']
 
 
 def sync_backlog(json_tree):
