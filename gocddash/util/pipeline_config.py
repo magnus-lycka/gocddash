@@ -15,9 +15,14 @@ class PipelineConfig:
     def get_log_parser(self, pipeline_name):
         for config_dict in self.pipelines["pipelines"]:
             if pipeline_name == config_dict["name"]:
-                return config_dict["log_parser"]
+                return config_dict.get('log_parser', None)
         return None
 
+    def get_email_notif(self, pipeline_name):
+        for config_dict in self.pipelines["pipelines"]:
+            if pipeline_name == config_dict["name"]:
+                return config_dict.get('email_notification', False)
+        return None
 
 _pipeline_config = None
 
