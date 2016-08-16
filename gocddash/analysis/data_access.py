@@ -93,6 +93,14 @@ class SQLConnection:
         self.cursor.execute("""SELECT * FROM texttest_failure WHERE stage_id=%s;""", (stage_id,))
         return self.cursor.fetchall()
 
+    def get_pipeline_head(self, pipeline_name):
+        self.cursor.execute("""SELECT f.* FROM
+                            (SELECT pipeline_name, max(id) as stage_id FROM failure_info GROUP BY pipeline_name) s
+                            JOIN failure_info f
+                            ON s.stage_id = f.id
+                            WHERE f.pipeline_name=%s;""", (pipeline_name,))
+        return self.cursor.fetchone()
+
     def get_synced_pipeline_heads(self):
         self.cursor.execute("""SELECT f.* FROM
                             (SELECT pipeline_name, max(id) as stage_id FROM failure_info GROUP BY pipeline_name) s
