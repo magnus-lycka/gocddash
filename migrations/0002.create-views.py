@@ -15,13 +15,39 @@ steps = [
          "DROP VIEW final_stages;"),
 
     step("""CREATE VIEW active_claims AS
-            SELECT i.*
-            FROM instance_claim i
+            WITH run_groups AS (
+              SELECT pi.*, fs.result, (
+                SELECT COUNT(*)
+                FROM pipeline_instance pix
+                JOIN final_stages fsx
+                ON fsx.instance_id = pix.id
+                WHERE pi.pipeline_counter <= pix.pipeline_counter and fs.result <> fsx.result
+              ) AS rungroup
+              FROM pipeline_instance pi
+              JOIN final_stages fs
+              ON fs.instance_id = pi.id
+            ), fail_intervals AS (
+              SELECT pipeline_name, result, MIN(pipeline_counter) AS start_counter, MAX(pipeline_counter) AS end_counter
+              FROM (SELECT * FROM run_groups) a
+              WHERE result = 'Failed'
+              GROUP BY result, rungroup, pipeline_name
+            ), latest_fail_intervals AS (
+              SELECT pipeline_name, max(start_counter) AS start_counter, max(end_counter) AS end_counter
+              FROM fail_intervals
+              GROUP BY pipeline_name
+            )
+            SELECT i.* FROM instance_claim i
             JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim GROUP BY pipeline_name) ia
             ON i.pipeline_name = ia.pipeline_name AND i.pipeline_counter = ia.pipeline_counter
-            JOIN pipeline_instance p ON p.pipeline_name = i.pipeline_name AND p.pipeline_counter = i.pipeline_counter
-            JOIN final_stages s ON s.instance_id = p.id
-            WHERE result <> 'Passed';""",
+            JOIN latest_fail_intervals lf
+            ON i.pipeline_name = lf.pipeline_name AND lf.start_counter <= i.pipeline_counter AND i.pipeline_counter <= lf.end_counter
+            JOIN (
+              SELECT pipeline_name, max(pipeline_counter) AS pipeline_counter
+              FROM pipeline_instance pi
+              JOIN stage s ON pi.id = s.instance_id
+              GROUP BY pipeline_name
+            ) p
+            ON lf.pipeline_name = p.pipeline_name AND lf.end_counter = p.pipeline_counter;""",
          "DROP VIEW active_claims;"),
 
     step("""CREATE VIEW failure_info AS
