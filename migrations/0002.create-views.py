@@ -21,14 +21,14 @@ steps = [
                 FROM pipeline_instance pix
                 JOIN final_stages fsx
                 ON fsx.instance_id = pix.id
-                WHERE pi.pipeline_counter <= pix.pipeline_counter and fs.result <> fsx.result
+                WHERE pi.pipeline_name = pix.pipeline_name AND pi.pipeline_counter <= pix.pipeline_counter AND fs.result <> fsx.result
               ) AS rungroup
               FROM pipeline_instance pi
               JOIN final_stages fs
               ON fs.instance_id = pi.id
             ), fail_intervals AS (
               SELECT pipeline_name, result, MIN(pipeline_counter) AS start_counter, MAX(pipeline_counter) AS end_counter
-              FROM (SELECT * FROM run_groups) a
+              FROM run_groups
               WHERE result = 'Failed'
               GROUP BY result, rungroup, pipeline_name
             ), latest_fail_intervals AS (
