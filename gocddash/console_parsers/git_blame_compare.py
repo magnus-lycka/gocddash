@@ -18,6 +18,7 @@ def fetch_pipeline_from_url(url):
 
 
 def extract_list_of_lists_from_html_table(git_sections):
+    """ Rather convoluted way of extracting the git blame list from GO. """
     final_list = []
 
     for table in git_sections:
