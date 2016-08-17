@@ -79,6 +79,6 @@ steps = [
               id SERIAL PRIMARY KEY,
               pipeline_name TEXT,
               pipeline_counter INTEGER,
-              sent TIMESTAMP);"""
+              sent TIMESTAMP);""",
          "DROP TABLE email_notifications;")
 ]
