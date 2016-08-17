@@ -49,14 +49,14 @@ def parse_pipeline_info(pipeline_name, pipeline_instances):
 def build_email_notifications(pipeline_name):
     latest_pipeline = get_pipeline_head(pipeline_name)
     if latest_pipeline.result == "Failed":
-        # TODO: Has email already been sent?
-        print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
-        start_of_red_streak = get_latest_failure_streak(pipeline_name)
-        perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
-                                              start_of_red_streak.start_counter - 1,
-                                              "")
-        create_email_notification_sent(pipeline_name, start_of_red_streak.start_counter)
-        send_prime_suspect_email(latest_pipeline, perpetrator_data)
+        if not get_connection().email_notification_sent_for_current_streak(pipeline_name):
+            print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
+            start_of_red_streak = get_latest_failure_streak(pipeline_name)
+            perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
+                                                  start_of_red_streak.start_counter - 1,
+                                                  "")
+            create_email_notification_sent(pipeline_name, start_of_red_streak.start_counter)
+            send_prime_suspect_email(latest_pipeline, perpetrator_data)
 
     # ALL BATTERIES FIRE
 
