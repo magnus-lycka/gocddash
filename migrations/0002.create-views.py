@@ -14,7 +14,7 @@ steps = [
             ON s.instance_id = sa.instance_id AND s.stage_counter = sa.stage_counter AND s.name = sa.name;""",
          "DROP VIEW final_stages;"),
 
-    step("""CREATE VIEW active_claims AS
+    step("""CREATE VIEW latest_fail_intervals AS
             WITH run_groups AS (
               SELECT pi.*, fs.result, (
                 SELECT COUNT(*)
@@ -31,11 +31,13 @@ steps = [
               FROM run_groups
               WHERE result = 'Failed'
               GROUP BY result, rungroup, pipeline_name
-            ), latest_fail_intervals AS (
-              SELECT pipeline_name, max(start_counter) AS start_counter, max(end_counter) AS end_counter
-              FROM fail_intervals
-              GROUP BY pipeline_name
             )
+            SELECT pipeline_name, max(start_counter) AS start_counter, max(end_counter) AS end_counter
+            FROM fail_intervals
+            GROUP BY pipeline_name;""",
+         "DROP VIEW latest_fail_intervals;"),
+
+    step("""CREATE VIEW active_claims AS
             SELECT i.* FROM instance_claim i
             JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim GROUP BY pipeline_name) ia
             ON i.pipeline_name = ia.pipeline_name AND i.pipeline_counter = ia.pipeline_counter
@@ -44,7 +46,7 @@ steps = [
             JOIN (
               SELECT pipeline_name, max(pipeline_counter) AS pipeline_counter
               FROM pipeline_instance pi
-              JOIN stage s ON pi.id = s.instance_id
+              --JOIN stage s ON pi.id = s.instance_id
               GROUP BY pipeline_name
             ) p
             ON lf.pipeline_name = p.pipeline_name AND lf.end_counter = p.pipeline_counter;""",
