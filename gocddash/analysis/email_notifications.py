@@ -14,7 +14,7 @@ def send_prime_suspect_email(pipeline, suspect_list):
     server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
-    title = "{} is broken in GO. If you pushed to this recently, please investigate.".format(pipeline.name)
+    title = "{} is broken in GO. If you pushed to this recently, please investigate.".format(pipeline.pipeline_name)
 
     base_go_url = get_app_config().cfg['GO_SERVER_URL']
     base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
