@@ -209,6 +209,10 @@ class SQLConnection:
         self.cursor.execute("""SELECT * FROM pipeline_instance WHERE pipeline_name = %s AND pipeline_counter = %s""", (pipeline_name, pipeline_counter))
         return self.cursor.fetchone() is not None
 
+    def get_latest_failure_streak(self, pipeline_name):
+        self.cursor.execute("""SELECT * FROM latest_fail_instances WHERE pipeline_name = %s""", (pipeline_name,))
+        return self.cursor.fetchone()
+
 _connection = None
 
 

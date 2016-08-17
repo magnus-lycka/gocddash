@@ -199,3 +199,15 @@ def create_instance_claim(instance_claim):
     else:
         get_connection().insert_instance_claim(instance_claim.pipeline_name, instance_claim.pipeline_counter,
                                                instance_claim.responsible, instance_claim.description)
+
+
+class FailureStreak:
+    def __init__(self, pipeline_name, start_counter, end_counter):
+        self.pipeline_name = pipeline_name
+        self.start_counter = start_counter
+        self.end_counter = end_counter
+
+
+def get_latest_failure_streak(pipeline_name):
+    result = get_connection().get_latest_failure_streak(pipeline_name)
+    return FailureStreak(*result)
