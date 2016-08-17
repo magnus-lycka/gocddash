@@ -11,32 +11,32 @@ from .data_access import get_connection
 import smtplib
 
 
-def send_prime_suspect_email(pipeline, suspect_list):
+def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_list):
     create_app_config()
     sender_user = get_app_config().cfg['SMTP_USER']
     print("Setting up server")
     # server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
-    title = "{} is broken in GO. If you pushed to this recently, please investigate.".format(pipeline.pipeline_name)
+    title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this recently, please investigate.".format(latest_pipeline.pipeline_name, start_of_failing_streak.start_counter, latest_pipeline.pipeline_counter)
 
     base_go_url = get_app_config().cfg['PUBLIC_GO_SERVER_URL']
     base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
-    insights_link = "{}insights/{}".format(base_dashboard_link, pipeline.pipeline_name)
-    go_overview_link = "{}tab/pipeline/history/{}".format(base_go_url, pipeline.pipeline_name)
+    insights_link = "{}insights/{}".format(base_dashboard_link, latest_pipeline.pipeline_name)
+    go_overview_link = "{}tab/pipeline/history/{}".format(base_go_url, latest_pipeline.pipeline_name)
 
-    msg_content = "<h2>{}<h2>" \
+    msg_content = "<p>{}</p>" \
                   "<p>Link to insights: {}</p>" \
                   "<p>Link to GO Overview: {}</p>" \
                   "<p>Link to GO Test Summary:</p> {}".format(title, insights_link, go_overview_link, "placeholder")
     message = MIMEText(msg_content, 'html')
 
     recipients = get_suspects(suspect_list)
-    # recipients = [';placeholder@pagero.com', 'placeholder@pagero.com']  # For test purposes
+    # recipients = [';placeholder@pagero.com', 'placeholder@pagero.com']
     print("\n Sent email to: {}".format(recipients))
     message['From'] = 'Pagero Dashboard'
     message['To'] = ', '.join(recipients)
-    message['Subject'] = '{} broken in GO'.format(pipeline.pipeline_name)
+    message['Subject'] = '{} broken in GO'.format(latest_pipeline.pipeline_name)
 
     msg_full = message.as_string()
 
@@ -60,7 +60,7 @@ def build_email_notifications(pipeline_name):
         perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
                                               start_of_red_streak.start_counter - 1, "")
         try:
-            send_prime_suspect_email(latest_pipeline, perpetrator_data)
+            send_prime_suspect_email(latest_pipeline, start_of_red_streak, perpetrator_data)
             create_email_notification_sent(pipeline_name, start_of_red_streak.start_counter)
         except Exception:
             print("Could not send email for pipeline " + pipeline_name)
