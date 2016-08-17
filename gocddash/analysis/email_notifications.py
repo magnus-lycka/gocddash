@@ -18,8 +18,8 @@ def send_prime_suspect_email(pipeline, suspect_list):
 
     base_go_url = get_app_config().cfg['GO_SERVER_URL']
     base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
-    insights_link = "{}insights/{}".format(base_dashboard_link, pipeline.name)
-    go_overview_link = "{}tab/pipeline/history/{}".format(base_go_url, pipeline.name)
+    insights_link = "{}insights/{}".format(base_dashboard_link, pipeline.pipeline_name)
+    go_overview_link = "{}tab/pipeline/history/{}".format(base_go_url, pipeline.pipeline_name)
 
     msg_content = "<h2>{} ></h2>\n" \
                   "Link to insights: {} \n" \
