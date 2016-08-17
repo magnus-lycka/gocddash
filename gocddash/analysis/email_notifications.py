@@ -16,7 +16,7 @@ def send_prime_suspect_email(pipeline, suspect_list):
 
     title = "{} is broken in GO. If you pushed to this recently, please investigate.".format(pipeline.pipeline_name)
 
-    base_go_url = get_app_config().cfg['GO_SERVER_URL']
+    base_go_url = get_app_config().cfg['PUBLIC_GO_SERVER_URL']
     base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
     insights_link = "{}insights/{}".format(base_dashboard_link, pipeline.pipeline_name)
     go_overview_link = "{}tab/pipeline/history/{}".format(base_go_url, pipeline.pipeline_name)
