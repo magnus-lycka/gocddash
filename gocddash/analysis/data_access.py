@@ -218,6 +218,13 @@ class SQLConnection:
         self.cursor.execute("""SELECT * FROM latest_fail_intervals WHERE pipeline_name = %s""", (pipeline_name,))
         return self.cursor.fetchone()
 
+    def email_notification_sent_for_current_streak(self, pipeline_name):
+        self.cursor.execute("""SELECT e.*
+                                FROM latest_fail_intervals l
+                                JOIN email_notifications e ON l.pipeline_name = e.pipeline_name AND e.pipeline_counter = l.start_counter
+                                WHERE l.pipeline_name = %s;""", (pipeline_name,))
+        return self.cursor.fetchone() is not None
+
 _connection = None
 
 
