@@ -4,7 +4,7 @@ import re
 from email.mime.text import MIMEText
 
 from gocddash.util.app_config import get_app_config, create_app_config
-
+import smtplib
 
 def send_prime_suspect_email(pipeline, suspect_list):
     create_app_config()
