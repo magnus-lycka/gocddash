@@ -26,6 +26,7 @@ Run the migration script
     yoyo apply --database postgresql://analysisappluser:analysisappluser@localhost:15554/go-analysis -b
 
 Use ./sync_pipelines.py ('-d' for continuous sync) to fetch data for the pipelines specified in pipelines.json.
+The sync also includes an email notification system (see point below).
 
 Stage failures will be parsed and categorized in the following three distinct phases in which the failure occurred:
 
