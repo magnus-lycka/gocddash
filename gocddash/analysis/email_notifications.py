@@ -16,7 +16,8 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
     server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
-    title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this recently, please investigate.".format(latest_pipeline.pipeline_name, start_of_failing_streak.start_counter, latest_pipeline.pipeline_counter)
+    title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this recently, please investigate.".format(
+        latest_pipeline.pipeline_name, start_of_failing_streak.start_counter, latest_pipeline.pipeline_counter)
 
     base_go_url = get_app_config().cfg['PUBLIC_GO_SERVER_URL']
     base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
@@ -30,26 +31,31 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
 
     recipients = get_suspects(suspect_list)
     # recipients = [';placeholder@pagero.com', 'placeholder@pagero.com']
-    print("\n Sent email to: {}".format(recipients))
+
     message['From'] = 'Go.CD Dashboard <{}>'.format(sender_user)
     message['To'] = ', '.join(recipients)
     message['Subject'] = '{} broken in GO'.format(latest_pipeline.pipeline_name)
 
     msg_full = message.as_string()
 
+    print("\n Sending email to: {}".format(recipients))
     server.sendmail(sender_user, recipients, msg_full)
+    print("\n Email sent!")
     print("\n -----MESSAGE FULL-----")
     print(msg_full)
     server.quit()
 
 
 def get_suspects(perpetrator_data):
-    suspect_emails = {re.search('<(.*)>', row[3]).group(1) for row in perpetrator_data}  # Extract the email address from perpetrator_data into a set
+    suspect_emails = {re.search('<(.*)>', row[3]).group(1) for row in
+                      perpetrator_data}  # Extract the email address from perpetrator_data into a set
     return suspect_emails
+
 
 def build_email_notifications(pipeline_name):
     latest_pipeline = get_pipeline_head(pipeline_name)
-    if not latest_pipeline.is_success() and not get_connection().email_notification_sent_for_current_streak(pipeline_name):
+    if not latest_pipeline.is_success() and not get_connection().email_notification_sent_for_current_streak(
+            pipeline_name):
         print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
         start_of_red_streak = get_latest_failure_streak(pipeline_name)
         perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
