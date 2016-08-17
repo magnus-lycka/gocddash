@@ -9,7 +9,15 @@ def clean_html(raw_html):
 
 
 def remove_excessive_whitespace(string):
-    return re.sub(' +', ' ', string)
+    return re.sub(' ( )+', '', string)
+
+
+def remove_wbr_tags(string):
+    test = re.sub('<wbr>', '', string)
+    test = re.sub('<wbr/>', '', test)
+    test = re.sub('</wbr>', '', test)
+    test = re.sub('<br/>', ' ', test)
+    return test
 
 
 def remove_new_line(string):
