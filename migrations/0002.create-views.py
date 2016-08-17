@@ -46,7 +46,7 @@ steps = [
             JOIN (
               SELECT pipeline_name, max(pipeline_counter) AS pipeline_counter
               FROM pipeline_instance pi
-              --JOIN stage s ON pi.id = s.instance_id
+              JOIN stage s ON pi.id = s.instance_id
               GROUP BY pipeline_name
             ) p
             ON lf.pipeline_name = p.pipeline_name AND lf.end_counter = p.pipeline_counter;""",
