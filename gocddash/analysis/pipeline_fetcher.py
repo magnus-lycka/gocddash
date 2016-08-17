@@ -52,8 +52,8 @@ def build_email_notifications(pipeline_name):
         # TODO: Has email already been sent?
         print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
         start_of_red_streak = get_latest_failure_streak(pipeline_name)
-        perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.pipeline_counter,
-                                              start_of_red_streak.pipeline_counter - 1,
+        perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
+                                              start_of_red_streak.start_counter - 1,
                                               "")
         send_prime_suspect_email(latest_pipeline, perpetrator_data)
 
