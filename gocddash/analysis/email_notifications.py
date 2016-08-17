@@ -15,7 +15,7 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
     create_app_config()
     sender_user = get_app_config().cfg['SMTP_USER']
     print("Setting up server")
-    # server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
+    server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
     title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this recently, please investigate.".format(latest_pipeline.pipeline_name, start_of_failing_streak.start_counter, latest_pipeline.pipeline_counter)
@@ -33,16 +33,16 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
     recipients = get_suspects(suspect_list)
     # recipients = [';placeholder@pagero.com', 'placeholder@pagero.com']
     print("\n Sent email to: {}".format(recipients))
-    message['From'] = 'Pagero Dashboard'
+    message['From'] = 'Go.CD Dashboard <{}>'.format(sender_user)
     message['To'] = ', '.join(recipients)
     message['Subject'] = '{} broken in GO'.format(latest_pipeline.pipeline_name)
 
     msg_full = message.as_string()
 
-    # server.sendmail(sender_user, recipients, msg_full)
+    server.sendmail(sender_user, recipients, msg_full)
     print("\n -----MESSAGE FULL-----")
     print(msg_full)
-    # server.quit()
+    server.quit()
 
 
 def get_suspects(perpetrator_data):
