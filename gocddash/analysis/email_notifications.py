@@ -27,8 +27,7 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
 
     msg_content = "<p>{}</p>" \
                   "<p>Link to insights: {}</p>" \
-                  "<p>Link to GO Overview: {}</p>" \
-                  "<p>Link to GO Test Summary:</p> {}".format(title, insights_link, go_overview_link, "placeholder")
+                  "<p>Link to GO Overview: {}</p>".format(title, insights_link, go_overview_link)
     message = MIMEText(msg_content, 'html')
 
     recipients = get_suspects(suspect_list)
@@ -39,8 +38,6 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
     message['Subject'] = '{} broken in GO'.format(latest_pipeline.pipeline_name)
 
     msg_full = message.as_string()
-
-    # Add link to insights page in Email
 
     # server.sendmail(sender_user, recipients, msg_full)
     print("\n -----MESSAGE FULL-----")
