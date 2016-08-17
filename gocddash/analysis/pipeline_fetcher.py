@@ -2,12 +2,11 @@ import json
 from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
-from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.util.get_failure_stage import get_failure_stage
 from gocddash.util.pipeline_config import get_pipeline_config
 from .data_access import get_connection
-from .domain import PipelineInstance, Stage, create_stage, Job, create_job, get_pipeline_head, get_latest_failure_streak, create_email_notification_sent
-from .email_notifications import send_prime_suspect_email
+from .domain import PipelineInstance, Stage, create_stage, Job, create_job
+from .email_notifications import build_email_notifications
 from .go_client import *
 
 
@@ -40,25 +39,12 @@ def parse_pipeline_info(pipeline_name, pipeline_instances):
                 stage_count = stage['counter']
                 parse_stage_info(stage_count, stage_name, instance)
     fetch_new_agents()
+    send_new_email_notifications(pipeline_name)
 
-    # Email notifications
+
+def send_new_email_notifications(pipeline_name):
     if get_pipeline_config().get_email_notif(pipeline_name):
         build_email_notifications(pipeline_name)
-
-
-def build_email_notifications(pipeline_name):
-    latest_pipeline = get_pipeline_head(pipeline_name)
-    if latest_pipeline.result == "Failed":
-        if not get_connection().email_notification_sent_for_current_streak(pipeline_name):
-            print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
-            start_of_red_streak = get_latest_failure_streak(pipeline_name)
-            perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
-                                                  start_of_red_streak.start_counter - 1,
-                                                  "")
-            create_email_notification_sent(pipeline_name, start_of_red_streak.start_counter)
-            send_prime_suspect_email(latest_pipeline, perpetrator_data)
-
-    # ALL BATTERIES FIRE
 
 
 def fetch_new_agents():

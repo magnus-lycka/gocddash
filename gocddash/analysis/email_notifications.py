@@ -3,7 +3,11 @@
 import re
 from email.mime.text import MIMEText
 
+from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.util.app_config import get_app_config, create_app_config
+from .domain import get_pipeline_head, get_latest_failure_streak, create_email_notification_sent
+from .data_access import get_connection
+
 import smtplib
 
 
@@ -48,3 +52,15 @@ def get_suspects(perpetrator_data):
     suspect_emails = {re.search('<(.*)>', row[3]).group(1) for row in perpetrator_data}  # Extract the email address from perpetrator_data into a set
     return suspect_emails
 
+def build_email_notifications(pipeline_name):
+    latest_pipeline = get_pipeline_head(pipeline_name)
+    if not latest_pipeline.is_success() and not get_connection().email_notification_sent_for_current_streak(pipeline_name):
+        print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
+        start_of_red_streak = get_latest_failure_streak(pipeline_name)
+        perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
+                                              start_of_red_streak.start_counter - 1, "")
+        try:
+            send_prime_suspect_email(latest_pipeline, perpetrator_data)
+            create_email_notification_sent(pipeline_name, start_of_red_streak.start_counter)
+        except Exception:
+            print("Could not send email for pipeline " + pipeline_name)
