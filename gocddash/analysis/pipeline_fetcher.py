@@ -6,7 +6,7 @@ from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.util.get_failure_stage import get_failure_stage
 from gocddash.util.pipeline_config import get_pipeline_config
 from .data_access import get_connection
-from .domain import PipelineInstance, Stage, create_stage, Job, create_job, get_pipeline_head, get_latest_failure_streak
+from .domain import PipelineInstance, Stage, create_stage, Job, create_job, get_pipeline_head, get_latest_failure_streak, create_email_notification_sent
 from .email_notifications import send_prime_suspect_email
 from .go_client import *
 
@@ -55,6 +55,7 @@ def build_email_notifications(pipeline_name):
         perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
                                               start_of_red_streak.start_counter - 1,
                                               "")
+        create_email_notification_sent(pipeline_name, start_of_red_streak.start_counter)
         send_prime_suspect_email(latest_pipeline, perpetrator_data)
 
     # ALL BATTERIES FIRE
