@@ -14,4 +14,3 @@ PREFERRED_UPSTREAM = "change to your preferred upstream pipeline for git blame s
 
 SMTP_SERVER = "your smtp server"
 SMTP_USER = "your smtp username"
-SMTP_PASSWD = "your smtp password"
