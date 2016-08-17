@@ -52,6 +52,11 @@ class SQLConnection:
                              WHERE pipeline_name = %s AND pipeline_counter = %s;""",
                             (pipeline_name, pipeline_counter, responsible, desc, pipeline_name, pipeline_counter))
 
+    def insert_email_notification_sent(self, pipeline_name, pipeline_counter):
+        self.cursor.execute("""INSERT INTO email_notifications(pipeline_name, pipeline_counter, sent)
+                                VALUES (%s, %s, now())""",
+                            (pipeline_name, pipeline_counter))
+
     def get_highest_pipeline_count(self, pipeline_name):
         self.cursor.execute("""SELECT COALESCE(max(pipeline_counter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
                             (pipeline_name,))

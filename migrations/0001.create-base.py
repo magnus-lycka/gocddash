@@ -73,5 +73,12 @@ steps = [
               pipeline_counter INTEGER,
               responsible TEXT,
               description TEXT);""",
-         "DROP TABLE instance_claim;")
+         "DROP TABLE instance_claim;"),
+
+    step("""CREATE TABLE email_notifications(
+              id SERIAL PRIMARY KEY,
+              pipeline_name TEXT,
+              pipeline_counter INTEGER,
+              sent TIMESTAMP);"""
+         "DROP TABLE email_notifications;")
 ]

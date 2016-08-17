@@ -42,6 +42,10 @@ def create_job(stage, job):
     get_connection().insert_job(stage.stage_id, job)
 
 
+def create_email_notification_sent(pipeline_name, pipeline_counter):
+    get_connection().insert_email_notification_sent(pipeline_name, pipeline_counter)
+
+
 class PipelineInstance:
     def __init__(self, pipeline_name, pipeline_counter, trigger_message, instance_id):
         self.pipeline_name = pipeline_name
