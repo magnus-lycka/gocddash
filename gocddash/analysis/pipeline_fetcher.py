@@ -2,10 +2,12 @@ import json
 from datetime import datetime
 
 from gocddash.console_parsers.determine_parser import get_parser_info
+from gocddash.console_parsers.git_blame_compare import get_git_comparison
 from gocddash.util.get_failure_stage import get_failure_stage
 from gocddash.util.pipeline_config import get_pipeline_config
 from .data_access import get_connection
-from .domain import PipelineInstance, Stage, create_stage, Job, create_job
+from .domain import PipelineInstance, Stage, create_stage, Job, create_job, get_pipeline_head, get_latest_failure_streak
+from .email_notifications import send_prime_suspect_email
 from .go_client import *
 
 
@@ -19,14 +21,13 @@ def download_and_store(pipeline_name, offset, run_times):
         else:
             print("Could not get pipeline history from GO.")
 
-    parse_pipeline_info(pipeline_json)
+    parse_pipeline_info(pipeline_name, pipeline_json)
 
 
-def parse_pipeline_info(pipelines):
-    for pipeline in pipelines:
+def parse_pipeline_info(pipeline_name, pipeline_instances):
+    for pipeline in pipeline_instances:
         pipeline_counter = pipeline["counter"]
         print("Pipeline counter: {}".format(pipeline_counter))
-        pipeline_name = pipeline["name"]
         pipeline_id = pipeline["id"]
         instance = PipelineInstance(pipeline_name, pipeline_counter,
                                     pipeline["build_cause"]["trigger_message"], pipeline_id)
@@ -39,6 +40,24 @@ def parse_pipeline_info(pipelines):
                 stage_count = stage['counter']
                 parse_stage_info(stage_count, stage_name, instance)
     fetch_new_agents()
+
+    # Email notifications
+    if get_pipeline_config().get_email_notif(pipeline_name):
+        build_email_notifications(pipeline_name)
+
+
+def build_email_notifications(pipeline_name):
+    latest_pipeline = get_pipeline_head(pipeline_name)
+    if latest_pipeline.result == "Failed":
+        # TODO: Has email already been sent?
+        print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
+        start_of_red_streak = get_latest_failure_streak(pipeline_name)
+        perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.pipeline_counter,
+                                              start_of_red_streak.pipeline_counter - 1,
+                                              "")
+        send_prime_suspect_email(latest_pipeline, perpetrator_data)
+
+    # ALL BATTERIES FIRE
 
 
 def fetch_new_agents():

@@ -9,15 +9,22 @@ from gocddash.util.app_config import get_app_config, create_app_config
 
 def send_prime_suspect_email(pipeline, suspect_list):
     create_app_config()
-    sender_user = get_app_config().cfg['SMTP_USER']  # sender@server.com
-    sender_passwd = get_app_config().cfg['SMTP_PASSWD']  # 'senderPassword'
+    sender_user = get_app_config().cfg['SMTP_USER']
     print("Setting up server")
     server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
-    print("Before title")
-    title = "{} is broken in GO. If you pushed to this recently, please investigate.".format(pipeline)  #TODO: Change to .name when done testing
-    msg_content = "<h2>{title} > <font color='red'>OK</font></h2>\n".format(title=title)
+    title = "{} is broken in GO. If you pushed to this recently, please investigate.".format(pipeline.name)
+
+    base_go_url = get_app_config().cfg['GO_SERVER_URL']
+    base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
+    insights_link = "{}insights/{}".format(base_dashboard_link, pipeline.name)
+    go_overview_link = "{}tab/pipeline/history/{}".format(base_go_url, pipeline.name)
+
+    msg_content = "<h2>{} ></h2>\n" \
+                  "Link to insights: {} \n" \
+                  "Link to GO.CD Overview: {} \n" \
+                  "Link to GO.CD Test Summary: {} \n".format(title, insights_link, go_overview_link, "placeholder")
     message = MIMEText(msg_content, 'html')
 
     message['From'] = 'Hej <sender@server>'
@@ -30,12 +37,9 @@ def send_prime_suspect_email(pipeline, suspect_list):
 
     # Add link to insights page in Email
 
-    print("Before tls")
-    # server.starttls()
-    print("Before login")
-    server.login(sender_user, sender_passwd)
-    print("Passed login")
-    server.sendmail(sender_user, ['receiver@server'], msg_full)
+    # server.sendmail(sender_user, ['receiver@server'], msg_full)
+    print("\n -----MESSAGE FULL-----")
+    print(msg_full)
     server.quit()
 
 
