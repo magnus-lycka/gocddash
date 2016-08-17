@@ -13,11 +13,11 @@ def remove_excessive_whitespace(string):
 
 
 def remove_wbr_tags(string):
-    test = re.sub('<wbr>', '', string)
-    test = re.sub('<wbr/>', '', test)
-    test = re.sub('</wbr>', '', test)
-    test = re.sub('<br/>', ' ', test)
-    return test
+    string = re.sub('<wbr>', '', string)
+    string = re.sub('<wbr/>', '', string)
+    string = re.sub('</wbr>', '', string)
+    string = re.sub('<br/>', ' ', string)
+    return string
 
 
 def remove_new_line(string):
