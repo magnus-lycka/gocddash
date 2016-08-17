@@ -7,7 +7,8 @@
     },
     {
       "name": "another-pipeline",
-      "log_parser": "junit"
+      "log_parser": "junit",
+      "email_notifications": false
     }
   ]
 }
