@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from gocddash.util.app_config import get_app_config, create_app_config
 import smtplib
 
+
 def send_prime_suspect_email(pipeline, suspect_list):
     create_app_config()
     sender_user = get_app_config().cfg['SMTP_USER']
@@ -20,16 +21,15 @@ def send_prime_suspect_email(pipeline, suspect_list):
     insights_link = "{}insights/{}".format(base_dashboard_link, pipeline.pipeline_name)
     go_overview_link = "{}tab/pipeline/history/{}".format(base_go_url, pipeline.pipeline_name)
 
-    msg_content = "<h2>{}<h2>\n" \
-                  "Link to insights: {} \n" \
-                  "Link to GO.CD Overview: {} \n" \
-                  "Link to GO.CD Test Summary: {} \n".format(title, insights_link, go_overview_link, "placeholder")
+    msg_content = "<h2>{}<h2>" \
+                  "<p>Link to insights: {}</p>" \
+                  "<p>Link to GO Overview: {}</p>" \
+                  "<p>Link to GO Test Summary:</p> {}".format(title, insights_link, go_overview_link, "placeholder")
     message = MIMEText(msg_content, 'html')
 
-    suspect_list = get_suspects(suspect_list)
-    recipients = [*suspect_list]
+    recipients = get_suspects(suspect_list)
     # recipients = [';placeholder@pagero.com', 'placeholder@pagero.com']  # For test purposes
-    print(recipients)
+    print("\n Sent email to: {}".format(recipients))
     message['From'] = 'Pagero Dashboard'
     message['To'] = ', '.join(recipients)
     message['Subject'] = '{} broken in GO'.format(pipeline.pipeline_name)
