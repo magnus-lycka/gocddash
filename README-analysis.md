@@ -43,7 +43,7 @@ Starting the Dashboard
 
 Before it will work you need some configuration. Create a file 'application.cfg' under 'gocddash'. There is a sample example file there named 'application.cfg.example' that you can copy.
 
-The synchronization of run data from Go is done through `sync_pipelines.py`. Synchronization of data will be done for pipelines specified in `pipelines.json`. Look at `sample_pipelines.json` to see what format this file should have.
+The synchronization of run data from Go is done through `sync_pipelines.py`. Synchronization of data will be done for pipelines specified in `pipelines.json`. Look at `pipelines.json.example` to see what format this file should have.
 
 Run `app.py` in the gocddash directory - this will serve the dashboard.
 
@@ -53,3 +53,4 @@ The dashboard is available locally from http://127.0.0.1:5000/dash/
 3. On the Insights page for a pipeline, information is displayed in three panels. Failed pipelines contain more information and actions.
 4. On the Pipeline graphs page, success rate/failure type per agent and historical test count graphs are available.
 5. A graph of system wide historical success rate per agent is also available through the More/Config dropdown menu at the top.
+6. The sync process also handles an email notification system for alerting primary suspects when a pipeline breaks. The notification system is opt-in per pipeline as specified in pipelines.json.
