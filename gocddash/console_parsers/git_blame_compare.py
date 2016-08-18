@@ -6,9 +6,9 @@ from gocddash.util.html_utils import *
 
 def open_html(pipeline_name, current, comparison):
     html = go_request_comparison_html(pipeline_name, current, comparison)
-    html = remove_wbr_tags(html)
-    html = remove_new_line(html)
-    html = remove_excessive_whitespace(html)
+    # html = remove_wbr_tags(html)
+    # html = remove_new_line(html)
+    # html = remove_excessive_whitespace(html)
     soup = BeautifulSoup(html, "html.parser")
     return soup
 
@@ -30,6 +30,7 @@ def extract_list_of_lists_from_html_table(git_sections):
 
         list_of_words = table.split()
 
+        print(list_of_words)
         indices = [i for i, x in enumerate(list_of_words) if  """class="revision">""" in x and """class="revision">Revision""" not in x]
 
         for index in indices:
@@ -62,22 +63,28 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
     # Material revision diff test
     if "pipeline instance that was triggered with a non-sequential material revision." in str(soup):
         return None
-    table = soup.find('div', {"style": "padding: 1em;"})
-    unicode_table = [str(item) for item in table]
-    git_sections = []
-    for item in unicode_table:
-        cleaned_text = remove_new_line(remove_excessive_whitespace(remove_wbr_tags(item)))
-        if cleaned_text:  # There are empty lines in the cleaned text for some reason
-            git_sections.append(cleaned_text)
+    material_titles = soup.findAll('div', {"class": "material_title"})
+    git_sections = list(map(lambda z: z.rpartition("/")[2], filter(lambda y: not y.startswith(" Pipeline"),  map(lambda x: x.findAll('strong')[0].get_text(), material_titles))))
+    tables = soup.findAll('table', {'class': "list_table material_modifications"})
+    # print(tables)
+    assert len(tables) == len(git_sections)
+    changes = []
+    for table_index, table in enumerate(tables):
+        revisions = table.findAll('td', {'class': 'revision'})
+        modified_by = table.findAll('td', {'class': 'modified_by'})
+        comments = table.findAll('td', {'class': 'comment'})
 
-    git_sections = [item for item in git_sections if "Git" in item]
+        these_changes = []
+        for index, revision in enumerate(revisions):
+            revision_text = revision.get_text().strip()
+            modified_by_text = remove_new_line(modified_by[index].get_text().strip())
+            comments_text = comments[index].get_text().strip()
+            these_changes.append((revision_text, modified_by_text, comments_text))
+        changes.append((git_sections[table_index], these_changes))
 
-    final_list = extract_list_of_lists_from_html_table(git_sections)
+    print(changes)
 
-    final_list = only_real_people(final_list)
-    final_list = sort_by_current_then_preferred(final_list, pipeline_name, preferred_upstream)
-
-    return final_list
+    return changes
 
 
 def sort_by_current_then_preferred(git_blame_list, pipeline_name, preferred_upstream):
