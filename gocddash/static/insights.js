@@ -41,7 +41,8 @@ $('#rerun-button').click(function () {
         data: payload,
         username: go_username,
         password: go_password,
-        crossDomain: true
+        crossDomain: true,
+        headers: {'Confirm': true}
     })
         .done(function () {
             document.location.reload(true);
