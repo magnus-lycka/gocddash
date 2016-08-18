@@ -182,7 +182,6 @@
                             <thead>
                             <tr>
                                 <th>Pipeline</th>
-                                <th>Git URL</th>
                                 <th>Revision</th>
                                 <th>Modified by</th>
                                 <th>Comment</th>
@@ -190,14 +189,15 @@
 
                             </thead>
                             <tbody>
-                            {% for row in perpretrator_data %}
-                                <tr>
-                                    <td>{{ row[0] }}</td>
-                                    <td>{{ row[1] }}</td>
-                                    <td>{{ row[2] }}</td>
-                                    <td>{{ row[3] }}</td>
-                                    <td>{{ row[4] }}</td>
-                                </tr>
+                            {% for repo, revisions in git_history %}
+                                {% for revision, modified_by, comment in revisions %}
+                                    <tr>
+                                        <td>{{ repo }}</td>
+                                        <td>{{ revision }}</td>
+                                        <td>{{ modified_by }}</td>
+                                        <td>{{ comment }}</td>
+                                    </tr>
+                                {% endfor %}
                             {% endfor %}
 
                             </tbody>

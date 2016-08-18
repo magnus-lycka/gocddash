@@ -599,7 +599,6 @@ new_html_format = """<!DOCTYPE HTML>
 </div>
 </body>
 </html>
-
 """
 
 
