@@ -17,7 +17,6 @@ def material_revision_diff_tests(soup):
 def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
     soup = open_html(pipeline_name, current, comparison)
 
-    #TODO: Check that this works. Write a test for it.
     if material_revision_diff_tests(soup):
         return None
 
