@@ -32,8 +32,19 @@ steps = [
               WHERE result = 'Failed'
               GROUP BY result, rungroup, pipeline_name
             )
-            SELECT pipeline_name, max(start_counter) AS start_counter, max(end_counter) AS end_counter
-            FROM fail_intervals
+            SELECT pipeline_name, (SELECT max(pipeline_counter)
+                FROM final_stages fxx
+                JOIN pipeline_instance pxx
+                ON fxx.instance_id = pxx.id
+                JOIN (SELECT name
+                    FROM final_stages f
+                    JOIN pipeline_instance p
+                    ON f.instance_id = p.id
+                    WHERE pipeline_name = fiv.pipeline_name
+                    GROUP BY name ORDER BY min(scheduled_date) DESC LIMIT 1) last_stage
+                ON fxx.name = last_stage.name
+            WHERE pipeline_name = fiv.pipeline_name and result = 'Passed') AS start_counter, max(end_counter) AS end_counter
+            FROM fail_intervals fiv
             GROUP BY pipeline_name;""",
          "DROP VIEW latest_fail_intervals;"),
 
