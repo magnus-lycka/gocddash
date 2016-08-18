@@ -1,6 +1,6 @@
 def get_failure_tip(current, previous, last_success):
     if current.is_success():
-        return "All good."
+        return "All good.", ""
     else:
         return handle_failure(current, previous, last_success)
 
@@ -11,9 +11,9 @@ def handle_failure(current, previous, last_success):
         if previous.stage.description and previous.stage.responsible:
             last_claim = "Last claim: {}: {}".format(previous.stage.responsible, previous.stage.description)
     if current.stage.failure_stage == "POST":
-        return "All tests passed, but the build failed. {}".format(last_claim)
+        return "All tests passed, but the build failed.", last_claim
     elif current.stage.failure_stage == "STARTUP":
-        return "Tests failed during STARTUP."
+        return "Tests failed during STARTUP.", last_claim
     else:
         return handle_test_failure(current, previous, last_success), last_claim
 
