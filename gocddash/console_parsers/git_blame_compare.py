@@ -66,8 +66,7 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
     material_titles = soup.findAll('div', {"class": "material_title"})
     git_sections = list(map(lambda z: z.rpartition("/")[2], filter(lambda y: not y.startswith(" Pipeline"),  map(lambda x: x.findAll('strong')[0].get_text(), material_titles))))
     tables = soup.findAll('table', {'class': "list_table material_modifications"})
-    # print(tables)
-    assert len(tables) == len(git_sections)
+
     changes = []
     for table_index, table in enumerate(tables):
         revisions = table.findAll('td', {'class': 'revision'})
@@ -80,9 +79,11 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
             modified_by_text = remove_new_line(modified_by[index].get_text().strip())
             comments_text = comments[index].get_text().strip()
             these_changes.append((revision_text, modified_by_text, comments_text))
+
         these_changes = only_real_people(these_changes)
         changes.append((git_sections[table_index], these_changes))
 
+    changes = sort_by_current_then_preferred(changes, pipeline_name, preferred_upstream)
     return changes
 
 
