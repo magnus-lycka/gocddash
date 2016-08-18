@@ -162,8 +162,8 @@
             {% if not current_status.is_success() %}
                 <div class="col-md-12">
 
-                    {% if not gitblame %}
-                        <h4>Upstream git blame: </h4>
+                    {% if not git_history %}
+                        <h4>Upstream git history: </h4>
                         <i>This comparison involves a pipeline instance that was triggered with a non-sequential material revision. Go to GOCD for further info.</i>
                         <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}" target="_blank">Go to
                             GO CD
@@ -207,8 +207,8 @@
                     {% endif %}
 
 
-                    {% if gitblame %}
-                    <h4>Upstream git blame:
+                    {% if git_history %}
+                    <h4>Upstream git history:
                         <small>({{ current_status.stage.pipeline_counter }} compared
                             to {{ latest_passing_stage.pipeline_counter }})
                         </small>
@@ -230,7 +230,7 @@
                         </thead>
                         <tbody>
 
-                        {% for row in gitblame %}
+                        {% for row in git_history %}
                             <tr>
                                 <td>{{ row[0] }}</td>
                                 <td>{{ row[1] }}</td>

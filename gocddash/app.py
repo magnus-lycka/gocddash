@@ -255,7 +255,7 @@ def insights(pipeline_name):
     latest_passing_stage = get_latest_passing_stage(pipeline_name, current_stage.stage_name)
     stage_name_index = (get_connection().get_stage_order(pipeline_name)).index(current_stage.stage_name)
 
-    git_blame_data = []
+    git_history = []
     perpetrator_data = []
 
     if not current_stage.is_success():
@@ -266,7 +266,7 @@ def insights(pipeline_name):
                                                   latest_passing_stage.pipeline_counter,
                                                   app.config['PREFERRED_UPSTREAM'])
 
-        git_blame_data = get_git_comparison(pipeline_name, current_stage.pipeline_counter,
+        git_history = get_git_comparison(pipeline_name, current_stage.pipeline_counter,
                                             latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
 
     base_url = app.config['PUBLIC_GO_SERVER_URL']
@@ -294,7 +294,7 @@ def insights(pipeline_name):
         theme=get_bootstrap_theme(),
         footer=get_footer(),
         current_status=current_status,
-        gitblame=git_blame_data,
+        git_history=git_history,
         rerun_link=rerun_link,
         comparison_link=comparison_link,
         live_info=dash_status.pipelines[pipeline_name],
