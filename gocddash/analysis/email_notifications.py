@@ -1,7 +1,7 @@
 import re
 from email.mime.text import MIMEText
 
-from gocddash.console_parsers.git_blame_compare import get_git_comparison
+from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.util.app_config import get_app_config, create_app_config
 from .domain import get_pipeline_head, get_latest_failure_streak, create_email_notification_sent
 from .data_access import get_connection
