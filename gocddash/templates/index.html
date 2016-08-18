@@ -54,13 +54,6 @@
                                       title="{{ unsynced_claims[pipeline.name].responsible }}: {{ unsynced_claims[pipeline.name].description }}"></span>
                             {% endif %}
                         {% endif %}
-                        {% if not "Success" in pipeline.status and not "Building" in pipeline.status %}
-                            {% set claimed_counter = synced_pipelines[pipeline.name].pipeline_counter if (pipeline.name in synced_pipelines.keys() and synced_pipelines[pipeline.name].pipeline_counter < pipeline.label|int) else pipeline.label %}
-                            <span class="glyphicon glyphicon-flag pull-right claim-stage-flag"
-                                  data-pipeline_name="{{ pipeline.name }}" data-pipeline_counter="{{ claimed_counter }}"
-                                  data-target="#myModal" data-toggle="modal" data-placement="top"
-                                  title="Claim this stage" id="claim-button"></span>
-                        {% endif %}
                     </h3>
                 </div>
                 <div id="collapse{{ loop.index }}" class="panel-collapse collapse">
@@ -91,40 +84,6 @@
             </div>
         {% endif %}
         {% endfor %}
-        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h5 class="modal-title"><strong>Claim failing stage</strong></h5>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" id="claimForm">
-                            <div class="form-group" id="responsibleFormGroup">
-                                <label for="responsible" class="col-sm-2 control-label">Responsible</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="responsible" name="responsible"
-                                           placeholder="Responsible">
-                                    <span id="responsibleHelpBlock" class="help-block hidden">Please fill in this required field.</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="description" class="col-sm-2 control-label">Description</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="description" name="description"
-                                           placeholder="Description">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="postClaim">Claim stage</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <hr>
