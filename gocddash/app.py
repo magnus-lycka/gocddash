@@ -286,6 +286,7 @@ def insights(pipeline_name):
                                                                 latest_passing_stage.pipeline_counter)
 
     dash_status = get_cctray_status()
+    recommendation, last_claim = failure_tip.get_failure_tip(current_status, previous_status, latest_passing_stage.pipeline_counter)
 
     template = render_template(
         'insights.html',  # Defined in the templates folder
@@ -300,7 +301,8 @@ def insights(pipeline_name):
         live_info=dash_status.pipelines[pipeline_name],
         latest_passing_stage=latest_passing_stage,
         previous_status=previous_status,
-        failure_tip=failure_tip.get_failure_tip(current_status, previous_status, latest_passing_stage.pipeline_counter),
+        recommendation=recommendation,
+        last_claim=last_claim,
         log_link=log_link,
         main_pipeline_link=main_pipeline_link,
         stage_name_index=stage_name_index,
