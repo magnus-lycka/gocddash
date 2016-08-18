@@ -47,8 +47,10 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
 
 
 def get_suspects(perpetrator_data):
-    suspect_emails = {re.search('<(.*)>', row[3]).group(1) for row in
-                      perpetrator_data}  # Extract the email address from perpetrator_data into a set
+    all_rows = []
+    for _, rows in perpetrator_data:
+        all_rows.extend(rows)
+    suspect_emails = {re.search('<(.*)>', row[1]).group(1) for row in all_rows}
     return suspect_emails
 
 
