@@ -15,7 +15,7 @@ sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash.util.pipeline_config import create_pipeline_config
 from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_status, create_go_client
-from gocddash.console_parsers.git_blame_compare import get_git_comparison
+from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.dash_board import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, \
