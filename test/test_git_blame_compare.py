@@ -612,16 +612,15 @@ class TestGitBlame(unittest.TestCase):
         git_blame_compare.go_request_comparison_html = MagicMock(return_value=new_html_format)
         output = git_blame_compare.get_git_comparison(pipeline_name, current, comparison, 'banana')
         self.assertEqual(output, [
-            (' Git - URL: ssh://git@git/testonline/services/big_repository/app_server.git, Branch: master', [
+            ('app_server.git, Branch: master', [
                 ('efe8f8d9a2e5aa87398e2d338246fd8e950df60d', 'ab <ab@test.com> 2016-08-17T15:55:37+02:00', 'testing')
             ]),
-            (' Git - URL: ssh://git@git/testonline/services/big_repository/big_repository.git, Branch: master', [
+            ('big_repository.git, Branch: master', [
                 ('9ca18056f017b5869bef325e8f30fa3c2b9c7198', 'lg <lg@test.com> 2016-08-18T08:39:43+02:00', 'asdf'),
                 ('6ec66540aa09abfda527630d8ab0ecfa651c11d2', 'rm <rm@test.com> 2016-08-18T08:27:41+02:00', 'qwerty'),
                 ('f493dfcf50591e6efdd7578e461f977699cde1c2', 'ab <ab@test.com> 2016-08-17T17:35:51+02:00', 'hello'),
                 ('1bfdd417c37dd04d356fe1f6e75113afbdc300f5', 'eb <eb@test.com> 2016-08-17T16:44:42+02:00', 'debug'),
                 ('e8f4dc265be0d0d20f9ad2f9fd74978d1d5ea07e', 'lg <lg@test.com> 2016-08-17T16:33:41+02:00', 'ids'),
-                ('ba7b91b6d45960e9130096139974a0a0f4cd2df2', 'go-agent <go-agent@test.com> 2016-08-17T16:25:12+02:00', 'gomongo'),
                 ('32df04538efe309e3ea245fdcedd12e1c6ad773b', 'ja <ja@test.com> 2016-08-17T15:31:38+02:00', 'cherry pick'),
                 ('944004c49589b276603d983871d1a531e9933837', 'ja <ja@test.com> 2016-08-17T15:30:43+02:00', 'cherry pick again'),
                 ('fb543f0e1f9aeaaa70d6a9bc4bfa748d04093ed3', 'ja <ja@test.com> 2016-08-17T13:21:04+02:00', 'testing stuff')

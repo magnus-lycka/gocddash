@@ -80,9 +80,8 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
             modified_by_text = remove_new_line(modified_by[index].get_text().strip())
             comments_text = comments[index].get_text().strip()
             these_changes.append((revision_text, modified_by_text, comments_text))
+        these_changes = only_real_people(these_changes)
         changes.append((git_sections[table_index], these_changes))
-
-    print(changes)
 
     return changes
 
@@ -95,4 +94,4 @@ def sort_by_current_then_preferred(git_blame_list, pipeline_name, preferred_upst
 
 
 def only_real_people(git_blame_list):
-    return [item for item in git_blame_list if "go-agent" not in item[3]]  # x[3] is the Modified by column
+    return list(filter(lambda x: "go-agent" not in x[1], git_blame_list))
