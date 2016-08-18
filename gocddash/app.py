@@ -22,7 +22,7 @@ from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_
     get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status, \
     create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
 from gocddash.dash_board.graph import create_job_test_html_graph, single_pipeline_html_graph, all_pipelines_html_graph
-from gocddash.dash_board.cc_tray_cache import create_cache, get_cache
+#from gocddash.dash_board.cc_tray_cache import create_cache, get_cache
 
 group_of_pipeline = defaultdict(str)
 
@@ -56,15 +56,15 @@ def dashboard():
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
 
-    previous_pipelines = get_cache().get_pipelines()
+    # previous_pipelines = get_cache().get_pipelines()
     finished_pipelines = []
     if which == 'failing':
         pipeline_names = [pipeline.name for pipeline in pipelines]
-        finished_pipelines = [pipeline for pipeline in previous_pipelines if pipeline.name not in pipeline_names]
-        new_failing_pipelines = [pipeline for pipeline in pipelines if pipeline not in previous_pipelines]
-        if new_failing_pipelines:
-            for pipeline in new_failing_pipelines:
-                finished_pipelines.append(pipeline)
+        # finished_pipelines = [pipeline for pipeline in previous_pipelines if pipeline.name not in pipeline_names]
+        # new_failing_pipelines = [pipeline for pipeline in pipelines if pipeline not in previous_pipelines]
+        # if new_failing_pipelines:
+        #     for pipeline in new_failing_pipelines:
+        #         finished_pipelines.append(pipeline)
 
     all_pipelines = project.select('all')
     unwanted_pipelines = []
@@ -475,7 +475,7 @@ def main():
     pipeline_path = pargs_dict['pipeline_config']
     create_pipeline_config(pipeline_path)
 
-    create_cache()
+    # create_cache()
 
 
 main()
