@@ -12,11 +12,5 @@ def remove_excessive_whitespace(string):
     return re.sub(' ( )+', '', string)
 
 
-def remove_wbr_tags(string):
-    string = re.sub('<(/)?wbr(/)?>', '', string)
-    string = re.sub('<br/>', ' ', string)
-    return string
-
-
 def remove_new_line(string):
     return string.replace("\n", "")
