@@ -43,7 +43,7 @@ steps = [
                     WHERE pipeline_name = fiv.pipeline_name
                     GROUP BY name ORDER BY min(scheduled_date) DESC LIMIT 1) last_stage
                 ON fxx.name = last_stage.name
-            WHERE pipeline_name = fiv.pipeline_name and result = 'Passed') AS start_counter, max(end_counter) AS end_counter
+            WHERE pipeline_name = fiv.pipeline_name and result = 'Passed') + 1 AS start_counter, max(end_counter) AS end_counter
             FROM fail_intervals fiv
             GROUP BY pipeline_name;""",
          "DROP VIEW latest_fail_intervals;"),
