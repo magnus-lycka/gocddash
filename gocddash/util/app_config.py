@@ -1,3 +1,7 @@
+"""This module handles the application.cfg file and creates an AppConfig object from it.
+Makes it easier to access configurations throughout the project
+"""
+
 import os
 from configparser import ConfigParser
 from itertools import chain
