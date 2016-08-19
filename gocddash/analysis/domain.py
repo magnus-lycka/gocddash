@@ -205,13 +205,14 @@ def create_instance_claim(instance_claim):
                                                instance_claim.responsible, instance_claim.description)
 
 
-class FailureStreak:
-    def __init__(self, pipeline_name, start_counter, end_counter):
+class ResultStreak:
+    def __init__(self, pipeline_name, fail_counter, pass_counter, currently_passing):
         self.pipeline_name = pipeline_name
-        self.start_counter = start_counter
-        self.end_counter = end_counter
+        self.start_counter = fail_counter
+        self.end_counter = pass_counter
+        self.currently_passing = currently_passing
 
 
 def get_latest_failure_streak(pipeline_name):
     result = get_connection().get_latest_failure_streak(pipeline_name)
-    return FailureStreak(*result)
+    return ResultStreak(*result)

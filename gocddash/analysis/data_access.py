@@ -233,7 +233,7 @@ class SQLConnection:
         return self.cursor.fetchone() is not None
 
     def get_latest_failure_streak(self, pipeline_name):
-        self.cursor.execute("""SELECT * FROM latest_fail_intervals WHERE pipeline_name = %s""", (pipeline_name,))
+        self.cursor.execute("""SELECT * FROM latest_intervals WHERE pipeline_name = %s""", (pipeline_name,))
         return self.cursor.fetchone()
 
     def email_notification_sent_for_current_streak(self, pipeline_name):

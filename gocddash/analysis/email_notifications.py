@@ -14,7 +14,7 @@ from .data_access import get_connection
 import smtplib
 
 
-def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_list):
+def send_prime_suspect_email(latest_pipeline, streak, suspect_list):
     create_app_config()
     sender_user = get_app_config().cfg['SMTP_USER']
     print("Setting up server")
@@ -22,7 +22,7 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
     print("Done setting up server\n")
 
     title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this or any upstream recently, please investigate.".format(
-        latest_pipeline.pipeline_name, start_of_failing_streak.start_counter, latest_pipeline.pipeline_counter)
+        latest_pipeline.pipeline_name, streak.start_counter+1, latest_pipeline.pipeline_counter)
 
     base_go_url = get_app_config().cfg['PUBLIC_GO_SERVER_URL']
     base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
@@ -63,11 +63,11 @@ def build_email_notifications(pipeline_name):
     if not latest_pipeline.is_success() and not get_connection().email_notification_sent_for_current_streak(
             pipeline_name):
         print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
-        start_of_red_streak = get_latest_failure_streak(pipeline_name)
-        perpetrator_data = get_git_comparison(pipeline_name, start_of_red_streak.start_counter,
-                                              start_of_red_streak.start_counter - 1, "")
+        streak = get_latest_failure_streak(pipeline_name)
+        perpetrator_data = get_git_comparison(pipeline_name, streak.pass_counter+1,
+                                              streak.pass_counter, "")
         try:
-            send_prime_suspect_email(latest_pipeline, start_of_red_streak, perpetrator_data)
-            create_email_notification_sent(pipeline_name, start_of_red_streak.start_counter)
+            send_prime_suspect_email(latest_pipeline, streak, perpetrator_data)
+            create_email_notification_sent(pipeline_name, streak.pass_counter+1)
         except Exception:
             print("Could not send email for pipeline " + pipeline_name)
