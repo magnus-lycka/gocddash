@@ -1,3 +1,4 @@
+"""Module used for parsing the console log of a characterize classified pipeline"""
 import re
 
 from gocddash.analysis.data_access import get_connection

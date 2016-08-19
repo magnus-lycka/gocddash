@@ -1,3 +1,4 @@
+"""Module used for parsing the console log of a JUnit classified pipeline"""
 from gocddash.analysis.data_access import get_connection
 from gocddash.analysis.go_client import go_request_junit_report
 from gocddash.util.html_utils import remove_excessive_whitespace, clean_html
