@@ -24,14 +24,12 @@
                            title="View details">
                             <span id="glyph{{ loop.index }}" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </a>
-                        <a href="{{ pipeline.url }}">{{ pipeline.name }}
+                        <a href="{{ pipeline.url }}">{{ pipeline.name }}</a>
                             <span class="badge">{{ pipeline.label }}
                             </span>
-                        </a>
-                        <a data-toggle="tooltip" title="{{ pipeline.changed }}"
-                           href="{{ pipeline.url }}">
+                        <span data-toggle="tooltip" title="{{ pipeline.changed }}">
                             {{ pipeline.changed | time_or_date }}
-                        </a>
+                        </span>
                         {% if pipeline.name in synced_pipelines.keys() %}
                             <a href="{{ application_root }}/insights/{{ pipeline.name }}"> <span
                                     id="glyph{{ insights }}"

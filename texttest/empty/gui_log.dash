@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4607/dash/?which=failing
+url: http://127.0.0.1:4946/dash/?which=failing
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -9,25 +9,25 @@ url: http://127.0.0.1:4607/dash/?which=failing
           +
           + [7]Select pipeline groups / Config
           + [8]Select theme
-     * Last refresh: 08:24:55 | 00 seconds
+     * Last refresh: 09:19:48 | 00 seconds
 
-[9]qux 240 [10]2015-11-26
+[9]qux 240 2015-11-26
 
-   [11]defaultStage 1 [12]defaultJob
+   [10]defaultStage 1 [11]defaultJob
 
-[13]baz 203 [14]2015-11-26
+[12]baz 203 2015-11-26
 
-   [15]gamma 1 [16]defaultJob
-   [17]delta 1 [18]defaultJob
+   [13]gamma 1 [14]defaultJob
+   [15]delta 1 [16]defaultJob
    Breakers: Mary Wollstonecraft <maryw@example.com>
 
-[19]large-norf 13 [20]2015-11-20
+[17]large-norf 13 2015-11-20
 
-   [21]runTests 1 [22]defaultJob
+   [18]runTests 1 [19]defaultJob
 
-[23]bar 57 [24]2015-11-03
+[20]bar 57 2015-11-03
 
-   [25]beta 1 [26]defaultJob
+   [21]beta 1 [22]defaultJob
    Breakers: Willy Wonka <willyw@example.com>
      __________________________________________________________________
 
@@ -42,34 +42,30 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4607/dash/?which=failing
-   3. http://127.0.0.1:4607/dash/?which=progress
-   4. http://127.0.0.1:4607/dash/?which=all
-   5. http://127.0.0.1:4607/dash/?which=failing
-   6. http://127.0.0.1:4607/dash/stats
-   7. http://127.0.0.1:4607/dash/select/
-   8. http://127.0.0.1:4607/dash/select_theme/
+   2. http://127.0.0.1:4946/dash/?which=failing
+   3. http://127.0.0.1:4946/dash/?which=progress
+   4. http://127.0.0.1:4946/dash/?which=all
+   5. http://127.0.0.1:4946/dash/?which=failing
+   6. http://127.0.0.1:4946/dash/stats
+   7. http://127.0.0.1:4946/dash/select/
+   8. http://127.0.0.1:4946/dash/select_theme/
    9. http://go-server/go/pipelines/value_stream_map/qux/240
-  10. http://go-server/go/pipelines/value_stream_map/qux/240
-  11. http://go-server/go/pipelines/qux/240/defaultStage/1
-  12. http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob
-  13. http://go-server/go/pipelines/value_stream_map/baz/203
-  14. http://go-server/go/pipelines/value_stream_map/baz/203
-  15. http://go-server/go/pipelines/baz/203/readyToTest/1
-  16. http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob
-  17. http://go-server/go/pipelines/baz/181/delta/1
-  18. http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob
-  19. http://go-server/go/pipelines/value_stream_map/large-norf/13
-  20. http://go-server/go/pipelines/value_stream_map/large-norf/13
-  21. http://go-server/go/pipelines/large-norf/13/runTests/1
-  22. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
-  23. http://go-server/go/pipelines/value_stream_map/bar/57
-  24. http://go-server/go/pipelines/value_stream_map/bar/57
-  25. http://go-server/go/pipelines/bar/57/runTests/1
-  26. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
+  10. http://go-server/go/pipelines/qux/240/defaultStage/1
+  11. http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob
+  12. http://go-server/go/pipelines/value_stream_map/baz/203
+  13. http://go-server/go/pipelines/baz/203/readyToTest/1
+  14. http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob
+  15. http://go-server/go/pipelines/baz/181/delta/1
+  16. http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob
+  17. http://go-server/go/pipelines/value_stream_map/large-norf/13
+  18. http://go-server/go/pipelines/large-norf/13/runTests/1
+  19. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
+  20. http://go-server/go/pipelines/value_stream_map/bar/57
+  21. http://go-server/go/pipelines/bar/57/runTests/1
+  22. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  28. http://127.0.0.1:4607/dash/?which=failing#collapse1
-  29. http://127.0.0.1:4607/dash/?which=failing#collapse2
-  30. http://127.0.0.1:4607/dash/?which=failing#collapse3
-  31. http://127.0.0.1:4607/dash/?which=failing#collapse4
+  24. http://127.0.0.1:4946/dash/?which=failing#collapse1
+  25. http://127.0.0.1:4946/dash/?which=failing#collapse2
+  26. http://127.0.0.1:4946/dash/?which=failing#collapse3
+  27. http://127.0.0.1:4946/dash/?which=failing#collapse4
