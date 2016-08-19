@@ -1,3 +1,8 @@
+"""Fetches and builds the Git History Comparison list and sorts it by current pipeline name and preferred upstream
+as specified in application.cfg. Filters out any material revision modifications by go-agent.
+
+"""
+
 from bs4 import BeautifulSoup
 
 from gocddash.analysis.go_client import go_request_comparison_html
