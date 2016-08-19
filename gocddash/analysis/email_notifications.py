@@ -66,8 +66,8 @@ def build_email_notifications(pipeline_name):
         streak = get_latest_failure_streak(pipeline_name)
         perpetrator_data = get_git_comparison(pipeline_name, streak.pass_counter+1,
                                               streak.pass_counter, "")
-        send_prime_suspect_email(latest_pipeline, streak, perpetrator_data)
         try:
+            send_prime_suspect_email(latest_pipeline, streak, perpetrator_data)
             create_email_notification_sent(pipeline_name, streak.pass_counter+1)
         except Exception:
             print("Could not send email for pipeline " + pipeline_name)
