@@ -30,7 +30,6 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
     message = MIMEText(msg_content, 'html')
 
     recipients = get_suspects(suspect_list)
-    # recipients = [';placeholder@pagero.com', 'placeholder@pagero.com']
 
     message['From'] = 'Go.CD Dashboard <{}>'.format(sender_user)
     message['To'] = ', '.join(recipients)
