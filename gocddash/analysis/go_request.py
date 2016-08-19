@@ -1,3 +1,4 @@
+"""Handles the logic of making synchronisation requests to GO"""
 import math
 from functools import reduce
 
