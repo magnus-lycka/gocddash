@@ -49,7 +49,7 @@ class FailureRecommendation:
                 "Recommend to rerun."),
             (
                 lambda: self.current.failure_signature == self.previous.failure_signature and self.current.test_names == self.previous.test_names,
-                "Same failure signature and same failure indices as last failure"),
+                "Same failure signature and same failure indices as last failure."),
             (lambda: self.current.failure_signature == self.previous.failure_signature,
              "Same failure signature as last test. Unlikely flickering."),
             (lambda: self.current.test_names == self.previous.test_names,
