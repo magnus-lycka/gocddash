@@ -1,10 +1,21 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container">
-{% for pipeline in pipelines %}
-    {% if loop.index is divisibleby(cols) %}
-    <div class="row">
-    {% endif %}
+    <div class="container">
+        {% if not pipelines %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="jumbotron">
+                        <h2>No pipeline groups selected.</h2>
+                     <p><a href="{{ application_root }}/select">Select pipeline groups here.
+                     </a></p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% for pipeline in pipelines %}
+            {% if (loop.index - 1) is divisibleby(cols) %}
+                <div class="row">
+            {% endif %}
         <div class="col-md-{{ 12 // cols }}">
             <div class="panel panel-{{ pipeline.status | bootstrap_status }}">
                 <div class="panel-heading {{ pipeline.status | bootstrap_building }}">
@@ -13,63 +24,124 @@
                            title="View details">
                             <span id="glyph{{ loop.index }}" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </a>
-                        <a href="{{ pipeline.url }}">{{ pipeline.name }}
+                        <a href="{{ pipeline.url }}">{{ pipeline.name }}</a>
                             <span class="badge">{{ pipeline.label }}
                             </span>
-                        </a>
-                        <a  data-toggle="tooltip" title="{{ pipeline.changed }}"
-                            href="{{ pipeline.url }}">
+                        <span data-toggle="tooltip" title="{{ pipeline.changed }}">
                             {{ pipeline.changed | time_or_date }}
-                        </a>
+                        </span>
+                        {% if pipeline.name in synced_pipelines.keys() %}
+                            <a href="{{ application_root }}/insights/{{ pipeline.name }}"> <span
+                                    id="glyph{{ insights }}"
+                                    class="glyphicon glyphicon-stats"
+                                    aria-hidden="true"></span> |
+                                <i> Insights </i>
+                                ({{ synced_pipelines[pipeline.name].pipeline_counter }})
+                            </a>
+
+                            {% if not "Success" in pipeline.status and synced_pipelines[pipeline.name].responsible %}
+                                <span class="glyphicon glyphicon-lock pull-right claimed-lock"
+                                      aria-hidden="true" data-placement="top"
+                                      title="{{ synced_pipelines[pipeline.name].responsible }}: {{ synced_pipelines[pipeline.name].description }}"></span>
+                            {% endif %}
+                        {% endif %}
+                        {% if not "Success" in pipeline.status and pipeline.name in unsynced_claims.keys() %}
+                            {% if unsynced_claims[pipeline.name].responsible and unsynced_claims[pipeline.name].pipeline_counter|string == pipeline.label %}
+                                <span class="glyphicon glyphicon-lock pull-right claimed-lock"
+                                      aria-hidden="true" data-placement="top"
+                                      title="{{ unsynced_claims[pipeline.name].responsible }}: {{ unsynced_claims[pipeline.name].description }}"></span>
+                            {% endif %}
+                        {% endif %}
                     </h3>
                 </div>
                 <div id="collapse{{ loop.index }}" class="panel-collapse collapse">
                     <div class="panel-body">
-                    {% for stage in pipeline.stages %}
-                        <div class="btn-group-vertical">
-                            <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}"
-                               role="button" href="{{ stage.url }}">{{ stage.name }}
-                                <span class="badge">{{ stage.counter }}</span></a>
-                            {% for job in stage.jobs %}
-                            <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
-                               href="{{ job.url }}">{{ job.name }}</a>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                    {% for kind in pipeline.messages | sort %}
-                        <br>
-                        {{ kind }}:
-                        {% for message in pipeline.messages[kind] | sort %}
-                            {{ message }}
+                        {% for stage in pipeline.stages %}
+                            <div class="btn-group-vertical">
+                                <a class="btn btn-sm btn-{{ stage.status | bootstrap_status }}"
+                                   role="button" href="{{ stage.url }}">{{ stage.name }}
+                                    <span class="badge">{{ stage.counter }}</span></a>
+                                {% for job in stage.jobs %}
+                                    <a class="btn btn-sm btn-{{ job.status | bootstrap_status }}" role="button"
+                                       href="{{ job.url }}">{{ job.name }}</a>
+                                {% endfor %}
+                            </div>
                         {% endfor %}
-                    {% endfor %}
+                        {% for kind in pipeline.messages | sort %}
+                            <br>
+                            {{ kind }}:
+                            {% for message in pipeline.messages[kind] | sort %}
+                                {{ message }}
+                            {% endfor %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
-    {% if loop.index is divisibleby(cols) %}
+        {% if loop.index is divisibleby(cols) or loop.index == pipelines|length %}
+            </div>
+        {% endif %}
+        {% endfor %}
     </div>
-    {% endif %}
-{% endfor %}
-</div>
+
+    <hr>
+
+    <div id="mgmt-bar" class="container hidden">
+        <div class="row">
+            <div class="col-md-12">
+                <span>System status</span>
+                {{ total_pipelines }}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" aria-valuenow="{{ progress_bar_data[0] }}"
+                         style="width: {{ progress_bar_data[0] }}%">
+                        {% if progress_bar_data[0] > 5 %}
+                            {{ progress_bar_data[0] | round | int }} %
+                        {% endif %}
+                    </div>
+                    <div class="progress-bar progress-bar-info progress-bar-striped"
+                         style="width: {{ progress_bar_data[1] }}%">
+                        {% if progress_bar_data[1] > 5 %}
+                            {{ progress_bar_data[1] | round | int }} %
+                        {% endif %}
+                    </div>
+                    <div class="progress-bar progress-bar-danger" style="width: {{ progress_bar_data[2] }}%">
+                        {% if progress_bar_data[2] %}
+                            {{ progress_bar_data[2] | round | int }} %
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="status-popup">
+        {% for pipeline in finished_pipelines %}
+            <div class="col-md-4">
+                <div class="pipeline-alert" style="display:none">
+                    <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}"
+                         role="alert" id="pipeline-status-cache">
+                        <strong>Info:</strong> {{ pipeline.name }} just finished.
+                        New status: {{ pipeline.status }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}
 
 {% block scripts %}
+    <script src="{{ url_for('gocddash.static', filename='index.js') }}"></script>
 
-<!-- Refresh every minute -->
-<script type="text/javascript">
-  window.setTimeout(function(){ document.location.reload(true); }, 60000);
-</script>
-
-<script type="text/javascript">
-{% for pipeline in pipelines %}
-    $("#collapse{{ loop.index }}").on('shown.bs.collapse', function () {
-       $("#glyph{{ loop.index }}").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-    });
-    $("#collapse{{ loop.index }}").on('hidden.bs.collapse', function () {
-       $("#glyph{{ loop.index }}").removeClass("glyphicon-minus").addClass("glyphicon-plus");
-    });
-{% endfor %}
-</script>
+    <script type="text/javascript">
+        {% for pipeline in pipelines %}
+            $("#collapse{{ loop.index }}").on('shown.bs.collapse', function () {
+                $("#glyph{{ loop.index }}").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+            });
+            $("#collapse{{ loop.index }}").on('hidden.bs.collapse', function () {
+                $("#glyph{{ loop.index }}").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+            });
+        {% endfor %}
+    </script>
 
 {% endblock %}

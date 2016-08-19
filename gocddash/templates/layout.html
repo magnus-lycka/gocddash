@@ -10,81 +10,80 @@
     <meta name="author" content="magnus@thinkware.se">
     <title>Go.CD Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{ theme }}/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('gocddash.static', filename='dash.css') }}" rel="stylesheet">
+
+    {% block bokehstuff %}{% endblock %}
 </head>
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-static-top">
+
+<nav class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button"
-                    class="navbar-toggle collapsed"
-                    data-toggle="collapse"
-                    data-target="#navbar"
-                    aria-expanded="false"
-                    aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ go_server_url }}">{{ go_server_url }}</a>
+            <a class="navbar-brand" href="{{ go_server_url }}" target="_blank">{{ go_server_url }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a class="btn btn-warning" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Show only failing builds" href="{{ url_for('gocddash.dashboard') }}?which=failing">Failing</a></li>
-                <li><a class="btn btn-info" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Show failing and building" href="{{ url_for('gocddash.dashboard') }}?which=progress">Progress</a></li>
-                <li><a class="btn btn-success" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Show all builds" href="{{ url_for('gocddash.dashboard') }}?which=all">All</a></li>
-            </ul>
-            <ul class="nav navbar-nav">
-                <li><a class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Select which pipeline groups to monitor"
-                       href="{{ url_for('gocddash.select') }}">Select Pipeline-Groups</a></li>
-                <li><a class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom"
-                       title="Select which bootstrap theme to use."
-                       href="{{ url_for('gocddash.select_theme') }}">Select Theme</a></li>
+                <li class="active" title="Show only failing builds"><a href="{{ url_for('gocddash.dashboard') }}?which=failing">Failing</a></li>
+                <li class="active" title="Show failing and building"><a href="{{ url_for('gocddash.dashboard') }}?which=progress">Progress</a></li>
+                <li class="active" title="Show all builds"><a href="{{ url_for('gocddash.dashboard') }}?which=all">All</a></li>
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li>Last refresh:<br>{{ now | tm }}</li>
-                <li><br><span id="seconds">00</span> seconds</li>
+
             </ul>
-        </div><!--/.navbar-collapse -->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More/Config <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('gocddash.stats') }}">Graph overview</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li title="Select which pipeline groups to monitor"><a href="{{ url_for('gocddash.select') }}">Select pipeline groups / Config</a></li>
+                        <li title="Select which bootstrap theme to use"><a href="{{ url_for('gocddash.select_theme') }}">Select theme</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <p class="navbar-text navbar-right">Last refresh: {{ now | tm }} | <span id="seconds">00</span> seconds</p>
+                </li>
+            </ul>
+
+
+        </div>
     </div>
 </nav>
 
 {% block content %}{% endblock %}
 
 <div class="container">
-    <p></p> <!-- no space between the well below and the button in the bottom of the forms??? -->
-    <div class="well well-sm small text-center">{{ footer }}</div>
+    <p></p>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well well-sm small text-center">{{ footer }}</div>
+        </div>
+    </div>
 </div>
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
-<script>
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-});
+
+<script type="text/javascript">
+    var applicationRoot = "{{ application_root }}";
 </script>
 
-<script>
-var sec = 0;
-setInterval( function(){
-    if (++sec < 10) {
-      $("#seconds").html("0" + sec);
-    } else {
-      $("#seconds").html(sec);
-    }
-}, 1000);
-</script>
+<script src="{{ url_for('gocddash.static', filename='dash.js') }}"></script>
+
 
 {% block scripts %}{% endblock %}
 

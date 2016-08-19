@@ -1,0 +1,15 @@
+{
+  "name": "beta",
+  "approved_by": "asdf",
+  "id": 647837,
+  "result": "Failed",
+  "jobs": [
+    {
+      "name": "defaultJob",
+      "result": "Failed",
+      "id": 1235,
+      "scheduled_date": 1436509518752,
+      "agent_uuid": "1"
+    }
+  ]
+}

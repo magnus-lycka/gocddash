@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>404: Not Found!</title>
+    </head>
+    <div class="container">
+
+        <div class="jumbotron">
+            <h1>:(</h1>
+            <p>{{ statuscode }}: It looks like the page you're trying to access does not exist.</p>
+            <p><a class="btn btn-primary btn-lg" href="{{ dashboard_link }}" role="button">Go back to the dashboard</a></p>
+        </div>
+    </div>
+{% endblock %}
+

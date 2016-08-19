@@ -1,6 +1,7 @@
 import unittest
-from parse_cctray import Projects, Pipeline
 from xml.etree import ElementTree as Et
+
+from gocddash.analysis.parse_cctray import Projects, Pipeline
 
 
 class TestPipelines(unittest.TestCase):

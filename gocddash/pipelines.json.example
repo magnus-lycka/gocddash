@@ -1,0 +1,15 @@
+{
+  "pipelines": [
+    {
+      "name": "some-pipeline",
+      "begin_at": 2200,
+      "log_parser": "junit",
+      "email_notifications": true
+    },
+    {
+      "name": "another-pipeline",
+      "log_parser": "junit",
+      "email_notifications": false
+    }
+  ]
+}

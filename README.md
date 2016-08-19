@@ -11,7 +11,7 @@ The builds you selected will be shown in descending
 chronological order.
 
 By default, you just see the pipeline name, the current
-status, the pipeline label and the latest build time, 
+status, the pipeline label and the latest build time,
 but you can expand the view to see the status of its
 stages and jobs, as well as the list of breakers.
 There are also links to the current versions of pipelines,
@@ -86,3 +86,7 @@ everything also works with the uWSGI service and nginx.
 
 Both these applications have similar setup strategies, with config under
 /etc/uwsgi and /etc/nginx.
+
+## Development
+
+See the instructions in "README-analysis.md"

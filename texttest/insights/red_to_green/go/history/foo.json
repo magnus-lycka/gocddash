@@ -1,0 +1,39 @@
+{
+  "pagination":{
+    "total":382
+  },
+  "pipelines":[
+    {
+      "counter": 382,
+      "name": "foo",
+      "id": 123,
+      "build_cause": {
+        "trigger_message": "hej :)"
+      },
+      "stages": [
+        {
+          "scheduled": true,
+          "result": "Passed",
+          "counter": 1,
+          "name": "alpha"
+        }
+      ]
+    },
+    {
+      "counter": 381,
+      "name": "foo",
+      "id": 122,
+      "build_cause": {
+        "trigger_message": "hej :)"
+      },
+      "stages": [
+        {
+          "scheduled": true,
+          "result": "Failed",
+          "counter": 1,
+          "name": "alpha"
+        }
+      ]
+    }
+  ]
+}

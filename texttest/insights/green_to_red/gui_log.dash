@@ -1,0 +1,119 @@
+url: http://127.0.0.1:4583/dash/insights/bar
+   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
+     * [2]Failing
+     * [3]Progress
+     * [4]All
+
+     * [5]More/Config
+          + [6]Graph overview
+          +
+          + [7]Select pipeline groups / Config
+          + [8]Select theme
+     * Last refresh: 11:58:07 | 00 seconds
+
+Insights for bar
+
+Latest in Go
+
+   Pipeline counter: 57, run 1
+
+   Result: Failure
+
+Latest analyzed
+
+   Pipeline counter:
+          57
+
+   Stage:
+          beta , run 1
+
+   Result:
+          Failure
+
+   Triggered by:
+          hej :)
+
+   Approved by:
+          asdf
+
+   Failure stage:
+          TEST
+
+   Recommendation:
+          Last pipeline was a success. Potential for flickering but may
+          need further investigation.
+
+Last green
+
+   Pipeline counter: 56 (1 pipeline ago)
+
+   Stage: beta
+
+   At: 2015-07-10 08:25:18
+   (BUTTON) Claim failing stage
+     __________________________________________________________________
+
+   [9]Overview
+   [10]Rerun beta
+   [11]Test Summary
+     __________________________________________________________________
+
+   [12]Pipeline Graphs
+
+Upstream git history: (57 compared to 56) [13]Go to GO CD comparison page
+
+   Pipeline Revision Modified by Comment
+   app_server.git, Branch: master efe8f8d9a2e5aa87398e2d338246fd8e950df60d
+   ab <ab@test.com> 2016-08-17T15:55:37+02:00 testing
+   big_repository.git, Branch: master
+   9ca18056f017b5869bef325e8f30fa3c2b9c7198 lg <lg@test.com>
+   2016-08-18T08:39:43+02:00 asdf
+   big_repository.git, Branch: master
+   6ec66540aa09abfda527630d8ab0ecfa651c11d2 rm <rm@test.com>
+   2016-08-18T08:27:41+02:00 qwerty
+   big_repository.git, Branch: master
+   f493dfcf50591e6efdd7578e461f977699cde1c2 ab <ab@test.com>
+   2016-08-17T17:35:51+02:00 hello
+   big_repository.git, Branch: master
+   1bfdd417c37dd04d356fe1f6e75113afbdc300f5 eb <eb@test.com>
+   2016-08-17T16:44:42+02:00 debug
+   big_repository.git, Branch: master
+   e8f4dc265be0d0d20f9ad2f9fd74978d1d5ea07e lg <lg@test.com>
+   2016-08-17T16:33:41+02:00 ids
+   big_repository.git, Branch: master
+   32df04538efe309e3ea245fdcedd12e1c6ad773b ja <ja@test.com>
+   2016-08-17T15:31:38+02:00 cherry pick
+   big_repository.git, Branch: master
+   944004c49589b276603d983871d1a531e9933837 ja <ja@test.com>
+   2016-08-17T15:30:43+02:00 cherry pick again
+   big_repository.git, Branch: master
+   fb543f0e1f9aeaaa70d6a9bc4bfa748d04093ed3 ja <ja@test.com>
+   2016-08-17T13:21:04+02:00 testing stuff
+
+   (BUTTON) ×
+
+Claim failing stage
+
+   Responsible
+   ____________________ Please fill in this required field.
+   Description
+   ____________________
+   (BUTTON) Close (BUTTON) Claim stage
+
+   ???
+
+References
+
+   1. http://go.pagero.local/go/
+   2. http://127.0.0.1:4583/dash/?which=failing
+   3. http://127.0.0.1:4583/dash/?which=progress
+   4. http://127.0.0.1:4583/dash/?which=all
+   5. http://127.0.0.1:4583/dash/insights/bar
+   6. http://127.0.0.1:4583/dash/stats
+   7. http://127.0.0.1:4583/dash/select/
+   8. http://127.0.0.1:4583/dash/select_theme/
+   9. http://go.pagero.local/go/tab/pipeline/history/bar
+  10. http://127.0.0.1:4583/dash/insights/bar
+  11. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests
+  12. http://127.0.0.1:4583/dash/graphs/bar
+  13. http://go.pagero.local/go/compare/bar/57/with/56

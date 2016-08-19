@@ -1,0 +1,302 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center">Insights for {{ current_status.stage.pipeline_name }} </h2>
+
+                {% if not current_status.is_success() and current_status.stage.is_claimed() %}
+                    <h4 class="text-center">
+                        Claimed by {{ current_status.stage.responsible }}: {{ current_status.stage.description }}
+                    </h4>
+                {% endif %}
+
+                {% if (live_info.label|int != current_status.stage.pipeline_counter or live_info.stages[stage_name_index].counter|int != current_status.stage.stage_counter) and "Building" not in live_info.status %}
+                    <div class="alert alert-info" role="alert">
+                        <strong>Information:</strong> Latest pipeline in GO has not been synced and analyzed yet.
+                        Waiting for sync (~1min).
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-{{ live_info.status | bootstrap_status }}">
+                    <div class="panel-heading {{ live_info.status | bootstrap_building }}">
+                        <h3 class="panel-title">{{ live_info.status | building_panel_label }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p><strong>Pipeline counter:</strong> {{ live_info.label }}, <strong>run </strong> {{ live_info.stages[stage_name_index].counter }}
+                        </p>
+                        <p>
+                            {% if current_status.stage.pipeline_counter == live_info.label|int and current_status.stage.stage_counter == live_info.stages[stage_name_index].counter|int and live_info.stages[stage_name_index].name == current_status.stage.stage_name %}
+                                <strong>Result:</strong>
+                                <span class="{{ current_status.is_success() | build_outcome }}">{{ current_status.describe_run_outcome() }}</span>
+                            {% endif %}
+                            {% if current_status.stage.pipeline_counter != live_info.label|int or current_status.stage.stage_counter != live_info.stages[stage_name_index].counter|int %}
+                                <strong>Status:</strong>
+                                <span>{{ live_info.status }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="panel panel-{{ current_status.describe_run_outcome() | bootstrap_status }}">
+                    <div class="panel-heading">
+                        {% if not current_status.stage.is_success() and current_status.stage.is_claimed() %}
+                            <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true"></span>
+                        {% endif %}
+                        <h3 class="panel-title">
+                            Latest analyzed
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>Pipeline counter:</dt>
+                            <dd>{{ current_status.stage.pipeline_counter }}</dd>
+
+                            <dt>Stage:</dt>
+                            <dd>{{ current_status.stage.stage_name }}
+                                , <strong>run </strong> {{ current_status.stage.stage_counter }}
+                            </dd>
+
+                            <dt>Result:</dt>
+                            <dd class="{{ current_status.is_success() | build_outcome }}">{{ current_status.describe_run_outcome() }}</dd>
+
+                            <dt>Triggered by:</dt>
+                            <dd>{{ current_status.stage.trigger_message }}</dd>
+
+                            <dt>Approved by:</dt>
+                            <dd>{{ current_status.stage.approved_by }}</dd>
+
+                        </dl>
+                        {% if not current_status.is_success() %}
+                            <dl class="dl-horizontal">
+                                <dt>Failure stage:</dt>
+                                <dd>{{ current_status.stage.failure_stage }}</dd>
+
+                                <dt>Recommendation:</dt>
+                                <dd><span
+                                        class="{{ current_status.get_failure_stage_desc | failure_stage }}">{{ recommendation }}<br/>{{ last_claim }}</span>
+                                </dd>
+
+                            </dl>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="panel panel-{{ latest_passing_stage.is_success() | build_outcome_panel }}">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% if not latest_passing_stage.is_success() %}Earliest available (No green pipeline
+                                synced) {% endif %}
+                            {% if latest_passing_stage.is_success() %}Last green {% endif %}</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% set count = current_status.stage.pipeline_counter - latest_passing_stage.pipeline_counter %}
+                        <p><strong>Pipeline counter:</strong> {{ latest_passing_stage.pipeline_counter }} ({{ count }}
+                            pipeline{{ count | pluralize }} ago)</p>
+                        <p><strong>Stage:</strong> {{ latest_passing_stage.stage_name }}</p>
+                        <p><strong>At:</strong> {{ latest_passing_stage.scheduled_date }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% if not current_status.is_success() %}
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <button type="button" class="btn btn-danger btn-lg btn-block" id="claim-button" data-toggle="modal"
+                            data-target="#myModal">
+                        <span class="glyphicon glyphicon-flag pull-left" aria-hidden="true"></span>
+                        Claim failing stage
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+        <hr>
+        <div class="row">
+            <div class="col-md-4">
+                <a type="button" class="btn btn-primary btn-lg btn-block" href="{{ main_pipeline_link }}"
+                   target="_blank">
+                    <span class="glyphicon glyphicon-play pull-left" aria-hidden="true"></span>
+                    Overview
+                </a>
+            </div>
+            <div class="col-md-4">
+                {% if "Building" in live_info.status %}
+                    {% set disabled="disabled" %}
+                {% endif %}
+                <a type="button" class="{{ live_info.status | rerun_valid }} {{ disabled }}" href="#" id="rerun-button">
+                    <span id="glyph-rerun" class="glyphicon glyphicon-repeat pull-left" aria-hidden="true"></span>
+                    Rerun {{ current_status.stage.stage_name }}
+                    {% if "Building" in live_info.status %}
+                        (obsolete)
+                    {% endif %}
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a type="button" class="btn btn-primary btn-lg btn-block" href="{{ log_link }}" target="_blank">
+                    <span class="glyphicon glyphicon-th-list pull-left" aria-hidden="true"></span>
+                    Test Summary
+                </a>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <a type="button" class="btn btn-default pull-right"
+                   href="{{ application_root }}/graphs/{{ current_status.stage.pipeline_name }}">
+                    <span class="glyphicon glyphicon-object-align-bottom pull-left" aria-hidden="true"></span>
+                    Pipeline Graphs
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            {% if not current_status.is_success() %}
+                <div class="col-md-12">
+
+                    {% if not git_history %}
+                        <h4>Upstream git history: </h4>
+                        <i>This comparison involves a pipeline instance that was triggered with a non-sequential material revision. Go to GOCD for further info.</i>
+                        <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}" target="_blank">Go to
+                            GO CD
+                            comparison page</a>
+                    {% endif %}
+
+                    {% if perpretrator_data %}
+
+                        <h4>Prime suspect:
+                            <small>({{ latest_passing_stage.pipeline_counter + 1 }} compared
+                                to {{ latest_passing_stage.pipeline_counter }})
+                            </small>
+                        </h4>
+
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Pipeline</th>
+                                <th>Revision</th>
+                                <th>Modified by</th>
+                                <th>Comment</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            {% for repo, revisions in perpretrator_data %}
+                                {% for revision, modified_by, comment in revisions %}
+                                    <tr>
+                                        <td>{{ repo }}</td>
+                                        <td>{{ revision }}</td>
+                                        <td>{{ modified_by }}</td>
+                                        <td>{{ comment }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                        <hr>
+
+                    {% endif %}
+
+
+                    {% if git_history %}
+                    <h4>Upstream git history:
+                        <small>({{ current_status.stage.pipeline_counter }} compared
+                            to {{ latest_passing_stage.pipeline_counter }})
+                        </small>
+                        <a type="button" class="btn btn-info pull-right" href="{{ comparison_link }}" target="_blank">Go to
+                            GO CD
+                            comparison page</a>
+                    </h4>
+
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Pipeline</th>
+                            <th>Revision</th>
+                            <th>Modified by</th>
+                            <th>Comment</th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        {% for repo, revisions in git_history %}
+                            {% for revision, modified_by, comment in revisions %}
+                            <tr>
+                                <td>{{ repo }}</td>
+                                <td>{{ revision }}</td>
+                                <td>{{ modified_by }}</td>
+                                <td>{{ comment }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title"><strong>Claim failing stage</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="claimForm">
+                        <div class="form-group" id="responsibleFormGroup">
+                            <label for="responsible" class="col-sm-2 control-label">Responsible</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="responsible" name="responsible"
+                                       placeholder="Responsible">
+                                <span id="responsibleHelpBlock" class="help-block hidden">Please fill in this required field.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="description" name="description"
+                                       placeholder="Description">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="postClaim">Claim stage</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script type="text/javascript">
+        var current_stage = {
+            pipeline_name: "{{ current_status.stage.pipeline_name }}",
+            pipeline_counter: "{{ current_status.stage.pipeline_counter }}",
+            stage_name: "{{ current_status.stage.stage_name }}"
+        };
+        var go_server_url = "{{ go_server_url }}";
+        var rerun_token = "{{ rerun_token }}";
+        var go_username = "{{ username }}";
+        var go_password = "{{ passwd }}";
+    </script>
+
+    <script src="{{ url_for('gocddash.static', filename='insights.js') }}"></script>
+
+{% endblock %}

@@ -1,17 +1,18 @@
+import datetime
 import os
-import requests
 import sqlite3
 import time
-import datetime
 from collections import defaultdict
 from xml.etree import ElementTree as Et
+
+import requests
 
 SAMPLES_MARKER = 'meta:measurement'
 
 
 def analyze_xml(data):
     ts = datetime.datetime.now()
-    print data
+    print(data)
     environments = defaultdict(int)
     resources = defaultdict(int)
     root = Et.fromstring(data)
@@ -56,10 +57,10 @@ def init_db(conn):
             cur = conn.cursor()
             cur.execute(table)
             conn.commit()
-            print " ".join(table.split()[:3]).capitalize()
+            print(" ".join(table.split()[:3]).capitalize())
         except sqlite3.OperationalError as err:
             if 'exists' in err.message:
-                print "Table", table.split()[2], 'existed'
+                print("Table", table.split()[2], 'existed')
             else:
                 raise
 
@@ -82,7 +83,7 @@ def main():
     while True:
         time.sleep(60 - time.localtime()[5])
         data = fetch_jobqueue()
-        print data
+        print(data)
         store(dbpath, data)
 
 

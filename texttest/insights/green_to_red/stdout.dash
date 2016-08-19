@@ -1,0 +1,25 @@
+starting servers, db on port 16501 and application on port 4856, using checkout /home/emilyb/workspace/gocddash
+starting docker container from image postgres:9.3
+pulling image for postgres
+b'{"status":"Pulling from library/postgres","id":"9.3"}\r\n'
+b'{"status":"Digest: sha256:5f9de2c1bcf6aff1f9d10eceb30c3b72057eacd14d3fd25a3bbf732e62e3be12"}\r\n'
+b'{"status":"Status: Image is up to date for postgres:9.3"}\r\n'
+image pulled
+docker container ready to accept connections
+2016-08-10 15:19:54.306636 Starting synchronization.
+2016-08-10 15:19:54.308973 Will synchronize bar from 50 onwards.
+Requested pipelines = 7 (from 50 to 57)
+Pipeline counter: 57
+  Fetching stage: beta / 1
+Pipeline counter: 56
+  Fetching stage: beta / 1
+
+2016-08-10 15:19:54.339666 Done with the backlog.
+
+started docker container with id=8a03da8ec2166b05133dd4a0452f5c3b0cc7c90a40e4a11f1e446bf5338e2b21
+db is accepting connections
+application is started
+pipelines are synced
+Starting test workflow for GO CD Dashboard
+stopping docker container
+docker container stopped and removed

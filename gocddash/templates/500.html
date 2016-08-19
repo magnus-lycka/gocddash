@@ -1,0 +1,27 @@
+<head>
+    <meta charset="UTF-8">
+    <title>500 Internal Server Error</title>
+</head>
+
+{% extends "layout.html" %}
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>500: Internal Server Error</title>
+    </head>
+    <div class="container">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <h1>500: Internal Server Error</h1>
+                <p>{{ statuscode }} / {{ statuscode.description }}: </p>
+                    <p>Your request could not be handled.</p>
+                        <ul class="list-group">
+                            <li class="list-group-item"> Is Go down?</li>
+                            <li class="list-group-item"> Is the pipeline synchronization working?</li>
+                        </ul>
+                <p><a class="btn btn-primary btn-lg" href="{{ dashboard_link }}" role="button">Go back to the dashboard</a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
