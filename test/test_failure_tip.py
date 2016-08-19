@@ -25,19 +25,19 @@ class TestFailureTip(unittest.TestCase):
         passed_stage = self.create_stage_failure_info(None, True)
         current = pipeline_status.create_stage_info(passed_stage)
         result = failure_tip.get_failure_tip(current, None, 0)
-        self.assertEqual(result, "All good.")
+        self.assertEqual(result, ("All good.", ''))
 
     def test_current_startup(self):
         startup_stage = self.create_stage_failure_info(None, False, "STARTUP")
         current = pipeline_status.create_stage_info(startup_stage)
         result = failure_tip.get_failure_tip(current, None, 0)
-        self.assertEqual(result, "Tests failed during STARTUP.")
+        self.assertEqual(result, ("Tests failed during STARTUP.", ''))
 
     def test_current_post(self):
         post_stage = self.create_stage_failure_info(None, False, "POST")
         current = pipeline_status.create_stage_info(post_stage)
         result = failure_tip.get_failure_tip(current, None, 0)
-        self.assertEqual(result, "All tests passed, but the build failed. ")
+        self.assertEqual(result, ("All tests passed, but the build failed.", ''))
 
     def test_error_introduced(self):
         pipeline_status.get_failure_stage_signature = MagicMock(return_value={2000: {}})
