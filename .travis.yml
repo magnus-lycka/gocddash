@@ -8,4 +8,4 @@ install:
   - "pip install -r requirements.txt"
 script:
   - (cd tests && nosetests)
-  - texttest -a dash
+  - python2 -c "from texttestlib.engine import TextTest; TextTest().run()"
