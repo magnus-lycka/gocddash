@@ -20,6 +20,15 @@ def material_revision_diff_tests(soup):
 
 
 def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
+    """
+    Extracts the git history comparison from the GO comparison HTML page and stores the data in the following data structure
+    [(Git Name [(Revision, Modified By, Comment)]), etc...]
+    :param pipeline_name: the name of the pipeline to get the git comparison for
+    :param current: current pipeline counter
+    :param comparison: comparison pipeline counter
+    :param preferred_upstream: the preferred upstream pipeline to sort by
+    :return: None if there is a material revision difference in GO. Otherwise, the data structure mentioned earlier.
+    """
     soup = open_html(pipeline_name, current, comparison)
 
     if material_revision_diff_tests(soup):
@@ -43,7 +52,8 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
             these_changes.append((revision_text, modified_by_text, comments_text))
 
         these_changes = only_real_people(these_changes)
-        changes.append((git_sections[table_index], these_changes))
+        if these_changes:  # Avoids adding an empty list to the go-agent revision pipelines that have been filtered out
+            changes.append((git_sections[table_index], these_changes))
 
     changes = sort_by_current_then_preferred(changes, pipeline_name, preferred_upstream)
     return changes
