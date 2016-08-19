@@ -241,7 +241,7 @@ class SQLConnection:
             """SELECT e.*
                 FROM latest_intervals l
                 JOIN email_notifications e ON l.pipeline_name = e.pipeline_name AND l.pass_counter < e.pipeline_counter AND l.currently_passing = false
-                WHERE l.pipeline_name = 'po-webtest' = %s;""", (pipeline_name,))
+                WHERE l.pipeline_name = %s;""", (pipeline_name,))
         return self.cursor.fetchone() is not None
 
 _connection = None

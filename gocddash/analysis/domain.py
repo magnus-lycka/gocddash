@@ -208,8 +208,8 @@ def create_instance_claim(instance_claim):
 class ResultStreak:
     def __init__(self, pipeline_name, fail_counter, pass_counter, currently_passing):
         self.pipeline_name = pipeline_name
-        self.start_counter = fail_counter
-        self.end_counter = pass_counter
+        self.fail_counter = fail_counter
+        self.pass_counter = pass_counter
         self.currently_passing = currently_passing
 
 
