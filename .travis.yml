@@ -1,7 +1,7 @@
 language: python
 python:
   - "3.4"
-  - "3.5"
+#  - "3.5"
 before_install:
   - "sudo apt-get install lynx postgresql-server-dev-9.4"
 install:
@@ -9,5 +9,5 @@ install:
   - "pip2 install texttest"
 script:
   - (cd test && nosetests)
-  - "./texttest.py -d /home/travis/build/magnus-lycka/gocddash/texttest -con -a dash -b"
+  - "./texttest.py -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -con -a dash -b"
 
