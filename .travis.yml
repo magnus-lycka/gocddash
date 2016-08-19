@@ -6,9 +6,6 @@ before_install:
   - "sudo apt-get install postgresql-server-dev-9.4"
 install:
   - "pip install -r requirements.txt"
-env:
-  - TEXTTEST_PATH=./texttest
-  - TEXTTEST_PERSONAL_CONFIG=./.texttest.cfg
 script:
-  - echo `pwd`
+  - (cd tests && nosetests)
   - texttest -a dash
