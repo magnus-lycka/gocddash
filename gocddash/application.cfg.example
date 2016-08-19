@@ -11,7 +11,7 @@ DEBUG = False
 APPLICATION_ROOT = "/dash"
 BIND_PORT = 5000
 DB_PORT = 15554
-PREFERRED_UPSTREAM = "change to your preferred upstream pipeline for git blame sorting"
+PREFERRED_UPSTREAM = "example.git"
 
 SMTP_SERVER = "your smtp server"
 SMTP_USER = "your smtp username"
