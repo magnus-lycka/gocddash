@@ -1,3 +1,5 @@
+"""Handles all the graphing and plotting used in the various graphs of the dashboard"""
+
 from collections import OrderedDict
 
 import pandas as pd
@@ -51,6 +53,12 @@ def all_pipelines_html_graph(title):
 
 
 def create_agent_html_graph(graph_data, title):
+    """
+    Creates a graph showing the historical success rates of different agents split up into different failure stages
+    :param graph_data: list of GraphData objects as defined in the domain module
+    :param title: the requested title of the graph
+    :return: the graph and generated Bokeh related html extras used for embedding it on the dashboard
+    """
     panda_frame = pd.DataFrame(columns=['agent_name', 'Test', 'Startup', 'Post'])
 
     for index, row in enumerate(graph_data):
@@ -100,6 +108,12 @@ def create_agent_html_graph(graph_data, title):
 
 
 def create_job_test_html_graph(pipeline_name, title):
+    """
+    Creates a graph showing the historical tests run of a specific pipeline split up into passed, failed, and skipped tests
+    :param pipeline_name: the name of the requested pipeline
+    :param title: the requested title of the graph
+    :return: the graph and generated Bokeh related html extras used for embedding it on the dashboard
+    """
     graph_data = get_graph_statistics_for_final_stages(pipeline_name)
     panda_frame = pd.DataFrame(
         columns=['pipeline_counter', 'Tests passed', 'Tests failed', 'Tests skipped'])
@@ -145,6 +159,7 @@ def calculate_height_increase(dataframe=None):
 
 
 def get_bokeh_embed_resources(chart):
+    """Bokeh related extras needed for embedding a chart in HTML"""
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
     script, div = components(chart, INLINE)
