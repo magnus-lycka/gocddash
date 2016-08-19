@@ -9,6 +9,7 @@ filename_convention_scheme:standard
 full_name:Go CD Dashboard
 
 default_checkout:gocddash
+default_interface:config
 
 link_test_path:urls.txt
 link_test_path:application.cfg
