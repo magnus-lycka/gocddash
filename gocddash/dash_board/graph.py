@@ -140,7 +140,7 @@ def calculate_height_increase(dataframe=None):
         height = max(height)
     else:
         height = 100
-    height_increase = 0.35 * height
+    height_increase = 0.35 * height  # Increase chart max height by 35% in order to fit the legend properly
     return height, height_increase
 
 
