@@ -3,10 +3,11 @@ python:
   - "3.4"
   - "3.5"
 before_install:
-  - "sudo apt-get install postgresql-server-dev-9.4"
+  - "sudo apt-get install lynx postgresql-server-dev-9.4"
 install:
   - "pip install -r requirements.txt"
   - "pip2 install texttest"
 script:
   - (cd test && nosetests)
-  - python2 -c "from texttestlib.engine import TextTest; TextTest().run()"
+  - "./texttest.py -d . -con -a dash -b"
+
