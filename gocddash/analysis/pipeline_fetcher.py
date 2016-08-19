@@ -1,3 +1,4 @@
+"""Fetches all the relevant data from the synchronisation process and stores it in the postgresql database"""
 import json
 from datetime import datetime
 
