@@ -1,3 +1,8 @@
+"""This module is used for sending email alerts to addresses in the "Prime Suspects" list on the dashboard.
+If an address appears in the prime suspect list and has not received an email, an email alert will be sent.
+
+"""
+
 import re
 from email.mime.text import MIMEText
 
