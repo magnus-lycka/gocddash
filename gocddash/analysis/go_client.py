@@ -75,7 +75,7 @@ class GoSource:
 
 
 class FileSource:
-    """Mirror of the Go Source class but routes all requests to files instead of the GO API. Used by TextTest."""
+    """Mock version of the Go Source class but routes all requests to files instead of the GO API. Used by TextTest."""
     def __init__(self, directory):
         self.directory = directory
 
