@@ -1,3 +1,8 @@
+"""This module handles the pipelines.json file and creates a PipelineConfig object from it.
+Makes it easier to access configurations throughout the project.
+
+"""
+
 import codecs
 import json
 import os
