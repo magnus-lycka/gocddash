@@ -14,53 +14,49 @@ steps = [
             ON s.instance_id = sa.instance_id AND s.stage_counter = sa.stage_counter AND s.name = sa.name;""",
          "DROP VIEW final_stages;"),
 
-    step("""CREATE VIEW latest_fail_intervals AS
-            WITH run_groups AS (
-              SELECT pi.*, fs.result, (
-                SELECT COUNT(*)
-                FROM pipeline_instance pix
-                JOIN final_stages fsx
-                ON fsx.instance_id = pix.id
-                WHERE pi.pipeline_name = pix.pipeline_name AND pi.pipeline_counter <= pix.pipeline_counter AND fs.result <> fsx.result
-              ) AS rungroup
-              FROM pipeline_instance pi
-              JOIN final_stages fs
-              ON fs.instance_id = pi.id
-            ), fail_intervals AS (
-              SELECT pipeline_name, result, MIN(pipeline_counter) AS start_counter, MAX(pipeline_counter) AS end_counter
-              FROM run_groups
-              WHERE result = 'Failed'
-              GROUP BY result, rungroup, pipeline_name
+    step("""CREATE VIEW run_outcomes AS
+            SELECT pi.*, outcome
+            FROM pipeline_instance pi
+            JOIN (
+                SELECT instance_id, min(result) as outcome
+                FROM final_stages f
+                JOIN pipeline_instance p
+                ON f.instance_id = p.id
+                GROUP BY instance_id
+            ) px
+            ON px.instance_id = pi.id
+            ORDER BY pipeline_counter DESC""",
+         "DROP VIEW run_outcomes;"),
+
+    step("""CREATE VIEW latest_intervals AS
+            WITH max_failing as (
+            SELECT pipeline_name, max(pipeline_counter) as fail_counter FROM run_outcomes WHERE outcome = 'Failed' GROUP BY pipeline_name
+            ), max_passing as (
+            SELECT pipeline_name, max(pipeline_counter) as pass_counter FROM run_outcomes WHERE outcome = 'Passed' GROUP BY pipeline_name
             )
-            SELECT pipeline_name, (SELECT max(pipeline_counter)
-                FROM final_stages fxx
-                JOIN pipeline_instance pxx
-                ON fxx.instance_id = pxx.id
-                JOIN (SELECT name
-                    FROM final_stages f
-                    JOIN pipeline_instance p
-                    ON f.instance_id = p.id
-                    WHERE pipeline_name = fiv.pipeline_name
-                    GROUP BY name ORDER BY min(scheduled_date) DESC LIMIT 1) last_stage
-                ON fxx.name = last_stage.name
-            WHERE pipeline_name = fiv.pipeline_name and result = 'Passed') + 1 AS start_counter, max(end_counter) AS end_counter
-            FROM fail_intervals fiv
-            GROUP BY pipeline_name;""",
-         "DROP VIEW latest_fail_intervals;"),
+            SELECT mf.pipeline_name, fail_counter, pass_counter, (fail_counter < pass_counter) as currently_passing
+            FROM max_failing mf
+            JOIN max_passing ms
+            ON mf.pipeline_name = ms.pipeline_name""",
+         "DROP VIEW latest_intervals;"),
 
     step("""CREATE VIEW active_claims AS
             SELECT i.* FROM instance_claim i
             JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim GROUP BY pipeline_name) ia
             ON i.pipeline_name = ia.pipeline_name AND i.pipeline_counter = ia.pipeline_counter
-            JOIN latest_fail_intervals lf
-            ON i.pipeline_name = lf.pipeline_name AND lf.start_counter <= i.pipeline_counter AND i.pipeline_counter <= lf.end_counter
             JOIN (
-              SELECT pipeline_name, max(pipeline_counter) AS pipeline_counter
-              FROM pipeline_instance pi
-              JOIN stage s ON pi.id = s.instance_id
-              GROUP BY pipeline_name
+                SELECT l.*, p.pipeline_counter as current_pipeline
+                FROM latest_intervals l
+            JOIN (
+                SELECT pipeline_name, max(pipeline_counter) AS pipeline_counter
+                FROM pipeline_instance pi
+                JOIN stage s ON pi.id = s.instance_id
+                GROUP BY pipeline_name
             ) p
-            ON lf.pipeline_name = p.pipeline_name AND lf.end_counter = p.pipeline_counter;""",
+            ON l.pipeline_name = p.pipeline_name
+            WHERE currently_passing = false
+            ) lf
+            ON i.pipeline_name = lf.pipeline_name AND lf.pass_counter < i.pipeline_counter AND i.pipeline_counter <= lf.current_pipeline;""",
          "DROP VIEW active_claims;"),
 
     step("""CREATE VIEW failure_info AS
