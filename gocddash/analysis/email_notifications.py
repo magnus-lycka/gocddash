@@ -16,7 +16,7 @@ def send_prime_suspect_email(latest_pipeline, start_of_failing_streak, suspect_l
     server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
-    title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this recently, please investigate.".format(
+    title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this or any upstream recently, please investigate.".format(
         latest_pipeline.pipeline_name, start_of_failing_streak.start_counter, latest_pipeline.pipeline_counter)
 
     base_go_url = get_app_config().cfg['PUBLIC_GO_SERVER_URL']
