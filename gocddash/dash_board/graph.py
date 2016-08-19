@@ -63,6 +63,7 @@ def create_agent_html_graph(graph_data, title):
     bar = Bar(panda_frame,
               values=blend('Success', 'Test', 'Startup', 'Post', name='tests', labels_name='test'),
               label=cat(columns='agent_name', sort=False),
+              palette=['#eac435', '#2176ff', '#5ab738', '#f22c40'],  # These get assigned in alphabetical order... (Post, Startup, Success, Test)
               stack=cat(columns='test', sort=False),
               width=500, height=400, tools=tools, toolbar_location="right", title=title, responsive=True,
               ylabel='Agent success rate (%)')
