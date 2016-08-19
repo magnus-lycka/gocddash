@@ -8,7 +8,6 @@ install:
   - "pip install -r requirements.txt"
   - "pip2 install texttest"
 script:
-  - echo `which python2`
   - (cd test && nosetests)
-  - "./texttest.py -d . -con -a dash -b"
+  - "./texttest.py -d /home/travis/build/magnus-lycka/gocddash/texttest -con -a dash -b"
 
