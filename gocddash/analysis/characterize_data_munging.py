@@ -1,10 +1,8 @@
+"""Most of the methods in this file are old development for the characterize specific ML algorithms"""
 import collections
 import re
 
 from .data_access import get_connection
-
-
-# Most of the methods in this file are old development for the characterize specific ML algorithms
 
 
 def filter_docnames(pipeline_name):
