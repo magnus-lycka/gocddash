@@ -156,8 +156,15 @@ class SQLConnection:
 
     def fetch_latest_passing_stage(self, pipeline_name, stage_name):
         self.cursor.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s AND stage_name = %s AND result = 'Passed' ORDER BY pipeline_counter DESC, stage_counter DESC;""",
-            (pipeline_name, stage_name))
+            """SELECT f.*
+                FROM run_outcomes r
+                JOIN failure_info f
+                ON r.pipeline_name = f.pipeline_name AND r.pipeline_counter = f.pipeline_counter
+                WHERE f.pipeline_name = %s
+                AND outcome = 'Passed'
+                ORDER BY pipeline_counter DESC, stage_counter DESC;""",
+            (pipeline_name,)
+        )
         return self.cursor.fetchone()
 
     def fetch_first_synced(self, pipeline_name):
@@ -230,10 +237,11 @@ class SQLConnection:
         return self.cursor.fetchone()
 
     def email_notification_sent_for_current_streak(self, pipeline_name):
-        self.cursor.execute("""SELECT e.*
-                                FROM latest_fail_intervals l
-                                JOIN email_notifications e ON l.pipeline_name = e.pipeline_name AND e.pipeline_counter = l.start_counter
-                                WHERE l.pipeline_name = %s;""", (pipeline_name,))
+        self.cursor.execute(
+            """SELECT e.*
+                FROM latest_intervals l
+                JOIN email_notifications e ON l.pipeline_name = e.pipeline_name AND l.pass_counter < e.pipeline_counter AND l.currently_passing = false
+                WHERE l.pipeline_name = 'po-webtest' = %s;""", (pipeline_name,))
         return self.cursor.fetchone() is not None
 
 _connection = None
