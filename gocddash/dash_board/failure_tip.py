@@ -1,3 +1,6 @@
+"""Used for generating failure recommendations on the Insights page of the dashboard"""
+
+
 def get_failure_tip(current, previous, last_success):
     if current.is_success():
         return "All good.", ""
