@@ -2,6 +2,7 @@ import requests
 
 
 class GoSource:
+    """Main class for making requests to the GO API or server"""
     def __init__(self, base_go_url, auth):
         self.base_go_url = base_go_url
         self.auth = auth
@@ -74,6 +75,7 @@ class GoSource:
 
 
 class FileSource:
+    """Mirror of the Go Source class but routes all requests to files instead of the GO API. Used by TextTest."""
     def __init__(self, directory):
         self.directory = directory
 
