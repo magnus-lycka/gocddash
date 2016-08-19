@@ -64,7 +64,7 @@ class FailureRecommendation:
             (lambda: self.previous.is_success(),
              "Last pipeline was a success. Potential for flickering but may need further investigation."),
             (lambda: self.current.stage.pipeline_counter - last_success >= 3,
-             "Pipeline hasn't been green in a long time. Not flickering."),
+             "Pipeline hasn't been green in a long time."),
         ]
 
         self.default = "Last pipeline was a failure. Recommend to investigate further."
