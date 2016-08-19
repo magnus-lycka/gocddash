@@ -15,6 +15,12 @@ from gocddash.analysis.domain import get_graph_statistics_for_pipeline, get_grap
     get_graph_statistics
 
 
+GREEN = '#5ab738'
+RED = '#f22c40'
+BLUE = '#2176ff'
+YELLOW = '#eac435'
+
+
 def show_graph(plot):
     show(plot)
 
@@ -63,7 +69,7 @@ def create_agent_html_graph(graph_data, title):
     bar = Bar(panda_frame,
               values=blend('Success', 'Test', 'Startup', 'Post', name='tests', labels_name='test'),
               label=cat(columns='agent_name', sort=False),
-              palette=['#eac435', '#2176ff', '#5ab738', '#f22c40'],  # These get assigned in alphabetical order... (Post, Startup, Success, Test)
+              palette=[YELLOW, BLUE, GREEN, RED],  # These get assigned in alphabetical order... (Post, Startup, Success, Test)
               stack=cat(columns='test', sort=False),
               width=500, height=400, tools=tools, toolbar_location="right", title=title, responsive=True,
               ylabel='Agent success rate (%)')
