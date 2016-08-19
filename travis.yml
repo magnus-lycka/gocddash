@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.4"
+  - "3.5"
+install:
+  - "apt-get install postgresql-server-dev-9.4" 
+  - "pip install -r requirements.txt"
+  - "pip install texttest"
+script:
+  - echo `pwd`
+  - texttest -a dash
