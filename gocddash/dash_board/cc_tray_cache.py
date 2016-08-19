@@ -1,3 +1,4 @@
+"""Caching module used solely for the status-bar popups on the index page of the dashboard"""
 import time
 
 from gocddash.analysis.domain import get_cctray_status
