@@ -8,6 +8,6 @@ install:
   - "pip install -r requirements.txt"
   - "pip2 install texttest"
 script:
-  - (cd test && nosetests)
+  - (cd test && python3 -m unittest)
   - "./texttest.py -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -con -a dash -b"
 
