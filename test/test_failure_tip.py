@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import MagicMock
 
 from gocddash.analysis.domain import StageFailureInfo
-from gocddash.dash_board import failure_tip
-from gocddash.dash_board import pipeline_status
+from gocddash.dashboard import failure_tip
+from gocddash.dashboard import pipeline_status
 from gocddash.util.pipeline_config import create_pipeline_config
 
 

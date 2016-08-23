@@ -2,49 +2,28 @@
 Makes it easier to access configurations throughout the project.
 
 """
-
-import os
-from configparser import ConfigParser
-from itertools import chain
 from pathlib import Path
+from flask import Config
+import os
 
 
-class AppConfig:
-    def __init__(self, path):
-        self.path = path
-        if not os.path.isfile(path):
-            raise FileNotFoundError("Error: Missing application.cfg file in {}".format(path))
-        self.cfg = _read_from_file(path)
+class AppConfig(Config):
+    def __init__(self, root_path, defaults=None):
+        super().__init__(root_path, defaults)
+        if defaults:
+            self.from_object(defaults)
+        self.from_envvar('APP_CONFIG')
+        self.cfg = self
 
 _app_config = None
-
-
-def _read_from_file(path=None):
-    if not path:
-        path = os.getcwd() + "/gocddash/application.cfg"
-    parser = ConfigParser()
-    if not os.path.exists(path):
-        raise FileNotFoundError("Error: Missing application.cfg file in {}".format(path))
-    with open(path) as lines:
-        lines = chain(("[top]",), lines)  # Reads cfg file without section headers
-        parser.read_file(lines)
-
-    cfg = dict(parser.items('top'))
-    cfg = {key.strip('"').upper(): value.strip('"') for key, value in cfg.items()}
-    return cfg
 
 
 def create_app_config(path=None):
     if not path:
         path = str(Path(__file__).parents[1]) + "/application.cfg"
     global _app_config
-    if not _app_config:
-        _app_config = AppConfig(path)
-        return _app_config
-    else:
-        path = _app_config.path
-        _pipeline_config = AppConfig(path)
-        return _pipeline_config
+    _app_config = AppConfig(path)
+    return _app_config
 
 
 def get_app_config():

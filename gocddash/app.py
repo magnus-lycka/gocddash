@@ -3,11 +3,11 @@ import getpass
 import json
 import os
 import sys
+from pathlib import Path
 from collections import defaultdict
 from datetime import date, datetime
 from inspect import getsourcefile
 from os.path import abspath
-from pathlib import Path
 
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
@@ -16,13 +16,14 @@ sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 from gocddash.util.pipeline_config import create_pipeline_config
 from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_history_comparison import get_git_comparison
-from gocddash.dash_board import failure_tip, pipeline_status
+from gocddash.dashboard import failure_tip, pipeline_status
 from gocddash.analysis.data_access import get_connection, create_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, \
     get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status, \
     create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
-from gocddash.dash_board.graph import create_job_test_html_graph, single_pipeline_html_graph, all_pipelines_html_graph
-#from gocddash.dash_board.cc_tray_cache import create_cache, get_cache
+from gocddash.dashboard.graph import create_job_test_html_graph, single_pipeline_html_graph, all_pipelines_html_graph
+
+# from gocddash.dashboard.cc_tray_cache import create_cache, get_cache
 
 group_of_pipeline = defaultdict(str)
 
@@ -267,7 +268,7 @@ def insights(pipeline_name):
                                                   app.config['PREFERRED_UPSTREAM'])
 
         git_history = get_git_comparison(pipeline_name, current_stage.pipeline_counter,
-                                            latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
+                                         latest_passing_stage.pipeline_counter, app.config['PREFERRED_UPSTREAM'])
 
     base_url = app.config['PUBLIC_GO_SERVER_URL']
 
@@ -286,7 +287,8 @@ def insights(pipeline_name):
                                                                 latest_passing_stage.pipeline_counter)
 
     dash_status = get_cctray_status()
-    recommendation, last_claim = failure_tip.get_failure_tip(current_status, previous_status, latest_passing_stage.pipeline_counter)
+    recommendation, last_claim = failure_tip.get_failure_tip(current_status, previous_status,
+                                                             latest_passing_stage.pipeline_counter)
 
     template = render_template(
         'insights.html',  # Defined in the templates folder
@@ -316,7 +318,8 @@ def insights(pipeline_name):
 
 
 app = Flask(__name__)
-app.config.from_pyfile('application.cfg', silent=False)
+if not app.config.from_envvar('APP_CONFIG'):
+    app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
 
 
@@ -357,8 +360,8 @@ def build_outcome_panel(build_passed):
 
 
 @app.template_filter('failure_stage')
-def failure_stage(failure_stage):
-    return "text-danger" if failure_stage else "text-warning"
+def failure_stage(failed_stage):
+    return "text-danger" if failed_stage else "text-warning"
 
 
 @app.template_filter('building_panel_label')
@@ -455,10 +458,6 @@ def parse_args():
 
 
 def main():
-    gocddash_directory = os.path.dirname(abspath(getsourcefile(lambda: 0)))
-    if not os.path.isfile(gocddash_directory + '/application.cfg'):
-        print("Error: Missing application.cfg file in {}/".format(gocddash_directory))
-        quit()
     pargs_dict = parse_args()
     if 'GO_SERVER_URL' not in app.config:
         app.config['GO_SERVER_URL'] = input('go-server url: ')

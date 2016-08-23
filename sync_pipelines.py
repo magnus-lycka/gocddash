@@ -5,7 +5,7 @@ import datetime
 import time
 
 from gocddash.analysis import data_access, actions, go_request, go_client
-from gocddash.dash_board import read_pipeline_config
+from gocddash.dashboard import read_pipeline_config
 from gocddash.util import pipeline_config, app_config
 
 

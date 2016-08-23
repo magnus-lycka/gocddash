@@ -6,7 +6,10 @@ import docker # if this import fails, run 'sudo pip install docker-py'
 class ContainerManager:
 
     def __init__(self, docker_registry=""):
-        self.docker_client = docker.Client(base_url = os.environ.get("DOCKER_HOST", "tcp://localhost:2375"))
+        self.docker_client = docker.Client(
+            base_url=os.environ.get("DOCKER_HOST", "tcp://localhost:2375"),
+            version="auto"
+        )
         self.docker_registry = docker_registry
 
     def start_db_container(self, db_image, db_image_tag, db_port, environment=None):

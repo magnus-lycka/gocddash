@@ -1,6 +1,6 @@
 import unittest
 
-from gocddash.dash_board import read_pipeline_config
+from gocddash.dashboard import read_pipeline_config
 
 
 def get_max_mock(name):
