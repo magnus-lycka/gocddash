@@ -18,8 +18,12 @@ class ContainerManager:
         if not self.image_available(db_image_name):
             self.pull_image(db_image, db_image_tag)
 
-        container = self.docker_client.create_container(image=db_image_name, ports=[5432], environment=environment)
-        self.docker_client.start(container=container.get("Id"), port_bindings={5432:db_port})
+        host_config = self.docker_client.create_host_config(port_bindings={5432: db_port})
+        container = self.docker_client.create_container(image=db_image_name,
+                                                        ports=[5432],
+                                                        environment=environment,
+                                                        host_config=host_config)
+        self.docker_client.start(container=container.get("Id"))
         self._wait_for_db_container_to_start(container)
         print("started docker container with id={}".format(container.get("Id")))
         return container
