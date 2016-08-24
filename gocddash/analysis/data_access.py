@@ -2,56 +2,75 @@ import psycopg2
 
 
 class SQLConnection:
-    def __init__(self, db_port):
+    def __init__(self, db_host='localhost', db_port='15554'):
         self.cursor = None
-        self.db_port = db_port
+        db_port = db_port
 
-        conn_string = "host='dev.localhost' dbname='go-analysis' user='analysisappluser' password='analysisappluser' port='{}'".format(self.db_port)
+        conn_string = ("host={} "
+                       "dbname='go-analysis' "
+                       "user='analysisappluser' "
+                       "password='analysisappluser' "
+                       "port='{}'".format(db_host, db_port))
         conn = psycopg2.connect(conn_string)
         self.conn = conn
-        # conn.autocommit = True
         self.cursor = conn.cursor()
 
     def insert_pipeline_instance(self, instance):
         self.cursor.execute(
-            """INSERT INTO pipeline_instance(id, pipeline_name, pipeline_counter, trigger_message) VALUES (%s, %s, %s, %s);""",
+            "INSERT INTO pipeline_instance "
+            "(id, pipeline_name, pipeline_counter, trigger_message) "
+            "VALUES (%s, %s, %s, %s);",
             (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message))
         self.conn.commit()
 
     def insert_stage(self, pipeline_instance_id, stage):
         self.cursor.execute(
-            """INSERT INTO stage(id, instance_id, stage_counter, name, approved_by, scheduled_date, result) VALUES (%s, %s, %s, %s, %s, %s, %s);""",
-            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name, stage.approved_by, stage.scheduled_date, stage.stage_result))
+            "INSERT INTO stage "
+            "(id, instance_id, stage_counter, name, approved_by, scheduled_date, result) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s);",
+            (stage.stage_id, pipeline_instance_id, stage.stage_counter, stage.stage_name,
+             stage.approved_by, stage.scheduled_date, stage.stage_result))
         self.conn.commit()
 
     def insert_job(self, stage_id, job):
         self.cursor.execute(
-            """INSERT INTO job(id, stage_id, name, agent_uuid, scheduled_date, result, tests_run, tests_failed, tests_skipped) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);""",
-            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date, job.job_result, job.tests_run, job.tests_failed, job.tests_skipped))
+            "INSERT INTO job "
+            "(id, stage_id, name, agent_uuid, scheduled_date, result, tests_run, tests_failed, tests_skipped) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);",
+            (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date,
+             job.job_result, job.tests_run, job.tests_failed, job.tests_skipped))
         self.conn.commit()
 
     def insert_agent(self, id, agent_name):
-        self.cursor.execute("""INSERT INTO agent(id, agent_name) VALUES (%s, %s);""", (id, agent_name))
+        self.cursor.execute("INSERT INTO agent (id, agent_name) VALUES (%s, %s);", (id, agent_name))
         self.conn.commit()
 
     def insert_texttest_failure(self, stage_id, test_index, failure_type, document_name):
         self.cursor.execute(
-            """INSERT INTO texttest_failure(stage_id, test_index, failure_type, document_name) VALUES (%s, %s, %s, %s);""",
+            "INSERT INTO texttest_failure "
+            "(stage_id, test_index, failure_type, document_name) "
+            "VALUES (%s, %s, %s, %s);",
             (stage_id, test_index, failure_type, document_name))
         self.conn.commit()
 
     def insert_failure_information(self, stage_id, failure_stage):
-        self.cursor.execute("""INSERT INTO failure_information(stage_id, failure_stage) VALUES (%s, %s);""",
+        self.cursor.execute("INSERT INTO failure_information "
+                            "(stage_id, failure_stage) "
+                            "VALUES (%s, %s);",
                             (stage_id, failure_stage))
         self.conn.commit()
 
     def insert_junit_failure_information(self, stage_id, failure_type, failure_test):
-        self.cursor.execute("""INSERT INTO junit_failure(stage_id, failure_type, failure_test) VALUES (%s, %s, %s);""",
+        self.cursor.execute("INSERT INTO junit_failure "
+                            "(stage_id, failure_type, failure_test) "
+                            "VALUES (%s, %s, %s);",
                             (stage_id, failure_type, failure_test))
         self.conn.commit()
 
     def insert_instance_claim(self, pipeline_name, pipeline_counter, responsible, desc):
-        self.cursor.execute("""INSERT INTO instance_claim(pipeline_name, pipeline_counter, responsible, description) VALUES (%s, %s, %s, %s);""",
+        self.cursor.execute("INSERT INTO instance_claim "
+                            "(pipeline_name, pipeline_counter, responsible, description) "
+                            "VALUES (%s, %s, %s, %s);",
                             (pipeline_name, pipeline_counter, responsible, desc))
         self.conn.commit()
 
@@ -219,29 +238,42 @@ class SQLConnection:
 
     def get_claims_for_unsynced_pipelines(self):
         self.cursor.execute(
-            """SELECT i.pipeline_name, i.pipeline_counter, i.responsible, i.description
-                FROM instance_claim i
-                JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim WHERE pipeline_name NOT IN (
-                 SELECT pipeline_name FROM pipeline_instance
-                ) GROUP BY pipeline_name) gi
-                ON i.pipeline_name = gi.pipeline_name AND i.pipeline_counter = gi.pipeline_counter;"""
+            "SELECT i.pipeline_name, i.pipeline_counter, i.responsible, i.description "
+            "FROM instance_claim i "
+            "JOIN ("
+            "    SELECT pipeline_name, max(pipeline_counter) as pipeline_counter "
+            "    FROM instance_claim WHERE pipeline_name NOT IN ("
+            "        SELECT pipeline_name FROM pipeline_instance"
+            "    )"
+            "    GROUP BY pipeline_name"
+            ") gi ON i.pipeline_name = gi.pipeline_name AND i.pipeline_counter = gi.pipeline_counter;"
         )
         return self.cursor.fetchall()
 
     def pipeline_instance_exists(self, pipeline_name, pipeline_counter):
-        self.cursor.execute("""SELECT * FROM pipeline_instance WHERE pipeline_name = %s AND pipeline_counter = %s""", (pipeline_name, pipeline_counter))
+        self.cursor.execute("SELECT * "
+                            "FROM pipeline_instance "
+                            "WHERE pipeline_name = %s AND pipeline_counter = %s",
+                            (pipeline_name, pipeline_counter))
         return self.cursor.fetchone() is not None
 
     def get_latest_failure_streak(self, pipeline_name):
-        self.cursor.execute("""SELECT * FROM latest_intervals WHERE pipeline_name = %s""", (pipeline_name,))
+        self.cursor.execute("SELECT * "
+                            "FROM latest_intervals "
+                            "WHERE pipeline_name = %s",
+                            (pipeline_name,))
         return self.cursor.fetchone()
 
     def email_notification_sent_for_current_streak(self, pipeline_name):
         self.cursor.execute(
-            """SELECT e.*
-                FROM latest_intervals l
-                JOIN email_notifications e ON l.pipeline_name = e.pipeline_name AND l.pass_counter < e.pipeline_counter AND l.currently_passing = false
-                WHERE l.pipeline_name = %s;""", (pipeline_name,))
+            "SELECT e.* "
+            "FROM latest_intervals l "
+            "JOIN email_notifications e ON "
+            "  l.pipeline_name = e.pipeline_name AND "
+            "  l.pass_counter < e.pipeline_counter AND "
+            "  l.currently_passing = false "
+            "WHERE l.pipeline_name = %s;",
+            (pipeline_name,))
         return self.cursor.fetchone() is not None
 
 _connection = None
@@ -250,7 +282,7 @@ _connection = None
 def create_connection(db_port=15554):
     global _connection
     if not _connection:
-        _connection = SQLConnection(db_port)
+        _connection = SQLConnection(db_port=db_port)
         return _connection
     raise ValueError("Database connection already instantiated - will not instantiate again.")
 
