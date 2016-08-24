@@ -6,16 +6,18 @@ python:
 
 sudo: required
 
-before_install:
-  - "sudo apt-get install lynx postgresql-server-dev-9.4"
-
-install:
-  - "pip install -r requirements.txt"
-  - "pip2 install texttest"
-
 services:
   - docker
+
+before_install:
+  - docker pull postgres:9.3
+  - sudo apt-get install lynx postgresql-server-dev-9.3
+
+install:
+  - pip install -r requirements.txt
+  - pip2 install texttest
 
 script:
   - (cd test && python3 -m unittest)
   - "python2 `which texttest` -a dash -b -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -l"
+  - find ~/.texttest/tmp -name 'std*.dash' | xargs more
