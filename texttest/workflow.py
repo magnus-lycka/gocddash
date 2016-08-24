@@ -21,7 +21,7 @@ def start_servers(docker):
                                                                                                  gocd_dash_path))
 
     db_container = start_db_docker(docker, db_port)
-    apply_db_migrations(gocd_dash_path, db_port)
+    apply_db_migrations(gocd_dash_path, db_port=db_port)
     application_process = start_application(gocd_dash_path, db_port, application_port)
     sync_pipelines(gocd_dash_path, db_port)
 
@@ -74,8 +74,8 @@ def start_db_docker(docker, dbport):
     return db_container
 
 
-def apply_db_migrations(gocd_dash_path, db_port):
-    conn_str = 'postgresql://analysisappluser:analysisappluser@dev.localhost:{}/go-analysis'.format(db_port)
+def apply_db_migrations(gocd_dash_path, db_host='localhost', db_port='15554'):
+    conn_str = 'postgresql://analysisappluser:analysisappluser@{}:{}/go-analysis'.format(db_host, db_port)
     _wait_for_db_to_accept_connections(conn_str)
     backend = get_backend(conn_str)
     migrations = read_migrations(gocd_dash_path + '/migrations')
