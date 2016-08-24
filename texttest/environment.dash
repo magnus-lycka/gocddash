@@ -1,2 +1,2 @@
 DOCKER_API_VERSION:1.21
-APP_CONFIG:/home/magnusl/work/gocddash/texttest/application.cfg
+APP_CONFIG:$TEXTTEST_CHECKOUT/texttest/application.cfg
