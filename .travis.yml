@@ -9,5 +9,4 @@ install:
   - "pip2 install texttest"
 script:
   - (cd test && python3 -m unittest)
-  - "./texttest.py -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -con -a dash -b"
-
+  - "python2 `which texttest` -l -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -a dash"
