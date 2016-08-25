@@ -18,7 +18,7 @@ class TestReadFile(unittest.TestCase):
             {"name": "feature", "begin_at": 100},
         ]
 
-        pipelines = read_pipeline_config.parse_config(input)
+        pipelines = read_pipeline_config.get_pipelines_to_sync(input)
         self.assertEqual(pipelines, [("characterize", 1500), ("feature", 100)])
 
     def testNoBeginAt(self):
@@ -31,7 +31,7 @@ class TestReadFile(unittest.TestCase):
             {"name": "feature"},
         ]
 
-        pipelines = read_pipeline_config.parse_config(input)
+        pipelines = read_pipeline_config.get_pipelines_to_sync(input)
         self.assertEqual(pipelines, [("characterize", 1500), ("feature", 2180)])
 
         read_pipeline_config.get_max_pipeline_status = saved

@@ -6,7 +6,9 @@ from gocddash.analysis.parse_cctray import Projects, Pipeline
 
 class TestPipelines(unittest.TestCase):
     def setUp(self):
-        self.projects = Projects(open('data/cctray.xml').read())
+        with open('data/cctray.xml') as cctray_file:
+            cctray_xml = cctray_file.read()
+        self.projects = Projects(cctray_xml)
         self.pipelines = self.projects.pipelines
 
     def test_count_pipelines(self):
@@ -88,7 +90,9 @@ class TestPipelines(unittest.TestCase):
 
 class TestStages(unittest.TestCase):
     def setUp(self):
-        self.stages = Projects(open('data/cctray.xml')).pipelines['baz'].stages
+        with open('data/cctray.xml') as cctray_file:
+            cctray_xml = cctray_file.read()
+        self.stages = Projects(cctray_xml).pipelines['baz'].stages
 
     def test_pipeline_stages(self):
         self.assertEqual(2, len(self.stages))
@@ -103,7 +107,8 @@ class TestStages(unittest.TestCase):
 
 class TestJobs(unittest.TestCase):
     def setUp(self):
-        self.jobs = Projects(open('data/cctray.xml')).pipelines['snafu-service'].stages[1].jobs
+        with open('data/cctray.xml') as cctray_file:
+            self.jobs = Projects(cctray_file).pipelines['snafu-service'].stages[1].jobs
 
     def test_stage_jobs(self):
         self.assertEqual(2, len(self.jobs))

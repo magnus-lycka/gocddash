@@ -59,7 +59,8 @@ class TestFailure(StageFailure):
 
 def create_stage_info(stage_failure_info):
     log_parser = get_pipeline_config().get_log_parser(stage_failure_info.pipeline_name)
-    if log_parser is None:  # Log parser should almost always be junit. This fixes changing config without reloading the cfg
+    # Log parser should almost always be junit. This fixes changing config without reloading the cfg
+    if log_parser is None:
         log_parser = 'junit'
     if stage_failure_info.is_success():
         result = StageSuccess(stage_failure_info)
@@ -72,8 +73,7 @@ def create_stage_info(stage_failure_info):
 
 def junit_failure_extraction(stage_failure_info):
     failure_tuples = get_connection().get_junit_failure_signature(stage_failure_info.stage_id)
-    failure_signatures = [item[0] for item in failure_tuples]
-    failure_indices = [item[1] for item in failure_tuples]
+    failure_signatures, failure_indices = zip(*failure_tuples)
     return TestFailure(stage_failure_info, failure_signatures, failure_indices)
 
 
