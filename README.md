@@ -1,5 +1,6 @@
 # gocddash
 Status dashboard for Go.CD Continuous Delivery Server
+[![Build Status](https://travis-ci.org/magnus-lycka/gocddash.svg?branch=master)](https://travis-ci.org/magnus-lycka/gocddash)
 
 Gocddash provides an overview of the builds in your
 Thoughtworks Go Continuous Delivery server.
