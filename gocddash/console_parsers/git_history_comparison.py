@@ -6,7 +6,7 @@ as specified in application.cfg. Filters out any material revision modifications
 from bs4 import BeautifulSoup
 
 from gocddash.analysis.go_client import go_request_comparison_html
-from gocddash.util.html_utils import *
+from gocddash.util.html_utils import remove_new_line
 
 
 def open_html(pipeline_name, current, comparison):
@@ -21,7 +21,8 @@ def material_revision_diff_tests(soup):
 
 def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
     """
-    Extracts the git history comparison from the GO comparison HTML page and stores the data in the following data structure
+    Extracts the git history comparison from the GO comparison HTML page and
+    stores the data in the following data structure
     [(Git Name [(Revision, Modified By, Comment)]), etc...]
     :param pipeline_name: the name of the pipeline to get the git comparison for
     :param current: current pipeline counter
@@ -35,7 +36,12 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
         return None
 
     material_titles = soup.findAll('div', {"class": "material_title"})
-    git_sections = list(map(lambda z: z.rpartition("/")[2], filter(lambda y: not y.startswith(" Pipeline"),  map(lambda x: x.findAll('strong')[0].get_text(), material_titles))))
+    git_sections = list(
+        map(lambda z: z.rpartition("/")[2],
+            filter(lambda y: not y.startswith(" Pipeline"),
+                   map(lambda x: x.findAll('strong')[0].get_text(),
+                       material_titles)))
+    )
     tables = soup.findAll('table', {'class': "list_table material_modifications"})
 
     changes = []

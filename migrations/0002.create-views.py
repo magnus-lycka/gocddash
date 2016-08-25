@@ -30,9 +30,15 @@ steps = [
 
     step("""CREATE VIEW latest_intervals AS
             WITH max_failing as (
-            SELECT pipeline_name, max(pipeline_counter) as fail_counter FROM run_outcomes WHERE outcome = 'Failed' GROUP BY pipeline_name
+                SELECT pipeline_name, max(pipeline_counter) as fail_counter
+                FROM run_outcomes
+                WHERE outcome = 'Failed'
+                GROUP BY pipeline_name
             ), max_passing as (
-            SELECT pipeline_name, max(pipeline_counter) as pass_counter FROM run_outcomes WHERE outcome = 'Passed' GROUP BY pipeline_name
+                SELECT pipeline_name, max(pipeline_counter) as pass_counter
+                FROM run_outcomes
+                WHERE outcome = 'Passed'
+                GROUP BY pipeline_name
             )
             SELECT mf.pipeline_name, fail_counter, pass_counter, (fail_counter < pass_counter) as currently_passing
             FROM max_failing mf
@@ -42,7 +48,9 @@ steps = [
 
     step("""CREATE VIEW active_claims AS
             SELECT i.* FROM instance_claim i
-            JOIN (SELECT pipeline_name, max(pipeline_counter) as pipeline_counter FROM instance_claim GROUP BY pipeline_name) ia
+            JOIN (
+                SELECT pipeline_name, max(pipeline_counter) as pipeline_counter
+                FROM instance_claim GROUP BY pipeline_name) ia
             ON i.pipeline_name = ia.pipeline_name AND i.pipeline_counter = ia.pipeline_counter
             JOIN (
                 SELECT l.*, p.pipeline_counter as current_pipeline
@@ -56,21 +64,28 @@ steps = [
             ON l.pipeline_name = p.pipeline_name
             WHERE currently_passing = false
             ) lf
-            ON i.pipeline_name = lf.pipeline_name AND lf.pass_counter < i.pipeline_counter AND i.pipeline_counter <= lf.current_pipeline;""",
+            ON i.pipeline_name = lf.pipeline_name AND
+               lf.pass_counter < i.pipeline_counter AND
+               i.pipeline_counter <= lf.current_pipeline;""",
          "DROP VIEW active_claims;"),
 
     step("""CREATE VIEW failure_info AS
-            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.id, s.name as stage_name, p.trigger_message, s.approved_by, s.result, f.failure_stage, ac.responsible, ac.description, s.scheduled_date
+            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.id, s.name as stage_name,
+                   p.trigger_message, s.approved_by, s.result, f.failure_stage, ac.responsible,
+                   ac.description, s.scheduled_date
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
             LEFT JOIN failure_information f ON f.stage_id = s.id
-            LEFT JOIN active_claims ac ON ac.pipeline_name = p.pipeline_name AND ac.pipeline_counter <= p.pipeline_counter
+            LEFT JOIN active_claims ac ON ac.pipeline_name = p.pipeline_name AND
+                      ac.pipeline_counter <= p.pipeline_counter
             WHERE s.result <> 'Cancelled'
             ORDER BY p.pipeline_counter DESC, s.stage_counter DESC;""",
          "DROP VIEW failure_info;"),
 
     step("""CREATE VIEW graph_statistics AS
-            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, f.failure_stage, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
+            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name,
+                   s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result,
+                   f.failure_stage, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
             FROM pipeline_instance p
             JOIN stage s ON s.instance_id = p.id
             JOIN job j ON j.stage_id = s.id
@@ -79,7 +94,9 @@ steps = [
          "DROP VIEW graph_statistics;"),
 
     step("""CREATE VIEW graph_statistics_final_stages AS
-            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name, s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result, f.failure_stage, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
+            SELECT p.pipeline_name, p.pipeline_counter, s.stage_counter, s.name as stage_name,
+                   s.result as stage_result, j.name as job_name, j.scheduled_date, j.result as job_result,
+                   f.failure_stage, a.agent_name, j.tests_run, j.tests_failed, j.tests_skipped
             FROM pipeline_instance p
             JOIN final_stages s ON s.instance_id = p.id
             JOIN job j ON j.stage_id = s.id

@@ -17,7 +17,8 @@ def document_filter(document_names):
 
 def document_name_split(name):
     return name[:re.search(
-        "(catalogue|routingLog|eventsLog|performance|stderr|stdout|exitcode|documentMetadata|internalxml|primarypres|target)",
+        "(catalogue|routingLog|eventsLog|performance|stderr|stdout|"
+        "exitcode|documentMetadata|internalxml|primarypres|target)",
         name).end()]
 
 
@@ -71,7 +72,10 @@ def create_binary_test_index_list(failure_indices):
 def check_if_consecutive_failure_signature(failure_indices):
     """ Old characterize specific ML method """
     consecutive_binary_list = []
-    od = collections.OrderedDict(sorted(failure_indices.items()))
+    sorted_failure_indices = sorted(failure_indices.items())
+    # PyCharm inspection bug, https://youtrack.jetbrains.com/issue/PY-17759
+    # noinspection PyArgumentList
+    od = collections.OrderedDict(sorted_failure_indices)
     for index, value in enumerate(od.items()):
         if value[1] == od.values()[index - 1]:
             consecutive_binary_list.append((value[0], 1))

@@ -39,7 +39,8 @@ class TexttestConsoleParser:
         final_dict = {key: value for (key, value) in test_dict.items() if value is not None}
         return final_dict
 
-    def extract_failure_info(self, failure_case):
+    @staticmethod
+    def extract_failure_info(failure_case):
         if failure_case:
             error = failure_case[0]
             error_codes = error.split(': ', 1)[1]

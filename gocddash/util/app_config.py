@@ -4,7 +4,6 @@ Makes it easier to access configurations throughout the project.
 """
 from pathlib import Path
 from flask import Config
-import os
 
 
 class AppConfig(Config):

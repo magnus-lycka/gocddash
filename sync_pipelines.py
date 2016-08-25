@@ -49,7 +49,8 @@ def parse_args():
     parser.add_argument('--db-port', help='database port, (overrides any value set in application config)')
     parser.add_argument('-p', '--pipeline-cfg', help='pipeline config')
     parser.add_argument('-f', '--file-source', help='go client file source')
-    parser.add_argument('-d', '--continuous-sync', action='store_true', help='run as a daemon and continually sync pipelines')
+    parser.add_argument('-d', '--continuous-sync', action='store_true',
+                        help='run as a daemon and continually sync pipelines')
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     return pargs_dict
@@ -70,7 +71,12 @@ def configure_from_args(pargs_dict):
     if file_source:
         app_config.get_app_config().cfg['GO_SERVER_URL'] = file_source
 
-    return app_config.get_app_config().cfg['GO_SERVER_URL'], app_config.get_app_config().cfg['GO_SERVER_USER'], app_config.get_app_config().cfg['GO_SERVER_PASSWD'], app_config.get_app_config().cfg['DB_PORT']
+    return (
+        app_config.get_app_config().cfg['GO_SERVER_URL'],
+        app_config.get_app_config().cfg['GO_SERVER_USER'],
+        app_config.get_app_config().cfg['GO_SERVER_PASSWD'],
+        app_config.get_app_config().cfg['DB_PORT']
+    )
 
 
 def sync_backlog(json_tree):

@@ -1,8 +1,9 @@
 """Handles the logic of making synchronisation requests to GO"""
 import math
+import json
 from functools import reduce
 
-from .pipeline_fetcher import *
+from .pipeline_fetcher import go_get_pipeline_status, go_request_pipeline_history
 
 
 def calculate_request(latest_pipeline, max_pipeline_in_go, pipelines=10, start=0):
@@ -33,7 +34,7 @@ def get_max_pipeline_status(pipeline_name):
         pipelines = pipeline_history["pipelines"]
 
         highest_available_pipeline_index = reduce(lambda acc, pipeline: max(acc, pipeline["counter"]) if (
-        pipeline["stages"][0]["result"] != "Unknown") else acc, pipelines, 0)
+            pipeline["stages"][0]["result"] != "Unknown") else acc, pipelines, 0)
         return pipeline_history["pagination"]["total"], highest_available_pipeline_index
     else:
         print("Could not retrieve pipeline history from GO.")

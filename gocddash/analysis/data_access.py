@@ -20,7 +20,8 @@ class SQLConnection:
             "INSERT INTO pipeline_instance "
             "(id, pipeline_name, pipeline_counter, trigger_message) "
             "VALUES (%s, %s, %s, %s);",
-            (instance.instance_id, instance.pipeline_name, instance.pipeline_counter, instance.trigger_message))
+            (instance.instance_id, instance.pipeline_name,
+             instance.pipeline_counter, instance.trigger_message))
         self.conn.commit()
 
     def insert_stage(self, pipeline_instance_id, stage):
@@ -88,44 +89,55 @@ class SQLConnection:
         self.conn.commit()
 
     def get_highest_pipeline_count(self, pipeline_name):
-        self.cursor.execute("""SELECT COALESCE(max(pipeline_counter), 0) FROM pipeline_instance WHERE pipeline_name = %s""",
+        self.cursor.execute("SELECT COALESCE(max(pipeline_counter), 0) "
+                            "FROM pipeline_instance "
+                            "WHERE pipeline_name = %s",
                             (pipeline_name,))
         return self.cursor.fetchone()[0]
 
     def get_new_agents(self):
-        self.cursor.execute(
-            """SELECT DISTINCT agent_uuid FROM job WHERE agent_uuid IS NOT NULL EXCEPT SELECT id FROM agent""")
+        self.cursor.execute("SELECT DISTINCT agent_uuid "
+                            "FROM job "
+                            "WHERE agent_uuid IS NOT NULL EXCEPT SELECT id FROM agent")
         return map(lambda x: x[0], self.cursor.fetchall())
 
     def is_failure_downloaded(self, stage_id):
-        self.cursor.execute("""SELECT * FROM failure_information WHERE stage_id=%s ;""", (stage_id,))
+        self.cursor.execute("SELECT * FROM failure_information WHERE stage_id=%s ;", (stage_id,))
         return self.cursor.fetchone()
 
     def get_failure_statistics(self, pipeline_name, months_back=1):
         self.cursor.execute(
-            """SELECT * FROM failure_info WHERE pipelinename=%s AND scheduleddate > 'now'::TIMESTAMP - '%s month'::INTERVAL;""",
-            (pipeline_name, months_back))
+            "SELECT * "
+            "FROM failure_info "
+            "WHERE pipelinename=%s AND "
+            "      scheduleddate > 'now'::TIMESTAMP - '%s month'::INTERVAL;",
+            (pipeline_name, months_back)
+        )
         return self.cursor.fetchall()
 
     def get_junit_failure_signature(self, stage_id):
         self.cursor.execute(
-            """SELECT failure_type, failure_test FROM junit_failure WHERE stage_id=%s ORDER BY failure_test ;""", (stage_id,))
+            "SELECT failure_type, failure_test "
+            "FROM junit_failure "
+            "WHERE stage_id=%s ORDER BY failure_test ;",
+            (stage_id,)
+        )
         return self.cursor.fetchall()
 
     def get_texttest_document_statistics(self, pipeline_name):
-        self.cursor.execute("""SELECT * FROM all_data WHERE pipelinename=%s;""", (pipeline_name,))
+        self.cursor.execute("SELECT * FROM all_data WHERE pipelinename=%s;", (pipeline_name,))
         return self.cursor.fetchall()
 
     def get_texttest_document_names(self, pipeline_name):
-        self.cursor.execute("""SELECT document_name FROM all_data WHERE pipelinename=%s;""", (pipeline_name,))
+        self.cursor.execute("SELECT document_name FROM all_data WHERE pipelinename=%s;", (pipeline_name,))
         return map(lambda x: x[0], self.cursor.fetchall())
 
     def get_texttest_failures(self, pipeline_name):
-        self.cursor.execute("""SELECT * FROM texttest_failure;""", (pipeline_name,))
+        self.cursor.execute("SELECT * FROM texttest_failure;", (pipeline_name,))
         return self.cursor.fetchall()
 
     def get_stage_texttest_failures(self, stage_id):
-        self.cursor.execute("""SELECT * FROM texttest_failure WHERE stage_id=%s;""", (stage_id,))
+        self.cursor.execute("SELECT * FROM texttest_failure WHERE stage_id=%s;", (stage_id,))
         return self.cursor.fetchall()
 
     def get_pipeline_head(self, pipeline_name):
@@ -145,13 +157,17 @@ class SQLConnection:
 
     def fetch_current_stage(self, pipeline_name):
         self.cursor.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipeline_counter DESC, scheduled_date DESC, stage_counter DESC;""",
+            "SELECT * "
+            "FROM failure_info "
+            "WHERE pipeline_name = %s "
+            "ORDER BY pipeline_counter DESC, scheduled_date DESC, stage_counter DESC;",
             (pipeline_name,))
 
         return self.cursor.fetchone()
 
     def truncate_tables(self):
-        self.cursor.execute("TRUNCATE failure_information, job, junit_failure, pipeline_instance, stage, texttest_failure, instance_claim")
+        self.cursor.execute("TRUNCATE failure_information, job, junit_failure, "
+                            "pipeline_instance, stage, texttest_failure, instance_claim")
 
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_index, current_stage_name):
         sql = """SELECT *
@@ -169,7 +185,11 @@ class SQLConnection:
 
     def get_stage_order(self, pipeline_name):
         self.cursor.execute(
-            """SELECT stage_name FROM failure_info WHERE pipeline_name = %s GROUP BY stage_name ORDER BY min(scheduled_date) ASC;""",
+            "SELECT stage_name "
+            "FROM failure_info "
+            "WHERE pipeline_name = %s "
+            "GROUP BY stage_name "
+            "ORDER BY min(scheduled_date) ASC;",
             (pipeline_name,))
         return list(map(lambda x: x[0], self.cursor.fetchall()))
 
@@ -178,7 +198,8 @@ class SQLConnection:
             """SELECT f.*
                 FROM run_outcomes r
                 JOIN failure_info f
-                ON r.pipeline_name = f.pipeline_name AND r.pipeline_counter = f.pipeline_counter
+                ON r.pipeline_name = f.pipeline_name AND
+                   r.pipeline_counter = f.pipeline_counter
                 WHERE f.pipeline_name = %s
                 AND outcome = 'Passed'
                 ORDER BY pipeline_counter DESC, stage_counter DESC;""",
@@ -188,13 +209,14 @@ class SQLConnection:
 
     def fetch_first_synced(self, pipeline_name):
         self.cursor.execute(
-            """SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipeline_counter LIMIT 1;""",
+            "SELECT * FROM failure_info WHERE pipeline_name = %s ORDER BY pipeline_counter LIMIT 1;",
             (pipeline_name,))
         return self.cursor.fetchone()
 
     def claim_exists(self, pipeline_name, pipeline_counter):
         self.cursor.execute(
-            """SELECT * FROM instance_claim WHERE pipeline_name = %s AND pipeline_counter = %s;""", (pipeline_name, pipeline_counter)
+            "SELECT * FROM instance_claim WHERE pipeline_name = %s AND pipeline_counter = %s;",
+            (pipeline_name, pipeline_counter)
         )
         return self.cursor.fetchone() is not None
 
@@ -217,7 +239,6 @@ class SQLConnection:
                 WHERE pipeline_name = %s
                 ORDER BY pipeline_counter ASC""", (pipeline_name,)
         )
-        # Old 20 limit: AND pipeline_counter > (SELECT max(pipeline_counter) FROM pipeline_instance WHERE pipeline_name = %s)-20
         return self.cursor.fetchall()
 
     def get_jobs_by_stage_id(self, stage_id):
@@ -279,7 +300,7 @@ class SQLConnection:
 _connection = None
 
 
-def create_connection(db_port=15554):
+def create_connection(db_port='15554'):
     global _connection
     if not _connection:
         _connection = SQLConnection(db_port=db_port)

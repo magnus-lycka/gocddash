@@ -21,8 +21,11 @@ def send_prime_suspect_email(latest_pipeline, streak, suspect_list):
     server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
-    title = "{} broke in GO at pipeline counter {}, and is currently at counter {}. If you pushed to this or any upstream recently, please investigate.".format(
-        latest_pipeline.pipeline_name, streak.pass_counter+1, latest_pipeline.pipeline_counter)
+    title = (
+        "{} broke in GO at pipeline counter {}, and is currently at counter {}. "
+        "If you pushed to this or any upstream recently, please investigate."
+        .format(latest_pipeline.pipeline_name, streak.pass_counter+1, latest_pipeline.pipeline_counter)
+    )
 
     base_go_url = get_app_config().cfg['PUBLIC_GO_SERVER_URL']
     base_dashboard_link = get_app_config().cfg['PUBLIC_DASH_URL']
@@ -64,10 +67,12 @@ def build_email_notifications(pipeline_name):
             pipeline_name):
         print("\n -----SENDING EMAILS FOR {}-----".format(pipeline_name))
         streak = get_latest_failure_streak(pipeline_name)
-        perpetrator_data = get_git_comparison(pipeline_name, streak.pass_counter+1,
+        perpetrator_data = get_git_comparison(pipeline_name, streak.pass_counter + 1,
                                               streak.pass_counter, "")
         try:
             send_prime_suspect_email(latest_pipeline, streak, perpetrator_data)
-            create_email_notification_sent(pipeline_name, streak.pass_counter+1)
-        except Exception:
+            create_email_notification_sent(pipeline_name, streak.pass_counter + 1)
+        except Exception as error:
+            # TODO: Narrow down to expected exception classes. We don't want to hide bugs e.g. NameError.
             print("Could not send email for pipeline " + pipeline_name)
+            print(error)

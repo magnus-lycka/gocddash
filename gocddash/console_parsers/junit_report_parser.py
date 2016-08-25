@@ -24,7 +24,8 @@ class JunitConsoleParser:
         else:
             return 0, 0, 0
 
-    def extract_failure_info(self, console_log):
+    @staticmethod
+    def extract_failure_info(console_log):
         console_log = console_log.split("Unit Test Failure and Error Details")[0]
         console_log = remove_excessive_whitespace(clean_html(console_log))
         console_log = console_log.split("seconds.")[1]
@@ -43,7 +44,8 @@ class JunitConsoleParser:
             for error in failures:
                 get_connection().insert_junit_failure_information(stage_id, error[0], error[1])
 
-    def extract_bar_chart_data(self, console_log):
+    @staticmethod
+    def extract_bar_chart_data(console_log):
         console_log = console_log.split("Unit Test Failure and Error Details")[0]
         splitted_console_log_list = remove_excessive_whitespace(clean_html(console_log)).split()
         total_tests_run = splitted_console_log_list[2]

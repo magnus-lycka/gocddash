@@ -85,13 +85,15 @@ class FileSource:
     def go_request_pipeline_history(self, pipeline_name, offset=0):
         return self.read_file("/history/" + pipeline_name + ".json")
 
-    def go_get_pipeline_instance(self, pipeline_name, pipeline_counter):
+    @staticmethod
+    def go_get_pipeline_instance(pipeline_name, pipeline_counter):
         return ""
 
     def go_get_pipeline_status(self, pipeline_name):
         return self.read_file("/status/" + pipeline_name + ".json")
 
-    def go_get_stage_instance(self, pipeline_name, pipeline_counter, stage_name):
+    @staticmethod
+    def go_get_stage_instance(pipeline_name, pipeline_counter, stage_name):
         return ""
 
     def go_request_stages_history(self, pipeline_name, pipeline_counter, stage_index, stage_name):
@@ -105,13 +107,15 @@ class FileSource:
             return True, self.read_file("/junit_passed.html")
         return True, self.read_file("/junit.html")
 
-    def go_request_job_history(self, pipeline_name, stage_name, offset=0):
+    @staticmethod
+    def go_request_job_history(pipeline_name, stage_name, offset=0):
         return ""
 
     def go_get_pipeline_groups(self):
         return self.read_file("/config/pipeline_groups.json")
 
-    def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name):
+    @staticmethod
+    def go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name):
         return ""
 
     def go_request_comparison_html(self, pipeline_name, current, comparison):

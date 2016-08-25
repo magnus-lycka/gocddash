@@ -11,7 +11,8 @@ class TestFailureTip(unittest.TestCase):
     path = "data/pipelines.json"
     create_pipeline_config(path)
 
-    def create_stage_failure_info(self, parent=None, passed=False, failure_stage=None, stage_id=2000):
+    @staticmethod
+    def create_stage_failure_info(parent=None, passed=False, failure_stage=None, stage_id=2000):
         if parent:
             pipeline_counter = parent.pipeline_counter - 1
         else:

@@ -4,7 +4,8 @@ from .go_client import go_get_cctray
 
 
 def get_previous_stage(current_stage):
-    result = get_connection().fetch_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_counter, current_stage.stage_name)
+    result = get_connection().fetch_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
+                                                   current_stage.stage_counter, current_stage.stage_name)
     if result:
         return StageFailureInfo(*result)
     else:
@@ -69,7 +70,8 @@ class Stage:
 
 
 class StageFailureInfo:
-    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message, approved_by, result, failure_stage, responsible, description, scheduled_date):
+    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message,
+                 approved_by, result, failure_stage, responsible, description, scheduled_date):
         self.pipeline_name = pipeline_name
         self.pipeline_counter = pipeline_counter
         self.stage_id = stage_id
