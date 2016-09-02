@@ -23,7 +23,6 @@ from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_
     create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
 from gocddash.dashboard.graph import create_job_test_html_graph, single_pipeline_html_graph, all_pipelines_html_graph
 
-# from gocddash.dashboard.cc_tray_cache import create_cache, get_cache
 
 group_of_pipeline = defaultdict(str)
 
@@ -129,12 +128,6 @@ def internal_server_error(e):
 def page_not_found(e):
     return render_template('404.html', statuscode=e, dashboard_link=url_for('gocddash.dashboard'), now=datetime.now(),
                            footer=get_footer(), theme=get_bootstrap_theme()), 404
-
-
-# Catches all errors - a bit too trigger happy
-# @gocddash.app_errorhandler(Exception)
-# def all_exception_handler(error):
-#     return render_template('500.html', statuscode=error), 500
 
 
 @gocddash.route("/select/", methods=['GET', 'POST'])
@@ -318,7 +311,7 @@ def insights(pipeline_name):
 
 
 app = Flask(__name__)
-if not app.config.from_envvar('APP_CONFIG'):
+if not ('APP_CONFIG' in os.environ and app.config.from_envvar('APP_CONFIG')):
     app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
 
@@ -475,8 +468,6 @@ def main():
 
     pipeline_path = pargs_dict['pipeline_config']
     create_pipeline_config(pipeline_path)
-
-    # create_cache()
 
 
 main()
