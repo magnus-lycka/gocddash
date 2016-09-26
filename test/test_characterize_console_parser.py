@@ -178,10 +178,13 @@ class TestConsoleFetcher(unittest.TestCase):
             (13, 'missing', 'target_fatturapa_1_1_4163489'),
             (13, 'differences', 'catalogue'),
             (13, 'differences', 'routingLog'),
-            (13, 'differences', 'stdout')]}
+            (13, 'differences', 'stdout')
+        ]}
         characterize_console_parser.go_request_console_log = MagicMock(return_value=console_log)
+        characterize_console_parser.go_request_junit_report = MagicMock(return_value=(False, ''))
         test_object = characterize_console_parser.TexttestConsoleParser('ct-t', 2064, 1, 'runTests', 'defaultJob')
         output_dictionary = test_object.parse_info()
+        self.maxDiff = None
         self.assertEqual(output_dictionary, error_dictionary)
 
 

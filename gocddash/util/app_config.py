@@ -9,7 +9,7 @@ from flask import Config
 class AppConfig(Config):
     _shared_state = {'root_path': None}
 
-    def __init__(self, root_path, defaults=None):
+    def __init__(self, root_path=None, defaults=None):
         self.__dict__ = self._shared_state
         if root_path is not None:
             self._init(root_path, defaults)
@@ -23,10 +23,8 @@ class AppConfig(Config):
 
 
 def create_app_config(path=None):
-    if not path:
-        path = str(Path(__file__).parents[1]) + "/application.cfg"
-    return AppConfig(path)
+    return AppConfig(path or str(Path(__file__).parents[1]) + "/application.cfg")
 
 
 def get_app_config():
-    return AppConfig(None)
+    return AppConfig()

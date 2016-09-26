@@ -5,6 +5,7 @@ from gocddash.analysis.domain import StageFailureInfo
 from gocddash.dashboard import failure_tip
 from gocddash.dashboard import pipeline_status
 from gocddash.util.pipeline_config import create_pipeline_config
+from gocddash.console_parsers.characterize_console_parser import TexttestConsoleParser
 
 
 class TestFailureTip(unittest.TestCase):
@@ -18,7 +19,7 @@ class TestFailureTip(unittest.TestCase):
         else:
             pipeline_counter = 2000
 
-        return StageFailureInfo("characterize", pipeline_counter, 1, stage_id, "runTests", "triggered by x",
+        return StageFailureInfo('characterize', pipeline_counter, 1, stage_id, "runTests", "triggered by x",
                                 "changes", "Passed" if passed else "Failed", failure_stage, "resp", "desc", 2014)
 
     def test_current_passing(self):
@@ -43,7 +44,7 @@ class TestFailureTip(unittest.TestCase):
 
     def test_error_introduced(self):
         pipeline_status.get_failure_stage_signature = MagicMock(return_value={2000: {}})
-        pipeline_status.get_pipeline_config().get_log_parser = MagicMock(return_value="characterize")
+        pipeline_status.get_pipeline_config().get_log_parser = MagicMock(return_value=TexttestConsoleParser)
 
         failed_stage = self.create_stage_failure_info(None, False, "TEST")
         passed_stage = self.create_stage_failure_info(failed_stage, True)
@@ -57,7 +58,7 @@ class TestFailureTip(unittest.TestCase):
 
     def test_error_unchanged(self):
         pipeline_status.get_failure_stage_signature = MagicMock(side_effect=[{2000: {}}, {1999: {}}])
-        pipeline_status.get_pipeline_config().get_log_parser = MagicMock(return_value="characterize")
+        pipeline_status.get_pipeline_config().get_log_parser = MagicMock(return_value=TexttestConsoleParser)
 
         this_stage = self.create_stage_failure_info(None, False, "TEST", stage_id=2000)
         previous_stage = self.create_stage_failure_info(this_stage, False, "TEST", stage_id=1999)

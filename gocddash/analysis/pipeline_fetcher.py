@@ -2,7 +2,7 @@
 import json
 from datetime import datetime
 
-from gocddash.console_parsers.determine_parser import get_parser_info
+from gocddash.console_parsers.junit_report_parser import JunitConsoleParser
 from gocddash.util.get_failure_stage import get_failure_stage
 from gocddash.util.pipeline_config import get_pipeline_config
 from .data_access import get_connection
@@ -92,7 +92,7 @@ def fetch_job(pipeline_counter, pipeline_name, stage, stage_index, jobs):
         scheduled_date = ms_timestamp_to_date(job['scheduled_date']).replace(microsecond=0)
         job_id = job['id']
         job_result = job['result']
-        parser = get_parser_info("junit")(pipeline_name, pipeline_counter, stage_index, stage.stage_name, job_name)
+        parser = JunitConsoleParser(pipeline_name, pipeline_counter, stage_index, stage.stage_name, job_name)
         tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
         job = Job(job_id, stage.stage_id, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed,
                   tests_skipped)
@@ -109,7 +109,7 @@ def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, s
     failure_stage = get_failure_stage(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
     get_connection().insert_failure_information(stage_id, failure_stage)
 
-    failures = get_parser_info(log_parser)(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+    failures = log_parser(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
     failures.insert_info(stage_id)
 
 

@@ -2,27 +2,28 @@
 from gocddash.analysis.data_access import get_connection
 from gocddash.analysis.go_client import go_request_junit_report
 from gocddash.util.html_utils import remove_excessive_whitespace, clean_html
+from .default_console_parser import DefaultConsoleParser
 
 
-class JunitConsoleParser:
+class JunitConsoleParser(DefaultConsoleParser):
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
         success, response = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+        self.response = response
         self.console_log = response
         self.success = success
 
     def parse_info(self):
         if self.success:
-            return self.extract_failure_info(self.console_log)
+            return self.extract_failure_info()
 
     def parse_bar_chart_info(self):
         if self.success:
-            return self.extract_bar_chart_data(self.console_log)
+            return self.extract_bar_chart_data()
         else:
             return 0, 0, 0
 
-    @staticmethod
-    def extract_failure_info(console_log):
-        console_log = console_log.split("Unit Test Failure and Error Details")[0]
+    def extract_failure_info(self):
+        console_log = self.console_log.split("Unit Test Failure and Error Details")[0]
         console_log = remove_excessive_whitespace(clean_html(console_log))
         console_log = console_log.split("seconds.")[1]
         console_log = console_log.splitlines()
@@ -40,11 +41,13 @@ class JunitConsoleParser:
             for error in failures:
                 get_connection().insert_junit_failure_information(stage_id, error[0], error[1])
 
-    @staticmethod
-    def extract_bar_chart_data(console_log):
-        console_log = console_log.split("Unit Test Failure and Error Details")[0]
+    def extract_bar_chart_data(self):
+        console_log = self.console_log.split("Unit Test Failure and Error Details")[0]
         splitted_console_log_list = remove_excessive_whitespace(clean_html(console_log)).split()
         total_tests_run = splitted_console_log_list[2]
         failures = splitted_console_log_list[5]
         not_run = splitted_console_log_list[9]
         return total_tests_run, failures, not_run
+
+    def _check_test_failures(self):
+        return "Failures: 0" not in self.console_log

@@ -4,12 +4,18 @@ import sys
 
 from gocddash.analysis.data_access import get_connection
 from gocddash.analysis.go_client import go_request_console_log
+from gocddash.analysis.go_client import go_request_junit_report
+from .default_console_parser import DefaultConsoleParser
 
-ansi_escape = re.compile(r'\x1b[^m]*m')
+
+def ansi_escape(x):
+    return re.compile(r'\x1b[^m]*m').sub('', x)
 
 
-class TexttestConsoleParser:
+class TexttestConsoleParser(DefaultConsoleParser):
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
+        self.success, self.response = go_request_junit_report(
+            pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         self.console_log = go_request_console_log(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
 
     def parse_info(self):
@@ -26,7 +32,7 @@ class TexttestConsoleParser:
 
         for index, test_row in enumerate(test_case_list):
             test_case = test_row.split('test-case', 1)[-1]
-            test_case = ansi_escape.sub('', test_case)
+            test_case = ansi_escape(test_case)
 
             send_error = [error for error in failure_case_list if test_case + " " in error]
             error_list = self.extract_failure_info(send_error)
@@ -36,7 +42,7 @@ class TexttestConsoleParser:
 
             test_dict[test_case] = error_list
 
-        final_dict = {key: value for (key, value) in test_dict.items() if value is not None}
+        final_dict = {key: value for (key, value) in test_dict.items() if value}
         return final_dict
 
     @staticmethod
@@ -50,7 +56,7 @@ class TexttestConsoleParser:
             for category in error_list:
                 for document in category.split(','):
                     type_document_error_list.append(
-                        (category.split()[0], ansi_escape.sub('', document.split()[-1])))
+                        (category.split()[0], ansi_escape(document.split()[-1])))
         return type_document_error_list
 
     def insert_info(self, stage_id):
@@ -61,3 +67,6 @@ class TexttestConsoleParser:
                 for failure in value:
                     index, failure_type, document_name = failure
                     get_connection().insert_texttest_failure(stage_id, index, failure_type, document_name)
+
+    def _check_test_failures(self):
+        return "----------" in self.response

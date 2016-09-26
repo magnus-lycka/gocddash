@@ -2,6 +2,9 @@ import sys
 from ..analysis.characterize_data_munging import get_failure_stage_signature
 from ..analysis.data_access import get_connection
 from ..util.pipeline_config import get_pipeline_config
+from ..console_parsers.junit_report_parser import JunitConsoleParser
+from ..console_parsers.characterize_console_parser import TexttestConsoleParser
+from ..console_parsers.default_console_parser import DefaultConsoleParser
 
 
 class StageOutcome:
@@ -69,8 +72,8 @@ def create_stage_info(stage_failure_info):
     print('create_stage_info', stage_failure_info, file=sys.stderr)
     log_parser = get_pipeline_config().get_log_parser(stage_failure_info.pipeline_name)
     # Log parser should almost always be junit. This fixes changing config without reloading the cfg
-    if log_parser is None:
-        log_parser = 'junit'
+    if log_parser is DefaultConsoleParser:
+        log_parser = JunitConsoleParser
     if stage_failure_info.is_success():
         result = StageSuccess(stage_failure_info)
     elif stage_failure_info.failure_stage == "TEST":
@@ -94,6 +97,6 @@ def characterize_failure_extraction(stage_failure_info):
 
 
 failure_extractors = {
-    "characterize": characterize_failure_extraction,
-    "junit": junit_failure_extraction
+    TexttestConsoleParser: characterize_failure_extraction,
+    JunitConsoleParser: junit_failure_extraction
 }

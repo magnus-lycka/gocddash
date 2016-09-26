@@ -11,7 +11,9 @@ except Exception as error:
 
 
 class GoSource:
-    """Main class for making requests to the GO API or server"""
+    """
+    Preforms REST API requests to Go-server
+    """
 
     def __init__(self, base_go_url, auth):
         self.base_go_url = base_go_url
@@ -98,7 +100,12 @@ class GoSource:
 
 # noinspection PyUnusedLocal
 class FileSource:
-    """Mock version of the Go Source class but routes all requests to files instead of the GO API. Used by TextTest."""
+    """
+    Mock version of the GoSource class.
+    Routes all requests to files instead of the GO API.
+
+    Used for testing.
+    """
 
     def __init__(self, directory):
         self.directory = directory

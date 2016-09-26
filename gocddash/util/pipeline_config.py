@@ -5,6 +5,7 @@ import codecs
 import json
 import os
 from pathlib import Path
+from ..console_parsers.determine_parser import get_parser_info
 
 
 class PipelineConfig:
@@ -29,7 +30,7 @@ class PipelineConfig:
     def get_log_parser(self, pipeline_name):
         for config_dict in self.pipelines["pipelines"]:
             if pipeline_name == config_dict["name"]:
-                return config_dict.get('log_parser', None)
+                return get_parser_info(config_dict.get('log_parser', None))
         return None
 
     def get_email_notif(self, pipeline_name):
@@ -40,9 +41,7 @@ class PipelineConfig:
 
 
 def create_pipeline_config(path=None):
-    if not path:
-        path = str(Path(__file__).parents[1]) + "/pipelines.json"
-    return PipelineConfig(path)
+    return PipelineConfig(path or str(Path(__file__).parents[1]) + "/pipelines.json")
 
 
 def get_pipeline_config():
