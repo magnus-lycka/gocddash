@@ -1,53 +1,62 @@
 #!/usr/bin/env python3
-
 import os
+import psutil
 import random
 import socket
 import subprocess
 import sys
 import time
-
-import psycopg2
-from docker_management import ContainerManager
-from yoyo import read_migrations, get_backend
+import requests
 
 
-def start_servers(docker):
-    db_port = random.randrange(15550, 17550)
-    application_port = random.randrange(4545, 4999)
-    gocd_dash_path = os.environ['TEXTTEST_CHECKOUT']
-    print("starting servers, db on port {} and application on port {}, using checkout {}".format(db_port,
-                                                                                                 application_port,
-                                                                                                 gocd_dash_path))
+def get_free_port():
+    # There is a potential for a race condition here, but I think it works ok in practice.
+    port_used = True
+    while port_used:
+        port = random.randrange(4545, 9999)
+        port_used = port in [x.laddr[1] for x in psutil.net_connections()]
+    # noinspection PyUnboundLocalVariable
+    return port
 
-    db_container = start_db_docker(docker, db_port)
-    apply_db_migrations(gocd_dash_path, db_port=db_port)
-    application_process = start_application(gocd_dash_path, db_port, application_port)
-    sync_pipelines(gocd_dash_path, db_port)
 
-    return db_container, application_port, application_process
+def start_servers(gocd_dash_path):
+    application_port = get_free_port()
+    print("starting server, application on port {}, using checkout {}".format(application_port, gocd_dash_path))
+
+    apply_db_migrations(gocd_dash_path)
+    application_process = start_application(gocd_dash_path, None, application_port)
+
+    return application_port, application_process
 
 
 def perform_testcase(port):
     print("Starting test workflow for GO CD Dashboard")
     with open("gui_log.txt", "w", encoding="UTF-8") as log:
         with open("urls.txt") as urls:
+
+            coverage_url = "http://127.0.0.1:{}/dash/coverage/".format(port)
+
             for url in urls:
                 url_contents = url.split(':')
                 protocol = url_contents[0]
                 host = url_contents[1]
                 path = url_contents[2][4:]
                 url = protocol + ":" + host + ":" + str(port) + path
-
                 log.write("url: {}\n".format(url))
 
-                out = subprocess.check_output(["/usr/bin/lynx", "-dump", url])
+                try:
+                    out = subprocess.check_output(["/usr/bin/lynx", "-dump", url], stderr=subprocess.STDOUT)
+                except subprocess.CalledProcessError as error:
+                    print(error)
+                    print(error.output.decode("UTF-8"))
+                    raise
                 log.write(out.decode("UTF-8"))
 
+            requests.get(coverage_url)
 
-def stop_servers(docker, db, application):
+
+def stop_servers(application):
     application.kill()
-    docker.stop_container(db)
 
 
 def main():
@@ -55,46 +64,17 @@ def main():
     if not (3 == python_version):
         print("This code requires Python 3. Instead found version {}. Exiting.".format(python_version))
         sys.exit(-1)
-    docker = ContainerManager()
-    db, app_port, application = start_servers(docker)
+    gocd_dash_path = os.environ['TEXTTEST_CHECKOUT']
+    app_port, application = start_servers(gocd_dash_path)
     try:
+        sync_pipelines(gocd_dash_path)
         perform_testcase(app_port)
     finally:
-        stop_servers(docker, db, application)
+        stop_servers(application)
 
 
-def start_db_docker(docker, dbport):
-    db_image = "postgres"
-    db_image_tag = "9.3"
-    db_params = {"POSTGRES_PASSWORD": "analysisappluser",
-                 "POSTGRES_USER": "analysisappluser",
-                 "POSTGRES_DB": "go-analysis"}
-
-    db_container = docker.start_db_container(db_image, db_image_tag, dbport, environment=db_params)
-    return db_container
-
-
-def apply_db_migrations(gocd_dash_path, db_host='localhost', db_port='15554'):
-    conn_str = 'postgresql://analysisappluser:analysisappluser@{}:{}/go-analysis'.format(db_host, db_port)
-    _wait_for_db_to_accept_connections(conn_str)
-    backend = get_backend(conn_str)
-    migrations = read_migrations(gocd_dash_path + '/migrations')
-    backend.apply_migrations(backend.to_apply(migrations))
-
-
-def _wait_for_db_to_accept_connections(conn_str):
-    def can_connect():
-        try:
-            get_backend(conn_str)
-            return True
-        except psycopg2.OperationalError:
-            return False
-
-    i = 0
-    while i < 10 and not can_connect():
-        time.sleep(0.5)
-        i += 1
-    print("db is accepting connections")
+def apply_db_migrations(gocd_dash_path):
+    os.system('sqlite3 gocddash.sqlite3 < {}'.format(gocd_dash_path + '/migrations/setup.sql'))
 
 
 def start_application(gocd_dash_path, db_port, application_port):
@@ -116,7 +96,7 @@ def _wait_for_app_to_start(application_port):
         try:
             s.connect(('localhost', application_port))
             return True
-        except socket.error as e:
+        except socket.error:
             return False
 
     i = 0
@@ -127,10 +107,14 @@ def _wait_for_app_to_start(application_port):
     print("application is started")
 
 
-def sync_pipelines(gocd_dash_path, db_port):
-    subprocess.check_call(["/usr/bin/env", "python3",
+def sync_pipelines(gocd_dash_path):
+    subprocess.check_call(["/usr/bin/env", "coverage3",
+                           "run",
+                           "--branch",
+                           "--parallel-mode",
+                           "--source=gocddash",
                            gocd_dash_path + "/sync_pipelines.py",
-                           "--db-port", str(db_port),
+                           "--db-port", str(0),
                            "-a", os.getcwd() + "/application.cfg",
                            "-p", os.getcwd() + "/pipelines.json",
                            "-f", os.getcwd()])

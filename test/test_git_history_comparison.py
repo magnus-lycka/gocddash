@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 from gocddash.console_parsers import git_history_comparison
 
-
+# noinspection PyPep8
 git_history_html = """<!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -601,6 +601,7 @@ git_history_html = """<!DOCTYPE HTML>
 </html>
 """
 
+# noinspection PyPep8
 material_revision_diff = """<!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -1229,9 +1230,12 @@ class TestGitBlame(unittest.TestCase):
                 ('f493dfcf50591e6efdd7578e461f977699cde1c2', 'ab <ab@test.com> 2016-08-17T17:35:51+02:00', 'hello'),
                 ('1bfdd417c37dd04d356fe1f6e75113afbdc300f5', 'eb <eb@test.com> 2016-08-17T16:44:42+02:00', 'debug'),
                 ('e8f4dc265be0d0d20f9ad2f9fd74978d1d5ea07e', 'lg <lg@test.com> 2016-08-17T16:33:41+02:00', 'ids'),
-                ('32df04538efe309e3ea245fdcedd12e1c6ad773b', 'ja <ja@test.com> 2016-08-17T15:31:38+02:00', 'cherry pick'),
-                ('944004c49589b276603d983871d1a531e9933837', 'ja <ja@test.com> 2016-08-17T15:30:43+02:00', 'cherry pick again'),
-                ('fb543f0e1f9aeaaa70d6a9bc4bfa748d04093ed3', 'ja <ja@test.com> 2016-08-17T13:21:04+02:00', 'testing stuff')
+                ('32df04538efe309e3ea245fdcedd12e1c6ad773b', 'ja <ja@test.com> 2016-08-17T15:31:38+02:00',
+                 'cherry pick'),
+                ('944004c49589b276603d983871d1a531e9933837', 'ja <ja@test.com> 2016-08-17T15:30:43+02:00',
+                 'cherry pick again'),
+                ('fb543f0e1f9aeaaa70d6a9bc4bfa748d04093ed3', 'ja <ja@test.com> 2016-08-17T13:21:04+02:00',
+                 'testing stuff')
             ])
         ])
 

@@ -1,5 +1,5 @@
-"""Extracts the failure stage of a pipeline from the JUnit report.
-
+"""
+Extracts the failure stage of a pipeline from the JUnit report.
 """
 
 from gocddash.analysis.go_client import go_request_junit_report

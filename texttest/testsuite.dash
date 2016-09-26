@@ -1,3 +1,5 @@
 # With an empty database, display dashboard
 empty
 insights
+graphs
+dashboard_actions

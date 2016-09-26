@@ -1,3 +1,4 @@
+from collections import namedtuple
 from . import parse_cctray
 from .data_access import get_connection
 from .go_client import go_get_cctray
@@ -5,7 +6,7 @@ from .go_client import go_get_cctray
 
 def get_previous_stage(current_stage):
     result = get_connection().fetch_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
-                                                   current_stage.stage_counter, current_stage.stage_name)
+                                                   current_stage.stage_name, current_stage.stage_counter)
     if result:
         return StageFailureInfo(*result)
     else:
@@ -19,8 +20,8 @@ def get_current_stage(pipeline_name):
     return None
 
 
-def get_latest_passing_stage(pipeline_name, stage_name):
-    result = get_connection().fetch_latest_passing_stage(pipeline_name, stage_name)
+def get_latest_passing_stage(pipeline_name):
+    result = get_connection().fetch_latest_passing_stage(pipeline_name)
     if result:
         return StageFailureInfo(*result)
     else:
@@ -47,7 +48,12 @@ def create_email_notification_sent(pipeline_name, pipeline_counter):
     get_connection().insert_email_notification_sent(pipeline_name, pipeline_counter)
 
 
-class PipelineInstance:
+class DomainObject:
+    def __repr__(self):
+        return "<{}> {}".format(self.__class__.__name__, self.__dict__)
+
+
+class PipelineInstance(DomainObject):
     def __init__(self, pipeline_name, pipeline_counter, trigger_message, instance_id):
         self.pipeline_name = pipeline_name
         self.pipeline_counter = pipeline_counter
@@ -56,7 +62,7 @@ class PipelineInstance:
         self.stages = {}
 
 
-class Stage:
+class Stage(DomainObject):
     def __init__(self, stage_name, approved_by, stage_result, stage_counter, stage_id, scheduled_date):
         self.stage_name = stage_name
         self.approved_by = approved_by
@@ -69,7 +75,7 @@ class Stage:
         return self.stage_result == "Passed"
 
 
-class StageFailureInfo:
+class StageFailureInfo(DomainObject):
     def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_id, stage_name, trigger_message,
                  approved_by, result, failure_stage, responsible, description, scheduled_date):
         self.pipeline_name = pipeline_name
@@ -92,8 +98,9 @@ class StageFailureInfo:
         return self.responsible is not None
 
 
-class Job:
-    def __init__(self, job_id, stage_id, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed, tests_skipped):
+class Job(DomainObject):
+    def __init__(self, job_id, stage_id, job_name, agent_uuid, scheduled_date, job_result, tests_run, tests_failed,
+                 tests_skipped):
         self.job_id = job_id
         self.stage_id = stage_id
         self.job_name = job_name
@@ -124,30 +131,25 @@ def get_claims_for_unsynced_pipelines():
     return fold(result, InstanceClaim, [])
 
 
-class GraphData:
-    def __init__(self, pipeline_name, pipeline_counter, stage_counter, stage_name, stage_result, job_name, scheduled_date, job_result, failure_stage, agent_name, tests_run, tests_failed, tests_skipped):
-        self.pipeline_name = pipeline_name
-        self.pipeline_counter = pipeline_counter
-        self.stage_counter = stage_counter
-        self.stage_name = stage_name
-        self.stage_result = stage_result
-        self.job_name = job_name
-        self.scheduled_date = scheduled_date
-        self.job_result = job_result
-        self.failure_stage = failure_stage
-        self.agent_name = agent_name
-        self.tests_run = tests_run
-        self.tests_failed = tests_failed
-        self.tests_skipped = tests_skipped
+GraphData = namedtuple('GraphData',
+                       [
+                           "pipeline_name",
+                           "pipeline_counter",
+                           "stage_counter",
+                           "stage_name",
+                           "stage_result",
+                           "job_name",
+                           "scheduled_date",
+                           "job_result",
+                           "failure_stage",
+                           "agent_name",
+                           "tests_run",
+                           "tests_failed",
+                           "tests_skipped"
+                       ])
 
 
-class EmbeddedChart:
-    def __init__(self, chart, js_resources, css_resources, script, div):
-        self.chart = chart
-        self.js_resources = js_resources
-        self.css_resources = css_resources
-        self.script = script
-        self.div = div
+EmbeddedChart = namedtuple('EmbeddedChart', ['chart', 'js_resources', 'css_resources', 'script', 'div'])
 
 
 def get_graph_statistics():
@@ -157,7 +159,7 @@ def get_graph_statistics():
 
 def get_graph_statistics_for_pipeline(pipeline_name):
     result = get_connection().get_graph_statistics_for_pipeline(pipeline_name)
-    return fold(result, GraphData)
+    return fold(result, GraphData, [])
 
 
 def get_graph_statistics_for_final_stages(pipeline_name):
@@ -190,12 +192,7 @@ def get_cctray_status():
     return project
 
 
-class InstanceClaim:
-    def __init__(self, pipeline_name, pipeline_counter, responsible, description):
-        self.pipeline_name = pipeline_name
-        self.pipeline_counter = pipeline_counter
-        self.responsible = responsible
-        self.description = description
+InstanceClaim = namedtuple('InstanceClaim', ['pipeline_name', 'pipeline_counter', 'responsible', 'description'])
 
 
 def create_instance_claim(instance_claim):
@@ -207,12 +204,7 @@ def create_instance_claim(instance_claim):
                                                instance_claim.responsible, instance_claim.description)
 
 
-class ResultStreak:
-    def __init__(self, pipeline_name, fail_counter, pass_counter, currently_passing):
-        self.pipeline_name = pipeline_name
-        self.fail_counter = fail_counter
-        self.pass_counter = pass_counter
-        self.currently_passing = currently_passing
+ResultStreak = namedtuple('ResultStreak', ['pipeline_name', 'fail_counter', 'pass_counter', 'currently_passing'])
 
 
 def get_latest_failure_streak(pipeline_name):

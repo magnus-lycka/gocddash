@@ -7,3 +7,7 @@ building_newer
 stage_passed
 no_latest_passing_stage
 green_and_red_job
+junit_fail_on_startup
+junit_fail_on_startup404
+junit_fail_on_post
+texttest_log

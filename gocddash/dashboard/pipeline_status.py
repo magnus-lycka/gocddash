@@ -1,12 +1,27 @@
+import sys
 from ..analysis.characterize_data_munging import get_failure_stage_signature
 from ..analysis.data_access import get_connection
 from ..util.pipeline_config import get_pipeline_config
 
 
-class StageSuccess:
+class StageOutcome:
     def __init__(self, stage):
         self.stage = stage
 
+    def is_success(self):
+        return NotImplemented
+
+    def describe_run_outcome(self):
+        return NotImplemented
+
+    def describe_rerun(self):
+        return NotImplemented
+
+    def __repr__(self):
+        return "<{}> {}".format(self.__class__.__name__, self.__dict__)
+
+
+class StageSuccess(StageOutcome):
     def is_success(self):
         return True
 
@@ -17,10 +32,7 @@ class StageSuccess:
         return "Test was a success. Do not rerun."
 
 
-class StageFailure(StageSuccess):
-    def __init__(self, stage):
-        StageSuccess.__init__(self, stage)
-
+class StageFailure(StageOutcome):
     def is_success(self):
         return False
 
@@ -45,19 +57,16 @@ class StageFailure(StageSuccess):
 
 class TestFailure(StageFailure):
     def __init__(self, stage, failure_signature, test_names):
-        StageFailure.__init__(self, stage)
+        super().__init__(stage)
         self.failure_signature = failure_signature
         self.test_names = test_names
-
-    def __repr__(self):
-        return "{} {} {} {} {}".format(self.stage.pipeline_name, self.stage.pipeline_counter, self.stage.stage_index,
-                                       self.test_names, self.failure_signature)
 
     def has_error_statistics(self):
         return True
 
 
 def create_stage_info(stage_failure_info):
+    print('create_stage_info', stage_failure_info, file=sys.stderr)
     log_parser = get_pipeline_config().get_log_parser(stage_failure_info.pipeline_name)
     # Log parser should almost always be junit. This fixes changing config without reloading the cfg
     if log_parser is None:

@@ -18,7 +18,8 @@ class TestFailureTip(unittest.TestCase):
         else:
             pipeline_counter = 2000
 
-        return StageFailureInfo("characterize", pipeline_counter, 1, stage_id, "runTests", "triggered by x", "changes", "Passed" if passed else "Failed", failure_stage, "resp", "desc", 2014)
+        return StageFailureInfo("characterize", pipeline_counter, 1, stage_id, "runTests", "triggered by x",
+                                "changes", "Passed" if passed else "Failed", failure_stage, "resp", "desc", 2014)
 
     def test_current_passing(self):
         pipeline_status.get_pipeline_config().get_log_parser = MagicMock(return_value="characterize")
@@ -48,8 +49,11 @@ class TestFailureTip(unittest.TestCase):
         passed_stage = self.create_stage_failure_info(failed_stage, True)
         current = pipeline_status.create_stage_info(failed_stage)
         previous = pipeline_status.create_stage_info(passed_stage)
-        result= failure_tip.get_failure_tip(current, previous, 0)
-        self.assertEqual(result, ("Last pipeline was a success. Potential for flickering but may need further investigation.", "Last claim: resp: desc"))
+        result = failure_tip.get_failure_tip(current, previous, 0)
+        self.assertEqual(result,
+                         ("Last pipeline was a success. Potential for flickering but may need further investigation.",
+                          "Last claim: resp: desc")
+                         )
 
     def test_error_unchanged(self):
         pipeline_status.get_failure_stage_signature = MagicMock(side_effect=[{2000: {}}, {1999: {}}])

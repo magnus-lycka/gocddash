@@ -40,34 +40,33 @@ class FailureRecommendation:
         self.previous = previous
         self.last_success = last_success
 
-        self.statistics_actions = [
-            (
-                lambda: self.current.stage.failure_stage == "STARTUP" and self.current.stage.failure_stage == self.previous.stage.failure_stage,
-                "Tests have failed at STARTUP several times in a row. Recommend to rerun after investigation."),
-            (
-                lambda: len(self.current.test_names) == 1 and 1 in current.test_names,  # Very specific for characterize
-                "Recommend to rerun."),
-            (
-                lambda: self.current.failure_signature == self.previous.failure_signature and self.current.test_names == self.previous.test_names,
-                "Same failure signature and same failure indices as last failure."),
-            (lambda: self.current.failure_signature == self.previous.failure_signature,
-             "Same failure signature as last test. Unlikely flickering."),
-            (lambda: self.current.test_names == self.previous.test_names,
-             "Same failure indices as last test. Unlikely flickering."),
-            (lambda: len(current.test_names) == 1,
-             "Only one test failure. Potential for flickering but needs further investigation."),
-            (lambda: len(self.current.test_names) == len(self.previous.test_names),
-             "Same number of failures as previous test. Unlikely flickering.")
+        self.statistics_actions = [(
+            lambda: self.current.stage.failure_stage == "STARTUP" and
+                    self.current.stage.failure_stage == self.previous.stage.failure_stage,
+            "Tests have failed at STARTUP several times in a row. Recommend to rerun after investigation."), (
+            lambda: len(self.current.test_names) == 1 and 1 in current.test_names,  # Very specific for characterize
+            "Recommend to rerun."), (
+            lambda: self.current.failure_signature == self.previous.failure_signature and
+                    self.current.test_names == self.previous.test_names,
+            "Same failure signature and same failure indices as last failure."), (
+            lambda: self.current.failure_signature == self.previous.failure_signature,
+            "Same failure signature as last test. Unlikely flickering."), (
+            lambda: self.current.test_names == self.previous.test_names,
+            "Same failure indices as last test. Unlikely flickering."), (
+            lambda: len(current.test_names) == 1,
+            "Only one test failure. Potential for flickering but needs further investigation."), (
+            lambda: len(self.current.test_names) == len(self.previous.test_names),
+            "Same number of failures as previous test. Unlikely flickering.")
         ]
 
-        self.fallback_actions = [
-            (lambda: self.previous.is_success(),
-             "Last pipeline was a success. Potential for flickering but may need further investigation."),
-            (lambda: self.current.stage.pipeline_counter - last_success >= 3,
-             "Pipeline hasn't been green in a long time."),
+        self.fallback_actions = [(
+            lambda: self.previous.is_success(),
+            "Last pipeline was a success. Potential for flickering but may need further investigation."), (
+            lambda: self.current.stage.pipeline_counter - last_success >= 3,
+            "Pipeline hasn't been green in a long time."),
         ]
 
-        self.default = "Last pipeline was a failure. Recommend to investigate further."
+        self.default = "Last pipeline was a failure. Further investigation is recommended."
 
     def get_initial_recommendation(self):
         statistics_match = self.any_match()
@@ -92,4 +91,6 @@ class FailureRecommendation:
         return self.default
 
     def initial_tip_available(self):
-        return self.current.has_error_statistics() and not self.previous.is_success() and self.previous.has_error_statistics()
+        return (self.current.has_error_statistics() and
+                not self.previous.is_success() and
+                self.previous.has_error_statistics())

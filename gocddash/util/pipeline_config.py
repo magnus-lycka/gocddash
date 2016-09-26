@@ -1,8 +1,7 @@
-"""This module handles the pipelines.json file and creates a PipelineConfig object from it.
-Makes it easier to access configurations throughout the project.
-
 """
-
+This module handles the pipelines.json file and creates a PipelineConfig object from it.
+It makes it easier to access configurations throughout the project.
+"""
 import codecs
 import json
 import os
@@ -15,7 +14,11 @@ class PipelineConfig:
         if not os.path.isfile(path):
             raise FileNotFoundError("Error: Missing pipelines.json file in {}".format(path))
         with codecs.open(path, encoding="utf-8") as pipelines_json:
-            self.pipelines = json.load(pipelines_json)
+            try:
+                self.pipelines = json.load(pipelines_json)
+            except ValueError as err:
+                print('TODO: Present Error Message about failed json parsing', err)
+                raise
 
     def get_log_parser(self, pipeline_name):
         for config_dict in self.pipelines["pipelines"]:

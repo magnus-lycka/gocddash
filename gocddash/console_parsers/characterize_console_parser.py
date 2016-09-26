@@ -1,5 +1,6 @@
 """Module used for parsing the console log of a characterize classified pipeline"""
 import re
+import sys
 
 from gocddash.analysis.data_access import get_connection
 from gocddash.analysis.go_client import go_request_console_log
@@ -64,8 +65,9 @@ class TexttestConsoleParser:
 
     def insert_info(self, stage_id):
         failures = self.parse_info()
+        print("TexttestConsoleParser.insert_info", failures, file=sys.stderr)
         if failures:
-            for key, value in failures.items():
+            for value in failures.values():
                 for failure in value:
                     index, failure_type, document_name = failure
                     get_connection().insert_texttest_failure(stage_id, index, failure_type, document_name)

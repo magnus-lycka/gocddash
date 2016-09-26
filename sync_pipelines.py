@@ -23,7 +23,9 @@ def parse_pipeline_availability(pipelines):
 
 def synchronize(pipelines):
     for pipeline, begin_sync_index in pipelines:
-        synced_pipeline_counter = data_access.get_connection().get_highest_pipeline_count(pipeline)
+        connection = data_access.get_connection()
+        print('Will sync to', connection.show_database())
+        synced_pipeline_counter = connection.get_highest_pipeline_count(pipeline)
         sync_begin_index = max(begin_sync_index, synced_pipeline_counter)
         max_in_go = go_request.get_max_pipeline_status(pipeline)[0]
         number_of_pipelines = max_in_go - sync_begin_index
@@ -110,7 +112,6 @@ def main():
 
     server_url, user, passwd, db_port = configure_from_args(pargs_dict)
 
-    data_access.create_connection(db_port)
     go_client.create_go_client(server_url, (user, passwd))
 
     pipelines = sync_backlog(pipeline_config.get_pipeline_config().pipelines)

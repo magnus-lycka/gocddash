@@ -1,6 +1,7 @@
 """Most of the methods in this file are old development for the characterize specific ML algorithms"""
 import collections
 import re
+import sys
 
 from .data_access import get_connection
 
@@ -38,10 +39,12 @@ def binary_dependent_variable(result_column):
 
 
 def get_failure_stage_signature(stage_id):
+    print('get_failure_stage_signature', stage_id, file=sys.stderr)
     return texttest_failure_group_by_stage(get_connection().get_stage_texttest_failures(stage_id))
 
 
 def get_failure_signatures(pipeline_name):
+    print('get_failure_signatures', pipeline_name, file=sys.stderr)
     failure_information = texttest_failure_group_by_stage(get_connection().get_texttest_failures(pipeline_name))
     return failure_information
 

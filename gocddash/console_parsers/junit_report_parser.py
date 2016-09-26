@@ -11,12 +11,8 @@ class JunitConsoleParser:
         self.success = success
 
     def parse_info(self):
-        if "Artifact 'testoutput/index.html' is unavailable as it may have been purged by Go or deleted externally." not in self.console_log:
-            failure_information = self.extract_failure_info(self.console_log)
-        else:
-            failure_information = None
-
-        return failure_information
+        if self.success:
+            return self.extract_failure_info(self.console_log)
 
     def parse_bar_chart_info(self):
         if self.success:

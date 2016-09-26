@@ -16,7 +16,6 @@ from bokeh.resources import INLINE
 from gocddash.analysis.domain import get_graph_statistics_for_pipeline, get_graph_statistics_for_final_stages, \
     get_graph_statistics
 
-
 GREEN = '#5ab738'
 RED = '#f22c40'
 BLUE = '#2176ff'
@@ -60,6 +59,8 @@ def create_agent_html_graph(graph_data, title):
     :return: the graph and generated Bokeh related html extras used for embedding it on the dashboard
     """
     panda_frame = pd.DataFrame(columns=['agent_name', 'Test', 'Startup', 'Post'])
+    import sys
+    sys.stderr.write("create_agent_html_graph:\n\n%s\n\n%s" % (graph_data, title))
 
     for index, row in enumerate(graph_data):
         f_stage = row.failure_stage
@@ -77,7 +78,8 @@ def create_agent_html_graph(graph_data, title):
     bar = Bar(panda_frame,
               values=blend('Success', 'Test', 'Startup', 'Post', name='tests', labels_name='test'),
               label=cat(columns='agent_name', sort=False),
-              palette=[YELLOW, BLUE, GREEN, RED],  # These get assigned in alphabetical order... (Post, Startup, Success, Test)
+              # These get assigned in alphabetical order... (Post, Startup, Success, Test)
+              palette=[YELLOW, BLUE, GREEN, RED],
               stack=cat(columns='test', sort=False),
               width=500, height=400, tools=tools, toolbar_location="right", title=title, responsive=True,
               ylabel='Agent success rate (%)')
@@ -93,7 +95,8 @@ def create_agent_html_graph(graph_data, title):
     glyphs = bar.select(GlyphRenderer)
     for item in glyphs:
         panda_index = panda_frame['agent_name'].str.contains(item.data_source.data['agent_name'][0])
-        panda_index = panda_index[panda_index == True].index[0]  # Pandas specific syntax. Ignore IDEA warning.
+        # noinspection PyPep8
+        panda_index = panda_index[panda_index == True].index[0]  # Pandas specific syntax.
         item.data_source.data['NoR'] = [panda_frame.get_value(index=panda_index, col='NoR')]
 
     hover.tooltips = OrderedDict([
@@ -109,7 +112,8 @@ def create_agent_html_graph(graph_data, title):
 
 def create_job_test_html_graph(pipeline_name, title):
     """
-    Creates a graph showing the historical tests run of a specific pipeline split up into passed, failed, and skipped tests
+    Creates a graph showing the historical tests run of a specific
+    pipeline split up into passed, failed, and skipped tests
     :param pipeline_name: the name of the requested pipeline
     :param title: the requested title of the graph
     :return: the graph and generated Bokeh related html extras used for embedding it on the dashboard

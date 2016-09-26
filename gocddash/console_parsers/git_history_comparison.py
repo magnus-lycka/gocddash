@@ -3,6 +3,7 @@ as specified in application.cfg. Filters out any material revision modifications
 
 """
 
+# noinspection PyPackageRequirements
 from bs4 import BeautifulSoup
 
 from gocddash.analysis.go_client import go_request_comparison_html

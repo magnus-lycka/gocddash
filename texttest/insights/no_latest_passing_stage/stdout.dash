@@ -1,13 +1,8 @@
-starting servers, db on port 17524 and application on port 4779, using checkout /home/emilyb/workspace/gocddash
-starting docker container from image postgres:9.3
-pulling image for postgres
-b'{"status":"Pulling from library/postgres","id":"9.3"}\r\n'
-b'{"status":"Digest: sha256:5f9de2c1bcf6aff1f9d10eceb30c3b72057eacd14d3fd25a3bbf732e62e3be12"}\r\n'
-b'{"status":"Status: Image is up to date for postgres:9.3"}\r\n'
-image pulled
-docker container ready to accept connections
-2016-08-10 15:20:03.984193 Starting synchronization.
-2016-08-10 15:20:03.986520 Will synchronize bar from 50 onwards.
+Started MemchachedCache
+2016-09-21 17:25:06.372669 Starting synchronization.
+Will sync to 0 main /home/magnusl/.texttest/tmp/dash.21Sep172457.32676/dash/insights/no_latest_passing_stage/gocddash.sqlite3
+
+2016-09-21 17:25:06.374816 Will synchronize bar from 50 onwards.
 Requested pipelines = 7 (from 50 to 57)
 Pipeline counter: 57
   Fetching stage: beta / 1
@@ -16,12 +11,9 @@ Pipeline counter: 56
 Pipeline counter: 55
   Fetching stage: beta / 1
 
-2016-08-10 15:20:04.015708 Done with the backlog.
+2016-09-21 17:25:06.447335 Done with the backlog.
 
-started docker container with id=9d34cc62c8f81406ac2dafbcecb1042eb8eb28426925b40738145d104086eb0d
-db is accepting connections
+starting server, application on port 4719, using checkout /home/magnusl/work/gocddash
 application is started
 pipelines are synced
 Starting test workflow for GO CD Dashboard
-stopping docker container
-docker container stopped and removed

@@ -26,6 +26,7 @@ class Projects(object):
                 self.pipelines[project.get("pipeline_name")] = Pipeline()
             self.pipelines[project.get("pipeline_name")].add_facts(project)
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def all_which(entity):
         return True

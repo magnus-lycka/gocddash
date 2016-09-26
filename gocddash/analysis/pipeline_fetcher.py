@@ -1,4 +1,4 @@
-"""Fetches all the relevant data from the synchronisation process and stores it in the postgresql database"""
+"""Fetches all the relevant data from the synchronisation process and stores it in the database"""
 import json
 from datetime import datetime
 
@@ -8,7 +8,7 @@ from gocddash.util.pipeline_config import get_pipeline_config
 from .data_access import get_connection
 from .domain import PipelineInstance, Stage, create_stage, Job, create_job
 from .email_notifications import build_email_notifications
-from .go_client import *
+from .go_client import go_request_pipeline_history, go_get_agent_information, go_request_stage_instance
 
 
 def download_and_store(pipeline_name, offset, run_times):

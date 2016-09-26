@@ -20,10 +20,12 @@ Sample usage: go_cli pull -p pipeline-name
     parser.add_argument(
         '-p', '--pipeline', type=str, default=None, help="Which PIPELINE to use.")
     parser.add_argument(
-        '-d', '--dry-run', action='store_true', default=False, help="Dry-run a command, without syncronizing or saving any data.")
+        '-d', '--dry-run', action='store_true', default=False,
+        help="Dry-run a command, without synchronizing or saving any data.")
     parser.add_argument(
         '-n', '--next', type=int, default=None,
-        help="Pull the subsequent NEXT number of pipeline counts from GO. Defaults to the number of pipelines currently not synced locally.")
+        help="Pull the subsequent NEXT number of pipeline counts from GO. "
+             "Defaults to the number of pipelines currently not synced locally.")
     parser.add_argument(
         '-s', '--start', type=int, default=0, help="Pull from START pipeline count.")
     parser.add_argument(

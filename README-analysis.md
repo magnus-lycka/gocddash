@@ -13,7 +13,7 @@ yoyo-migrations
 beautifulsoup4
 bokeh
 
-(Don't be afraid if the pandas installation takes a while.)
+(The pandas installation might take a while.)
 
 Start up a local database with docker:
 

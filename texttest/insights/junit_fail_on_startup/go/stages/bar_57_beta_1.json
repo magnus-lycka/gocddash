@@ -1,0 +1,22 @@
+{
+  "name": "beta",
+  "approved_by": "asdf",
+  "id": 647838,
+  "result": "Failed",
+  "jobs": [
+    {
+      "name": "specialJob",
+       "result": "Passed",
+       "id": 34676,
+      "scheduled_date": 1436509518752,
+      "agent_uuid": "1"
+    },
+    {
+      "name": "noTestsJob",
+      "result": "Failed",
+      "id": 34677,
+      "scheduled_date": 1436509510571,
+      "agent_uuid": "1"
+    }
+  ]
+}

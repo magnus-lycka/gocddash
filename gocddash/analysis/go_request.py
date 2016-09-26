@@ -3,7 +3,7 @@ import math
 import json
 from functools import reduce
 
-from .pipeline_fetcher import go_get_pipeline_status, go_request_pipeline_history
+from .go_client import go_get_pipeline_status, go_request_pipeline_history
 
 
 def calculate_request(latest_pipeline, max_pipeline_in_go, pipelines=10, start=0):

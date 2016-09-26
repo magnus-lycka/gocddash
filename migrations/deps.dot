@@ -1,0 +1,37 @@
+digraph G {
+
+node [shape=box];  pipeline_instance; stage; job; agent; texttest_failure; failure_information; junit_failure; instance_claim; email_notifications;
+
+node [shape=oval];
+
+final_stages -> stage;
+final_stages -> stage;
+
+run_outcomes -> pipeline_instance;
+run_outcomes -> final_stages;
+
+latest_intervals -> run_outcomes;
+latest_intervals -> run_outcomes;
+
+active_claims -> instance_claim;
+active_claims -> latest_intervals;
+active_claims -> pipeline_instance;
+
+failure_info -> pipeline_instance;
+failure_info -> stage;
+failure_info -> failure_information;
+failure_info -> active_claims;
+
+graph_statistics -> pipeline_instance;
+graph_statistics -> stage;
+graph_statistics -> job;
+graph_statistics -> agent;
+graph_statistics -> failure_information;
+
+graph_statistics_final_stages -> pipeline_instance;
+graph_statistics_final_stages -> final_stages;
+graph_statistics_final_stages -> job;
+graph_statistics_final_stages -> agent;
+graph_statistics_final_stages -> failure_information;
+
+}

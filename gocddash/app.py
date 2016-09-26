@@ -8,21 +8,20 @@ from collections import defaultdict
 from datetime import date, datetime
 from inspect import getsourcefile
 from os.path import abspath
-
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
+from gocddash.appcoverage import cover  # Make sure this comes before other gocddash imports
 from gocddash.util.pipeline_config import create_pipeline_config
 from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.dashboard import failure_tip, pipeline_status
-from gocddash.analysis.data_access import get_connection, create_connection
+from gocddash.analysis.data_access import get_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, \
     get_first_synced_stage, get_pipeline_heads, get_job_to_display, EmbeddedChart, get_cctray_status, \
     create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
 from gocddash.dashboard.graph import create_job_test_html_graph, single_pipeline_html_graph, all_pipelines_html_graph
-
 
 group_of_pipeline = defaultdict(str)
 
@@ -56,24 +55,10 @@ def dashboard():
     pipelines = project.select(
         which, groups=groups, group_map=group_of_pipeline)
 
-    # previous_pipelines = get_cache().get_pipelines()
-    finished_pipelines = []
-    if which == 'failing':
-        pipeline_names = [pipeline.name for pipeline in pipelines]
-        # finished_pipelines = [pipeline for pipeline in previous_pipelines if pipeline.name not in pipeline_names]
-        # new_failing_pipelines = [pipeline for pipeline in pipelines if pipeline not in previous_pipelines]
-        # if new_failing_pipelines:
-        #     for pipeline in new_failing_pipelines:
-        #         finished_pipelines.append(pipeline)
-
-    all_pipelines = project.select('all')
     unwanted_pipelines = []
     for name, group in group_of_pipeline.items():
         if group not in groups:
             unwanted_pipelines.append(name)
-
-    finished_pipelines = [pipeline for pipeline in all_pipelines if
-                          pipeline in finished_pipelines and pipeline.name not in unwanted_pipelines]
 
     for pipeline in pipelines:
         pipeline_name = pipeline.name
@@ -102,8 +87,7 @@ def dashboard():
                            synced_pipelines=synced_pipelines,
                            unsynced_claims=loose_claims,
                            progress_bar_data=progress_bar_data,
-                           application_root=app.config['APPLICATION_ROOT'],
-                           finished_pipelines=finished_pipelines)
+                           application_root=app.config['APPLICATION_ROOT'])
 
 
 def get_progress_bar_data(project):
@@ -200,7 +184,7 @@ def stats():
         *all_pipelines_html_graph("Historical agent success rate for all pipelines. "))
 
     template = render_template(
-        'stats.html',  # Defined in the templates folder
+        'stats.html',
         agent_graph=all_pipelines_agent_graph,
         go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
         now=datetime.now(),
@@ -223,7 +207,7 @@ def graphs(pipeline_name):
     back_to_insights_link = app_root + "/insights/{}".format(pipeline_name)
 
     template = render_template(
-        'graphs.html',  # Defined in the templates folder
+        'graphs.html',
         agent_graph=agent_graph,
         tests_run_graph=tests_run_graph,
         go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
@@ -243,10 +227,12 @@ def insights(pipeline_name):
     if current_stage is None:
         abort(500,
               "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
+    print('Get current status for', current_stage, file=sys.stderr)
     current_status = pipeline_status.create_stage_info(current_stage)
+    print('Got current status', current_status, file=sys.stderr)
     last_stage = get_previous_stage(current_stage)
     previous_status = pipeline_status.create_stage_info(last_stage)
-    latest_passing_stage = get_latest_passing_stage(pipeline_name, current_stage.stage_name)
+    latest_passing_stage = get_latest_passing_stage(pipeline_name)
     stage_name_index = (get_connection().get_stage_order(pipeline_name)).index(current_stage.stage_name)
 
     git_history = []
@@ -284,7 +270,7 @@ def insights(pipeline_name):
                                                              latest_passing_stage.pipeline_counter)
 
     template = render_template(
-        'insights.html',  # Defined in the templates folder
+        'insights.html',
         go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
         now=datetime.now(),
         theme=get_bootstrap_theme(),
@@ -314,6 +300,7 @@ app = Flask(__name__)
 if not ('APP_CONFIG' in os.environ and app.config.from_envvar('APP_CONFIG')):
     app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
+app.register_blueprint(cover, url_prefix=app.config["APPLICATION_ROOT"]+'/coverage')
 
 
 @app.template_filter('bootstrap_status')
@@ -447,11 +434,24 @@ def parse_args():
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})
-    return pargs_dict
 
 
+@app.before_first_request
 def main():
-    pargs_dict = parse_args()
+    if 'FILE_CLIENT' in app.config:
+        create_go_client(app.config['FILE_CLIENT'], auth=None)
+    else:
+        create_go_client(
+            app.config['GO_SERVER_URL'],
+            (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
+        )
+
+    pipeline_path = app.config.get('PIPELINE_CONFIG')
+    create_pipeline_config(pipeline_path)
+
+
+if __name__ == '__main__':
+    parse_args()
     if 'GO_SERVER_URL' not in app.config:
         app.config['GO_SERVER_URL'] = input('go-server url: ')
     if 'GO_SERVER_USER' not in app.config:
@@ -459,18 +459,4 @@ def main():
     if 'GO_SERVER_PASSWD' not in app.config:
         app.config['GO_SERVER_PASSWD'] = getpass.getpass()
 
-    create_connection(db_port=app.config['DB_PORT'])
-
-    if pargs_dict['file_client']:
-        create_go_client(pargs_dict['file_client'], auth=None)
-    else:
-        create_go_client(app.config['GO_SERVER_URL'], (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD']))
-
-    pipeline_path = pargs_dict['pipeline_config']
-    create_pipeline_config(pipeline_path)
-
-
-main()
-
-if __name__ == '__main__':
     app.run(port=app.config['BIND_PORT'])

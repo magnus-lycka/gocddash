@@ -1,2 +1,4 @@
 DOCKER_API_VERSION:1.21
 APP_CONFIG:$TEXTTEST_CHECKOUT/texttest/application.cfg
+COVERAGE:1
+COVERAGE_FILE:/tmp/gocddash-cover/coverage

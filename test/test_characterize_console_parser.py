@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 
 from gocddash.console_parsers import characterize_console_parser
 
+# noinspection PyPep8
 console_log = """08:17:55.463 [go] Job Started: 2016-07-13 08:17:55 CEST
 
 08:17:55.463 [go] Start to prepare ct-t/2064/runTests/1/defaultJob on build-go-agent012 [/var/lib/go-agent]
@@ -169,7 +170,15 @@ console_log = """08:17:55.463 [go] Job Started: 2016-07-13 08:17:55 CEST
 
 class TestConsoleFetcher(unittest.TestCase):
     def test_console_fetcher_parse_test_index(self):
-        error_dictionary = {' COMPANY13': [(13, 'new', 'internalxml_IE01-5987313'), (13, 'missing', 'documentMetadata4163489'), (13, 'missing', 'internalxml_IE01-4163489'), (13, 'missing', 'primarypres4163489'), (13, 'missing', 'target_fatturapa_1_1_4163489'), (13, 'differences', 'catalogue'), (13, 'differences', 'routingLog'), (13, 'differences', 'stdout')]}
+        error_dictionary = {' COMPANY13': [
+            (13, 'new', 'internalxml_IE01-5987313'),
+            (13, 'missing', 'documentMetadata4163489'),
+            (13, 'missing', 'internalxml_IE01-4163489'),
+            (13, 'missing', 'primarypres4163489'),
+            (13, 'missing', 'target_fatturapa_1_1_4163489'),
+            (13, 'differences', 'catalogue'),
+            (13, 'differences', 'routingLog'),
+            (13, 'differences', 'stdout')]}
         characterize_console_parser.go_request_console_log = MagicMock(return_value=console_log)
         test_object = characterize_console_parser.TexttestConsoleParser('ct-t', 2064, 1, 'runTests', 'defaultJob')
         output_dictionary = test_object.parse_info()
