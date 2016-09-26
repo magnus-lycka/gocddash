@@ -41,6 +41,18 @@ def get_max_pipeline_status(pipeline_name):
         return 0, 0
 
 
+def get_pipelines_to_sync(json_config):
+    """
+    Parses pipelines.json to get the pipeline name and where to start syncing from.
+    """
+    name_start_tuple_list = [
+        (key['name'], key['begin_at']) if "begin_at" in key
+        else (key['name'], max(0, get_max_pipeline_status(key['name'])[1] - 20))
+        for key in json_config['pipelines']
+    ]
+    return name_start_tuple_list
+
+
 def get_diff(from_counter, to_counter, size):
     return "Requested pipelines = " + str(size) + " (from " + str(from_counter) + " to " + str(to_counter) + ")"
 

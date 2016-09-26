@@ -1,6 +1,6 @@
 import unittest
 
-from gocddash.dashboard import read_pipeline_config
+from gocddash.analysis import go_request
 
 
 def get_max_mock(name):
@@ -12,26 +12,26 @@ def get_max_mock(name):
 
 class TestReadFile(unittest.TestCase):
     def testRegularConfig(self):
-        input = dict()
-        input["pipelines"] = [
+        input_ = dict()
+        input_["pipelines"] = [
             {"name": "characterize", "begin_at": 1500},
             {"name": "feature", "begin_at": 100},
         ]
 
-        pipelines = read_pipeline_config.get_pipelines_to_sync(input)
+        pipelines = go_request.get_pipelines_to_sync(input_)
         self.assertEqual(pipelines, [("characterize", 1500), ("feature", 100)])
 
     def testNoBeginAt(self):
-        saved = read_pipeline_config.get_max_pipeline_status
-        read_pipeline_config.get_max_pipeline_status = get_max_mock
+        saved = go_request.get_max_pipeline_status
+        go_request.get_max_pipeline_status = get_max_mock
 
-        input = dict()
-        input["pipelines"] = [
+        input_ = dict()
+        input_["pipelines"] = [
             {"name": "characterize", "begin_at": 1500},
             {"name": "feature"},
         ]
 
-        pipelines = read_pipeline_config.get_pipelines_to_sync(input)
+        pipelines = go_request.get_pipelines_to_sync(input_)
         self.assertEqual(pipelines, [("characterize", 1500), ("feature", 2180)])
 
-        read_pipeline_config.get_max_pipeline_status = saved
+        go_request.get_max_pipeline_status = saved

@@ -5,7 +5,6 @@ import datetime
 import time
 
 from gocddash.analysis import data_access, actions, go_request, go_client
-from gocddash.dashboard import read_pipeline_config
 from gocddash.util import pipeline_config, app_config
 
 
@@ -60,7 +59,7 @@ def parse_args():
 
 def configure_from_args(pargs_dict):
     pipeline_cfg_path = pargs_dict['pipeline_cfg']
-    pipeline_config.create_pipeline_config(pipeline_cfg_path)
+    pipeline_config.PipelineConfig(pipeline_cfg_path)
 
     application_cfg_path = pargs_dict['app_cfg']
     app_config.create_app_config(application_cfg_path)
@@ -82,7 +81,7 @@ def configure_from_args(pargs_dict):
 
 
 def sync_backlog(json_tree):
-    requested_pipelines = read_pipeline_config.get_pipelines_to_sync(json_tree)
+    requested_pipelines = go_request.get_pipelines_to_sync(json_tree)
     log("Starting synchronization.")
     pipelines = parse_pipeline_availability(requested_pipelines)
     synchronize(pipelines)

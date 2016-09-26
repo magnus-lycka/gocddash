@@ -43,4 +43,5 @@ stderr:\d{2}/\w{3}/\d{4}{REPLACE <date>}
 stderr:\d{2}:\d{2}:\d{2}{REPLACE <timestamp>}
 stderr:Coverage.py warning: Module gocddash was previously imported, but not measured.
 stderr:GET /dash/coverage/
+stderr:<StageFailureInfo>
 [end]

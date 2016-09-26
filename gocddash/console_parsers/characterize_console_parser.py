@@ -31,9 +31,8 @@ class TexttestConsoleParser:
             send_error = [error for error in failure_case_list if test_case + " " in error]
             error_list = self.extract_failure_info(send_error)
 
-            if error_list:
-                for i, item in enumerate(error_list):
-                    error_list[i] = (index + 1,) + item
+            for i, item in enumerate(error_list):
+                error_list[i] = (index + 1,) + item
 
             test_dict[test_case] = error_list
 
@@ -42,26 +41,17 @@ class TexttestConsoleParser:
 
     @staticmethod
     def extract_failure_info(failure_case):
+        type_document_error_list = []
         if failure_case:
             error = failure_case[0]
             error_codes = error.split(': ', 1)[1]
 
             error_list = [category for category in error_codes.split(', ')]
-
-            type_document_error_list = []
-
             for category in error_list:
-
-                if ',' in category:
-                    for document in category.split(','):
-                        type_document_error_list.append(
-                            (category.split()[0], ansi_escape.sub('', document.split()[-1])))
-                else:
-                    type_document_error_list.append((category.split()[0], ansi_escape.sub('', category.split()[-1])))
-
-            return type_document_error_list
-        else:
-            return None
+                for document in category.split(','):
+                    type_document_error_list.append(
+                        (category.split()[0], ansi_escape.sub('', document.split()[-1])))
+        return type_document_error_list
 
     def insert_info(self, stage_id):
         failures = self.parse_info()

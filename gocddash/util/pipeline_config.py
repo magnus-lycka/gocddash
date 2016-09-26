@@ -1,6 +1,5 @@
 """
 This module handles the pipelines.json file and creates a PipelineConfig object from it.
-It makes it easier to access configurations throughout the project.
 """
 import codecs
 import json
@@ -9,7 +8,14 @@ from pathlib import Path
 
 
 class PipelineConfig:
-    def __init__(self, path):
+    _shared_state = {'path': None}
+
+    def __init__(self, path=None):
+        self.__dict__ = self._shared_state
+        if path is not None:
+            self._init(path)
+
+    def _init(self, path):
         self.path = path
         if not os.path.isfile(path):
             raise FileNotFoundError("Error: Missing pipelines.json file in {}".format(path))
@@ -32,24 +38,13 @@ class PipelineConfig:
                 return config_dict.get('email_notifications', False)
         return None
 
-_pipeline_config = None
-
 
 def create_pipeline_config(path=None):
     if not path:
         path = str(Path(__file__).parents[1]) + "/pipelines.json"
-    global _pipeline_config
-    if not _pipeline_config:
-        _pipeline_config = PipelineConfig(path)
-        return _pipeline_config
-    else:
-        path = _pipeline_config.path
-        _pipeline_config = PipelineConfig(path)
-        return _pipeline_config
+    return PipelineConfig(path)
 
 
 def get_pipeline_config():
-    if not _pipeline_config:
-        raise ValueError("Pipeline config not instantiated")
-    return _pipeline_config
+    return PipelineConfig()
 
