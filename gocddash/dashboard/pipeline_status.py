@@ -69,7 +69,6 @@ class TestFailure(StageFailure):
 
 
 def create_stage_info(stage_failure_info):
-    print('create_stage_info', stage_failure_info, file=sys.stderr)
     log_parser = get_pipeline_config().get_log_parser(stage_failure_info.pipeline_name)
     # Log parser should almost always be junit. This fixes changing config without reloading the cfg
     if log_parser is DefaultConsoleParser:

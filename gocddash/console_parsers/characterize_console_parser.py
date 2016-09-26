@@ -61,7 +61,6 @@ class TexttestConsoleParser(DefaultConsoleParser):
 
     def insert_info(self, stage_id):
         failures = self.parse_info()
-        print("TexttestConsoleParser.insert_info", failures, file=sys.stderr)
         if failures:
             for value in failures.values():
                 for failure in value:
@@ -69,4 +68,4 @@ class TexttestConsoleParser(DefaultConsoleParser):
                     get_connection().insert_texttest_failure(stage_id, index, failure_type, document_name)
 
     def _check_test_failures(self):
-        return "----------" in self.response
+        return len(self.parse_info()) > 0

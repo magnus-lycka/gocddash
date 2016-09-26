@@ -227,9 +227,7 @@ def insights(pipeline_name):
     if current_stage is None:
         abort(500,
               "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
-    print('Get current status for', current_stage, file=sys.stderr)
     current_status = pipeline_status.create_stage_info(current_stage)
-    print('Got current status', current_status, file=sys.stderr)
     last_stage = get_previous_stage(current_stage)
     previous_status = pipeline_status.create_stage_info(last_stage)
     latest_passing_stage = get_latest_passing_stage(pipeline_name)
