@@ -90,43 +90,22 @@
         <div class="row">
             <div class="col-md-12">
                 <span>System status</span>
-                {{ total_pipelines }}
                 <div class="progress">
-                    <div class="progress-bar progress-bar-success" aria-valuenow="{{ progress_bar_data[0] }}"
-                         style="width: {{ progress_bar_data[0] }}%">
-                        {% if progress_bar_data[0] > 5 %}
-                            {{ progress_bar_data[0] | round | int }} %
+                {% for (percentage, format_class) in zip(progress_bar_data,
+                    ('progress-bar-success', 'progress-bar-info progress-bar-striped', 'progress-bar-danger')
+                         ) %}
+                    <div class="progress-bar {{ format_class }}"
+                         style="width: {{ percentage }}%">
+                        {% if percentage > 1 %}
+                            {{ "{:.0f}%".format(percentage) }}
                         {% endif %}
                     </div>
-                    <div class="progress-bar progress-bar-info progress-bar-striped"
-                         style="width: {{ progress_bar_data[1] }}%">
-                        {% if progress_bar_data[1] > 5 %}
-                            {{ progress_bar_data[1] | round | int }} %
-                        {% endif %}
-                    </div>
-                    <div class="progress-bar progress-bar-danger" style="width: {{ progress_bar_data[2] }}%">
-                        {% if progress_bar_data[2] %}
-                            {{ progress_bar_data[2] | round | int }} %
-                        {% endif %}
-                    </div>
+                {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container hidden" id="status-popup">
-        {% for pipeline in finished_pipelines %}
-            <div class="col-md-4">
-                <div class="pipeline-alert" style="display:none">
-                    <div class="alert alert-{{ pipeline.is_success() | build_outcome_panel }}"
-                         role="alert" id="pipeline-status-cache">
-                        <strong>Info:</strong> {{ pipeline.name }} just finished.
-                        New status: {{ pipeline.status }}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
 
 {% endblock %}
 

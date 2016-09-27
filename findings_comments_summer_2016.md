@@ -137,7 +137,8 @@ program.
 e.g. catch `NameError` and `AttributeError`, which are almost
 certainly programming errors!
 
-# Web application design
+
+# Flask & Web application design
 
 ## Blueprints
 
@@ -159,6 +160,13 @@ instead of `http://go/dash/claim` and all substance in the
 POST data.
 The web server logs are certainly more useful with more
 explicit URLs, and I think testing gets easier too.
+
+## Flask decorators
+
+Decorators such as `@app.before_first_request` helps you
+run things at the right time, without having to run them
+when the module is imported (which might cause a mess for
+testing etc).
 
 
 # Persistence & caching solution
@@ -210,6 +218,7 @@ to cache all network calls to the go-server
 (in `go_client.GoSource.base_request`). This does add an extra
 dependency, but memcached is basically no maintenance.
 Just start a server. No schema to maintain. No authentication etc.
+
 
 # Bokeh
 

@@ -49,11 +49,9 @@ def dashboard():
     which = request.args.get('which', 'failing')
     project = get_cctray_status()
     progress_bar_data = get_progress_bar_data(project)
-    groups = request.cookies.get(
-        'checked_pipeline_groups_cookie', '').split(',')
+    groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
 
-    pipelines = project.select(
-        which, groups=groups, group_map=group_of_pipeline)
+    pipelines = project.select(which, groups=groups, group_map=group_of_pipeline)
 
     unwanted_pipelines = []
     for name, group in group_of_pipeline.items():
@@ -299,6 +297,11 @@ if not ('APP_CONFIG' in os.environ and app.config.from_envvar('APP_CONFIG')):
     app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
 app.register_blueprint(cover, url_prefix=app.config["APPLICATION_ROOT"]+'/coverage')
+
+
+@app.template_global(name='zip')
+def _zip(*args, **kwargs):  # to not overwrite builtin zip in globals
+    return __builtins__.zip(*args, **kwargs)
 
 
 @app.template_filter('bootstrap_status')

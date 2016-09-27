@@ -29,14 +29,24 @@ class Projects(object):
     # noinspection PyUnusedLocal
     @staticmethod
     def all_which(entity):
+        """
+        Select all pipelines.
+        """
         return True
 
     @staticmethod
     def progress_which(entity):
+        """
+        Select all pipelines except those that are "green",
+        i.e. both those failing last build and all currently building.
+        """
         return entity.status != 'Success'
 
     @staticmethod
     def failing_which(entity):
+        """
+        Select only the pipelines that failed last build
+        """
         return 'Failure' in entity.status
 
     @staticmethod
