@@ -1,0 +1,2 @@
+POST http://127.0.0.1:{port}/dash/claim pipelineName=bar pipelineCounter=57 responsible=Lindemann description=Spring
+GET http://127.0.0.1:{port}/dash/insights/bar

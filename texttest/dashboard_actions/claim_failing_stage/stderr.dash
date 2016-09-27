@@ -1,0 +1,5 @@
+ * Running on http://127.0.0.1:7184/ (Press CTRL+C to quit)
+127.0.0.1 - - [28/Sep/2016 00:01:11] "POST /dash/claim HTTP/1.1" 200 -
+127.0.0.1 - - [28/Sep/2016 00:01:11] "GET /dash/insights/bar HTTP/1.0" 200 -
+Coverage.py warning: Module gocddash was previously imported, but not measured.
+127.0.0.1 - - [28/Sep/2016 00:01:11] "GET /dash/coverage/ HTTP/1.1" 201 -

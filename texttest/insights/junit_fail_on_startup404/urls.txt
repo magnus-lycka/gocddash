@@ -1,1 +1,1 @@
-http://127.0.0.1:4545/dash/insights/bar
+GET http://127.0.0.1:{port}/dash/insights/bar

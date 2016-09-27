@@ -29,27 +29,37 @@ def start_servers(gocd_dash_path):
     return application_port, application_process
 
 
+def do_get(url, data):
+    try:
+        return subprocess.check_output(["/usr/bin/lynx", "-dump", url], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as error:
+        print(error)
+        print(error.output.decode("UTF-8"))
+        raise
+
+
+def do_post(url, data):
+    response = requests.post(url, data)
+    return response.text.encode("UTF-8")
+
+
 def perform_testcase(port):
+    action = {
+        'GET': do_get,
+        'POST': do_post,
+    }
     print("Starting test workflow for GO CD Dashboard")
     with open("gui_log.txt", "w", encoding="UTF-8") as log:
-        with open("urls.txt") as urls:
+        with open("urls.txt") as rows:
 
             coverage_url = "http://127.0.0.1:{}/dash/coverage/".format(port)
 
-            for url in urls:
-                url_contents = url.split(':')
-                protocol = url_contents[0]
-                host = url_contents[1]
-                path = url_contents[2][4:]
-                url = protocol + ":" + host + ":" + str(port) + path
-                log.write("url: {}\n".format(url))
-
-                try:
-                    out = subprocess.check_output(["/usr/bin/lynx", "-dump", url], stderr=subprocess.STDOUT)
-                except subprocess.CalledProcessError as error:
-                    print(error)
-                    print(error.output.decode("UTF-8"))
-                    raise
+            for row in rows:
+                verb, url, *raw_data = row.split()
+                data = dict(pair.split('=') for pair in raw_data)
+                url = url.format(port=port)
+                log.write("{} {}\ndata: {}\n".format(verb, url, data))
+                out = action[verb](url, data)
                 log.write(out.decode("UTF-8"))
 
             requests.get(coverage_url)
