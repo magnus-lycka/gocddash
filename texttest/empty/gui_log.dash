@@ -1,4 +1,4 @@
-url: http://127.0.0.1:4946/dash/?which=failing
+url: http://127.0.0.1:7584/dash/?which=failing
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
      * [3]Progress
@@ -9,7 +9,7 @@ url: http://127.0.0.1:4946/dash/?which=failing
           +
           + [7]Select pipeline groups / Config
           + [8]Select theme
-     * Last refresh: 09:19:48 | 00 seconds
+     * Last refresh: 15:28:18 | 00 seconds
 
 [9]qux 240 2015-11-26
 
@@ -32,9 +32,9 @@ url: http://127.0.0.1:4946/dash/?which=failing
      __________________________________________________________________
 
    System status
-   44 %
-   11 %
-   44 %
+   44%
+   11%
+   44%
 
    ???
 
@@ -42,13 +42,13 @@ References
 
    Visible links
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4946/dash/?which=failing
-   3. http://127.0.0.1:4946/dash/?which=progress
-   4. http://127.0.0.1:4946/dash/?which=all
-   5. http://127.0.0.1:4946/dash/?which=failing
-   6. http://127.0.0.1:4946/dash/stats
-   7. http://127.0.0.1:4946/dash/select/
-   8. http://127.0.0.1:4946/dash/select_theme/
+   2. http://127.0.0.1:7584/dash/?which=failing
+   3. http://127.0.0.1:7584/dash/?which=progress
+   4. http://127.0.0.1:7584/dash/?which=all
+   5. http://127.0.0.1:7584/dash/?which=failing
+   6. http://127.0.0.1:7584/dash/stats
+   7. http://127.0.0.1:7584/dash/select/
+   8. http://127.0.0.1:7584/dash/select_theme/
    9. http://go-server/go/pipelines/value_stream_map/qux/240
   10. http://go-server/go/pipelines/qux/240/defaultStage/1
   11. http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob
@@ -65,7 +65,7 @@ References
   22. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
 
    Hidden links:
-  24. http://127.0.0.1:4946/dash/?which=failing#collapse1
-  25. http://127.0.0.1:4946/dash/?which=failing#collapse2
-  26. http://127.0.0.1:4946/dash/?which=failing#collapse3
-  27. http://127.0.0.1:4946/dash/?which=failing#collapse4
+  24. http://127.0.0.1:7584/dash/?which=failing#collapse1
+  25. http://127.0.0.1:7584/dash/?which=failing#collapse2
+  26. http://127.0.0.1:7584/dash/?which=failing#collapse3
+  27. http://127.0.0.1:7584/dash/?which=failing#collapse4
