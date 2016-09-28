@@ -38,9 +38,11 @@ stdout:\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{6}{REPLACE <time>}
 stdout:Will sync to
 gui_log:Last refresh:
 gui_log:127.0.0.1:\d*{REPLACE 127.0.0.1:<port>}
+gui_log:Error: Missing pipelines.json file in .+{REPLACE Error: Missing pipelines.json file.}
 stderr:127.0.0.1:\d*{REPLACE 127.0.0.1:<port>}
 stderr:\d{2}/\w{3}/\d{4}{REPLACE <date>}
 stderr:\d{2}:\d{2}:\d{2}{REPLACE <timestamp>}
 stderr:Coverage.py warning: Module gocddash was previously imported, but not measured.
 stderr:GET /dash/coverage/
+stderr:Loaded new pipeline configuration from .+{REPLACE Loaded new pipeline configuration.}
 [end]

@@ -59,8 +59,6 @@ def create_agent_html_graph(graph_data, title):
     :return: the graph and generated Bokeh related html extras used for embedding it on the dashboard
     """
     panda_frame = pd.DataFrame(columns=['agent_name', 'Test', 'Startup', 'Post'])
-    import sys
-    sys.stderr.write("create_agent_html_graph:\n\n%s\n\n%s" % (graph_data, title))
 
     for index, row in enumerate(graph_data):
         f_stage = row.failure_stage
@@ -96,7 +94,7 @@ def create_agent_html_graph(graph_data, title):
     for item in glyphs:
         panda_index = panda_frame['agent_name'].str.contains(item.data_source.data['agent_name'][0])
         # noinspection PyPep8
-        panda_index = panda_index[panda_index == True].index[0]  # Pandas specific syntax.
+        panda_index = panda_index[panda_index==True].index[0]  # Pandas specific syntax.
         item.data_source.data['NoR'] = [panda_frame.get_value(index=panda_index, col='NoR')]
 
     hover.tooltips = OrderedDict([

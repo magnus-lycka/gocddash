@@ -108,7 +108,7 @@ class TestStages(unittest.TestCase):
 class TestJobs(unittest.TestCase):
     def setUp(self):
         with open('data/cctray.xml') as cctray_file:
-            self.jobs = Projects(cctray_file).pipelines['snafu-service'].stages[1].jobs
+            self.jobs = Projects(cctray_file.read()).pipelines['snafu-service'].stages[1].jobs
 
     def test_stage_jobs(self):
         self.assertEqual(2, len(self.jobs))

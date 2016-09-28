@@ -306,8 +306,6 @@ class SQLConnection:
         return claim_
 
     def get_graph_statistics_for_pipeline(self, pipeline_name):
-        import sys
-        sys.stderr.write('get_graph_statistics_for_pipeline %s\n' % pipeline_name)
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(

@@ -81,8 +81,6 @@ class FailureRecommendation:
             if predicate():
                 return string
 
-        return None
-
     def pick_match(self):
         for predicate, string in self.fallback_actions:
             if predicate():

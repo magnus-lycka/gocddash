@@ -1,0 +1,53 @@
+GET http://127.0.0.1:9634/dash/select/
+data: {}
+   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
+     * [2]Failing
+     * [3]Progress
+     * [4]All
+
+     * [5]More/Config
+          + [6]Graph overview
+          +
+          + [7]Select pipeline groups / Config
+          + [8]Select theme
+     * Last refresh: 16:56:08 | 00 seconds
+
+   [BUTTON Input] (not implemented)_________________ [BUTTON Input] (not
+   implemented)___________________
+   [ ] Bananas
+   Save pipeline-group selection
+     __________________________________________________________________
+
+   (BUTTON) Reload config
+
+   ???
+
+References
+
+   1. http://go.pagero.local/go/
+   2. http://127.0.0.1:9634/dash/?which=failing
+   3. http://127.0.0.1:9634/dash/?which=progress
+   4. http://127.0.0.1:9634/dash/?which=all
+   5. http://127.0.0.1:9634/dash/select/
+   6. http://127.0.0.1:9634/dash/stats
+   7. http://127.0.0.1:9634/dash/select/
+   8. http://127.0.0.1:9634/dash/select_theme/
+SHELL ./break_pipeline_config.sh
+data: {}
+This is the new pipelines.json:
+8<-----------------------------
+{
+  "pipelines": [
+    {
+      "name": "foo",
+      "begin_at": 380,
+      "log_parser": "junit"
+    },
+    {
+      "name": "bar",
+      "begin_at": 50,
+      "log_parser": "junit"
+8<-----------------------------
+POST http://127.0.0.1:9634/dash/reloadconfig
+data: {}
+Expecting ',' delimiter: line 12 column 1 (char 181)

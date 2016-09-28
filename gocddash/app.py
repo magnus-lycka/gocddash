@@ -9,6 +9,7 @@ from datetime import date, datetime
 from inspect import getsourcefile
 from os.path import abspath
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
+from flask import flash, current_app
 
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
@@ -160,8 +161,14 @@ def select_theme():
 
 @gocddash.route("/reloadconfig", methods=['POST'])
 def reload_config():
-    create_pipeline_config()
-    return "OK."
+    try:
+        pipeline_path = current_app.config.get('PIPELINE_CONFIG')
+        create_pipeline_config(pipeline_path)
+        flash("Reloaded pipeline config.", "success")
+        return "OK."
+    except (ValueError, FileNotFoundError) as error:
+        flash("Got '{}' when reloading pipeline config.".format(error), 'danger')
+        return str(error)
 
 
 @gocddash.route("/claim", methods=['POST'])
@@ -293,6 +300,7 @@ def insights(pipeline_name):
 
 
 app = Flask(__name__)
+app.secret_key = 'some_secret'
 if not ('APP_CONFIG' in os.environ and app.config.from_envvar('APP_CONFIG')):
     app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
@@ -430,7 +438,7 @@ def parse_args():
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     parser.add_argument('-b', '--bind-port', help='bind port')
     parser.add_argument('--db-port', help='database port')
-    parser.add_argument('--pipeline-config', help='pipelines.json folder path')
+    parser.add_argument('--pipeline-config', help='pipelines.json path')
     parser.add_argument('--file-client', help='file client folder path')
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)

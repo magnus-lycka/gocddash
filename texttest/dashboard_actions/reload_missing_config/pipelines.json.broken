@@ -1,0 +1,11 @@
+{
+  "pipelines": [
+    {
+      "name": "foo",
+      "begin_at": 380,
+      "log_parser": "junit"
+    },
+    {
+      "name": "bar",
+      "begin_at": 50,
+      "log_parser": "junit"

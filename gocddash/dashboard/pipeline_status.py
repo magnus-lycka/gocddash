@@ -1,7 +1,6 @@
-import sys
 from ..analysis.characterize_data_munging import get_failure_stage_signature
 from ..analysis.data_access import get_connection
-from ..util.pipeline_config import get_pipeline_config
+from ..console_parsers.determine_parser import get_log_parser
 from ..console_parsers.junit_report_parser import JunitConsoleParser
 from ..console_parsers.characterize_console_parser import TexttestConsoleParser
 from ..console_parsers.default_console_parser import DefaultConsoleParser
@@ -11,13 +10,13 @@ class StageOutcome:
     def __init__(self, stage):
         self.stage = stage
 
-    def is_success(self):
+    def is_success(self):  # pragma: no cover
         return NotImplemented
 
-    def describe_run_outcome(self):
+    def describe_run_outcome(self):  # pragma: no cover
         return NotImplemented
 
-    def describe_rerun(self):
+    def describe_rerun(self):  # pragma: no cover
         return NotImplemented
 
     def __repr__(self):
@@ -69,7 +68,7 @@ class TestFailure(StageFailure):
 
 
 def create_stage_info(stage_failure_info):
-    log_parser = get_pipeline_config().get_log_parser(stage_failure_info.pipeline_name)
+    log_parser = get_log_parser(stage_failure_info.pipeline_name)
     # Log parser should almost always be junit. This fixes changing config without reloading the cfg
     if log_parser is DefaultConsoleParser:
         log_parser = JunitConsoleParser

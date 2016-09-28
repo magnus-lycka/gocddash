@@ -11,12 +11,12 @@ note this should be a valid path on your machine, and point to the location of t
 
 Install other prerequisites:
 
-    sudo pip3 install docker-py
+    sudo pip3 install -r requirements.txt
     sudo apt-get install lynx
 
 Then start TextTest in this working directory with this command:
 
-    texttest -a dash -d .
+    texttest -a dash -d . -gx
 
 This should open a graphical test browser that you can use to manage your test cases, and trigger test runs.
 

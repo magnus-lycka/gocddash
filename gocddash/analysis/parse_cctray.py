@@ -4,10 +4,7 @@ from xml.etree import ElementTree as Et
 
 class Projects(object):
     def __init__(self, source):
-        try:
-            self.tree = Et.fromstring(source)
-        except TypeError:
-            self.tree = Et.parse(source)
+        self.tree = Et.fromstring(source)
         self.pipelines = {}
         self.stages = defaultdict(list)
         self.jobs = defaultdict(list)

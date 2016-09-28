@@ -7,6 +7,7 @@ import subprocess
 import sys
 import time
 import requests
+import bs4
 
 
 def get_free_port():
@@ -17,6 +18,12 @@ def get_free_port():
         port_used = port in [x.laddr[1] for x in psutil.net_connections()]
     # noinspection PyUnboundLocalVariable
     return port
+
+
+def text_from_html(html):
+    soap = bs4.BeautifulSoup(html, 'lxml')
+    text = soap.get_text("\n", strip=True)
+    return text
 
 
 def start_servers(gocd_dash_path):
@@ -31,36 +38,50 @@ def start_servers(gocd_dash_path):
 
 def do_get(url, data):
     try:
-        return subprocess.check_output(["/usr/bin/lynx", "-dump", url], stderr=subprocess.STDOUT)
+        return subprocess.check_output(["/usr/bin/lynx", "-dump", url], stderr=subprocess.STDOUT).decode('utf-8')
     except subprocess.CalledProcessError as error:
         print(error)
-        print(error.output.decode("UTF-8"))
+        print(error.output)
         raise
 
 
 def do_post(url, data):
     response = requests.post(url, data)
-    return response.text.encode("UTF-8")
+    return text_from_html(response.text)
+
+
+def run_shell_script(script, _):
+    return subprocess.check_output([script], stderr=subprocess.STDOUT).decode('utf-8')
 
 
 def perform_testcase(port):
     action = {
         'GET': do_get,
         'POST': do_post,
+        'SHELL': run_shell_script,
     }
     print("Starting test workflow for GO CD Dashboard")
-    with open("gui_log.txt", "w", encoding="UTF-8") as log:
+    with open("gui_log.txt", "w", encoding="utf-8") as log:
         with open("urls.txt") as rows:
 
             coverage_url = "http://127.0.0.1:{}/dash/coverage/".format(port)
 
             for row in rows:
+                if not row.strip():
+                    continue
                 verb, url, *raw_data = row.split()
                 data = dict(pair.split('=') for pair in raw_data)
                 url = url.format(port=port)
-                log.write("{} {}\ndata: {}\n".format(verb, url, data))
+                log.write("{} {}\ndata: {{{}}}\n".format(verb, url,
+                                                         ", ".join("%s='%s'" % tup for tup in sorted(data.items()))))
                 out = action[verb](url, data)
-                log.write(out.decode("UTF-8"))
+                try:
+                    log.write(out)
+                except TypeError as err:
+                    print("Got '{}' on log.write()".format(err))
+                    print("What I had:", verb, url, data, type(out))
+                    print("What I got back:", out.decode('utf-8'))
+                    raise
 
             requests.get(coverage_url)
 

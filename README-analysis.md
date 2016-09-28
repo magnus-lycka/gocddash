@@ -5,25 +5,9 @@ Before everything:
 
 With pip3 (apt-get install python3-pip), install the following packages:
 
-flask
-jinja2
-psycopg2
-pandas
-yoyo-migrations
-beautifulsoup4
-bokeh
+    python3 -m pip install requirements,txt
 
 (The pandas installation might take a while.)
-
-Start up a local database with docker:
-
-    docker run -p 15554:5432 -d go-analysis-db:1.1.1-GO
-
-(The image will be put on docker hub shortly. It's just an empty postgresql 9.3 database with a default schema and user 'analysisappluser')
-
-Run the migration script
-
-    yoyo apply --database postgresql://analysisappluser:analysisappluser@localhost:15554/go-analysis -b
 
 Use ./sync_pipelines.py ('-d' for continuous sync) to fetch data for the pipelines specified in pipelines.json.
 The sync also includes an email notification system (see point 6 below).

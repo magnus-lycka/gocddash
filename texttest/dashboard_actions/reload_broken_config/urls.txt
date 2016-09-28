@@ -1,0 +1,3 @@
+GET http://127.0.0.1:{port}/dash/select/
+SHELL ./break_pipeline_config.sh
+POST http://127.0.0.1:{port}/dash/reloadconfig

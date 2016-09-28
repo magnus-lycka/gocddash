@@ -10,7 +10,7 @@ except Exception as error:
     print('Fell back on SimpleCache due to', error)
 
 
-class GoSource:
+class GoSource:  # pragma: no cover
     """
     Preforms REST API requests to Go-server
     """
@@ -213,7 +213,7 @@ _go_client = None
 
 def create_go_client(base_go_url, auth):
     global _go_client
-    if "http" in base_go_url:
+    if "http" in base_go_url:  # pragma: no cover
         _go_client = GoSource(base_go_url, auth)
     else:
         _go_client = FileSource(base_go_url)

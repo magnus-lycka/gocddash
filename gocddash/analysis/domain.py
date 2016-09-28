@@ -9,31 +9,24 @@ def get_previous_stage(current_stage):
                                                    current_stage.stage_name, current_stage.stage_counter)
     if result:
         return StageFailureInfo(*result)
-    else:
-        return None
 
 
 def get_current_stage(pipeline_name):
     result = get_connection().fetch_current_stage(pipeline_name)
     if result:
         return StageFailureInfo(*result)
-    return None
 
 
 def get_latest_passing_stage(pipeline_name):
     result = get_connection().fetch_latest_passing_stage(pipeline_name)
     if result:
         return StageFailureInfo(*result)
-    else:
-        return None
 
 
 def get_first_synced_stage(pipeline_name):
     result = get_connection().fetch_first_synced(pipeline_name)
     if result:
         return StageFailureInfo(*result)
-    else:
-        return None
 
 
 def create_stage(pipeline_instance, stage):
@@ -175,8 +168,6 @@ def get_job_to_display(stage_id):
             if not job.is_success():
                 return job
         return jobs[0]
-    else:
-        return None
 
 
 def fold(rows, class_to_instantiate, default=None):

@@ -2,10 +2,10 @@
 
 
 class DefaultConsoleParser:
-    def __init__(self, console_log):
+    def __init__(self, console_log):  # pragma: no cover
         raise NotImplementedError
 
-    def insert_info(self, stage_id):
+    def insert_info(self, stage_id):  # pragma: no cover
         raise NotImplementedError
 
     def get_failure_stage(self):
@@ -21,5 +21,5 @@ class DefaultConsoleParser:
         else:
             return "STARTUP"
 
-    def _check_test_failures(self):
+    def _check_test_failures(self):  # pragma: no cover
         raise NotImplementedError

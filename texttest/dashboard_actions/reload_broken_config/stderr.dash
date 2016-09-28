@@ -1,0 +1,7 @@
+ * Running on http://127.0.0.1:9634/ (Press CTRL+C to quit)
+Loaded new pipeline configuration from /home/magnusl/.texttest/tmp/dash.28Sep165606.25797/dash/dashboard_actions/reload_broken_config/pipelines.json.
+Loaded new pipeline configuration from /home/magnusl/.texttest/tmp/dash.28Sep165606.25797/dash/dashboard_actions/reload_broken_config/pipelines.json.
+127.0.0.1 - - [28/Sep/2016 16:56:08] "GET /dash/select/ HTTP/1.0" 200 -
+127.0.0.1 - - [28/Sep/2016 16:56:08] "POST /dash/reloadconfig HTTP/1.1" 200 -
+Coverage.py warning: Module gocddash was previously imported, but not measured.
+127.0.0.1 - - [28/Sep/2016 16:56:08] "GET /dash/coverage/ HTTP/1.1" 201 -
