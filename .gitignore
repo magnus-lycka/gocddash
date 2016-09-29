@@ -4,6 +4,9 @@ __pycache__/
 **.png
 **.prof
 .gitstats
+*.sqlite3
+*.dot
+*.png
 
 # JetBrains
 .idea/

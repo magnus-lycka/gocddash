@@ -88,6 +88,13 @@ everything also works with the uWSGI service and nginx.
 Both these applications have similar setup strategies, with config under
 /etc/uwsgi and /etc/nginx.
 
+## Caching
+
+Gocddash used memcached for some caching purposes if it's available.
+Install it with
+
+    sudo apt-get install memcached
+
 ## Development
 
 See the instructions in "README-analysis.md"

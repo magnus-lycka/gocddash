@@ -6,6 +6,10 @@ python:
 
 sudo: required
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y lynx memcached
+
 install:
   - pip install -r requirements.txt
   - pip2 install texttest

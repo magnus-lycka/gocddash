@@ -3,11 +3,17 @@ Developing GOCD Dashboard
 
 Before everything:
 
-With pip3 (apt-get install python3-pip), install the following packages:
+Install the following packages:
 
-    python3 -m pip install requirements,txt
+    sudo apt-get install lynx
 
-(The pandas installation might take a while.)
+The console based browser is used for the automated tests.
+
+    sudo python2 -m pip install texttest
+    python3 -m pip install requirements.txt
+
+(You need to use `sudo` if you don't use a virtual environment for Python 3.
+ The pandas installation might take a while.)
 
 Use ./sync_pipelines.py ('-d' for continuous sync) to fetch data for the pipelines specified in pipelines.json.
 The sync also includes an email notification system (see point 6 below).
