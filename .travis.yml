@@ -6,13 +6,6 @@ python:
 
 sudo: required
 
-services:
-  - docker
-
-before_install:
-  - docker pull postgres:9.3
-  - sudo apt-get install lynx postgresql-server-dev-9.3
-
 install:
   - pip install -r requirements.txt
   - pip2 install texttest
