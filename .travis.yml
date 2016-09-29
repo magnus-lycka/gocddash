@@ -9,12 +9,16 @@ sudo: required
 dist: trusty
 
 before_install:
+  - sudo add-apt-repository ppa:jonathonf/backports
   - sudo apt-get -qq update
-  - sudo apt-get install -y lynx memcached sqlite3
+  - sudo apt-get install -y lynx sqlite3
 
 install:
   - pip install -r requirements.txt
   - pip2 install texttest
+
+services:
+  - memcached
 
 script:
   - (cd test && python3 -m unittest)

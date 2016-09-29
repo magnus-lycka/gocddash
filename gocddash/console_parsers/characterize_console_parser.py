@@ -16,7 +16,7 @@ class TexttestConsoleParser(DefaultConsoleParser):
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
         self.success, self.response = go_request_junit_report(
             pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
-        self.console_log = go_request_console_log(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+        super().__init__(go_request_console_log(pipeline_name, pipeline_counter, stage_index, stage_name, job_name))
 
     def parse_info(self):
         """
