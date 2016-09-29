@@ -28,8 +28,8 @@ class TestFileStorage(unittest.TestCase):
             34578: {2: [("new", "documentMetadata"), ("new", "internalxml")], 12: [("missing", "target")]}})
 
     def test_console_fetcher_parse_test_index(self):
-        input = {34578: {2: [("new", "documentMetadata"), ("new", "internalxml")], 12: [("missing", "target")]}}
-        output = create_binary_test_index_list(input)
+        input_ = {34578: {2: [("new", "documentMetadata"), ("new", "internalxml")], 12: [("missing", "target")]}}
+        output = create_binary_test_index_list(input_)
         self.assertEqual(output, [(34578, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)])
 
 

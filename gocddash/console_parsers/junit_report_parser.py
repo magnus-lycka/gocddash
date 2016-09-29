@@ -7,10 +7,11 @@ from .default_console_parser import DefaultConsoleParser
 
 class JunitConsoleParser(DefaultConsoleParser):
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
+        super().__init__(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         success, response = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         self.response = response
+        self.console_log = response
         self.success = success
-        super().__init__(response)
 
     def parse_info(self):
         if self.success:

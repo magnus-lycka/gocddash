@@ -7,6 +7,7 @@ import subprocess
 import sys
 import time
 import requests
+# noinspection PyPackageRequirements
 import bs4
 
 
@@ -36,8 +37,10 @@ def start_servers(gocd_dash_path):
     return application_port, application_process
 
 
+# noinspection PyUnusedLocal
 def do_get(url, data):
     try:
+        # noinspection PyUnresolvedReferences
         return subprocess.check_output(["/usr/bin/lynx", "-dump", url], stderr=subprocess.STDOUT).decode('utf-8')
     except subprocess.CalledProcessError as error:
         print(error)
@@ -51,6 +54,7 @@ def do_post(url, data):
 
 
 def run_shell_script(script, _):
+    # noinspection PyUnresolvedReferences
     return subprocess.check_output([script], stderr=subprocess.STDOUT).decode('utf-8')
 
 

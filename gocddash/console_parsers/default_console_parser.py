@@ -2,8 +2,11 @@
 
 
 class DefaultConsoleParser:
-    def __init__(self, console_log):
-        self.console_log = console_log
+    # noinspection PyUnusedLocal
+    def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
+        self.console_log = None
+        self.response = None
+        self.success = True
 
     def insert_info(self, stage_id):  # pragma: no cover
         raise NotImplementedError
