@@ -4,13 +4,16 @@ import getpass
 import json
 import os
 import sys
-from pathlib import Path
 from collections import defaultdict
 from datetime import date, datetime
 from inspect import getsourcefile
 from os.path import abspath
+from pathlib import Path
+
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 from flask import flash, current_app, jsonify
+
+from dashboard.graph import pipeline_history_chart_json, agent_success_rate_chart_json
 
 sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
@@ -23,8 +26,6 @@ from gocddash.analysis.data_access import get_connection
 from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, \
     get_first_synced_stage, get_pipeline_heads, get_job_to_display, get_cctray_status, \
     create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
-from gocddash.dashboard.graph import agent_success_rates
-from gocddash.dashboard.graph import pipeline_test_results
 
 group_of_pipeline = defaultdict(str)
 
@@ -202,88 +203,22 @@ def stats():
 
 @gocddash.route("/agents/success_rate/<limit_days>/<limit_cnt>/<y_axis>/<pipeline>", methods=['GET'])
 def get_agents_success_rate(limit_days, limit_cnt, y_axis, pipeline):
-    if pipeline == '*':
-        pipeline = None
-        title = "Historical agent success rate for all pipelines. "
-    else:
-        title = "Historical agent success rate for pipeline {}. ".format(pipeline)
     try:
         limit_days = int(limit_days)
+    except ValueError:
+        abort(404, "limit_days must be integer, got {}.".format(limit_days))
+
+    try:
         limit_cnt = int(limit_cnt)
     except ValueError:
-        abort(404, "Needed two integers, got {} and {}.".format(limit_days, limit_cnt))
+        abort(404, "limit_cnt must be integer, got {}.".format(limit_cnt))
 
-    agent_summaries = agent_success_rates(limit_days, limit_cnt, pipeline)
+    percentage = y_axis == 'percent'
 
-    def make_bar_row(label, color, x, y, n, percentage=False):
-        if percentage:
-            template = "\nFailure stage: {}\nTotal tests run on agent: {}"
-            text = [template.format(label, nn) for (yy, nn) in zip(y, n)]
-        else:
-            template = "\nFailure stage: {}\nRate: {:.1f}%\nTotal tests run on agent: {}"
-            text = [template.format(label, 100.0 * yy / nn, nn) for (yy, nn) in zip(y, n)]
-        return {
-            "x": x,
-            "y": y,
-            "name": label,
-            "type": "bar",
-            "text": text,
-            "marker": {
-                "color": color,
-                "line": {
-                    "color": "#ffffff",
-                    "width": 1.0
-                }
-            }
-        }
+    if pipeline == '*':
+        pipeline = None
 
-    if limit_days:
-        title += "Max {} days. ".format(limit_days)
-
-    if limit_cnt:
-        title += "Max {} jobs per agent. ".format(limit_cnt)
-
-    y_maker = getattr
-    y_label = 'Jobs (count)'
-
-    if y_axis == 'percent':
-        def y_maker(summary, kind):
-            if summary.n:
-                return 100.0 * getattr(summary, kind) / summary.n
-            else:
-                return 0.0
-
-        y_label = 'Jobs (percent)'
-
-    layout = {
-        "hovermode": "closest",
-        "barmode": "stack",
-        "title": title,
-        "legend": {
-            "x": 0,
-            "y": 100,
-            "orientation": "h"
-        },
-        "xaxis": {
-            "title": "Agent name"
-        },
-        "yaxis": {
-            "title": y_label
-        }
-    }
-
-    data = []
-    x = sorted(agent_summaries)
-
-    for label, color in [
-        ('Success', '#5ab738'),
-        ('Test', '#f22c40'),
-        ('Startup', '#2176ff'),
-        ('Post', '#eac435'),
-    ]:
-        y = [y_maker(agent_summaries[agent], label.lower()) for agent in x]
-        n = [agent_summaries[agent].n for agent in x]
-        data.append(make_bar_row(label, color, x, y, n, y_axis == 'percent'))
+    layout, data = agent_success_rate_chart_json(limit_cnt, limit_days, percentage, pipeline)
 
     return jsonify(layout=layout, data=data)
 
@@ -291,52 +226,7 @@ def get_agents_success_rate(limit_days, limit_cnt, y_axis, pipeline):
 @gocddash.route("/pipelines/<pipeline_name>/history", methods=['GET'])
 def get_pipelines_history(pipeline_name):
 
-    pipeline_summaries = pipeline_test_results(pipeline_name)
-    title = "Historical tests for {}. (last {} executions)".format(pipeline_name, len(pipeline_summaries))
-
-    def make_bar_row(label, color, x, y):
-        return {
-            "x": x,
-            "y": y,
-            "name": label,
-            "type": "bar",
-            "marker": {
-                "color": color,
-                "line": {
-                    "color": "#ffffff",
-                    "width": 1.0
-                }
-            }
-        }
-
-    layout = {
-        "hovermode": "closest",
-        "barmode": "stack",
-        "title": title,
-        "legend": {
-            "x": 0,
-            "y": 100,
-            "orientation": "h"
-        },
-        "xaxis": {
-            "type": "category",
-            "title": "Pipeline counter"
-        },
-        "yaxis": {
-            "title": 'Test-count'
-        }
-    }
-
-    data = []
-    x = sorted(pipeline_summaries)
-
-    for label, color in [
-        ('passed', '#5ab738'),
-        ('failed', '#f22c40'),
-        ('skipped', '#2176ff'),
-    ]:
-        y = [getattr(pipeline_summaries[pipeline_counter], label.lower()) for pipeline_counter in x]
-        data.append(make_bar_row('Tests ' + label, color, x, y))
+    layout, data = pipeline_history_chart_json(pipeline_name)
 
     return jsonify(layout=layout, data=data)
 
