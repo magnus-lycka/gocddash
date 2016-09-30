@@ -1,31 +1,16 @@
 {% extends "layout.html" %}
 
-{% block bokehstuff %}
-    {{ agent_graph.js_resources|indent(4)|safe }}
-
-    {{ agent_graph.css_resources|indent(4)|safe }}
-
-    {{ agent_graph.script|indent(4)|safe }}
-
-    {{ tests_run_graph.js_resources|indent(4)|safe }}
-
-    {{ tests_run_graph.css_resources|indent(4)|safe }}
-
-    {{ tests_run_graph.script|indent(4)|safe }}
-
-{% endblock %}
-
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                {{ tests_run_graph.div|indent(4)|safe }}
+                <div id="pipeline_chart" style="width:1100px;height:500px;"></div>
             </div>
         </div>
         <hr>
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                {{ agent_graph.div|indent(4)|safe }}
+            <div class="col-md-8 col-md-offset-2">
+                <div id="agent_bar_chart" style="width:750px;height:400px;"></div>
             </div>
         </div>
         <hr>
@@ -39,6 +24,29 @@
         </div>
     </div>
 
+    <script src="/static/plotly-latest.min.js"></script>
 
+    <script>
+        function refreshPipelineChart() {
+
+            var url = '{{ application_root }}/pipelines/{{ pipeline_name }}/history';
+
+            Plotly.d3.json(url, function(figure) {
+                Plotly.newPlot('pipeline_chart', figure.data, figure.layout);
+             });
+        };
+
+        function refreshAgentChart() {
+
+            var url = '{{ application_root }}/agents/success_rate/30/0/percent/{{ pipeline_name }}';
+
+            Plotly.d3.json(url, function(figure) {
+                Plotly.newPlot('agent_bar_chart', figure.data, figure.layout);
+             });
+        };
+
+        refreshPipelineChart();
+        refreshAgentChart();
+    </script>
 
 {% endblock %}

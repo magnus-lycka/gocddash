@@ -2,22 +2,24 @@ import requests
 from urllib.parse import quote
 from werkzeug.contrib.cache import SimpleCache, MemcachedCache
 
+cache_timeout = 10
 try:
-    cache = MemcachedCache()
+    cache = MemcachedCache(default_timeout=cache_timeout)
     print("Started MemchachedCache")
+    # TODO Provoke failure unless the service is running. Just a get?
 except Exception as error:
-    cache = SimpleCache()
+    cache = SimpleCache(default_timeout=cache_timeout)
     print('Fell back on SimpleCache due to', error)
 
 
 class GoSource:  # pragma: no cover
     """
-    Preforms REST API requests to Go-server
+    Performs REST API requests to Go-server
     """
-
     def __init__(self, base_go_url, auth):
         self.base_go_url = base_go_url
         self.auth = auth
+        self.consecutive_cache_errors = 0
 
     def simple_api_request(self, url, headers=None):
         response = self.api_request(url, headers)
@@ -37,21 +39,37 @@ class GoSource:  # pragma: no cover
         return self.base_request("api/" + url, headers)
 
     def base_request(self, url, headers=None):
-        if cache.get('auth=%s' % quote(repr(self.auth))) is not None:
+        try:
             response = cache.get('url={};headers={}'.format(url, quote(repr(headers))))
+            self.consecutive_cache_errors = 0
             if response is not None:
                 return response
+        except Exception as cache_error:
+            self.cache_failure()
+            print(cache_error)
+            print('Failed to get cache for url={};headers={}'.format(url, quote(repr(headers))))
         response = requests.get(self.base_go_url + url, auth=self.auth, headers=headers)
         try:
-            cache.set('url=%s;headers=%s' % (url, quote(repr(headers))), response, 10)
+            ok = cache.set('url=%s;headers=%s' % (url, quote(repr(headers))), response)
+            if ok:
+                self.consecutive_cache_errors = 0
+            else:
+                raise RuntimeError('cache.set() failed')
         except Exception as cache_error:
+            self.cache_failure()
             print(cache_error)
             print('Failed to cache url={};headers={}'.format(url, quote(repr(headers))))
             print('Value:', response)
             raise
-        if cache.get('auth=%s' % quote(repr(self.auth))) is None:
-            cache.set('auth=%s' % quote(repr(self.auth)), True, timeout=10 * 60)
         return response
+
+    def cache_failure(self):
+        max_fails = 5
+        self.consecutive_cache_errors += 1
+        if self.consecutive_cache_errors >= max_fails:
+            global cache
+            cache = SimpleCache(default_timeout=cache_timeout)
+            print('Fell back on SimpleCache due to {} consecutive cache failures.'.format(max_fails))
 
     def go_request_pipeline_history(self, pipeline_name, offset=0):
         return self.simple_api_request("pipelines/{}/history/{}".format(pipeline_name, offset))

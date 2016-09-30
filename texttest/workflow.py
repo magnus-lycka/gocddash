@@ -31,7 +31,7 @@ def start_servers(gocd_dash_path):
     application_port = get_free_port()
     print("starting server, application on port {}, using checkout {}".format(application_port, gocd_dash_path))
 
-    apply_db_migrations(gocd_dash_path)
+    init_database(gocd_dash_path)
     application_process = start_application(gocd_dash_path, None, application_port)
 
     return application_port, application_process
@@ -66,7 +66,7 @@ def perform_testcase(port):
     }
     print("Starting test workflow for GO CD Dashboard")
     with open("gui_log.txt", "w", encoding="utf-8") as log:
-        with open("urls.txt") as rows:
+        with open("actions.txt") as rows:
 
             coverage_url = "http://127.0.0.1:{}/dash/coverage/".format(port)
 
@@ -108,7 +108,7 @@ def main():
         stop_servers(application)
 
 
-def apply_db_migrations(gocd_dash_path):
+def init_database(gocd_dash_path):
     os.system('sqlite3 gocddash.sqlite3 < {}'.format(gocd_dash_path + '/migrations/setup.sql'))
 
 

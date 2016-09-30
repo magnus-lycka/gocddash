@@ -145,13 +145,8 @@ GraphData = namedtuple('GraphData',
 EmbeddedChart = namedtuple('EmbeddedChart', ['chart', 'js_resources', 'css_resources', 'script', 'div'])
 
 
-def get_graph_statistics():
-    result = get_connection().get_graph_statistics()
-    return fold(result, GraphData)
-
-
-def get_graph_statistics_for_pipeline(pipeline_name):
-    result = get_connection().get_graph_statistics_for_pipeline(pipeline_name)
+def get_graph_statistics(days_limit=None, pipeline=None):
+    result = get_connection().get_graph_statistics(days_limit, pipeline)
     return fold(result, GraphData, [])
 
 

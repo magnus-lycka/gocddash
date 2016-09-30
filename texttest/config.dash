@@ -11,7 +11,7 @@ full_name:Go CD Dashboard
 default_checkout:gocddash
 default_interface:console
 
-link_test_path:urls.txt
+link_test_path:actions.txt
 link_test_path:application.cfg
 link_test_path:pipelines.json
 link_test_path:go/compare.html

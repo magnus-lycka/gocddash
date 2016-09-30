@@ -1,5 +1,5 @@
 import sqlite3
-
+from datetime import datetime, timedelta
 
 class SQLConnection:
     _shared_state = {'conn': None}
@@ -309,18 +309,28 @@ class SQLConnection:
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(
-                "SELECT * FROM graph_statistics WHERE pipeline_name = ?", (pipeline_name,)
+                "SELECT * "
+                "FROM graph_statistics "
+                "WHERE pipeline_name = ?", (pipeline_name,)
             )
             graph_statistics = cursor.fetchall()
         return graph_statistics
 
-    def get_graph_statistics(self):
+    def get_graph_statistics(self, days_limit, pipeline_name):
+        pipeline_name = pipeline_name or "%"
+        if days_limit:
+            start = datetime.now() - timedelta(days=days_limit)
+        else:
+            start = '2000-01-01 00:00:00.000000'
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(
                 "SELECT * "
                 "FROM graph_statistics "
-                "WHERE agent_name NOT LIKE 'UNKNOWN%';"
+                "WHERE agent_name NOT LIKE 'UNKNOWN%' "
+                "AND pipeline_name LIKE ? "
+                "AND scheduled_date > ?;",
+                (pipeline_name, start )
             )
             graph_statistics = cursor.fetchall()
         return graph_statistics
@@ -329,10 +339,11 @@ class SQLConnection:
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(
-                """SELECT *
-                FROM graph_statistics_final_stages
-                WHERE pipeline_name = ?
-                ORDER BY pipeline_counter ASC""", (pipeline_name,)
+                "SELECT * "
+                "FROM graph_statistics_final_stages "
+                "WHERE pipeline_name = ? "
+                "ORDER BY pipeline_counter ASC",
+                (pipeline_name,)
             )
             graph_statistics = cursor.fetchall()
         return graph_statistics
