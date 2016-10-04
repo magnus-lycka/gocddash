@@ -42,7 +42,6 @@ def start_servers(gocd_dash_path):
     application_port = get_free_port()
     print("starting server, application on port {}, using checkout {}".format(application_port, gocd_dash_path))
 
-    #init_database(gocd_dash_path)
     application_process = start_application(None, application_port)
 
     return application_port, application_process
@@ -117,10 +116,6 @@ def main():
         perform_testcase(app_port)
     finally:
         stop_servers(application)
-
-
-def init_database(gocd_dash_path):
-    os.system('sqlite3 gocddash.sqlite3 < {}'.format(gocd_dash_path + '/gocddash/database/setup.sql'))
 
 
 def start_application(db_port, application_port):
