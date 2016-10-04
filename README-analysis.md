@@ -7,6 +7,14 @@ Install the following packages:
 
     sudo apt-get install lynx
 
+You need at least version 3.8.3 of sqlite. If you get
+`sqlite3.OperationalError: near "WITH": syntax error`
+you need a newer version. Do this:
+
+    sudo add-apt-repository ppa:jonathonf/backports
+    sudo apt-get update
+    sudo apt-get install sqlite3
+
 The console based browser is used for the automated tests.
 
     sudo python2 -m pip install texttest
