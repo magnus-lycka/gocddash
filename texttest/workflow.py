@@ -12,8 +12,14 @@ import bs4
 
 
 def executable(binary='python'):
-    checkout = os.environ['TEXTTEST_CHECKOUT']
-    return os.path.join(checkout, 'texttest', 'venv', 'bin', binary)
+    candidates = [
+        os.path.join(sys.exec_prefix, 'bin', binary),
+        os.path.join(sys.exec_prefix, 'local', 'bin', binary),
+    ]
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    raise ValueError("Can't find location of {}".format(binary))
 
 
 def get_free_port():
