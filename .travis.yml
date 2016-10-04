@@ -2,7 +2,7 @@ language: python
 
 python:
   - "3.4"
-  - "3.5"
+#  - "3.5"
 
 sudo: required
 
@@ -22,12 +22,7 @@ services:
 
 script:
   - (cd test && python3 -m unittest)
-  - ln -s /usr/local /home/travis/build/magnus-lycka/gocddash/texttest/venv
-  - ls -la /home/travis/build/magnus-lycka/gocddash/texttest/venv
-  - ls -la /home/travis/build/magnus-lycka/gocddash/texttest/venv/bin
-  - ls -l /home/travis/virtualenv
-  - ls -l /home/travis/virtualenv/*/bin
-  - python -c 'import sys; print(sys.exec_prefix)'
+  - ln -s /home/travis/virtualenv/python3.4 /home/travis/build/magnus-lycka/gocddash/texttest/venv
   - "python2 `which texttest` -a dash -b -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -l"
   - find ~/.texttest/tmp -name 'std*.dash' | xargs more | cat
   - find ~/.texttest/tmp -name 'gui_log.dash' | xargs more | cat
