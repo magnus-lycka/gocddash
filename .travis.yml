@@ -9,9 +9,8 @@ sudo: required
 dist: trusty
 
 before_install:
-  - sudo add-apt-repository -y ppa:jonathonf/backports
   - sudo apt-get -qq update
-  - sudo apt-get install -y lynx sqlite3
+  - sudo apt-get install -y lynx
 
 install:
   - pip install -r requirements.txt
@@ -26,6 +25,8 @@ script:
   - ln -s /usr/local /home/travis/build/magnus-lycka/gocddash/texttest/venv
   - ls -la /home/travis/build/magnus-lycka/gocddash/texttest/venv
   - ls -la /home/travis/build/magnus-lycka/gocddash/texttest/venv/bin
+  - ls -l /home/travis/virtualenv
+  - ls -l /home/travis/virtualenv/*/bin
   - python -c 'import sys; print(sys.exec_prefix)'
   - "python2 `which texttest` -a dash -b -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -l"
   - find ~/.texttest/tmp -name 'std*.dash' | xargs more | cat
