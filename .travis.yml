@@ -26,6 +26,7 @@ script:
   - ln -s /usr/local /home/travis/build/magnus-lycka/gocddash/texttest/venv
   - ls -la /home/travis/build/magnus-lycka/gocddash/texttest/venv
   - ls -la /home/travis/build/magnus-lycka/gocddash/texttest/venv/bin
+  - python -c 'import sys; print(sys.exec_prefix)'
   - "python2 `which texttest` -a dash -b -c /home/travis/build/magnus-lycka/gocddash -d /home/travis/build/magnus-lycka/gocddash/texttest -l"
   - find ~/.texttest/tmp -name 'std*.dash' | xargs more | cat
   - find ~/.texttest/tmp -name 'gui_log.dash' | xargs more | cat
