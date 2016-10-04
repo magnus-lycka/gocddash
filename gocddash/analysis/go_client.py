@@ -6,7 +6,8 @@ cache_timeout = 10
 try:
     cache = MemcachedCache(default_timeout=cache_timeout)
     print("Started MemchachedCache")
-    # TODO Provoke failure unless the service is running. Just a get?
+    # Provoke failure unless the service is running.
+    cache.get('X')
 except Exception as error:
     cache = SimpleCache(default_timeout=cache_timeout)
     print('Fell back on SimpleCache due to', error)
@@ -60,11 +61,10 @@ class GoSource:  # pragma: no cover
             print(cache_error)
             print('Failed to cache url={};headers={}'.format(url, quote(repr(headers))))
             print('Value:', response)
-            raise
         return response
 
     def cache_failure(self):
-        max_fails = 5
+        max_fails = 10
         self.consecutive_cache_errors += 1
         if self.consecutive_cache_errors >= max_fails:
             global cache

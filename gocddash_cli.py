@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 
 import argparse
+from gocddash.analysis import go_request
+from gocddash.analysis import actions
+from gocddash.util import app_config
+from gocddash.analysis import go_client
+from gocddash.util import pipeline_config
 
+
+def init(application_cfg_path):
+    app_config.create_app_config(application_cfg_path)
+
+    pipeline_config.create_pipeline_config('./pipelines.json')
+
+    go_client.create_go_client(
+        app_config.get_app_config().cfg['GO_SERVER_URL'],
+        (app_config.get_app_config().cfg['GO_SERVER_USER'],
+         app_config.get_app_config().cfg['GO_SERVER_PASSWD']))
 
 def main():
     """ Runs program and handles CLI interaction """
@@ -16,7 +31,7 @@ Sample usage: go_cli pull -p pipeline-name
     )
     parser.add_argument(
         'action',
-        choices=['pull', 'info', 'export'])
+        choices=['pull', 'info'])
     parser.add_argument(
         '-p', '--pipeline', type=str, default=None, help="Which PIPELINE to use.")
     parser.add_argument(
@@ -33,9 +48,7 @@ Sample usage: go_cli pull -p pipeline-name
     )
 
     pargs = parser.parse_args()
-
-    from gocddash.analysis import go_request
-    from gocddash.analysis import actions
+    init('.')
 
     if pargs.action == 'pull':
         if not pargs.pipeline:
@@ -43,10 +56,6 @@ Sample usage: go_cli pull -p pipeline-name
         if pargs.next is None:
             pargs.next = go_request.get_max_pipeline_status(pargs.pipeline)[0] - pargs.start
         actions.pull(pargs.pipeline, pargs.next, pargs.start, pargs.dry_run)
-    elif pargs.action == 'export':
-        if not pargs.pipeline:
-            raise ValueError("No pipeline specified.")
-        actions.export(pargs.pipeline, "~/GO_CSV/" + pargs.filename + ".csv", pargs.dry_run)
     elif pargs.action == 'info':
         if pargs.pipeline:
             actions.info(pargs.pipeline)

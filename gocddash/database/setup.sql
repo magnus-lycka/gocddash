@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS pipeline_instance(
 --  currently_passing INTEGER -- 0|1 ???
 );
 
+
 CREATE TABLE IF NOT EXISTS stage(
     id INTEGER NOT NULL PRIMARY KEY,
     instance_id INTEGER,
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS stage(
 --  failure_stage TEXT NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS job(
     id INTEGER NOT NULL PRIMARY KEY,
     stage_id INTEGER,
@@ -42,10 +44,12 @@ CREATE TABLE IF NOT EXISTS job(
 -- Adapt to parent natural key
 );
 
+
 CREATE TABLE IF NOT EXISTS agent(
     id TEXT NOT NULL PRIMARY KEY,
     agent_name TEXT
 );
+
 
 CREATE TABLE IF NOT EXISTS texttest_failure(
     id SERIAL PRIMARY KEY,
@@ -56,12 +60,14 @@ CREATE TABLE IF NOT EXISTS texttest_failure(
 -- Adapt to parent natural key
 );
 
+
 -- Replace with column in stage
 CREATE TABLE IF NOT EXISTS failure_information(
     id SERIAL PRIMARY KEY,
     stage_id INTEGER,
     failure_stage TEXT
 );
+
 
 CREATE TABLE IF NOT EXISTS junit_failure(
     id SERIAL PRIMARY KEY,
@@ -72,6 +78,7 @@ CREATE TABLE IF NOT EXISTS junit_failure(
 );
 -- Perhaps merge X_failure tables?
 
+
 -- Replace with columns in pipeline_instance
 CREATE TABLE IF NOT EXISTS instance_claim(
     id SERIAL PRIMARY KEY,
@@ -81,6 +88,7 @@ CREATE TABLE IF NOT EXISTS instance_claim(
     description TEXT
 );
 
+
 -- Replace with column in pipeline_instance
 CREATE TABLE IF NOT EXISTS email_notifications(
     id SERIAL PRIMARY KEY,
@@ -88,6 +96,7 @@ CREATE TABLE IF NOT EXISTS email_notifications(
     pipeline_counter INTEGER,
     sent DATETIME
 );
+
 
 -- Replace with column in stage
 CREATE VIEW IF NOT EXISTS final_stages AS
@@ -102,16 +111,16 @@ CREATE VIEW IF NOT EXISTS final_stages AS
        s.stage_counter = sa.stage_counter AND
        s.name = sa.name;
 
-/*
-CREATE VIEW IF NOT EXISTS final_stages AS
-    SELECT s.*
-    FROM stage s
-    LEFT OUTER JOIN stage sa
-    ON s.name = sa.name AND
-       s.instance_id = sa.instance_id AND
-       s.stage_counter < sa.stage_counter
-    WHERE sa.stage_counter IS NULL;
-*/
+
+-- CREATE VIEW IF NOT EXISTS final_stages AS
+--    SELECT s.*
+--    FROM stage s
+--    LEFT OUTER JOIN stage sa
+--    ON s.name = sa.name AND
+--       s.instance_id = sa.instance_id AND
+--       s.stage_counter < sa.stage_counter
+--    WHERE sa.stage_counter IS NULL;
+
 
 -- replace with column in pipeline_instance
 CREATE VIEW IF NOT EXISTS run_outcomes AS
@@ -126,6 +135,7 @@ CREATE VIEW IF NOT EXISTS run_outcomes AS
     ) px
     ON px.instance_id = pi.id
     ORDER BY pipeline_counter DESC;
+
 
 -- Replace with columns in pipeline_instance
 CREATE VIEW IF NOT EXISTS latest_intervals AS

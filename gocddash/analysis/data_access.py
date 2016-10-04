@@ -1,5 +1,7 @@
+import os
 import sqlite3
 from datetime import datetime, timedelta
+
 
 class SQLConnection:
     _shared_state = {'conn': None}
@@ -8,6 +10,17 @@ class SQLConnection:
         self.__dict__ = self._shared_state
         if not self.conn:
             self.conn = sqlite3.connect('gocddash.sqlite3')
+            self._init()
+
+    def _init(self):
+        my_dir = os.path.split(__file__)[0]
+        path = os.path.join(my_dir, '..', 'database', 'setup.sql')
+        with open(path) as sql_file:
+            statements = sql_file.read().split('\n\n')
+            for statement in statements:
+                with self.conn:
+                    cursor = self.conn.cursor()
+                    cursor.execute(statement)
 
     def show_database(self):
         with self.conn:

@@ -1,6 +1,6 @@
 # Full path to the System Under Test
 executable:${TEXTTEST_CHECKOUT}/texttest/workflow.py
-interpreter:/usr/bin/env python3
+interpreter:${TEXTTEST_CHECKOUT}/texttest/venv/bin/python3
 
 # Naming scheme to use for files for stdin,stdout and stderr
 filename_convention_scheme:standard

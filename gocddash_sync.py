@@ -64,10 +64,6 @@ def configure_from_args(pargs_dict):
     application_cfg_path = pargs_dict['app_cfg']
     app_config.create_app_config(application_cfg_path)
 
-    db_port = pargs_dict['db_port']
-    if db_port:
-        app_config.get_app_config().cfg['DB_PORT'] = db_port
-
     file_source = pargs_dict['file_source']
     if file_source:
         app_config.get_app_config().cfg['GO_SERVER_URL'] = file_source

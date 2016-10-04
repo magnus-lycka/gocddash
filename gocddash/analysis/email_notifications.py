@@ -21,7 +21,7 @@ def send_prime_suspect_email(latest_pipeline, streak, suspect_list):
     server = smtplib.SMTP(get_app_config().cfg['SMTP_SERVER'])
     print("Done setting up server\n")
 
-    title = (
+    msg_body = (
         "{} broke in GO at pipeline counter {}, and is currently at counter {}. "
         "If you pushed to this or any upstream recently, please investigate."
         .format(latest_pipeline.pipeline_name, streak.pass_counter+1, latest_pipeline.pipeline_counter)
@@ -34,7 +34,7 @@ def send_prime_suspect_email(latest_pipeline, streak, suspect_list):
 
     msg_content = "<p>{}</p>" \
                   "<p>Link to insights: {}</p>" \
-                  "<p>Link to GO Overview: {}</p>".format(title, insights_link, go_overview_link)
+                  "<p>Link to GO Overview: {}</p>".format(msg_body, insights_link, go_overview_link)
     message = MIMEText(msg_content, 'html')
 
     recipients = get_suspects(suspect_list)

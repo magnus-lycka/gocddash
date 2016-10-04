@@ -1,31 +1,26 @@
+#!/usr/bin/env python3
 import argparse
 import builtins
 import getpass
 import json
 import os
-import sys
 from collections import defaultdict
 from datetime import date, datetime
-from inspect import getsourcefile
-from os.path import abspath
-from pathlib import Path
 
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
 from flask import flash, current_app, jsonify
-
-from dashboard.graph import pipeline_history_chart_json, agent_success_rate_chart_json
-
-sys.path.append(str(Path(abspath(getsourcefile(lambda: 0))).parents[1]))
 
 from gocddash.appcoverage import cover  # Make sure this comes before other gocddash imports
 from gocddash.util.pipeline_config import create_pipeline_config
 from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.dashboard import failure_tip, pipeline_status
+from gocddash.dashboard.graph import pipeline_history_chart_json, agent_success_rate_chart_json
 from gocddash.analysis.data_access import get_connection
-from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage, \
-    get_first_synced_stage, get_pipeline_heads, get_job_to_display, get_cctray_status, \
-    create_instance_claim, InstanceClaim, get_claims_for_unsynced_pipelines
+from gocddash.analysis.domain import get_previous_stage, get_current_stage, get_latest_passing_stage
+from gocddash.analysis.domain import get_first_synced_stage, get_pipeline_heads, get_job_to_display
+from gocddash.analysis.domain import get_cctray_status, create_instance_claim, InstanceClaim
+from gocddash.analysis.domain import get_claims_for_unsynced_pipelines
 
 group_of_pipeline = defaultdict(str)
 
@@ -188,7 +183,6 @@ def claim_instance():
 
 @gocddash.route("/stats", methods=['GET'])
 def stats():
-
     template = render_template(
         'stats.html',
         go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
@@ -225,7 +219,6 @@ def get_agents_success_rate(limit_days, limit_cnt, y_axis, pipeline):
 
 @gocddash.route("/pipelines/<pipeline_name>/history", methods=['GET'])
 def get_pipelines_history(pipeline_name):
-
     layout, data = pipeline_history_chart_json(pipeline_name)
 
     return jsonify(layout=layout, data=data)
@@ -255,7 +248,7 @@ def insights(pipeline_name):
     current_stage = get_current_stage(pipeline_name)
     if current_stage is None:
         abort(500,
-              "Database error. Have you tried syncing some pipelines using sync_pipelines.py? Current_stage is None.")
+              "Database error. Have you tried syncing some pipelines using gocddash_sync.py? Current_stage is None.")
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage)
     previous_status = pipeline_status.create_stage_info(last_stage)
@@ -328,7 +321,7 @@ app.secret_key = 'some_secret'
 if not ('APP_CONFIG' in os.environ and app.config.from_envvar('APP_CONFIG')):
     app.config.from_pyfile('application.cfg', silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
-app.register_blueprint(cover, url_prefix=app.config["APPLICATION_ROOT"]+'/coverage')
+app.register_blueprint(cover, url_prefix=app.config["APPLICATION_ROOT"] + '/coverage')
 
 
 @app.template_global(name='zip')

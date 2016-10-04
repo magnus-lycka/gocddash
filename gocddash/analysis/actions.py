@@ -1,5 +1,4 @@
 from gocddash.analysis import pipeline_fetcher, go_request, data_access
-from gocddash.util import file_storage
 
 
 def pull(pipeline_name, subsequent_pipelines, start, dry_run):
@@ -16,15 +15,6 @@ def pull(pipeline_name, subsequent_pipelines, start, dry_run):
     if not dry_run:
         fetch_pipelines(pipeline_name, latest_pipeline, max_pipeline_status, subsequent_pipelines, start)
         print("Done.")
-    else:
-        print("Dry run!")
-
-
-def export(pipeline_name, path, dry_run):
-    print("Saving as " + path)
-    if not dry_run:
-        file_storage.save_as_csv(pipeline_name, path)
-        print("Done!")
     else:
         print("Dry run!")
 

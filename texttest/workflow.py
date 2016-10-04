@@ -11,6 +11,11 @@ import requests
 import bs4
 
 
+def executable(binary='python'):
+    checkout = os.environ['TEXTTEST_CHECKOUT']
+    return os.path.join(checkout, 'texttest', 'venv', 'bin', binary)
+
+
 def get_free_port():
     # There is a potential for a race condition here, but I think it works ok in practice.
     port_used = True
@@ -31,8 +36,8 @@ def start_servers(gocd_dash_path):
     application_port = get_free_port()
     print("starting server, application on port {}, using checkout {}".format(application_port, gocd_dash_path))
 
-    init_database(gocd_dash_path)
-    application_process = start_application(gocd_dash_path, None, application_port)
+    #init_database(gocd_dash_path)
+    application_process = start_application(None, application_port)
 
     return application_port, application_process
 
@@ -102,19 +107,19 @@ def main():
     gocd_dash_path = os.environ['TEXTTEST_CHECKOUT']
     app_port, application = start_servers(gocd_dash_path)
     try:
-        sync_pipelines(gocd_dash_path)
+        sync_pipelines()
         perform_testcase(app_port)
     finally:
         stop_servers(application)
 
 
 def init_database(gocd_dash_path):
-    os.system('sqlite3 gocddash.sqlite3 < {}'.format(gocd_dash_path + '/migrations/setup.sql'))
+    os.system('sqlite3 gocddash.sqlite3 < {}'.format(gocd_dash_path + '/gocddash/database/setup.sql'))
 
 
-def start_application(gocd_dash_path, db_port, application_port):
-    application_process = subprocess.Popen(["/usr/bin/env", "python3",
-                                            gocd_dash_path + "/gocddash/app.py",
+def start_application(db_port, application_port):
+    application_process = subprocess.Popen([executable(),
+                                            executable("gocddash_app.py"),
                                             "-b", str(application_port),
                                             "--db-port", str(db_port),
                                             "--file-client", os.getcwd(),
@@ -142,13 +147,14 @@ def _wait_for_app_to_start(application_port):
     print("application is started")
 
 
-def sync_pipelines(gocd_dash_path):
-    subprocess.check_call(["/usr/bin/env", "coverage3",
+def sync_pipelines():
+    os.makedirs('/tmp/gocddash-cover/', exist_ok=True)
+    subprocess.check_call([executable('coverage'),
                            "run",
                            "--branch",
                            "--parallel-mode",
                            "--source=gocddash",
-                           gocd_dash_path + "/sync_pipelines.py",
+                           executable("gocddash_sync.py"),
                            "--db-port", str(0),
                            "-a", os.getcwd() + "/application.cfg",
                            "-p", os.getcwd() + "/pipelines.json",
