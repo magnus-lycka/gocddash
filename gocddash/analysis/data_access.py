@@ -6,10 +6,10 @@ from datetime import datetime, timedelta
 class SQLConnection:
     _shared_state = {'conn': None}
 
-    def __init__(self):
+    def __init__(self, path=None):
         self.__dict__ = self._shared_state
-        if not self.conn:
-            self.conn = sqlite3.connect('gocddash.sqlite3')
+        if path or not self.conn:
+            self.conn = sqlite3.connect(path or 'gocddash.sqlite3')
             self._init()
 
     def _init(self):
@@ -440,5 +440,5 @@ class SQLConnection:
         return mail_sent
 
 
-def get_connection():
-    return SQLConnection()
+def get_connection(path=None):
+    return SQLConnection(path)

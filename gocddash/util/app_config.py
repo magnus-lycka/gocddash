@@ -2,6 +2,7 @@
 Makes it easier to access configurations throughout the project.
 
 """
+import os
 from flask import Config
 
 
@@ -22,7 +23,8 @@ class AppConfig(Config):
 
 
 def create_app_config(path=None):
-    return AppConfig(path or "application.cfg")
+    path = path or os.path.join(os.getcwd(), 'application.cfg')
+    return AppConfig(path)
 
 
 def get_app_config():

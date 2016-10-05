@@ -319,7 +319,8 @@ def insights(pipeline_name):
 app = Flask(__name__)
 app.secret_key = 'some_secret'
 if not ('APP_CONFIG' in os.environ and app.config.from_envvar('APP_CONFIG')):
-    app.config.from_pyfile('application.cfg', silent=False)
+    path = os.path.join(os.getcwd(), 'application.cfg')
+    app.config.from_pyfile(path, silent=False)
 app.register_blueprint(gocddash, url_prefix=app.config["APPLICATION_ROOT"])
 app.register_blueprint(cover, url_prefix=app.config["APPLICATION_ROOT"] + '/coverage')
 
@@ -471,7 +472,7 @@ def main():
             app.config['GO_SERVER_URL'],
             (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
         )
-
+    get_connection(app.config.get('DB_PATH'))
     pipeline_path = app.config.get('PIPELINE_CONFIG')
     create_pipeline_config(pipeline_path)
 
