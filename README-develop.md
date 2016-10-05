@@ -80,3 +80,16 @@ The dashboard is available locally from http://127.0.0.1:5000/dash/
 6. The sync process also handles an email notification system for alerting primary
    suspects when a pipeline breaks. The notification system is opt-in per pipeline
    as specified in pipelines.json.
+
+
+Upgrading gocdpb in PyPI
+------------------------
+
+Make sure that all tests pass and that the version has been updated in setup.py.
+Commit and push changes to the repository before doing the following.
+
+    $ python3 setup.py sdist
+    $ twine upload dist/gocddash-<new version>.tar.gz
+    $ sudo pip3 install --upgrade gocddash
+
+Verify that the new version is downloaded, and works as intended.
