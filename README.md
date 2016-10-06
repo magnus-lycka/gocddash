@@ -97,4 +97,4 @@ Install it with
 
 ## Development
 
-See the instructions in "README-analysis.md"
+See the instructions in "README-develop.md"
