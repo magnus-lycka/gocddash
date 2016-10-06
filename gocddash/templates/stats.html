@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <script src="/static/plotly-latest.min.js"></script>
+    <script src="{{ url_for('gocddash.static', filename='plotly-latest.min.js') }}"></script>
 
     <script>
         function refreshAgentChart() {

@@ -248,7 +248,8 @@ def insights(pipeline_name):
     current_stage = get_current_stage(pipeline_name)
     if current_stage is None:
         abort(500,
-              "Database error. Have you tried syncing some pipelines using gocddash_sync.py? Current_stage is None.")
+              "Database error. Have you tried syncing some pipelines "
+              "using gocddash_sync.py? Current_stage is None.")
     current_status = pipeline_status.create_stage_info(current_stage)
     last_stage = get_previous_stage(current_stage)
     previous_status = pipeline_status.create_stage_info(last_stage)
