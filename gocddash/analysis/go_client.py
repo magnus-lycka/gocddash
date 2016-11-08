@@ -96,6 +96,10 @@ class GoSource:  # pragma: no cover
         request = self.api_request("agents/" + agent_uuid, headers={"Accept": "application/vnd.go.cd.v2+json"})
         return request.status_code == 200, request.content.decode("utf-8")
 
+    def go_get_agents(self):
+        request = self.api_request("agents", headers={"Accept": "application/vnd.go.cd.v2+json"})
+        return request.status_code == 200, request.content.decode("utf-8")
+
     def go_request_job_history(self, pipeline_name, stage_name, offset=0):
         return self.simple_api_request("jobs/{}/{}/defaultJob/history/{}".format(
             pipeline_name, stage_name, offset))
