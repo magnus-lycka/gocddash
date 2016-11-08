@@ -10,9 +10,8 @@ def get_failure_tip(current, previous, last_success):
 
 def handle_failure(current, previous, last_success):
     last_claim = ""
-    if previous and current:
-        if previous.stage.description and previous.stage.responsible:
-            last_claim = "Last claim: {}: {}".format(previous.stage.responsible, previous.stage.description)
+    if previous and previous.stage.responsible:
+        last_claim = "Last claim: {}: {}".format(previous.stage.responsible, previous.stage.description)
     if current.stage.failure_stage == "POST":
         return "All tests passed, but the build failed.", last_claim
     elif current.stage.failure_stage == "STARTUP":
@@ -69,19 +68,11 @@ class FailureRecommendation:
         self.default = "Last pipeline was a failure. Further investigation is recommended."
 
     def get_initial_recommendation(self):
-        statistics_match = self.any_match()
-        if statistics_match:
-            return statistics_match
-
-    def get_fallback_recommendation(self):
-        return self.pick_match()
-
-    def any_match(self):
         for predicate, string in self.statistics_actions:
             if predicate():
                 return string
 
-    def pick_match(self):
+    def get_fallback_recommendation(self):
         for predicate, string in self.fallback_actions:
             if predicate():
                 return string

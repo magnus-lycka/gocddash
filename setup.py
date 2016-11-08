@@ -13,7 +13,7 @@ with open('requirements.txt') as req_file:
 if __name__ == '__main__':
     setup(
         name='gocddash',
-        version='2.1',
+        version='2.2',
         description='A status dashboard for Go.CD.',
         author='Magnus Lyckå, Emily Bache',
         author_email='magnus@thinkware.se, emily.bache@pagero.com',
@@ -50,7 +50,6 @@ if __name__ == '__main__':
         scripts=[
             'gocddash/gocddash_app.py',
             'gocddash/gocddash_profiler.py',
-            'gocddash_sync.py',
-            'gocddash_cli.py',
-            'gocddash_truncate.py'],
+            'gocddash/gocddash_sync.py',
+        ],
     )

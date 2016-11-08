@@ -7,26 +7,22 @@ from .go_client import go_get_cctray
 def get_previous_stage(current_stage):
     result = get_connection().fetch_previous_stage(current_stage.pipeline_name, current_stage.pipeline_counter,
                                                    current_stage.stage_name, current_stage.stage_counter)
-    if result:
-        return StageFailureInfo(*result)
+    return result and StageFailureInfo(*result)
 
 
 def get_current_stage(pipeline_name):
     result = get_connection().fetch_current_stage(pipeline_name)
-    if result:
-        return StageFailureInfo(*result)
+    return result and StageFailureInfo(*result)
 
 
 def get_latest_passing_stage(pipeline_name):
     result = get_connection().fetch_latest_passing_stage(pipeline_name)
-    if result:
-        return StageFailureInfo(*result)
+    return result and StageFailureInfo(*result)
 
 
 def get_first_synced_stage(pipeline_name):
     result = get_connection().fetch_first_synced(pipeline_name)
-    if result:
-        return StageFailureInfo(*result)
+    return result and StageFailureInfo(*result)
 
 
 def create_stage(pipeline_instance, stage):

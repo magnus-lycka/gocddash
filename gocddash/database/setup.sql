@@ -1,33 +1,66 @@
+CREATE TABLE IF NOT EXISTS pipeline (
+    pipeline_name TEXT NOT NULL PRIMARY KEY,
+    pipeline_group TEXT NOT NULL,
+    sync INTEGER CHECK (sync IN (0, 1)),
+    log_parser TEXT,
+    email_notifications INTEGER CHECK (email_notifications IN (0, 1))
+);
+
+
+CREATE TABLE IF NOT EXISTS pipeline_sync_rule (
+    id INTEGER NOT NULL PRIMARY KEY,
+    kind TEXT NOT NULL DEFAULT 're',
+    pipeline_groups_field TEXT NOT NULL DEFAULT 'pipelines.name',
+    pattern TEXT NOT NULL,
+    sync INTEGER NOT NULL CHECK (sync IN (0, 1)) DEFAULT 0,
+    log_parser TEXT,
+    email_notifications INTEGER NOT NULL CHECK (email_notifications IN (0, 1)) DEFAULT 0,
+    UNIQUE (kind, pipeline_groups_field, pattern)
+);
+
+
+INSERT OR IGNORE INTO pipeline_sync_rule
+    (pattern, sync, log_parser, email_notifications)
+    VALUES
+    ('characterize', 1, 'characterize', 0);
+
+
+INSERT OR IGNORE INTO pipeline_sync_rule
+    (pattern, sync, log_parser, email_notifications)
+    VALUES
+    ('.', 1, 'junit', 0);
+
+
 CREATE TABLE IF NOT EXISTS pipeline_instance(
     id INTEGER NOT NULL PRIMARY KEY,
-    pipeline_name TEXT,
-    pipeline_counter INTEGER,
+    pipeline_name TEXT NOT NULL,
+    pipeline_counter INTEGER NOT NULL,
     trigger_message TEXT
--- Use natural key?
--- Add columns:
---  outcome TEXT,
---  claimant TEXT,
---  claim_text TEXT,
---  email_sent DATETIME,
---  fail_counter INTEGER,
---  pass_counter INTEGER,
---  currently_passing INTEGER -- 0|1 ???
+    outcome TEXT,
+    claimant TEXT,
+    claim_text TEXT,
+    email_sent DATETIME,
+    fail_counter INTEGER,
+    pass_counter INTEGER,
+    currently_passing INTEGER NOT NULL CHECK (currently_passing IN (0, 1)) DEFAULT 0,
+    UNIQUE (pipeline_name, pipeline_counter),
+    FOREIGN KEY(pipeline_name) REFERENCES pipeline(pipeline_name)
 );
 
 
 CREATE TABLE IF NOT EXISTS stage(
     id INTEGER NOT NULL PRIMARY KEY,
-    instance_id INTEGER,
-    stage_counter INTEGER,
-    name TEXT,
+    instance_id INTEGER NOT NULL,
+    stage_counter INTEGER NOT NULL,
+    name TEXT NOT NULL,
     approved_by TEXT,
     scheduled_date DATETIME,
-    result TEXT
+    result TEXT,
+    final INTEGER NOT NULL CHECK (final IN (0, 1)) DEFAULT 0,
+    failure_stage TEXT,
+    UNIQUE (instance_id, name, stage_counter),
+    FOREIGN KEY(instance_id) REFERENCES pipeline_instance(id)
 -- Use natural key?
--- Declare foreign key
--- Add columns:
---  final INTEGER -- 0|1 ???
---  failure_stage TEXT NULL
 );
 
 
@@ -40,7 +73,9 @@ CREATE TABLE IF NOT EXISTS job(
     result TEXT,
     tests_run INTEGER,
     tests_failed INTEGER,
-    tests_skipped INTEGER
+    tests_skipped INTEGER,
+    FOREIGN KEY(agent_uuid) REFERENCES agent(id),
+    FOREIGN KEY(stage_id) REFERENCES stage(id)
 -- Adapt to parent natural key
 );
 
@@ -52,7 +87,7 @@ CREATE TABLE IF NOT EXISTS agent(
 
 
 CREATE TABLE IF NOT EXISTS texttest_failure(
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     stage_id INTEGER,
     test_index INTEGER,
     failure_type TEXT,
@@ -63,14 +98,14 @@ CREATE TABLE IF NOT EXISTS texttest_failure(
 
 -- Replace with column in stage
 CREATE TABLE IF NOT EXISTS failure_information(
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     stage_id INTEGER,
     failure_stage TEXT
 );
 
 
 CREATE TABLE IF NOT EXISTS junit_failure(
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     stage_id INTEGER,
     failure_type TEXT,
     failure_test TEXT
@@ -81,7 +116,7 @@ CREATE TABLE IF NOT EXISTS junit_failure(
 
 -- Replace with columns in pipeline_instance
 CREATE TABLE IF NOT EXISTS instance_claim(
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     pipeline_name TEXT,
     pipeline_counter INTEGER,
     responsible TEXT,
@@ -91,7 +126,7 @@ CREATE TABLE IF NOT EXISTS instance_claim(
 
 -- Replace with column in pipeline_instance
 CREATE TABLE IF NOT EXISTS email_notifications(
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     pipeline_name TEXT,
     pipeline_counter INTEGER,
     sent DATETIME
@@ -99,27 +134,27 @@ CREATE TABLE IF NOT EXISTS email_notifications(
 
 
 -- Replace with column in stage
-CREATE VIEW IF NOT EXISTS final_stages AS
-    SELECT s.*
-    FROM stage s
-    INNER JOIN (
-        SELECT instance_id, max(stage_counter) as stage_counter, name
-        FROM stage
-        GROUP BY instance_id, name
-    ) sa
-    ON s.instance_id = sa.instance_id AND
-       s.stage_counter = sa.stage_counter AND
-       s.name = sa.name;
-
-
 -- CREATE VIEW IF NOT EXISTS final_stages AS
---    SELECT s.*
---    FROM stage s
---    LEFT OUTER JOIN stage sa
---    ON s.name = sa.name AND
---       s.instance_id = sa.instance_id AND
---       s.stage_counter < sa.stage_counter
---    WHERE sa.stage_counter IS NULL;
+--     SELECT s.*
+--     FROM stage s
+--     INNER JOIN (
+--         SELECT instance_id, max(stage_counter) as stage_counter, name
+--         FROM stage
+--         GROUP BY instance_id, name
+--     ) sa
+--     ON s.instance_id = sa.instance_id AND
+--        s.stage_counter = sa.stage_counter AND
+--        s.name = sa.name;
+
+
+CREATE VIEW IF NOT EXISTS final_stages AS
+   SELECT s.*
+   FROM stage s
+   LEFT OUTER JOIN stage sa
+   ON s.name = sa.name AND
+      s.instance_id = sa.instance_id AND
+      s.stage_counter < sa.stage_counter
+   WHERE sa.stage_counter IS NULL;
 
 
 -- replace with column in pipeline_instance
@@ -152,7 +187,7 @@ CREATE VIEW IF NOT EXISTS latest_intervals AS
     )
     SELECT mf.pipeline_name, fail_counter, pass_counter, (fail_counter < pass_counter) as currently_passing
     FROM max_failing mf
-    JOIN max_passing ms
+    LEFT OUTER JOIN max_passing ms
     ON mf.pipeline_name = ms.pipeline_name;
 
 

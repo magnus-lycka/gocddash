@@ -3,10 +3,10 @@
     "name": "Bananas",
     "pipelines": [
       {
-        "name": "asdf"
+        "name": "foo"
       },
       {
-        "name": "fdsa"
+        "name": "bar"
       }
     ]
   }

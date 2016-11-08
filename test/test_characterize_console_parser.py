@@ -180,13 +180,16 @@ class TestConsoleFetcher(unittest.TestCase):
             (13, 'differences', 'routingLog'),
             (13, 'differences', 'stdout')
         ]}
+        real_go_request_console_log = characterize_console_parser.go_request_console_log
+        real_go_request_junit_report = characterize_console_parser.go_request_junit_report
         characterize_console_parser.go_request_console_log = MagicMock(return_value=console_log)
         characterize_console_parser.go_request_junit_report = MagicMock(return_value=(False, ''))
         test_object = characterize_console_parser.TexttestConsoleParser('ct-t', 2064, 1, 'runTests', 'defaultJob')
         output_dictionary = test_object.parse_info()
         self.maxDiff = None
         self.assertEqual(output_dictionary, error_dictionary)
-
+        characterize_console_parser.go_request_console_log = real_go_request_console_log
+        characterize_console_parser.go_request_junit_report = real_go_request_junit_report
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,5 @@
 import unittest
-from gocddash.analysis.go_request import calculate_request
+from gocddash.analysis.actions import calculate_request
 
 
 class TestGoFailureExtractor(unittest.TestCase):

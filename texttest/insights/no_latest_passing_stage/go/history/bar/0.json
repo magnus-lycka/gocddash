@@ -1,0 +1,56 @@
+{
+  "pagination":{
+    "page_size": 10,
+    "total":57
+  },
+  "pipelines":[
+    {
+      "counter": 57,
+      "name": "bar",
+      "id": 6948,
+      "build_cause": {
+        "trigger_message": "hej :)"
+      },
+      "stages": [
+        {
+          "scheduled": true,
+          "result": "Failure",
+          "counter": 1,
+          "name": "beta"
+        }
+      ]
+    },
+    {
+      "counter": 56,
+      "name": "bar",
+      "id": 6947,
+      "build_cause": {
+        "trigger_message": "hej :)"
+      },
+      "stages": [
+        {
+          "scheduled": true,
+          "result": "Failure",
+          "counter": 1,
+          "name": "beta"
+        }
+      ]
+    },
+    {
+      "counter": 55,
+      "name": "bar",
+      "id": 6946,
+      "build_cause": {
+        "trigger_message": "hej :)"
+      },
+      "stages": [
+        {
+          "scheduled": true,
+          "result": "Failure",
+          "counter": 1,
+          "name": "beta"
+        }
+      ]
+    }
+  ]
+}

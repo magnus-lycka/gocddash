@@ -12,6 +12,7 @@ default_checkout:gocddash
 default_interface:console
 
 link_test_path:actions.txt
+link_test_path:agents.json
 link_test_path:application.cfg
 link_test_path:pipelines.json
 link_test_path:go/compare.html
@@ -27,6 +28,9 @@ link_test_path:go/status
 
 [collate_file]
 gui_log:gui_log.txt
+# Enable db collation for debug if needed
+# db_after_sync:db_after_sync
+# db_after_test:db_after_test
 [end]
 
 [run_dependent_text]

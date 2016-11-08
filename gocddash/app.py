@@ -12,7 +12,7 @@ from flask import flash, current_app, jsonify
 
 from gocddash.appcoverage import cover  # Make sure this comes before other gocddash imports
 from gocddash.util.pipeline_config import create_pipeline_config
-from gocddash.analysis.go_client import go_get_pipeline_groups, go_get_pipeline_status, create_go_client
+from gocddash.analysis.go_client import go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.dashboard import failure_tip, pipeline_status
 from gocddash.dashboard.graph import pipeline_history_chart_json, agent_success_rate_chart_json
@@ -48,7 +48,8 @@ def dashboard():
     which = request.args.get('which', 'failing')
     project = get_cctray_status()
     progress_bar_data = get_progress_bar_data(project)
-    groups = request.cookies.get('checked_pipeline_groups_cookie', '').split(',')
+    groups = request.cookies.get('checked_pipeline_groups_cookie',
+                                 ','.join(set(group_of_pipeline.values()))).split(',')
 
     pipelines = project.select(which, groups=groups, group_map=group_of_pipeline)
 
@@ -128,6 +129,8 @@ def select():
         for i, pipeline_group in enumerate(all_pipeline_groups):
             if pipeline_group[0] in checked_pipeline_groups:
                 all_pipeline_groups[i][1] = 'checked'
+            else:
+                all_pipeline_groups[i][1] = ''
         template = render_template('select.html',
                                    go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                                    pipelinegroups=all_pipeline_groups,
@@ -426,17 +429,14 @@ def pipeline_is_paused(pipeline_name):
 
 
 def get_all_pipeline_groups():
-    kwargs = {}
-    if 'GO_SERVER_USER' in app.config:
-        kwargs['auth'] = (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
-    json_text = go_get_pipeline_groups()
-    full_json = json.loads(json_text)
+    for pipeline in get_connection().list_pipelines():
+        group_of_pipeline[pipeline['pipeline_name']] = pipeline['pipeline_group']
+    temp_dict = defaultdict(list)
+    for pipeline_name, pipeline_group in group_of_pipeline.items():
+        temp_dict[pipeline_group].append(pipeline_name)
     pipeline_groups = []
-    for pipeline_group in full_json:
-        pipeline_groups.append([pipeline_group['name'], '', []])
-        for pipeline in pipeline_group['pipelines']:
-            pipeline_groups[-1][-1].append(pipeline['name'])
-            group_of_pipeline[pipeline['name']] = pipeline_group['name']
+    for pipeline_group, pipeline_list in temp_dict.items():
+        pipeline_groups.append([pipeline_group, 'checked', pipeline_list])
     return pipeline_groups
 
 
@@ -456,7 +456,6 @@ def parse_args():
     parser.add_argument('-c', '--pipeline-columns', type=int, choices=[1, 2, 3, 4],
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     parser.add_argument('-b', '--bind-port', help='bind port')
-    parser.add_argument('--db-port', help='database port')
     parser.add_argument('--pipeline-config', help='pipelines.json path')
     parser.add_argument('--file-client', help='file client folder path')
     pargs = parser.parse_args()
@@ -474,8 +473,7 @@ def main():
             (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
         )
     get_connection(app.config.get('DB_PATH'))
-    pipeline_path = app.config.get('PIPELINE_CONFIG')
-    create_pipeline_config(pipeline_path)
+    get_all_pipeline_groups()
 
 
 if __name__ == '__main__':

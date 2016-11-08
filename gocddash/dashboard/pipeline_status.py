@@ -16,9 +16,6 @@ class StageOutcome:
     def describe_run_outcome(self):  # pragma: no cover
         return NotImplemented
 
-    def describe_rerun(self):  # pragma: no cover
-        return NotImplemented
-
     def __repr__(self):
         return "<{}> {}".format(self.__class__.__name__, self.__dict__)
 
@@ -30,9 +27,6 @@ class StageSuccess(StageOutcome):
     def describe_run_outcome(self):
         return "Success"
 
-    def describe_rerun(self):
-        return "Test was a success. Do not rerun."
-
 
 class StageFailure(StageOutcome):
     def is_success(self):
@@ -40,15 +34,6 @@ class StageFailure(StageOutcome):
 
     def describe_run_outcome(self):
         return "Failure"
-
-    def describe_rerun(self):
-        if self.stage.failure_stage == "POST":
-            desc = "Tests failed at POST. Recommend to rerun tests."
-        elif self.stage.failure_stage == "STARTUP":
-            desc = "Tests failed during STARTUP. Recommend to rerun tests."
-        else:
-            desc = "Failure during TEST phase. Suspected flickering. Recommend to rerun tests."
-        return desc
 
     def get_failure_stage_desc(self):
         return self.stage.failure_stage == "POST" or self.stage.failure_stage == "STARTUP"

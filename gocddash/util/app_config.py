@@ -11,7 +11,7 @@ class AppConfig(Config):
 
     def __init__(self, root_path=None, defaults=None):
         self.__dict__ = self._shared_state
-        if root_path is not None:
+        if root_path is not None or self.root_path is None:
             self._init(root_path, defaults)
 
     def _init(self, root_path, defaults):

@@ -20,7 +20,7 @@ class DefaultConsoleParser:
             elif self._check_test_failures():
                 return "TEST"
             else:
-                return "UNKKNOWN"
+                return "UNKNOWN"
         else:
             return "STARTUP"
 

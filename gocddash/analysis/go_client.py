@@ -6,8 +6,9 @@ cache_timeout = 10
 try:
     cache = MemcachedCache(default_timeout=cache_timeout)
     print("Started MemchachedCache")
-    # Provoke failure unless the service is running.
+    # Provoke failure if the service isn't running.
     cache.get('X')
+    print("Managed to get from Memchached")
 except Exception as error:
     cache = SimpleCache(default_timeout=cache_timeout)
     print('Fell back on SimpleCache due to', error)
@@ -51,6 +52,12 @@ class GoSource:  # pragma: no cover
             print('Failed to get cache for url={};headers={}'.format(url, quote(repr(headers))))
         response = requests.get(self.base_go_url + url, auth=self.auth, headers=headers)
         try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
+                raise LookupError(err)
+            raise
+        try:
             ok = cache.set('url=%s;headers=%s' % (url, quote(repr(headers))), response)
             if ok:
                 self.consecutive_cache_errors = 0
@@ -81,21 +88,17 @@ class GoSource:  # pragma: no cover
         response = self.api_request("pipelines/{}/status".format(pipeline_name))
         return response.content.decode("utf-8")
 
-    def go_get_stage_instance(self, pipeline_name, pipeline_counter, stage_name):
-        template = "stages/{}/{}/instance/{}/1"
-        return self.simple_api_request(template.format(pipeline_name, stage_name, pipeline_counter))
-
     def go_request_stages_history(self, pipeline_name, pipeline_id, stage, stage_name):
         return self.simple_api_request(
-            "stages/" + pipeline_name + "/" + stage_name + "/instance/" + str(pipeline_id) + "/" + str(stage))
+            "stages/{}/{}/instance/{}/{}".format(pipeline_name, stage_name, pipeline_id, stage))
 
     def go_get_agent_information(self, agent_uuid):
         request = self.api_request("agents/" + agent_uuid, headers={"Accept": "application/vnd.go.cd.v2+json"})
         return request.status_code == 200, request.content.decode("utf-8")
 
     def go_request_job_history(self, pipeline_name, stage_name, offset=0):
-        return self.simple_api_request(
-            "jobs/" + pipeline_name + "/" + stage_name + "/defaultJob/history/" + str(offset))
+        return self.simple_api_request("jobs/{}/{}/defaultJob/history/{}".format(
+            pipeline_name, stage_name, offset))
 
     def go_get_pipeline_groups(self):
         return self.simple_api_request("config/pipeline_groups")
@@ -129,10 +132,14 @@ class FileSource:
         self.directory = directory
 
     def read_file(self, path):
-        return open(self.directory + path).read()
+        try:
+            with open(self.directory + path) as f:
+                return f.read()
+        except FileNotFoundError as err:
+            raise LookupError(err)
 
     def go_request_pipeline_history(self, pipeline_name, offset=0):
-        return self.read_file("/history/" + pipeline_name + ".json")
+        return self.read_file("/history/{}/{}.json".format(pipeline_name, offset))
 
     @staticmethod
     def go_get_pipeline_instance(pipeline_name, pipeline_counter):
@@ -151,6 +158,9 @@ class FileSource:
 
     def go_get_agent_information(self, agent_uuid):
         return True, self.read_file("/agents/" + agent_uuid + ".json")
+
+    def go_get_agents(self):
+        return self.read_file("/agents.json")
 
     def go_request_junit_report(self, pipeline_name, pipeline_counter, stage_counter, stage_name, job_name):
         if job_name == "404Job":
@@ -194,7 +204,7 @@ def go_get_pipeline_status(pipeline_name):
     return _go_client.go_get_pipeline_status(pipeline_name)
 
 
-def go_request_stage_instance(pipeline_name, pipeline_counter, stage_index, stage_name):
+def go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name):
     return _go_client.go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name)
 
 
@@ -225,7 +235,6 @@ def go_request_comparison_html(pipeline_name, current, comparison):
 def go_get_cctray():
     return _go_client.go_get_cctray()
 
-
 _go_client = None
 
 
@@ -236,3 +245,13 @@ def create_go_client(base_go_url, auth):
     else:
         _go_client = FileSource(base_go_url)
     return _go_client
+
+
+class GoClient:
+    def __init__(self, go_url=None, auth=None):
+        if go_url:
+            create_go_client(go_url, auth)
+        self.client = _go_client
+
+    def __getattr__(self, item):
+        return getattr(self.client, 'go_' + item)

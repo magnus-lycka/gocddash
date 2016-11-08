@@ -2,12 +2,8 @@
   {
     "name": "Bananas",
     "pipelines": [
-      {
-        "name": "asdf"
-      },
-      {
-        "name": "fdsa"
-      }
+      { "name": "foo" },
+      { "name": "bar" }
     ]
   }
 ]

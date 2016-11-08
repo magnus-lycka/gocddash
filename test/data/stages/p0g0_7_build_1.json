@@ -1,0 +1,30 @@
+{
+    "approval_type": "success",
+    "approved_by": "changes",
+    "artifacts_deleted": false,
+    "clean_working_directory": true,
+    "counter": 1,
+    "fetch_materials": true,
+    "id": 52700,
+    "jobs": [
+        {
+            "agent_uuid": "f446f919-856a-488b-bc58-a23341438fef",
+            "id": 59116,
+            "name": "defaultJob",
+            "original_job_id": null,
+            "pipeline_counter": null,
+            "pipeline_name": null,
+            "rerun": false,
+            "result": "Passed",
+            "scheduled_date": 1476286088191,
+            "stage_counter": null,
+            "stage_name": null,
+            "state": "Completed"
+        }
+    ],
+    "name": "build",
+    "pipeline_counter": 7,
+    "pipeline_name": "p0g0",
+    "rerun_of_counter": null,
+    "result": "Passed"
+}

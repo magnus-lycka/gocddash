@@ -1,1 +1,1 @@
-GET http://127.0.0.1:{port}/dash/?which=failing
+POST http://127.0.0.1:{port}/dash/select/ NoBananas=1

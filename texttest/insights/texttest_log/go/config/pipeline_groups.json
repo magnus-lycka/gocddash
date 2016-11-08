@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Bananas",
+    "pipelines": [
+      { "name": "foo" },
+      { "name": "fnord" },
+      { "name": "qux" },
+      { "name": "norf" },
+      { "name": "baz" },
+      { "name": "snafu-service" },
+      { "name": "snafu-transformation" },
+      { "name": "large-norf" },
+      { "name": "characterize" }
+    ]
+  }
+]

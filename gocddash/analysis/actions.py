@@ -1,3 +1,5 @@
+import math
+
 from gocddash.analysis import pipeline_fetcher, go_request, data_access
 
 
@@ -20,7 +22,7 @@ def pull(pipeline_name, subsequent_pipelines, start, dry_run):
 
 
 def all_info():
-    all_synced = data_access.get_connection().get_synced_pipelines()
+    all_synced = data_access.get_connection().get_synced_pipeline_heads()
     print("I have these pipelines: ")
     print("Pipeline \t\tLocal \tIn Go")
     for pipeline in all_synced:
@@ -52,7 +54,16 @@ def assert_correct_input(pipeline_name, latest_pipeline, max_pipeline_status, su
     return pipeline_name, latest_pipeline, max_pipeline_status, subsequent_pipelines, start
 
 
-def fetch_pipelines(pipeline_name, latest_pipeline, max_pipeline_status, subsequent_pipelines, start):
-    offset, run_times = go_request.calculate_request(latest_pipeline, max_pipeline_status,
-                                                     pipelines=subsequent_pipelines, start=start)
+def fetch_pipelines(pipeline_name, latest_pipeline, max_pipeline_status, subsequent_pipelines, start, chunk_size=10):
+    offset, run_times = calculate_request(latest_pipeline, max_pipeline_status,
+                                          pipelines=subsequent_pipelines, start=start, chunk_size=chunk_size)
     pipeline_fetcher.download_and_store(pipeline_name, offset, run_times)
+
+
+def calculate_request(latest_pipeline, max_pipeline_in_go, pipelines=10, start=0, chunk_size=10):
+    if start == 0:
+        offset = max_pipeline_in_go - latest_pipeline - pipelines
+    else:
+        offset = max_pipeline_in_go - start - pipelines + 1
+    run_times = int(math.ceil(pipelines / chunk_size))
+    return offset, run_times

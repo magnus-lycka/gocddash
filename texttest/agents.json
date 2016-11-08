@@ -1,0 +1,22 @@
+{
+    "_embedded": {
+        "agents": [
+            {
+                "hostname": "goagent1",
+                "uuid": "ebed8cc9-0236-407c-af6e-104139e3ca20"
+            },
+            {
+                "hostname": "goagent2",
+                "uuid": "30834849-e5ff-4674-a69a-ce6c85401de7"
+            }
+        ]
+    },
+    "_links": {
+        "doc": {
+            "href": "https://api.go.cd/#agents"
+        },
+        "self": {
+            "href": "http://go/go/api/agents"
+        }
+    }
+}

@@ -1,27 +1,29 @@
 Started MemchachedCache
-2016-09-21 17:25:00.592418 Starting synchronization.
-Will sync to 0 main /home/magnusl/.texttest/tmp/dash.21Sep172457.32676/dash/insights/full_red/gocddash.sqlite3
-
-2016-09-21 17:25:00.593690 Will synchronize foo from 380 onwards.
-Requested pipelines = 2 (from 380 to 382)
-Pipeline counter: 382
+Managed to get from Memchached
+2016-11-08 13:09:05.240903 Starting synchronization.
+Store synced pipeline bar 57
+  Fetching stage: beta / 1
+sync_job
+job result Failed
+Store synced pipeline bar 56
+  Fetching stage: beta / 1
+sync_job
+job result Failed
+Store synced pipeline bar 55
+  Fetching stage: beta / 1
+sync_job
+job result Passed
+Store synced pipeline foo 382
   Fetching stage: alpha / 1
-Pipeline counter: 381
+sync_job
+job result Passed
+Store synced pipeline foo 381
   Fetching stage: alpha / 1
-Will sync to 0 main /home/magnusl/.texttest/tmp/dash.21Sep172457.32676/dash/insights/full_red/gocddash.sqlite3
-
-2016-09-21 17:25:00.645684 Will synchronize bar from 50 onwards.
-Requested pipelines = 7 (from 50 to 57)
-Pipeline counter: 57
-  Fetching stage: beta / 1
-Pipeline counter: 56
-  Fetching stage: beta / 1
-Pipeline counter: 55
-  Fetching stage: beta / 1
-
-2016-09-21 17:25:00.752362 Done with the backlog.
-
-starting server, application on port 4590, using checkout /home/magnusl/work/gocddash
+sync_job
+job result Passed
+2016-11-08 13:09:05.338224 Synchronization finished.
+2016-11-08 13:09:05.338241 Done!
+starting server, application on port 7841, using checkout /home/magnusl/work/gocddash
 application is started
 pipelines are synced
 Starting test workflow for GO CD Dashboard

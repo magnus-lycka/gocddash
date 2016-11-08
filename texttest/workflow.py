@@ -42,9 +42,17 @@ def start_servers(gocd_dash_path):
     application_port = get_free_port()
     print("starting server, application on port {}, using checkout {}".format(application_port, gocd_dash_path))
 
-    application_process = start_application(None, application_port)
+    application_process = start_application(application_port)
 
     return application_port, application_process
+
+
+def dump_database(file_name):
+    with open(file_name, 'w') as output:
+        data = subprocess.check_output(
+            ['sqlite3', 'gocddash.sqlite3'],
+            input=b'.dump')
+        output.write(data.decode('utf-8'))
 
 
 # noinspection PyUnusedLocal
@@ -113,16 +121,17 @@ def main():
     app_port, application = start_servers(gocd_dash_path)
     try:
         sync_pipelines()
+        dump_database('db_after_sync')
         perform_testcase(app_port)
+        dump_database('db_after_test')
     finally:
         stop_servers(application)
 
 
-def start_application(db_port, application_port):
+def start_application(application_port):
     application_process = subprocess.Popen([executable(),
                                             executable("gocddash_app.py"),
                                             "-b", str(application_port),
-                                            "--db-port", str(db_port),
                                             "--file-client", os.getcwd(),
                                             "--pipeline-config", os.getcwd() + "/pipelines.json"])
 
@@ -156,9 +165,8 @@ def sync_pipelines():
                            "--parallel-mode",
                            "--source=gocddash",
                            executable("gocddash_sync.py"),
-                           "--db-port", str(0),
                            "-a", os.getcwd() + "/application.cfg",
-                           "-p", os.getcwd() + "/pipelines.json",
+#                           "-p", os.getcwd() + "/pipelines.json",
                            "-f", os.getcwd()])
     print("pipelines are synced")
 

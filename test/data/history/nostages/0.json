@@ -1,0 +1,29 @@
+{
+  "pagination": {
+    "offset":0,
+    "total":7,
+    "page_size":10
+  },
+  "pipelines":[
+    {
+      "label":"7",
+      "name":"nostages",
+      "stages":[],
+      "id":47647,
+      "build_cause": {
+        "trigger_message": "modified by xxx"
+      },
+      "counter":7
+    },
+    {
+      "label":"6",
+      "name":"nostages",
+      "stages":[],
+      "id":47621,
+      "build_cause": {
+        "trigger_message": "modified by yyy"
+      },
+      "counter":6
+    }
+  ]
+}

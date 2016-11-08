@@ -1,0 +1,1244 @@
+13:16:43.265 [go] Job Started: 2016-08-19 13:16:43 CEST
+
+13:16:43.265 [go] Start to prepare po-characterize-tests/2253/runTests/1/defaultJob on build-go-agent001 [/var/lib/go-agent]
+13:16:43.729 [go] Cleaning working directory "/var/lib/go-agent/pipelines/po-characterize-tests" since stage is configured to clean working directory
+13:16:43.729 [go] Start to update materials.
+
+13:16:43.729 [go] Start updating po-characterize-tests at revision 6b4bddf72712232a88e78166fa5750e259c20c17 from git@git:pageroonline/test/po-characterize-tests
+13:16:43.731 STDERR: Cloning into '/var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests'...
+13:16:59.054 [GIT] Fetching changes
+13:17:00.140 [GIT] Performing git gc
+13:17:00.141 [GIT] Reset working directory pipelines/po-characterize-tests/po-characterize-tests
+13:17:00.141 [GIT] Cleaning all unversioned files in working copy
+13:17:00.259 [GIT] Cleaning submodule configurations in .git/config
+13:17:00.261 [GIT] Updating working copy to revision 6b4bddf72712232a88e78166fa5750e259c20c17
+13:17:00.337 HEAD is now at 6b4bddf Updated go artifacts
+13:17:00.338 [GIT] Removing modified files in submodules
+13:17:00.373 [GIT] Cleaning all unversioned files in working copy
+13:17:00.389 [go] Done.
+
+13:17:00.389 [go] setting environment variable 'GO_SERVER_URL' to value 'https://10.1.182.69:8154/go'
+13:17:00.389 [go] setting environment variable 'GO_TRIGGER_USER' to value 'changes'
+13:17:00.389 [go] setting environment variable 'GO_PIPELINE_NAME' to value 'po-characterize-tests'
+13:17:00.389 [go] setting environment variable 'GO_PIPELINE_COUNTER' to value '2253'
+13:17:00.389 [go] setting environment variable 'GO_PIPELINE_LABEL' to value '2253'
+13:17:00.390 [go] setting environment variable 'GO_STAGE_NAME' to value 'runTests'
+13:17:00.390 [go] setting environment variable 'GO_STAGE_COUNTER' to value '1'
+13:17:00.390 [go] setting environment variable 'GO_JOB_NAME' to value 'defaultJob'
+13:17:00.390 [go] setting environment variable 'GO_DEPENDENCY_LABEL_UPDATE_PLATFORMRECIPE' to value '2289'
+13:17:00.390 [go] setting environment variable 'GO_DEPENDENCY_LOCATOR_UPDATE_PLATFORMRECIPE' to value 'update-platformrecipe/2289/build/1'
+13:17:00.390 [go] setting environment variable 'GO_REVISION_PO_CHARACTERIZE_TESTS' to value '6b4bddf72712232a88e78166fa5750e259c20c17'
+13:17:00.390 [go] setting environment variable 'GO_TO_REVISION_PO_CHARACTERIZE_TESTS' to value '6b4bddf72712232a88e78166fa5750e259c20c17'
+13:17:00.390 [go] setting environment variable 'GO_FROM_REVISION_PO_CHARACTERIZE_TESTS' to value '6b4bddf72712232a88e78166fa5750e259c20c17'
+13:17:00.390 [go] setting environment variable 'GO_DEPENDENCY_LABEL_FORMAT_FILTERS' to value '6'
+13:17:00.390 [go] setting environment variable 'GO_DEPENDENCY_LOCATOR_FORMAT_FILTERS' to value 'format-filters/6/build/2'
+13:17:00.390 [go] setting environment variable 'GOCD_PIPELINE_VERSION' to value '1'
+
+13:17:00.397 [go] Start to build po-characterize-tests/2253/runTests/1/defaultJob on build-go-agent001 [/var/lib/go-agent]
+13:17:00.397 [go] Current job status: passed.
+
+13:17:00.397 [go] Start to execute task: <fetchartifact pipeline="update-platformrecipe" stage="build" job="defaultJob" srcdir="go-artifact" dest="upstream_platformrecipe" />.
+13:17:00.397 [go] Fetching artifact [go-artifact] from [update-platformrecipe/2289/build/1/defaultJob]
+13:17:00.407 [go] Saved artifact to [pipelines/po-characterize-tests/upstream_platformrecipe] after verifying the integrity of its contents.
+13:17:00.407 [go] Current job status: passed.
+
+13:17:00.407 [go] Start to execute task: <fetchartifact pipeline="format-filters" stage="build" job="defaultJob" srcdir="go-artifact" dest="upstream_format-filters" />.
+13:17:00.407 [go] Fetching artifact [go-artifact] from [format-filters/6/build/2/defaultJob]
+13:17:00.419 [go] Saved artifact to [pipelines/po-characterize-tests/upstream_format-filters] after verifying the integrity of its contents.
+13:17:00.419 [go] Current job status: passed.
+
+13:17:00.419 [go] Start to execute task: <exec command="/home/go/.local/bin/delete_service_logs" workingdir="po-characterize-tests" />.
+13:17:01.467 deleted /var/log/services
+13:17:02.027 [go] Current job status: passed.
+
+13:17:02.027 [go] Start to execute task: <exec command="/bin/bash" workingdir="po-characterize-tests" >
+<arg>-c</arg>
+<arg>/bin/cp ../upstream_platformrecipe/go-artifact/*.sbt . | true</arg>
+</exec>.
+13:17:02.030 [go] Current job status: passed.
+
+13:17:02.030 [go] Start to execute task: <exec command="/bin/bash" workingdir="po-characterize-tests" >
+<arg>-c</arg>
+<arg>/bin/cp ../upstream_format-filters/go-artifact/*.sbt . | true</arg>
+</exec>.
+13:17:02.133 [go] Current job status: passed.
+
+13:17:02.133 [go] Start to execute task: <exec command="./go-run-tests.sh" workingdir="po-characterize-tests" >
+<arg>small</arg>
+</exec>.
+13:17:06.350 [0m[[0minfo[0m] [0mLoading global plugins from /var/go/.sbt/0.13/plugins[0m
+13:17:09.975 [0m[[0minfo[0m] [0mLoading project definition from /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/project[0m
+13:17:10.048 [0m[[0minfo[0m] [0mUpdating {file:/var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/project/}po-characterize-tests-build...[0m
+13:17:10.091 [0m[[0minfo[0m] [0mResolving org.scala-sbt#root;0.0 ...[0m
+13:17:10.114 [A
+13:17:10.114 [2K[0m[[0minfo[0m] [0mResolving com.pagero#sbt-global;1.0-SNAPSHOT ...[0m
+13:17:10.117 [A
+13:17:10.117 [2K[0m[[0minfo[0m] [0mResolving com.pagero#sbt-commons;0.38 ...[0m
+13:17:10.204 [A
+13:17:10.204 [2K[0m[[0minfo[0m] [0mResolving com.github.gseitz#sbt-release;0.8.5 ...[0m
+13:17:10.227 [A
+13:17:10.227 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.sbt#sbt-git;0.6.4 ...[0m
+13:17:10.249 [A
+13:17:10.249 [2K[0m[[0minfo[0m] [0mResolving org.eclipse.jgit#org.eclipse.jgit.pgm;3.3.2.201404171909-r ...[0m
+13:17:10.273 [A
+13:17:10.273 [2K[0m[[0minfo[0m] [0mResolving args4j#args4j;2.0.12 ...[0m
+13:17:10.293 [A
+13:17:10.293 [2K[0m[[0minfo[0m] [0mResolving org.apache.commons#commons-compress;1.6 ...[0m
+13:17:10.316 [A
+13:17:10.316 [2K[0m[[0minfo[0m] [0mResolving org.tukaani#xz;1.4 ...[0m
+13:17:10.334 [A
+13:17:10.334 [2K[0m[[0minfo[0m] [0mResolving org.eclipse.jgit#org.eclipse.jgit.archive;3.3.2.201404171909-r ...[0m
+13:17:10.353 [A
+13:17:10.353 [2K[0m[[0minfo[0m] [0mResolving org.eclipse.jgit#org.eclipse.jgit;3.3.2.201404171909-r ...[0m
+13:17:10.388 [A
+13:17:10.389 [2K[0m[[0minfo[0m] [0mResolving com.jcraft#jsch;0.1.50 ...[0m
+13:17:10.409 [A
+13:17:10.409 [2K[0m[[0minfo[0m] [0mResolving com.googlecode.javaewah#JavaEWAH;0.7.9 ...[0m
+13:17:10.423 [A
+13:17:10.423 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpclient;4.1.3 ...[0m
+13:17:10.440 [A
+13:17:10.440 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpcore;4.1.4 ...[0m
+13:17:10.456 [A
+13:17:10.456 [2K[0m[[0minfo[0m] [0mResolving commons-logging#commons-logging;1.1.1 ...[0m
+13:17:10.471 [A
+13:17:10.472 [2K[0m[[0minfo[0m] [0mResolving commons-codec#commons-codec;1.4 ...[0m
+13:17:10.490 [A
+13:17:10.490 [2K[0m[[0minfo[0m] [0mResolving org.osgi#org.osgi.core;4.3.1 ...[0m
+13:17:10.505 [A
+13:17:10.505 [2K[0m[[0minfo[0m] [0mResolving org.eclipse.jgit#org.eclipse.jgit.ui;3.3.2.201404171909-r ...[0m
+13:17:10.522 [A
+13:17:10.522 [2K[0m[[0minfo[0m] [0mResolving org.scoverage#sbt-scoverage;1.3.3 ...[0m
+13:17:10.534 [A
+13:17:10.535 [2K[0m[[0minfo[0m] [0mResolving org.scoverage#scalac-scoverage-plugin_2.10;1.1.1 ...[0m
+13:17:10.550 [A
+13:17:10.550 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-library;2.10.5 ...[0m
+13:17:10.564 [A
+13:17:10.564 [2K[0m[[0minfo[0m] [0mResolving org.scalastyle#scalastyle-sbt-plugin;0.7.0 ...[0m
+13:17:10.578 [A
+13:17:10.578 [2K[0m[[0minfo[0m] [0mResolving org.scalastyle#scalastyle_2.10;0.7.0 ...[0m
+13:17:10.594 [A
+13:17:10.594 [2K[0m[[0minfo[0m] [0mResolving com.typesafe#config;1.2.0 ...[0m
+13:17:10.607 [A
+13:17:10.607 [2K[0m[[0minfo[0m] [0mResolving org.scalariform#scalariform_2.10;0.1.7 ...[0m
+13:17:10.620 [A
+13:17:10.620 [2K[0m[[0minfo[0m] [0mResolving org.texttest#sbt-texttest;1.8 ...[0m
+13:17:10.630 [A
+13:17:10.630 [2K[0m[[0minfo[0m] [0mResolving com.pagero#sbt-docker;0.42 ...[0m
+13:17:10.768 [A
+13:17:10.768 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#sbt;0.13.9 ...[0m
+13:17:10.780 [A
+13:17:10.780 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#main;0.13.9 ...[0m
+13:17:10.805 [A
+13:17:10.806 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#actions;0.13.9 ...[0m
+13:17:10.838 [A
+13:17:10.838 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#classpath;0.13.9 ...[0m
+13:17:10.848 [A
+13:17:10.848 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-compiler;2.10.5 ...[0m
+13:17:10.859 [A
+13:17:10.859 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.10.5 ...[0m
+13:17:10.870 [A
+13:17:10.870 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#interface;0.13.9 ...[0m
+13:17:10.881 [A
+13:17:10.881 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#io;0.13.9 ...[0m
+13:17:10.891 [A
+13:17:10.891 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#control;0.13.9 ...[0m
+13:17:10.900 [A
+13:17:10.900 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#launcher-interface;1.0.0-M1 ...[0m
+13:17:10.909 [A
+13:17:10.909 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#completion;0.13.9 ...[0m
+13:17:10.919 [A
+13:17:10.919 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#collections;0.13.9 ...[0m
+13:17:10.929 [A
+13:17:10.929 [2K[0m[[0minfo[0m] [0mResolving jline#jline;2.11 ...[0m
+13:17:10.938 [A
+13:17:10.938 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#api;0.13.9 ...[0m
+13:17:10.947 [A
+13:17:10.948 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#compiler-integration;0.13.9 ...[0m
+13:17:10.957 [A
+13:17:10.957 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#incremental-compiler;0.13.9 ...[0m
+13:17:10.968 [A
+13:17:10.968 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#logging;0.13.9 ...[0m
+13:17:10.979 [A
+13:17:10.979 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#process;0.13.9 ...[0m
+13:17:10.989 [A
+13:17:10.989 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#relation;0.13.9 ...[0m
+13:17:10.998 [A
+13:17:10.998 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#compile;0.13.9 ...[0m
+13:17:11.010 [A
+13:17:11.010 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#classfile;0.13.9 ...[0m
+13:17:11.021 [A
+13:17:11.022 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#persist;0.13.9 ...[0m
+13:17:11.031 [A
+13:17:11.031 [2K[0m[[0minfo[0m] [0mResolving org.scala-tools.sbinary#sbinary_2.10;0.4.2 ...[0m
+13:17:11.039 [A
+13:17:11.039 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#compiler-ivy-integration;0.13.9 ...[0m
+13:17:11.048 [A
+13:17:11.048 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#ivy;0.13.9 ...[0m
+13:17:11.060 [A
+13:17:11.060 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#cross;0.13.9 ...[0m
+13:17:11.070 [A
+13:17:11.070 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt.ivy#ivy;2.3.0-sbt-c5d1b95fdcc1e1007740ffbecf4eb07abc51ec93 ...[0m
+13:17:11.078 [A
+13:17:11.078 [2K[0m[[0minfo[0m] [0mResolving com.jcraft#jsch;0.1.46 ...[0m
+13:17:11.086 [A
+13:17:11.086 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#serialization_2.10;0.1.1 ...[0m
+13:17:11.097 [A
+13:17:11.097 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-pickling_2.10;0.10.0 ...[0m
+13:17:11.110 [A
+13:17:11.110 [2K[0m[[0minfo[0m] [0mResolving org.scalamacros#quasiquotes_2.10;2.0.1 ...[0m
+13:17:11.121 [A
+13:17:11.121 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-core_2.10;3.2.10 ...[0m
+13:17:11.130 [A
+13:17:11.130 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-ast_2.10;3.2.10 ...[0m
+13:17:11.139 [A
+13:17:11.139 [2K[0m[[0minfo[0m] [0mResolving com.thoughtworks.paranamer#paranamer;2.6 ...[0m
+13:17:11.147 [A
+13:17:11.147 [2K[0m[[0minfo[0m] [0mResolving org.spire-math#jawn-parser_2.10;0.6.0 ...[0m
+13:17:11.156 [A
+13:17:11.156 [2K[0m[[0minfo[0m] [0mResolving org.spire-math#json4s-support_2.10;0.6.0 ...[0m
+13:17:11.167 [A
+13:17:11.167 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#run;0.13.9 ...[0m
+13:17:11.175 [A
+13:17:11.175 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#task-system;0.13.9 ...[0m
+13:17:11.184 [A
+13:17:11.184 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#tasks;0.13.9 ...[0m
+13:17:11.192 [A
+13:17:11.192 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#tracking;0.13.9 ...[0m
+13:17:11.199 [A
+13:17:11.200 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#cache;0.13.9 ...[0m
+13:17:11.208 [A
+13:17:11.208 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#testing;0.13.9 ...[0m
+13:17:11.217 [A
+13:17:11.217 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#test-agent;0.13.9 ...[0m
+13:17:11.223 [A
+13:17:11.224 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#test-interface;1.0 ...[0m
+13:17:11.230 [A
+13:17:11.230 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#main-settings;0.13.9 ...[0m
+13:17:11.239 [A
+13:17:11.239 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#apply-macro;0.13.9 ...[0m
+13:17:11.248 [A
+13:17:11.248 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#command;0.13.9 ...[0m
+13:17:11.259 [A
+13:17:11.259 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#logic;0.13.9 ...[0m
+13:17:11.267 [A
+13:17:11.267 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#compiler-interface;0.13.9 ...[0m
+13:17:11.274 [A
+13:17:11.274 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#precompiled-2_8_2;0.13.9 ...[0m
+13:17:11.280 [A
+13:17:11.280 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#precompiled-2_9_2;0.13.9 ...[0m
+13:17:11.287 [A
+13:17:11.287 [2K[0m[[0minfo[0m] [0mResolving org.scala-sbt#precompiled-2_9_3;0.13.9 ...[0m
+13:17:11.630 [A
+13:17:11.630 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#jline;2.10.5 ...[0m
+13:17:11.637 [A
+13:17:11.637 [2K[0m[[0minfo[0m] [0mResolving org.fusesource.jansi#jansi;1.4 ...[0m
+13:17:11.854 [0m[[0minfo[0m] [0mDone updating.[0m
+13:17:17.614 [0m[[0minfo[0m] [0mSet current project to po-characterize-tests (in build file:/var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/)[0m
+13:17:17.852 [0m[[0minfo[0m] [0mdownloading jar:file:/home/go/.ivy2/cache/scala_2.10/sbt_0.13/com.pagero/sbt-commons/jars/sbt-commons-0.38.jar!/pagero-scalastyle-config.xml to /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target/scalastyle-config.xml[0m
+13:17:17.873 [0m[[0minfo[0m] [0mscalastyle using config /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target/scalastyle-config.xml[0m
+13:17:17.999 [0m[[0minfo[0m] [0mProcessed 0 file(s)[0m
+13:17:17.999 [0m[[0minfo[0m] [0mFound 0 errors[0m
+13:17:17.999 [0m[[0minfo[0m] [0mFound 0 warnings[0m
+13:17:18.000 [0m[[0minfo[0m] [0mFound 0 infos[0m
+13:17:18.000 [0m[[0minfo[0m] [0mFinished in 5 ms[0m
+13:17:18.001 [0m[[32msuccess[0m] [0mcreated output: /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target[0m
+13:17:18.053 [0m[[0minfo[0m] [0mUpdating {file:/var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/}po-characterize-tests...[0m
+13:17:18.056 [0m[[0minfo[0m] [0mResolving com.pagero#platformrecipe;1.2289.1-GO ...[0m
+13:17:18.066 [A
+13:17:18.066 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-library;2.11.7 ...[0m
+13:17:18.072 [A
+13:17:18.072 [2K[0m[[0minfo[0m] [0mResolving com.pagero#recipe-deployer_2.11;0.104 ...[0m
+13:17:18.079 [A
+13:17:18.079 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-classic;1.1.2 ...[0m
+13:17:18.149 [A
+13:17:18.149 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-core;1.1.2 ...[0m
+13:17:18.156 [A
+13:17:18.157 [2K[0m[[0minfo[0m] [0mResolving fr.janalyse#janalyse-ssh_2.11;0.9.14 ...[0m
+13:17:18.163 [A
+13:17:18.163 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.scala-logging#scala-logging-slf4j_2.11;2.1.2 ...[0m
+13:17:18.170 [A
+13:17:18.170 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.scala-logging#scala-logging-api_2.11;2.1.2 ...[0m
+13:17:18.176 [A
+13:17:18.177 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.11.0 ...[0m
+13:17:18.183 [A
+13:17:18.183 [2K[0m[[0minfo[0m] [0mResolving org.slf4j#slf4j-api;1.7.7 ...[0m
+13:17:18.189 [A
+13:17:18.189 [2K[0m[[0minfo[0m] [0mResolving com.jcraft#jsch;0.1.51 ...[0m
+13:17:18.195 [A
+13:17:18.195 [2K[0m[[0minfo[0m] [0mResolving org.apache.commons#commons-compress;1.8.1 ...[0m
+13:17:18.201 [A
+13:17:18.201 [2K[0m[[0minfo[0m] [0mResolving com.github.scopt#scopt_2.11;3.2.0 ...[0m
+13:17:18.207 [A
+13:17:18.207 [2K[0m[[0minfo[0m] [0mResolving com.pagero#monitored-service-api_2.11;0.10 ...[0m
+13:17:18.214 [A
+13:17:18.214 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-client_2.11;1.3.2 ...[0m
+13:17:18.220 [A
+13:17:18.221 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-can_2.11;1.3.2 ...[0m
+13:17:18.227 [A
+13:17:18.227 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-io_2.11;1.3.2 ...[0m
+13:17:18.234 [A
+13:17:18.234 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-util_2.11;1.3.2 ...[0m
+13:17:18.244 [A
+13:17:18.244 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-http_2.11;1.3.2 ...[0m
+13:17:18.251 [A
+13:17:18.251 [2K[0m[[0minfo[0m] [0mResolving org.parboiled#parboiled-scala_2.11;1.1.6 ...[0m
+13:17:18.257 [A
+13:17:18.257 [2K[0m[[0minfo[0m] [0mResolving org.parboiled#parboiled-core;1.1.6 ...[0m
+13:17:18.263 [A
+13:17:18.263 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-httpx_2.11;1.3.2 ...[0m
+13:17:18.271 [A
+13:17:18.271 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-xml_2.11;1.0.2 ...[0m
+13:17:18.278 [A
+13:17:18.278 [2K[0m[[0minfo[0m] [0mResolving org.jvnet.mimepull#mimepull;1.9.4 ...[0m
+13:17:18.283 [A
+13:17:18.283 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-slf4j_2.11;2.3.6 ...[0m
+13:17:18.290 [A
+13:17:18.290 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-actor_2.11;2.3.6 ...[0m
+13:17:18.296 [A
+13:17:18.296 [2K[0m[[0minfo[0m] [0mResolving com.typesafe#config;1.2.1 ...[0m
+13:17:18.302 [A
+13:17:18.302 [2K[0m[[0minfo[0m] [0mResolving net.virtual-void#json-lenses_2.11;0.6.0 ...[0m
+13:17:18.308 [A
+13:17:18.308 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-json_2.11;1.3.1 ...[0m
+13:17:18.326 [A
+13:17:18.326 [2K[0m[[0minfo[0m] [0mResolving com.pagero#po-systemtest_2.11;1.297.1-GO ...[0m
+13:17:18.333 [A
+13:17:18.333 [2K[0m[[0minfo[0m] [0mResolving com.pagero#intecon-spec;1.4.1-GO ...[0m
+13:17:18.339 [A
+13:17:18.339 [2K[0m[[0minfo[0m] [0mResolving com.pagero#servicecomm_2.11;0.223 ...[0m
+13:17:18.346 [A
+13:17:18.346 [2K[0m[[0minfo[0m] [0mResolving com.github.sstone#amqp-client_2.11;1.4 ...[0m
+13:17:18.352 [A
+13:17:18.352 [2K[0m[[0minfo[0m] [0mResolving com.rabbitmq#amqp-client;3.3.1 ...[0m
+13:17:18.361 [A
+13:17:18.362 [2K[0m[[0minfo[0m] [0mResolving org.slf4j#slf4j-api;1.7.5 ...[0m
+13:17:18.388 [A
+13:17:18.388 [2K[0m[[0minfo[0m] [0mResolving voldemort.store.compress#h2-lzf;1.0 ...[0m
+13:17:18.393 [A
+13:17:18.393 [2K[0m[[0minfo[0m] [0mResolving org.jolokia#jolokia-jvm;1.1.5 ...[0m
+13:17:18.399 [A
+13:17:18.399 [2K[0m[[0minfo[0m] [0mResolving org.jolokia#jolokia-core;1.1.5 ...[0m
+13:17:18.405 [A
+13:17:18.405 [2K[0m[[0minfo[0m] [0mResolving com.googlecode.json-simple#json-simple;1.1 ...[0m
+13:17:18.411 [A
+13:17:18.411 [2K[0m[[0minfo[0m] [0mResolving nl.grons#metrics-scala_2.11;3.2.0 ...[0m
+13:17:18.417 [A
+13:17:18.417 [2K[0m[[0minfo[0m] [0mResolving com.codahale.metrics#metrics-core;3.0.2 ...[0m
+13:17:18.423 [A
+13:17:18.423 [2K[0m[[0minfo[0m] [0mResolving com.codahale.metrics#metrics-healthchecks;3.0.2 ...[0m
+13:17:18.429 [A
+13:17:18.429 [2K[0m[[0minfo[0m] [0mResolving javax.management#jmxremote-optional;1.0.1-03 ...[0m
+13:17:18.435 [A
+13:17:18.435 [2K[0m[[0minfo[0m] [0mResolving com.pagero#monitored-service-api_2.11;0.13 ...[0m
+13:17:18.451 [A
+13:17:18.451 [2K[0m[[0minfo[0m] [0mResolving se.pagero#transaction-sorter;1.1 ...[0m
+13:17:18.457 [A
+13:17:18.457 [2K[0m[[0minfo[0m] [0mResolving net.sourceforge.jexcelapi#jxl;2.6.10 ...[0m
+13:17:18.462 [A
+13:17:18.462 [2K[0m[[0minfo[0m] [0mResolving log4j#log4j;1.2.14 ...[0m
+13:17:18.468 [A
+13:17:18.468 [2K[0m[[0minfo[0m] [0mResolving com.pagero#paysol-compiled-specs_2.11;0.105 ...[0m
+13:17:18.476 [A
+13:17:18.477 [2K[0m[[0minfo[0m] [0mResolving net.sandrogrzicic#scalabuff-runtime_2.11;1.4.0 ...[0m
+13:17:18.483 [A
+13:17:18.483 [2K[0m[[0minfo[0m] [0mResolving com.google.protobuf#protobuf-java;2.5.0 ...[0m
+13:17:18.488 [A
+13:17:18.488 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-parser-combinators_2.11;1.0.3 ...[0m
+13:17:18.494 [A
+13:17:18.494 [2K[0m[[0minfo[0m] [0mResolving com.pagero#interchange-spec;0.6 ...[0m
+13:17:18.500 [A
+13:17:18.500 [2K[0m[[0minfo[0m] [0mResolving com.pagero#delivery-spec;0.19 ...[0m
+13:17:18.506 [A
+13:17:18.507 [2K[0m[[0minfo[0m] [0mResolving com.pagero#transmissiondoc;0.15 ...[0m
+13:17:18.512 [A
+13:17:18.513 [2K[0m[[0minfo[0m] [0mResolving com.pagero#document-spec;0.19 ...[0m
+13:17:18.518 [A
+13:17:18.518 [2K[0m[[0minfo[0m] [0mResolving com.pagero#pageromail-spec;0.12 ...[0m
+13:17:18.524 [A
+13:17:18.524 [2K[0m[[0minfo[0m] [0mResolving com.pagero#schematron-spec;0.7 ...[0m
+13:17:18.530 [A
+13:17:18.530 [2K[0m[[0minfo[0m] [0mResolving com.pagero#documentevent-spec;0.19 ...[0m
+13:17:18.536 [A
+13:17:18.536 [2K[0m[[0minfo[0m] [0mResolving com.pagero#sendbatchevent-spec;0.2 ...[0m
+13:17:18.542 [A
+13:17:18.542 [2K[0m[[0minfo[0m] [0mResolving com.pagero#print-spec;0.7 ...[0m
+13:17:18.548 [A
+13:17:18.548 [2K[0m[[0minfo[0m] [0mResolving com.pagero#factoring-spec;0.42 ...[0m
+13:17:18.554 [A
+13:17:18.554 [2K[0m[[0minfo[0m] [0mResolving com.pagero#transform-spec;0.5 ...[0m
+13:17:18.560 [A
+13:17:18.560 [2K[0m[[0minfo[0m] [0mResolving com.pagero#smplookup-spec;0.5 ...[0m
+13:17:18.566 [A
+13:17:18.566 [2K[0m[[0minfo[0m] [0mResolving com.pagero#archivepushback-spec;0.17 ...[0m
+13:17:18.573 [A
+13:17:18.573 [2K[0m[[0minfo[0m] [0mResolving com.pagero#archiveindex-spec;0.21 ...[0m
+13:17:18.580 [A
+13:17:18.580 [2K[0m[[0minfo[0m] [0mResolving com.pagero#action-services-spec;0.8 ...[0m
+13:17:18.586 [A
+13:17:18.586 [2K[0m[[0minfo[0m] [0mResolving com.pagero#action-config-spec;0.2 ...[0m
+13:17:18.592 [A
+13:17:18.592 [2K[0m[[0minfo[0m] [0mResolving com.pagero#guerilla-transform-spec;0.10 ...[0m
+13:17:18.598 [A
+13:17:18.598 [2K[0m[[0minfo[0m] [0mResolving com.pagero#price-check-spec;0.21 ...[0m
+13:17:18.604 [A
+13:17:18.604 [2K[0m[[0minfo[0m] [0mResolving com.pagero#digitalsignature-spec;0.7 ...[0m
+13:17:18.610 [A
+13:17:18.610 [2K[0m[[0minfo[0m] [0mResolving com.pagero#preservationsignature-spec;0.2 ...[0m
+13:17:18.616 [A
+13:17:18.616 [2K[0m[[0minfo[0m] [0mResolving com.pagero#commnode-spec;0.8 ...[0m
+13:17:18.622 [A
+13:17:18.622 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-cluster-spec;0.2 ...[0m
+13:17:18.628 [A
+13:17:18.628 [2K[0m[[0minfo[0m] [0mResolving com.pagero#presentation-service-spec;0.2 ...[0m
+13:17:18.636 [A
+13:17:18.636 [2K[0m[[0minfo[0m] [0mResolving com.pagero#encryption-spec;0.4 ...[0m
+13:17:18.649 [A
+13:17:18.649 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-server_2.11;2.1 ...[0m
+13:17:18.655 [A
+13:17:18.655 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-shared_2.11;1.11.28 ...[0m
+13:17:18.661 [A
+13:17:18.661 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-proto_2.11;1.10.7 ...[0m
+13:17:18.668 [A
+13:17:18.669 [2K[0m[[0minfo[0m] [0mResolving org.jboss.netty#netty;3.2.4.Final ...[0m
+13:17:18.675 [A
+13:17:18.675 [2K[0m[[0minfo[0m] [0mResolving com.googlecode#kryo;1.04 ...[0m
+13:17:18.680 [A
+13:17:18.680 [2K[0m[[0minfo[0m] [0mResolving com.googlecode#reflectasm;1.01 ...[0m
+13:17:18.686 [A
+13:17:18.686 [2K[0m[[0minfo[0m] [0mResolving asm#asm;3.2 ...[0m
+13:17:18.690 [A
+13:17:18.690 [2K[0m[[0minfo[0m] [0mResolving com.googlecode#minlog;1.2 ...[0m
+13:17:18.695 [A
+13:17:18.695 [2K[0m[[0minfo[0m] [0mResolving de.javakaffee#kryo-serializers;0.9 ...[0m
+13:17:18.703 [A
+13:17:18.703 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-native_2.11;3.2.10 ...[0m
+13:17:18.708 [A
+13:17:18.708 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-core_2.11;3.2.10 ...[0m
+13:17:18.713 [A
+13:17:18.713 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-ast_2.11;3.2.10 ...[0m
+13:17:18.719 [A
+13:17:18.719 [2K[0m[[0minfo[0m] [0mResolving com.thoughtworks.paranamer#paranamer;2.6 ...[0m
+13:17:18.724 [A
+13:17:18.724 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scalap;2.11.0 ...[0m
+13:17:18.728 [A
+13:17:18.729 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-compiler;2.11.0 ...[0m
+13:17:18.739 [A
+13:17:18.739 [2K[0m[[0minfo[0m] [0mResolving com.pagero#inteconpushclient_2.11;0.1 ...[0m
+13:17:18.745 [A
+13:17:18.745 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpclient;4.5.1 ...[0m
+13:17:18.751 [A
+13:17:18.751 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpcore;4.4.3 ...[0m
+13:17:18.757 [A
+13:17:18.757 [2K[0m[[0minfo[0m] [0mResolving commons-logging#commons-logging;1.2 ...[0m
+13:17:18.762 [A
+13:17:18.762 [2K[0m[[0minfo[0m] [0mResolving commons-codec#commons-codec;1.9 ...[0m
+13:17:18.767 [A
+13:17:18.767 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpmime;4.5.1 ...[0m
+13:17:18.773 [A
+13:17:18.773 [2K[0m[[0minfo[0m] [0mResolving com.google.code.gson#gson;2.6.2 ...[0m
+13:17:18.778 [A
+13:17:18.778 [2K[0m[[0minfo[0m] [0mResolving org.bouncycastle#bcprov-jdk15on;1.49 ...[0m
+13:17:18.783 [A
+13:17:18.783 [2K[0m[[0minfo[0m] [0mResolving org.bouncycastle#bcpkix-jdk15on;1.49 ...[0m
+13:17:18.788 [A
+13:17:18.788 [2K[0m[[0minfo[0m] [0mResolving com.pagero.peppol#peppolsender_2.11;0.1 ...[0m
+13:17:18.793 [A
+13:17:18.793 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-classic;1.1.3 ...[0m
+13:17:18.800 [A
+13:17:18.800 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-core;1.1.3 ...[0m
+13:17:18.812 [A
+13:17:18.812 [2K[0m[[0minfo[0m] [0mResolving org.slf4j#jul-to-slf4j;1.7.0 ...[0m
+13:17:18.812 [A
+13:17:18.812 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-slf4j_2.11;2.3.9 ...[0m
+13:17:18.824 [A
+13:17:18.824 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-actor_2.11;2.3.9 ...[0m
+13:17:18.824 [A
+13:17:18.824 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-commons;3.1.0 ...[0m
+13:17:18.833 [A
+13:17:18.833 [2K[0m[[0minfo[0m] [0mResolving org.glassfish.metro#webservices-rt;2.2.1-1 ...[0m
+13:17:18.838 [A
+13:17:18.838 [2K[0m[[0minfo[0m] [0mResolving org.glassfish.metro#webservices-api;2.2.1-1 ...[0m
+13:17:18.844 [A
+13:17:18.844 [2K[0m[[0minfo[0m] [0mResolving com.google.inject#guice;3.0 ...[0m
+13:17:18.851 [A
+13:17:18.851 [2K[0m[[0minfo[0m] [0mResolving javax.inject#javax.inject;1 ...[0m
+13:17:18.856 [A
+13:17:18.856 [2K[0m[[0minfo[0m] [0mResolving aopalliance#aopalliance;1.0 ...[0m
+13:17:18.863 [A
+13:17:18.863 [2K[0m[[0minfo[0m] [0mResolving org.sonatype.sisu.inject#cglib;2.2.1-v20090111 ...[0m
+13:17:18.870 [A
+13:17:18.870 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-api;3.1.0 ...[0m
+13:17:18.877 [A
+13:17:18.878 [2K[0m[[0minfo[0m] [0mResolving joda-time#joda-time;2.1 ...[0m
+13:17:18.883 [A
+13:17:18.884 [2K[0m[[0minfo[0m] [0mResolving commons-io#commons-io;2.4 ...[0m
+13:17:18.889 [A
+13:17:18.889 [2K[0m[[0minfo[0m] [0mResolving javax.mail#mail;1.4 ...[0m
+13:17:18.894 [A
+13:17:18.894 [2K[0m[[0minfo[0m] [0mResolving javax.activation#activation;1.1 ...[0m
+13:17:18.898 [A
+13:17:18.899 [2K[0m[[0minfo[0m] [0mResolving com.pagero.peppol#oxalis-postatistics;1.0 ...[0m
+13:17:18.904 [A
+13:17:18.904 [2K[0m[[0minfo[0m] [0mResolving no.sendregning.ap#oxalis-api;3.0.0 ...[0m
+13:17:18.911 [A
+13:17:18.911 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-outbound;3.1.0 ...[0m
+13:17:18.918 [A
+13:17:18.918 [2K[0m[[0minfo[0m] [0mResolving com.sun.xml.bind#jaxb-impl;2.2.4 ...[0m
+13:17:19.202 [A
+13:17:19.203 [2K[0m[[0minfo[0m] [0mResolving javax.xml.bind#jaxb-api;2.2.3 ...[0m
+13:17:19.209 [A
+13:17:19.209 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-as2;3.1.0 ...[0m
+13:17:19.217 [A
+13:17:19.217 [2K[0m[[0minfo[0m] [0mResolving org.bouncycastle#bcmail-jdk15on;1.49 ...[0m
+13:17:19.223 [A
+13:17:19.224 [2K[0m[[0minfo[0m] [0mResolving javax.activation#activation;1.1.1 ...[0m
+13:17:19.229 [A
+13:17:19.229 [2K[0m[[0minfo[0m] [0mResolving javax.mail#mail;1.4.7 ...[0m
+13:17:19.244 [A
+13:17:19.244 [2K[0m[[0minfo[0m] [0mResolving org.glassfish#javax.annotation;3.1.1-b06 ...[0m
+13:17:19.250 [A
+13:17:19.250 [2K[0m[[0minfo[0m] [0mResolving com.pagero#paysol-rest-client_2.11;1.99.1-GO ...[0m
+13:17:19.258 [A
+13:17:19.258 [2K[0m[[0minfo[0m] [0mResolving org.scalaj#scalaj-http_2.11;0.3.16 ...[0m
+13:17:19.264 [A
+13:17:19.264 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-json_2.11;2.4.3 ...[0m
+13:17:19.271 [A
+13:17:19.271 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-iteratees_2.11;2.4.3 ...[0m
+13:17:19.276 [A
+13:17:19.277 [2K[0m[[0minfo[0m] [0mResolving org.scala-stm#scala-stm_2.11;0.7 ...[0m
+13:17:19.282 [A
+13:17:19.282 [2K[0m[[0minfo[0m] [0mResolving com.typesafe#config;1.3.0 ...[0m
+13:17:19.287 [A
+13:17:19.287 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-functional_2.11;2.4.3 ...[0m
+13:17:19.292 [A
+13:17:19.292 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-datacommons_2.11;2.4.3 ...[0m
+13:17:19.298 [A
+13:17:19.298 [2K[0m[[0minfo[0m] [0mResolving joda-time#joda-time;2.8.1 ...[0m
+13:17:19.303 [A
+13:17:19.303 [2K[0m[[0minfo[0m] [0mResolving org.joda#joda-convert;1.7 ...[0m
+13:17:19.309 [A
+13:17:19.309 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.11.6 ...[0m
+13:17:19.316 [A
+13:17:19.316 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.core#jackson-core;2.5.4 ...[0m
+13:17:19.321 [A
+13:17:19.321 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.core#jackson-annotations;2.5.4 ...[0m
+13:17:19.326 [A
+13:17:19.326 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.core#jackson-databind;2.5.4 ...[0m
+13:17:19.332 [A
+13:17:19.332 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.5.4 ...[0m
+13:17:19.338 [A
+13:17:19.338 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.datatype#jackson-datatype-jsr310;2.5.4 ...[0m
+13:17:19.344 [A
+13:17:19.344 [2K[0m[[0minfo[0m] [0mResolving org.apache.commons#commons-lang3;3.4 ...[0m
+13:17:19.350 [A
+13:17:19.350 [2K[0m[[0minfo[0m] [0mResolving se.pagero#sfti-protocol;1.2.9.28 ...[0m
+13:17:19.356 [A
+13:17:19.356 [2K[0m[[0minfo[0m] [0mResolving com.decodified#scala-ssh_2.11;0.7.0 ...[0m
+13:17:19.362 [A
+13:17:19.362 [2K[0m[[0minfo[0m] [0mResolving net.schmizz#sshj;0.10.0 ...[0m
+13:17:19.441 [A
+13:17:19.441 [2K[0m[[0minfo[0m] [0mResolving commons-net#commons-net;2.0 ...[0m
+13:17:19.447 [A
+13:17:19.447 [2K[0m[[0minfo[0m] [0mResolving com.jcraft#jsch;0.1.53 ...[0m
+13:17:19.459 [A
+13:17:19.459 [2K[0m[[0minfo[0m] [0mResolving com.pagero#format-filters;1.6.2-GO ...[0m
+13:17:19.860 [A
+13:17:19.860 [2K[0m[[0minfo[0m] [0mResolving org.scalatest#scalatest_2.11;2.2.1 ...[0m
+13:17:19.868 [A
+13:17:19.868 [2K[0m[[0minfo[0m] [0mResolving org.scoverage#scalac-scoverage-runtime_2.11;1.1.1 ...[0m
+13:17:19.873 [A
+13:17:19.873 [2K[0m[[0minfo[0m] [0mResolving org.scoverage#scalac-scoverage-plugin_2.11;1.1.1 ...[0m
+13:17:21.206 [A
+13:17:21.206 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-compiler;2.11.7 ...[0m
+13:17:21.212 [A
+13:17:21.212 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.11.7 ...[0m
+13:17:21.217 [A
+13:17:21.217 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-xml_2.11;1.0.4 ...[0m
+13:17:21.236 [A
+13:17:21.237 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-parser-combinators_2.11;1.0.4 ...[0m
+13:17:21.242 [A
+13:17:21.242 [2K[0m[[0minfo[0m] [0mResolving jline#jline;2.12.1 ...[0m
+13:17:21.540 [0m[[0minfo[0m] [0mDone updating.[0m
+13:17:22.068 [0m[[0minfo[0m] [0mReading scoverage instrumentation [/var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target/scala-2.11/scoverage-data/scoverage.coverage.xml][0m
+13:17:22.134 [0m[[0minfo[0m] [0m[36mRun completed in 52 milliseconds.[0m[0m
+13:17:22.134 [0m[[0minfo[0m] [0m[36mTotal number of tests run: 0[0m[0m
+13:17:22.134 [0m[[0minfo[0m] [0m[36mSuites: completed 0, aborted 0[0m[0m
+13:17:22.134 [0m[[0minfo[0m] [0m[36mTests: succeeded 0, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+13:17:22.134 [0m[[0minfo[0m] [0m[33mNo tests were executed.[0m[0m
+13:17:22.145 [0m[[0minfo[0m] [0mUpdating {file:/var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/}po-characterize-tests...[0m
+13:17:22.150 [0m[[0minfo[0m] [0mResolving com.pagero#platformrecipe;1.2289.1-GO ...[0m
+13:17:22.156 [A
+13:17:22.156 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-library;2.11.7 ...[0m
+13:17:22.161 [A
+13:17:22.161 [2K[0m[[0minfo[0m] [0mResolving com.pagero#recipe-deployer_2.11;0.104 ...[0m
+13:17:22.166 [A
+13:17:22.166 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-classic;1.1.2 ...[0m
+13:17:22.172 [A
+13:17:22.172 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-core;1.1.2 ...[0m
+13:17:22.177 [A
+13:17:22.177 [2K[0m[[0minfo[0m] [0mResolving fr.janalyse#janalyse-ssh_2.11;0.9.14 ...[0m
+13:17:22.183 [A
+13:17:22.183 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.scala-logging#scala-logging-slf4j_2.11;2.1.2 ...[0m
+13:17:22.188 [A
+13:17:22.189 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.scala-logging#scala-logging-api_2.11;2.1.2 ...[0m
+13:17:22.194 [A
+13:17:22.194 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.11.0 ...[0m
+13:17:22.199 [A
+13:17:22.199 [2K[0m[[0minfo[0m] [0mResolving org.slf4j#slf4j-api;1.7.7 ...[0m
+13:17:22.204 [A
+13:17:22.204 [2K[0m[[0minfo[0m] [0mResolving com.jcraft#jsch;0.1.51 ...[0m
+13:17:22.209 [A
+13:17:22.209 [2K[0m[[0minfo[0m] [0mResolving org.apache.commons#commons-compress;1.8.1 ...[0m
+13:17:22.218 [A
+13:17:22.218 [2K[0m[[0minfo[0m] [0mResolving com.github.scopt#scopt_2.11;3.2.0 ...[0m
+13:17:22.231 [A
+13:17:22.231 [2K[0m[[0minfo[0m] [0mResolving com.pagero#monitored-service-api_2.11;0.10 ...[0m
+13:17:22.236 [A
+13:17:22.236 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-client_2.11;1.3.2 ...[0m
+13:17:22.245 [A
+13:17:22.246 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-can_2.11;1.3.2 ...[0m
+13:17:22.251 [A
+13:17:22.251 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-io_2.11;1.3.2 ...[0m
+13:17:22.257 [A
+13:17:22.257 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-util_2.11;1.3.2 ...[0m
+13:17:22.263 [A
+13:17:22.263 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-http_2.11;1.3.2 ...[0m
+13:17:22.272 [A
+13:17:22.273 [2K[0m[[0minfo[0m] [0mResolving org.parboiled#parboiled-scala_2.11;1.1.6 ...[0m
+13:17:22.278 [A
+13:17:22.278 [2K[0m[[0minfo[0m] [0mResolving org.parboiled#parboiled-core;1.1.6 ...[0m
+13:17:22.283 [A
+13:17:22.284 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-httpx_2.11;1.3.2 ...[0m
+13:17:22.289 [A
+13:17:22.290 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-xml_2.11;1.0.2 ...[0m
+13:17:22.295 [A
+13:17:22.295 [2K[0m[[0minfo[0m] [0mResolving org.jvnet.mimepull#mimepull;1.9.4 ...[0m
+13:17:22.299 [A
+13:17:22.299 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-slf4j_2.11;2.3.6 ...[0m
+13:17:22.304 [A
+13:17:22.304 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-actor_2.11;2.3.6 ...[0m
+13:17:22.309 [A
+13:17:22.309 [2K[0m[[0minfo[0m] [0mResolving com.typesafe#config;1.2.1 ...[0m
+13:17:22.314 [A
+13:17:22.314 [2K[0m[[0minfo[0m] [0mResolving net.virtual-void#json-lenses_2.11;0.6.0 ...[0m
+13:17:22.319 [A
+13:17:22.320 [2K[0m[[0minfo[0m] [0mResolving io.spray#spray-json_2.11;1.3.1 ...[0m
+13:17:22.333 [A
+13:17:22.333 [2K[0m[[0minfo[0m] [0mResolving com.pagero#po-systemtest_2.11;1.297.1-GO ...[0m
+13:17:22.339 [A
+13:17:22.339 [2K[0m[[0minfo[0m] [0mResolving com.pagero#intecon-spec;1.4.1-GO ...[0m
+13:17:22.344 [A
+13:17:22.344 [2K[0m[[0minfo[0m] [0mResolving com.pagero#servicecomm_2.11;0.223 ...[0m
+13:17:22.350 [A
+13:17:22.350 [2K[0m[[0minfo[0m] [0mResolving com.github.sstone#amqp-client_2.11;1.4 ...[0m
+13:17:22.356 [A
+13:17:22.356 [2K[0m[[0minfo[0m] [0mResolving com.rabbitmq#amqp-client;3.3.1 ...[0m
+13:17:22.363 [A
+13:17:22.363 [2K[0m[[0minfo[0m] [0mResolving org.slf4j#slf4j-api;1.7.5 ...[0m
+13:17:22.381 [A
+13:17:22.381 [2K[0m[[0minfo[0m] [0mResolving voldemort.store.compress#h2-lzf;1.0 ...[0m
+13:17:22.387 [A
+13:17:22.387 [2K[0m[[0minfo[0m] [0mResolving org.jolokia#jolokia-jvm;1.1.5 ...[0m
+13:17:22.392 [A
+13:17:22.392 [2K[0m[[0minfo[0m] [0mResolving org.jolokia#jolokia-core;1.1.5 ...[0m
+13:17:22.398 [A
+13:17:22.398 [2K[0m[[0minfo[0m] [0mResolving com.googlecode.json-simple#json-simple;1.1 ...[0m
+13:17:22.402 [A
+13:17:22.402 [2K[0m[[0minfo[0m] [0mResolving nl.grons#metrics-scala_2.11;3.2.0 ...[0m
+13:17:22.407 [A
+13:17:22.408 [2K[0m[[0minfo[0m] [0mResolving com.codahale.metrics#metrics-core;3.0.2 ...[0m
+13:17:22.412 [A
+13:17:22.413 [2K[0m[[0minfo[0m] [0mResolving com.codahale.metrics#metrics-healthchecks;3.0.2 ...[0m
+13:17:22.417 [A
+13:17:22.417 [2K[0m[[0minfo[0m] [0mResolving javax.management#jmxremote-optional;1.0.1-03 ...[0m
+13:17:22.421 [A
+13:17:22.422 [2K[0m[[0minfo[0m] [0mResolving com.pagero#monitored-service-api_2.11;0.13 ...[0m
+13:17:22.434 [A
+13:17:22.434 [2K[0m[[0minfo[0m] [0mResolving se.pagero#transaction-sorter;1.1 ...[0m
+13:17:22.440 [A
+13:17:22.440 [2K[0m[[0minfo[0m] [0mResolving net.sourceforge.jexcelapi#jxl;2.6.10 ...[0m
+13:17:22.444 [A
+13:17:22.444 [2K[0m[[0minfo[0m] [0mResolving log4j#log4j;1.2.14 ...[0m
+13:17:22.449 [A
+13:17:22.449 [2K[0m[[0minfo[0m] [0mResolving com.pagero#paysol-compiled-specs_2.11;0.105 ...[0m
+13:17:22.455 [A
+13:17:22.455 [2K[0m[[0minfo[0m] [0mResolving net.sandrogrzicic#scalabuff-runtime_2.11;1.4.0 ...[0m
+13:17:22.461 [A
+13:17:22.461 [2K[0m[[0minfo[0m] [0mResolving com.google.protobuf#protobuf-java;2.5.0 ...[0m
+13:17:22.465 [A
+13:17:22.466 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-parser-combinators_2.11;1.0.3 ...[0m
+13:17:22.471 [A
+13:17:22.471 [2K[0m[[0minfo[0m] [0mResolving com.pagero#interchange-spec;0.6 ...[0m
+13:17:22.476 [A
+13:17:22.476 [2K[0m[[0minfo[0m] [0mResolving com.pagero#delivery-spec;0.19 ...[0m
+13:17:22.482 [A
+13:17:22.482 [2K[0m[[0minfo[0m] [0mResolving com.pagero#transmissiondoc;0.15 ...[0m
+13:17:22.487 [A
+13:17:22.487 [2K[0m[[0minfo[0m] [0mResolving com.pagero#document-spec;0.19 ...[0m
+13:17:22.493 [A
+13:17:22.493 [2K[0m[[0minfo[0m] [0mResolving com.pagero#pageromail-spec;0.12 ...[0m
+13:17:22.499 [A
+13:17:22.499 [2K[0m[[0minfo[0m] [0mResolving com.pagero#schematron-spec;0.7 ...[0m
+13:17:22.504 [A
+13:17:22.504 [2K[0m[[0minfo[0m] [0mResolving com.pagero#documentevent-spec;0.19 ...[0m
+13:17:22.510 [A
+13:17:22.510 [2K[0m[[0minfo[0m] [0mResolving com.pagero#sendbatchevent-spec;0.2 ...[0m
+13:17:22.515 [A
+13:17:22.515 [2K[0m[[0minfo[0m] [0mResolving com.pagero#print-spec;0.7 ...[0m
+13:17:22.520 [A
+13:17:22.520 [2K[0m[[0minfo[0m] [0mResolving com.pagero#factoring-spec;0.42 ...[0m
+13:17:22.526 [A
+13:17:22.526 [2K[0m[[0minfo[0m] [0mResolving com.pagero#transform-spec;0.5 ...[0m
+13:17:22.531 [A
+13:17:22.531 [2K[0m[[0minfo[0m] [0mResolving com.pagero#smplookup-spec;0.5 ...[0m
+13:17:22.535 [A
+13:17:22.535 [2K[0m[[0minfo[0m] [0mResolving com.pagero#archivepushback-spec;0.17 ...[0m
+13:17:22.540 [A
+13:17:22.540 [2K[0m[[0minfo[0m] [0mResolving com.pagero#archiveindex-spec;0.21 ...[0m
+13:17:22.545 [A
+13:17:22.545 [2K[0m[[0minfo[0m] [0mResolving com.pagero#action-services-spec;0.8 ...[0m
+13:17:22.550 [A
+13:17:22.550 [2K[0m[[0minfo[0m] [0mResolving com.pagero#action-config-spec;0.2 ...[0m
+13:17:22.555 [A
+13:17:22.555 [2K[0m[[0minfo[0m] [0mResolving com.pagero#guerilla-transform-spec;0.10 ...[0m
+13:17:22.559 [A
+13:17:22.560 [2K[0m[[0minfo[0m] [0mResolving com.pagero#price-check-spec;0.21 ...[0m
+13:17:22.565 [A
+13:17:22.565 [2K[0m[[0minfo[0m] [0mResolving com.pagero#digitalsignature-spec;0.7 ...[0m
+13:17:22.571 [A
+13:17:22.571 [2K[0m[[0minfo[0m] [0mResolving com.pagero#preservationsignature-spec;0.2 ...[0m
+13:17:22.578 [A
+13:17:22.578 [2K[0m[[0minfo[0m] [0mResolving com.pagero#commnode-spec;0.8 ...[0m
+13:17:22.582 [A
+13:17:22.582 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-cluster-spec;0.2 ...[0m
+13:17:22.588 [A
+13:17:22.588 [2K[0m[[0minfo[0m] [0mResolving com.pagero#presentation-service-spec;0.2 ...[0m
+13:17:22.594 [A
+13:17:22.594 [2K[0m[[0minfo[0m] [0mResolving com.pagero#encryption-spec;0.4 ...[0m
+13:17:22.606 [A
+13:17:22.606 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-server_2.11;2.1 ...[0m
+13:17:22.612 [A
+13:17:22.612 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-shared_2.11;1.11.28 ...[0m
+13:17:22.617 [A
+13:17:22.617 [2K[0m[[0minfo[0m] [0mResolving com.pagero#connect-proto_2.11;1.10.7 ...[0m
+13:17:22.624 [A
+13:17:22.624 [2K[0m[[0minfo[0m] [0mResolving org.jboss.netty#netty;3.2.4.Final ...[0m
+13:17:22.629 [A
+13:17:22.629 [2K[0m[[0minfo[0m] [0mResolving com.googlecode#kryo;1.04 ...[0m
+13:17:22.634 [A
+13:17:22.634 [2K[0m[[0minfo[0m] [0mResolving com.googlecode#reflectasm;1.01 ...[0m
+13:17:22.639 [A
+13:17:22.639 [2K[0m[[0minfo[0m] [0mResolving asm#asm;3.2 ...[0m
+13:17:22.643 [A
+13:17:22.643 [2K[0m[[0minfo[0m] [0mResolving com.googlecode#minlog;1.2 ...[0m
+13:17:22.648 [A
+13:17:22.648 [2K[0m[[0minfo[0m] [0mResolving de.javakaffee#kryo-serializers;0.9 ...[0m
+13:17:22.654 [A
+13:17:22.654 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-native_2.11;3.2.10 ...[0m
+13:17:22.660 [A
+13:17:22.660 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-core_2.11;3.2.10 ...[0m
+13:17:22.666 [A
+13:17:22.666 [2K[0m[[0minfo[0m] [0mResolving org.json4s#json4s-ast_2.11;3.2.10 ...[0m
+13:17:22.670 [A
+13:17:22.670 [2K[0m[[0minfo[0m] [0mResolving com.thoughtworks.paranamer#paranamer;2.6 ...[0m
+13:17:22.675 [A
+13:17:22.675 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scalap;2.11.0 ...[0m
+13:17:22.680 [A
+13:17:22.680 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-compiler;2.11.0 ...[0m
+13:17:22.689 [A
+13:17:22.689 [2K[0m[[0minfo[0m] [0mResolving com.pagero#inteconpushclient_2.11;0.1 ...[0m
+13:17:22.694 [A
+13:17:22.694 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpclient;4.5.1 ...[0m
+13:17:22.699 [A
+13:17:22.699 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpcore;4.4.3 ...[0m
+13:17:22.704 [A
+13:17:22.704 [2K[0m[[0minfo[0m] [0mResolving commons-logging#commons-logging;1.2 ...[0m
+13:17:22.710 [A
+13:17:22.710 [2K[0m[[0minfo[0m] [0mResolving commons-codec#commons-codec;1.9 ...[0m
+13:17:22.716 [A
+13:17:22.716 [2K[0m[[0minfo[0m] [0mResolving org.apache.httpcomponents#httpmime;4.5.1 ...[0m
+13:17:22.721 [A
+13:17:22.721 [2K[0m[[0minfo[0m] [0mResolving com.google.code.gson#gson;2.6.2 ...[0m
+13:17:22.727 [A
+13:17:22.727 [2K[0m[[0minfo[0m] [0mResolving org.bouncycastle#bcprov-jdk15on;1.49 ...[0m
+13:17:22.731 [A
+13:17:22.731 [2K[0m[[0minfo[0m] [0mResolving org.bouncycastle#bcpkix-jdk15on;1.49 ...[0m
+13:17:22.736 [A
+13:17:22.736 [2K[0m[[0minfo[0m] [0mResolving com.pagero.peppol#peppolsender_2.11;0.1 ...[0m
+13:17:22.742 [A
+13:17:22.742 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-classic;1.1.3 ...[0m
+13:17:22.748 [A
+13:17:22.748 [2K[0m[[0minfo[0m] [0mResolving ch.qos.logback#logback-core;1.1.3 ...[0m
+13:17:22.753 [A
+13:17:22.753 [2K[0m[[0minfo[0m] [0mResolving org.slf4j#jul-to-slf4j;1.7.0 ...[0m
+13:17:22.758 [A
+13:17:22.758 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-slf4j_2.11;2.3.9 ...[0m
+13:17:22.763 [A
+13:17:22.763 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.akka#akka-actor_2.11;2.3.9 ...[0m
+13:17:22.769 [A
+13:17:22.769 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-commons;3.1.0 ...[0m
+13:17:22.776 [A
+13:17:22.776 [2K[0m[[0minfo[0m] [0mResolving org.glassfish.metro#webservices-rt;2.2.1-1 ...[0m
+13:17:22.783 [A
+13:17:22.783 [2K[0m[[0minfo[0m] [0mResolving org.glassfish.metro#webservices-api;2.2.1-1 ...[0m
+13:17:22.789 [A
+13:17:22.789 [2K[0m[[0minfo[0m] [0mResolving com.google.inject#guice;3.0 ...[0m
+13:17:22.794 [A
+13:17:22.794 [2K[0m[[0minfo[0m] [0mResolving javax.inject#javax.inject;1 ...[0m
+13:17:22.799 [A
+13:17:22.799 [2K[0m[[0minfo[0m] [0mResolving aopalliance#aopalliance;1.0 ...[0m
+13:17:22.804 [A
+13:17:22.804 [2K[0m[[0minfo[0m] [0mResolving org.sonatype.sisu.inject#cglib;2.2.1-v20090111 ...[0m
+13:17:22.810 [A
+13:17:22.810 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-api;3.1.0 ...[0m
+13:17:22.816 [A
+13:17:22.816 [2K[0m[[0minfo[0m] [0mResolving joda-time#joda-time;2.1 ...[0m
+13:17:22.821 [A
+13:17:22.821 [2K[0m[[0minfo[0m] [0mResolving commons-io#commons-io;2.4 ...[0m
+13:17:22.826 [A
+13:17:22.826 [2K[0m[[0minfo[0m] [0mResolving javax.mail#mail;1.4 ...[0m
+13:17:22.830 [A
+13:17:22.830 [2K[0m[[0minfo[0m] [0mResolving javax.activation#activation;1.1 ...[0m
+13:17:22.835 [A
+13:17:22.835 [2K[0m[[0minfo[0m] [0mResolving com.pagero.peppol#oxalis-postatistics;1.0 ...[0m
+13:17:22.840 [A
+13:17:22.840 [2K[0m[[0minfo[0m] [0mResolving no.sendregning.ap#oxalis-api;3.0.0 ...[0m
+13:17:22.846 [A
+13:17:22.846 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-outbound;3.1.0 ...[0m
+13:17:22.852 [A
+13:17:22.852 [2K[0m[[0minfo[0m] [0mResolving com.sun.xml.bind#jaxb-impl;2.2.4 ...[0m
+13:17:22.857 [A
+13:17:22.857 [2K[0m[[0minfo[0m] [0mResolving javax.xml.bind#jaxb-api;2.2.3 ...[0m
+13:17:22.863 [A
+13:17:22.863 [2K[0m[[0minfo[0m] [0mResolving no.difi.oxalis#oxalis-as2;3.1.0 ...[0m
+13:17:22.869 [A
+13:17:22.869 [2K[0m[[0minfo[0m] [0mResolving org.bouncycastle#bcmail-jdk15on;1.49 ...[0m
+13:17:22.875 [A
+13:17:22.875 [2K[0m[[0minfo[0m] [0mResolving javax.activation#activation;1.1.1 ...[0m
+13:17:22.880 [A
+13:17:22.880 [2K[0m[[0minfo[0m] [0mResolving javax.mail#mail;1.4.7 ...[0m
+13:17:22.889 [A
+13:17:22.889 [2K[0m[[0minfo[0m] [0mResolving org.glassfish#javax.annotation;3.1.1-b06 ...[0m
+13:17:22.899 [A
+13:17:22.899 [2K[0m[[0minfo[0m] [0mResolving com.pagero#paysol-rest-client_2.11;1.99.1-GO ...[0m
+13:17:22.905 [A
+13:17:22.906 [2K[0m[[0minfo[0m] [0mResolving org.scalaj#scalaj-http_2.11;0.3.16 ...[0m
+13:17:22.912 [A
+13:17:22.912 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-json_2.11;2.4.3 ...[0m
+13:17:22.918 [A
+13:17:22.918 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-iteratees_2.11;2.4.3 ...[0m
+13:17:22.923 [A
+13:17:22.923 [2K[0m[[0minfo[0m] [0mResolving org.scala-stm#scala-stm_2.11;0.7 ...[0m
+13:17:22.953 [A
+13:17:22.953 [2K[0m[[0minfo[0m] [0mResolving com.typesafe#config;1.3.0 ...[0m
+13:17:22.958 [A
+13:17:22.958 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-functional_2.11;2.4.3 ...[0m
+13:17:22.963 [A
+13:17:22.963 [2K[0m[[0minfo[0m] [0mResolving com.typesafe.play#play-datacommons_2.11;2.4.3 ...[0m
+13:17:22.967 [A
+13:17:22.967 [2K[0m[[0minfo[0m] [0mResolving joda-time#joda-time;2.8.1 ...[0m
+13:17:22.972 [A
+13:17:22.972 [2K[0m[[0minfo[0m] [0mResolving org.joda#joda-convert;1.7 ...[0m
+13:17:22.977 [A
+13:17:22.977 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.11.6 ...[0m
+13:17:22.983 [A
+13:17:22.983 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.core#jackson-core;2.5.4 ...[0m
+13:17:22.988 [A
+13:17:22.988 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.core#jackson-annotations;2.5.4 ...[0m
+13:17:22.993 [A
+13:17:22.993 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.core#jackson-databind;2.5.4 ...[0m
+13:17:22.999 [A
+13:17:22.999 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.5.4 ...[0m
+13:17:23.004 [A
+13:17:23.004 [2K[0m[[0minfo[0m] [0mResolving com.fasterxml.jackson.datatype#jackson-datatype-jsr310;2.5.4 ...[0m
+13:17:23.010 [A
+13:17:23.010 [2K[0m[[0minfo[0m] [0mResolving org.apache.commons#commons-lang3;3.4 ...[0m
+13:17:23.015 [A
+13:17:23.015 [2K[0m[[0minfo[0m] [0mResolving se.pagero#sfti-protocol;1.2.9.28 ...[0m
+13:17:23.021 [A
+13:17:23.021 [2K[0m[[0minfo[0m] [0mResolving com.decodified#scala-ssh_2.11;0.7.0 ...[0m
+13:17:23.026 [A
+13:17:23.026 [2K[0m[[0minfo[0m] [0mResolving net.schmizz#sshj;0.10.0 ...[0m
+13:17:23.033 [A
+13:17:23.033 [2K[0m[[0minfo[0m] [0mResolving commons-net#commons-net;2.0 ...[0m
+13:17:23.038 [A
+13:17:23.038 [2K[0m[[0minfo[0m] [0mResolving com.jcraft#jsch;0.1.53 ...[0m
+13:17:23.048 [A
+13:17:23.048 [2K[0m[[0minfo[0m] [0mResolving com.pagero#format-filters;1.6.2-GO ...[0m
+13:17:23.387 [A
+13:17:23.387 [2K[0m[[0minfo[0m] [0mResolving org.scalatest#scalatest_2.11;2.2.1 ...[0m
+13:17:23.396 [A
+13:17:23.396 [2K[0m[[0minfo[0m] [0mResolving org.scoverage#scalac-scoverage-runtime_2.11;1.1.1 ...[0m
+13:17:23.400 [A
+13:17:23.400 [2K[0m[[0minfo[0m] [0mResolving org.scoverage#scalac-scoverage-plugin_2.11;1.1.1 ...[0m
+13:17:24.385 [A
+13:17:24.385 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-compiler;2.11.7 ...[0m
+13:17:24.390 [A
+13:17:24.390 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.11.7 ...[0m
+13:17:24.395 [A
+13:17:24.395 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-xml_2.11;1.0.4 ...[0m
+13:17:24.400 [A
+13:17:24.400 [2K[0m[[0minfo[0m] [0mResolving org.scala-lang.modules#scala-parser-combinators_2.11;1.0.4 ...[0m
+13:17:24.405 [A
+13:17:24.405 [2K[0m[[0minfo[0m] [0mResolving jline#jline;2.12.1 ...[0m
+13:17:24.684 [0m[[0minfo[0m] [0mDone updating.[0m
+13:17:24.748 [0m[[0minfo[0m] [0m[0m
+13:17:24.748 [0m[[0minfo[0m] [0mCommand: deploy -e local-systest-characterize -y --force-update *[0m
+13:17:25.302 [0m[[0minfo[0m] [0m[0m
+13:17:25.303 [0m[[0minfo[0m] [0mRecipe: com.pagero:platformrecipe:1.2289.1-GO, built by: go 2016-08-19 13:08:18 on build-go-agent007[0m
+13:17:28.199 [0m[[0minfo[0m] [0m[0m
+13:17:28.199 [0m[[0minfo[0m] [0mPending changes:[0m
+13:17:28.201 [0m[[0minfo[0m] [0m  Stop auth-admin-web1 [dev.localhost] (Undefined in recipe)[0m
+13:17:28.201 [0m[[0minfo[0m] [0m  Stop auth-frontend1 [dev.localhost] (Undefined in recipe)[0m
+13:17:28.201 [0m[[0minfo[0m] [0m  Stop auth-frontenddb1 [dev.localhost] (Undefined in recipe)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Stop hbv-document-statistics1 [dev.localhost] (Undefined in recipe)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Stop hbv-ext-web1 [dev.localhost] (Undefined in recipe)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Stop hbv1 [dev.localhost] (Undefined in recipe)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Stop hbvdb1 [dev.localhost] (Undefined in recipe)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Update etcd1 [dev.localhost] (Requested)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Update cassandra1 [dev.localhost] (Requested)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Update mock-datastorage1 [dev.localhost] (Requested)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Update sftp-server-keys1 [dev.localhost] (Requested)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Update paysoldb1 [dev.localhost] (Version 1.22.1-GO => small-2016-07-12)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Update rabbitmq1 [dev.localhost] (Requested)[0m
+13:17:28.204 [0m[[0minfo[0m] [0m  Update auth1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update pdf-action1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update delivery1 [dev.localhost] (Version 1.63.1-GO => 1.78.1-GO)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update protocol-ftp1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update protocol-sftp1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update digitalsignature1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update protocol-peppol-inbound1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update guerilla-transform1 [dev.localhost] (Version 2.18.1-GO => 2.20.1-GO)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update staticmapping1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update lookup1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update schematron1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update finbankwsprovider-mock1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update hbv-mock1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update sftp-server1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update ftp-server1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update svea-mock1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update intrum-mock1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update commnode-for-factoring-mock1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update receipt-generator1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update httpclient-mock1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update nginx1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m  Update paysol1 [dev.localhost] (Requested)[0m
+13:17:28.205 [0m[[0minfo[0m] [0m[0m
+13:17:28.205 [0m[[0minfo[0m] [0m[0m
+13:17:28.206 [0m[[0minfo[0m] [0m  Executing pending changes[0m
+13:17:28.252 [0m[[0minfo[0m] [0m    Stopping auth-admin-web1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:28.875 [0m[[0minfo[0m] [0m    Stopping auth-frontend1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:29.846 [0m[[0minfo[0m] [0m    Stopping auth-frontenddb1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:31.795 [0m[[0minfo[0m] [0m    Stopping hbv-document-statistics1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:32.855 [0m[[0minfo[0m] [0m    Stopping hbv-ext-web1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:33.390 [0m[[0minfo[0m] [0m    Stopping hbv1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:34.251 [0m[[0minfo[0m] [0m    Stopping hbvdb1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:34.896 [0m[[0minfo[0m] [0m    Updating etcd1 [dev.localhost][0m
+13:17:34.898 [0m[[0minfo[0m] [0m      Stopping etcd1 [dev.localhost] (kill timeout 2 seconds)[0m
+13:17:35.922 [0m[[0minfo[0m] [0m      Removing etcd1 [dev.localhost][0m
+13:17:35.934 [0m[[0minfo[0m] [0m      Creating etcd1 [dev.localhost][0m
+13:17:36.076 [0m[[0minfo[0m] [0m      Starting etcd1 [dev.localhost][0m
+13:17:37.597 [0m[[0minfo[0m] [0m      Waiting for etcd1 [dev.localhost] (max 40 seconds)[0m
+13:17:38.104 [0m[[0minfo[0m] [0m      Waiting 2 seconds after etcd1 [dev.localhost][0m
+13:17:40.105 [0m[[0minfo[0m] [0m      Started etcd1 [dev.localhost][0m
+13:17:40.108 [0m[[0minfo[0m] [0m    Updating cassandra1 [dev.localhost][0m
+13:17:40.110 [0m[[0minfo[0m] [0m      Stopping cassandra1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:17:43.253 [0m[[0minfo[0m] [0m      Removing cassandra1 [dev.localhost][0m
+13:17:43.303 [0m[[0minfo[0m] [0m      Creating cassandra1 [dev.localhost][0m
+13:17:43.433 [0m[[0minfo[0m] [0m      Starting cassandra1 [dev.localhost][0m
+13:17:44.145 [0m[[0minfo[0m] [0m      Waiting 20 seconds after cassandra1 [dev.localhost][0m
+13:18:04.145 [0m[[0minfo[0m] [0m      Started cassandra1 [dev.localhost][0m
+13:18:04.145 [0m[[0minfo[0m] [0m    Updating mock-datastorage1 [dev.localhost][0m
+13:18:04.145 [0m[[0minfo[0m] [0m      Removing mock-datastorage1 [dev.localhost][0m
+13:18:04.180 [0m[[0minfo[0m] [0m      Creating mock-datastorage1 [dev.localhost][0m
+13:18:06.748 [0m[[0minfo[0m] [0m      Starting mock-datastorage1 [dev.localhost][0m
+13:18:08.217 [0m[[0minfo[0m] [0m      Started mock-datastorage1 [dev.localhost][0m
+13:18:08.217 [0m[[0minfo[0m] [0m    Updating sftp-server-keys1 [dev.localhost][0m
+13:18:08.217 [0m[[0minfo[0m] [0m      Removing sftp-server-keys1 [dev.localhost][0m
+13:18:08.242 [0m[[0minfo[0m] [0m      Creating sftp-server-keys1 [dev.localhost][0m
+13:18:09.077 [0m[[0minfo[0m] [0m      Starting sftp-server-keys1 [dev.localhost][0m
+13:18:10.244 [0m[[0minfo[0m] [0m      Started sftp-server-keys1 [dev.localhost][0m
+13:18:10.244 [0m[[0minfo[0m] [0m    Updating paysoldb1 [dev.localhost][0m
+13:18:10.244 [0m[[0minfo[0m] [0m      Stopping paysoldb1 [dev.localhost] (kill timeout 5 seconds)[0m
+13:18:16.270 [0m[[0minfo[0m] [0m      Removing paysoldb1 [dev.localhost][0m
+13:18:16.350 [0m[[0minfo[0m] [0m      Creating paysoldb1 [dev.localhost][0m
+13:18:16.544 [0m[[0minfo[0m] [0m      Starting paysoldb1 [dev.localhost][0m
+13:18:17.466 [0m[[0minfo[0m] [0m      Waiting 2 seconds after paysoldb1 [dev.localhost][0m
+13:18:19.467 [0m[[0minfo[0m] [0m      Started paysoldb1 [dev.localhost][0m
+13:18:19.467 [0m[[0minfo[0m] [0m    Updating rabbitmq1 [dev.localhost][0m
+13:18:19.470 [0m[[0minfo[0m] [0m      Stopping rabbitmq1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:18:20.294 [0m[[0minfo[0m] [0m      Removing rabbitmq1 [dev.localhost][0m
+13:18:20.298 [0m[[0minfo[0m] [0m      Creating rabbitmq1 [dev.localhost][0m
+13:18:20.632 [0m[[0minfo[0m] [0m      Starting rabbitmq1 [dev.localhost][0m
+13:18:21.647 [0m[[0minfo[0m] [0m      Waiting for rabbitmq1 [dev.localhost] (max 40 seconds)[0m
+13:18:40.337 [0m[[0minfo[0m] [0m      Started rabbitmq1 [dev.localhost][0m
+13:18:40.337 [0m[[0minfo[0m] [0m    Updating auth1 [dev.localhost][0m
+13:18:40.338 [0m[[0minfo[0m] [0m      Stopping auth1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:18:41.929 [0m[[0minfo[0m] [0m      Removing auth1 [dev.localhost][0m
+13:18:41.962 [0m[[0minfo[0m] [0m      Creating auth1 [dev.localhost][0m
+13:18:42.085 [0m[[0minfo[0m] [0m      Starting auth1 [dev.localhost][0m
+13:18:43.098 [0m[[0minfo[0m] [0m      Waiting for auth1 [dev.localhost] (max 40 seconds)[0m
+13:18:53.200 [0m[[0minfo[0m] [0m      Started auth1 [dev.localhost][0m
+13:18:53.200 [0m[[0minfo[0m] [0m    Updating pdf-action1 [dev.localhost][0m
+13:18:53.200 [0m[[0minfo[0m] [0m      Removing pdf-action1 [dev.localhost][0m
+13:18:53.204 [0m[[0minfo[0m] [0m      Creating pdf-action1 [dev.localhost][0m
+13:18:53.351 [0m[[0minfo[0m] [0m      Starting pdf-action1 [dev.localhost][0m
+13:18:54.369 [0m[[0minfo[0m] [0m      Waiting for pdf-action1 [dev.localhost] (max 40 seconds)[0m
+13:18:58.407 [0m[[0minfo[0m] [0m      Started pdf-action1 [dev.localhost][0m
+13:18:58.407 [0m[[0minfo[0m] [0m    Updating delivery1 [dev.localhost][0m
+13:18:58.407 [0m[[0minfo[0m] [0m      Removing delivery1 [dev.localhost][0m
+13:18:58.411 [0m[[0minfo[0m] [0m      Creating delivery1 [dev.localhost][0m
+13:18:58.542 [0m[[0minfo[0m] [0m      Starting delivery1 [dev.localhost][0m
+13:18:59.554 [0m[[0minfo[0m] [0m      Waiting for delivery1 [dev.localhost] (max 40 seconds)[0m
+13:19:16.708 [0m[[0minfo[0m] [0m      Started delivery1 [dev.localhost][0m
+13:19:16.708 [0m[[0minfo[0m] [0m    Updating protocol-ftp1 [dev.localhost][0m
+13:19:16.708 [0m[[0minfo[0m] [0m      Removing protocol-ftp1 [dev.localhost][0m
+13:19:16.734 [0m[[0minfo[0m] [0m      Creating protocol-ftp1 [dev.localhost][0m
+13:19:17.080 [0m[[0minfo[0m] [0m      Starting protocol-ftp1 [dev.localhost][0m
+13:19:18.090 [0m[[0minfo[0m] [0m      Waiting for protocol-ftp1 [dev.localhost] (max 40 seconds)[0m
+13:19:23.639 [0m[[0minfo[0m] [0m      Started protocol-ftp1 [dev.localhost][0m
+13:19:23.639 [0m[[0minfo[0m] [0m    Updating protocol-sftp1 [dev.localhost][0m
+13:19:23.639 [0m[[0minfo[0m] [0m      Removing protocol-sftp1 [dev.localhost][0m
+13:19:23.647 [0m[[0minfo[0m] [0m      Creating protocol-sftp1 [dev.localhost][0m
+13:19:23.827 [0m[[0minfo[0m] [0m      Starting protocol-sftp1 [dev.localhost][0m
+13:19:24.839 [0m[[0minfo[0m] [0m      Waiting for protocol-sftp1 [dev.localhost] (max 40 seconds)[0m
+13:19:28.878 [0m[[0minfo[0m] [0m      Started protocol-sftp1 [dev.localhost][0m
+13:19:28.878 [0m[[0minfo[0m] [0m    Updating digitalsignature1 [dev.localhost][0m
+13:19:28.879 [0m[[0minfo[0m] [0m      Removing digitalsignature1 [dev.localhost][0m
+13:19:28.937 [0m[[0minfo[0m] [0m      Creating digitalsignature1 [dev.localhost][0m
+13:19:29.123 [0m[[0minfo[0m] [0m      Starting digitalsignature1 [dev.localhost][0m
+13:19:30.132 [0m[[0minfo[0m] [0m      Waiting for digitalsignature1 [dev.localhost] (max 40 seconds)[0m
+13:19:35.173 [0m[[0minfo[0m] [0m      Started digitalsignature1 [dev.localhost][0m
+13:19:35.173 [0m[[0minfo[0m] [0m    Updating protocol-peppol-inbound1 [dev.localhost][0m
+13:19:35.174 [0m[[0minfo[0m] [0m      Removing protocol-peppol-inbound1 [dev.localhost][0m
+13:19:35.182 [0m[[0minfo[0m] [0m      Creating protocol-peppol-inbound1 [dev.localhost][0m
+13:19:35.548 [0m[[0minfo[0m] [0m      Starting protocol-peppol-inbound1 [dev.localhost][0m
+13:19:36.558 [0m[[0minfo[0m] [0m      Waiting for protocol-peppol-inbound1 [dev.localhost] (max 40 seconds)[0m
+13:19:40.617 [0m[[0minfo[0m] [0m      Started protocol-peppol-inbound1 [dev.localhost][0m
+13:19:40.617 [0m[[0minfo[0m] [0m    Updating guerilla-transform1 [dev.localhost][0m
+13:19:40.617 [0m[[0minfo[0m] [0m      Removing guerilla-transform1 [dev.localhost][0m
+13:19:40.630 [0m[[0minfo[0m] [0m      Creating guerilla-transform1 [dev.localhost][0m
+13:19:40.805 [0m[[0minfo[0m] [0m      Starting guerilla-transform1 [dev.localhost][0m
+13:19:41.821 [0m[[0minfo[0m] [0m      Waiting for guerilla-transform1 [dev.localhost] (max 40 seconds)[0m
+13:19:50.399 [0m[[0minfo[0m] [0m      Started guerilla-transform1 [dev.localhost][0m
+13:19:50.399 [0m[[0minfo[0m] [0m    Updating staticmapping1 [dev.localhost][0m
+13:19:50.399 [0m[[0minfo[0m] [0m      Removing staticmapping1 [dev.localhost][0m
+13:19:50.425 [0m[[0minfo[0m] [0m      Creating staticmapping1 [dev.localhost][0m
+13:19:50.670 [0m[[0minfo[0m] [0m      Starting staticmapping1 [dev.localhost][0m
+13:19:51.678 [0m[[0minfo[0m] [0m      Waiting for staticmapping1 [dev.localhost] (max 40 seconds)[0m
+13:19:55.710 [0m[[0minfo[0m] [0m      Started staticmapping1 [dev.localhost][0m
+13:19:55.710 [0m[[0minfo[0m] [0m    Updating lookup1 [dev.localhost][0m
+13:19:55.710 [0m[[0minfo[0m] [0m      Removing lookup1 [dev.localhost][0m
+13:19:55.713 [0m[[0minfo[0m] [0m      Creating lookup1 [dev.localhost][0m
+13:19:55.974 [0m[[0minfo[0m] [0m      Starting lookup1 [dev.localhost][0m
+13:19:56.983 [0m[[0minfo[0m] [0m      Waiting for lookup1 [dev.localhost] (max 40 seconds)[0m
+13:20:03.033 [0m[[0minfo[0m] [0m      Started lookup1 [dev.localhost][0m
+13:20:03.033 [0m[[0minfo[0m] [0m    Updating schematron1 [dev.localhost][0m
+13:20:03.033 [0m[[0minfo[0m] [0m      Removing schematron1 [dev.localhost][0m
+13:20:03.036 [0m[[0minfo[0m] [0m      Creating schematron1 [dev.localhost][0m
+13:20:03.194 [0m[[0minfo[0m] [0m      Starting schematron1 [dev.localhost][0m
+13:20:04.204 [0m[[0minfo[0m] [0m      Waiting for schematron1 [dev.localhost] (max 40 seconds)[0m
+13:20:26.401 [0m[[0minfo[0m] [0m      Started schematron1 [dev.localhost][0m
+13:20:26.401 [0m[[0minfo[0m] [0m    Updating finbankwsprovider-mock1 [dev.localhost][0m
+13:20:26.401 [0m[[0minfo[0m] [0m      Stopping finbankwsprovider-mock1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:20:27.436 [0m[[0minfo[0m] [0m      Removing finbankwsprovider-mock1 [dev.localhost][0m
+13:20:27.519 [0m[[0minfo[0m] [0m      Creating finbankwsprovider-mock1 [dev.localhost][0m
+13:20:27.673 [0m[[0minfo[0m] [0m      Starting finbankwsprovider-mock1 [dev.localhost][0m
+13:20:28.557 [0m[[0minfo[0m] [0m      Started finbankwsprovider-mock1 [dev.localhost][0m
+13:20:28.557 [0m[[0minfo[0m] [0m    Updating hbv-mock1 [dev.localhost][0m
+13:20:28.559 [0m[[0minfo[0m] [0m      Stopping hbv-mock1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:20:29.673 [0m[[0minfo[0m] [0m      Removing hbv-mock1 [dev.localhost][0m
+13:20:29.677 [0m[[0minfo[0m] [0m      Creating hbv-mock1 [dev.localhost][0m
+13:20:29.907 [0m[[0minfo[0m] [0m      Starting hbv-mock1 [dev.localhost][0m
+13:20:30.915 [0m[[0minfo[0m] [0m      Waiting for hbv-mock1 [dev.localhost] (max 40 seconds)[0m
+13:20:31.427 [0m[[0minfo[0m] [0m      Started hbv-mock1 [dev.localhost][0m
+13:20:31.427 [0m[[0minfo[0m] [0m    Updating sftp-server1 [dev.localhost][0m
+13:20:31.427 [0m[[0minfo[0m] [0m      Stopping sftp-server1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:20:32.932 [0m[[0minfo[0m] [0m      Removing sftp-server1 [dev.localhost][0m
+13:20:32.939 [0m[[0minfo[0m] [0m      Creating sftp-server1 [dev.localhost][0m
+13:20:33.363 [0m[[0minfo[0m] [0m      Starting sftp-server1 [dev.localhost][0m
+13:20:35.111 [0m[[0minfo[0m] [0m      Started sftp-server1 [dev.localhost][0m
+13:20:35.111 [0m[[0minfo[0m] [0m    Updating ftp-server1 [dev.localhost][0m
+13:20:35.111 [0m[[0minfo[0m] [0m      Stopping ftp-server1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:21:05.899 [0m[[0minfo[0m] [0m      Removing ftp-server1 [dev.localhost][0m
+13:21:05.973 [0m[[0minfo[0m] [0m      Creating ftp-server1 [dev.localhost][0m
+13:21:06.138 [0m[[0minfo[0m] [0m      Starting ftp-server1 [dev.localhost][0m
+13:21:07.128 [0m[[0minfo[0m] [0m      Started ftp-server1 [dev.localhost][0m
+13:21:07.128 [0m[[0minfo[0m] [0m    Updating svea-mock1 [dev.localhost][0m
+13:21:07.128 [0m[[0minfo[0m] [0m      Stopping svea-mock1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:21:10.234 [0m[[0minfo[0m] [0m      Removing svea-mock1 [dev.localhost][0m
+13:21:10.467 [0m[[0minfo[0m] [0m      Creating svea-mock1 [dev.localhost][0m
+13:21:10.706 [0m[[0minfo[0m] [0m      Starting svea-mock1 [dev.localhost][0m
+13:21:11.506 [0m[[0minfo[0m] [0m      Started svea-mock1 [dev.localhost][0m
+13:21:11.507 [0m[[0minfo[0m] [0m    Updating intrum-mock1 [dev.localhost][0m
+13:21:11.507 [0m[[0minfo[0m] [0m      Stopping intrum-mock1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:21:12.463 [0m[[0minfo[0m] [0m      Removing intrum-mock1 [dev.localhost][0m
+13:21:12.467 [0m[[0minfo[0m] [0m      Creating intrum-mock1 [dev.localhost][0m
+13:21:12.693 [0m[[0minfo[0m] [0m      Starting intrum-mock1 [dev.localhost][0m
+13:21:13.462 [0m[[0minfo[0m] [0m      Started intrum-mock1 [dev.localhost][0m
+13:21:13.462 [0m[[0minfo[0m] [0m    Updating commnode-for-factoring-mock1 [dev.localhost][0m
+13:21:13.463 [0m[[0minfo[0m] [0m      Stopping commnode-for-factoring-mock1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:21:15.168 [0m[[0minfo[0m] [0m      Removing commnode-for-factoring-mock1 [dev.localhost][0m
+13:21:15.248 [0m[[0minfo[0m] [0m      Creating commnode-for-factoring-mock1 [dev.localhost][0m
+13:21:15.497 [0m[[0minfo[0m] [0m      Starting commnode-for-factoring-mock1 [dev.localhost][0m
+13:21:16.505 [0m[[0minfo[0m] [0m      Waiting for commnode-for-factoring-mock1 [dev.localhost] (max 40 seconds)[0m
+13:21:20.533 [0m[[0minfo[0m] [0m      Started commnode-for-factoring-mock1 [dev.localhost][0m
+13:21:20.533 [0m[[0minfo[0m] [0m    Updating receipt-generator1 [dev.localhost][0m
+13:21:20.533 [0m[[0minfo[0m] [0m      Stopping receipt-generator1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:21:21.538 [0m[[0minfo[0m] [0m      Removing receipt-generator1 [dev.localhost][0m
+13:21:21.584 [0m[[0minfo[0m] [0m      Creating receipt-generator1 [dev.localhost][0m
+13:21:21.939 [0m[[0minfo[0m] [0m      Starting receipt-generator1 [dev.localhost][0m
+13:21:22.706 [0m[[0minfo[0m] [0m      Started receipt-generator1 [dev.localhost][0m
+13:21:22.706 [0m[[0minfo[0m] [0m    Updating httpclient-mock1 [dev.localhost][0m
+13:21:22.706 [0m[[0minfo[0m] [0m      Stopping httpclient-mock1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:21:26.536 [0m[[0minfo[0m] [0m      Removing httpclient-mock1 [dev.localhost][0m
+13:21:26.573 [0m[[0minfo[0m] [0m      Creating httpclient-mock1 [dev.localhost][0m
+13:21:26.849 [0m[[0minfo[0m] [0m      Starting httpclient-mock1 [dev.localhost][0m
+13:21:27.901 [0m[[0minfo[0m] [0m      Started httpclient-mock1 [dev.localhost][0m
+13:21:27.901 [0m[[0minfo[0m] [0m    Updating nginx1 [dev.localhost][0m
+13:21:27.902 [0m[[0minfo[0m] [0m      Stopping nginx1 [dev.localhost] (kill timeout 30 seconds)[0m
+13:21:28.525 [0m[[0minfo[0m] [0m      Removing nginx1 [dev.localhost][0m
+13:21:28.530 [0m[[0minfo[0m] [0m      Creating nginx1 [dev.localhost][0m
+13:21:29.156 [0m[[0minfo[0m] [0m      Starting nginx1 [dev.localhost][0m
+13:21:30.165 [0m[[0minfo[0m] [0m      Waiting for nginx1 [dev.localhost] (max 40 seconds)[0m
+13:21:30.668 [0m[[0minfo[0m] [0m      Started nginx1 [dev.localhost][0m
+13:21:30.668 [0m[[0minfo[0m] [0m    Updating paysol1 [dev.localhost][0m
+13:21:30.669 [0m[[0minfo[0m] [0m      Stopping paysol1 [dev.localhost] (kill timeout 120 seconds)[0m
+13:21:39.189 [0m[[0minfo[0m] [0m      Removing paysol1 [dev.localhost][0m
+13:21:39.272 [0m[[0minfo[0m] [0m      Creating paysol1 [dev.localhost][0m
+13:21:39.549 [0m[[0minfo[0m] [0m      Starting paysol1 [dev.localhost][0m
+13:21:40.558 [0m[[0minfo[0m] [0m      Waiting for paysol1 [dev.localhost] (max 200 seconds)[0m
+13:21:41.124 [0m[[0minfo[0m] [0m        Waiting for paysol1 [dev.localhost] flyway db migration since 13:21:41[0m
+13:21:52.683 [0m[[0minfo[0m] [0m        Finished waiting for paysol1 [dev.localhost] flyway db migration on 13:21:52[0m
+13:23:14.293 [0m[[0minfo[0m] [0m      Waiting 4 seconds after paysol1 [dev.localhost][0m
+13:23:18.294 [0m[[0minfo[0m] [0m      Started paysol1 [dev.localhost][0m
+13:23:18.347 [0m[[0minfo[0m] [0m[0m
+13:23:18.347 [0m[[0minfo[0m] [0mDone![0m
+13:23:18.347 [0m[[0minfo[0m] [0m[0m
+13:23:18.684 [0m[[0minfo[0m] [0mjar: /home/go/.ivy2/cache/com.pagero/format-filters/jars/format-filters-1.6.2-GO.jar being unzipped to /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target/format-filters[0m
+13:23:18.695 [0m[[0minfo[0m] [0mCreated softlink /home/go/texttest/format-filters -> /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target/format-filters[0m
+13:23:18.698 [0m[[0minfo[0m] [0msoftlink not found, will create: src/it/texttest/transformations[0m
+13:23:18.699 [0m[[0minfo[0m] [0mCreated softlink src/it/texttest/transformations -> /home/go/texttest/format-filters/transformations[0m
+13:23:18.703 [0m[[0minfo[0m] [0mchoosing texttestRoot: Some(/home/go/texttest)[0m
+13:23:18.704 [0m[[0minfo[0m] [0mWill install TextTests globally with name List(characterize) under TEXTTEST_ROOT /home/go/texttest[0m
+13:23:18.710 [0m[[0minfo[0m] [0mrunning texttest applications List(characterize) in /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests[0m
+13:23:18.713 [0m[[0minfo[0m] [0mfound texttest on PATH at location: Some(/usr/local/bin/texttest)[0m
+13:23:18.713 [0m[[0minfo[0m] [0mchoosing texttestRoot: Some(/home/go/texttest)[0m
+13:23:18.715 [0m[[0minfo[0m] [0mWill start texttest with this command: List(/usr/local/bin/texttest, -a, characterize, -b, all, -c, /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests, -d, /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/src/it/texttest:/home/go/texttest, -ts, small)[0m
+13:23:18.802 [0m[[0minfo[0m] [0m2016-08-19 13:23:18,801 - Using Application Paysol_Characterization_Tests, checkout /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests[0m
+13:23:18.895 [0m[[0minfo[0m] [0m2016-08-19 13:23:18,894 - Running Paysol_Characterization_Tests test-suite texttest[0m
+13:23:18.895 [0m[[0minfo[0m] [0m2016-08-19 13:23:18,894 -   Running Paysol_Characterization_Tests test-suite small[0m
+13:23:18.895 [0m[[0minfo[0m] [0m2016-08-19 13:23:18,895 -     Running Paysol_Characterization_Tests test-case warmup[0m
+13:23:38.876 [0m[[0minfo[0m] [0m2016-08-19 13:23:38,875 - Comparing differences for Paysol_Characterization_Tests test-suite texttest[0m
+13:23:38.876 [0m[[0minfo[0m] [0m2016-08-19 13:23:38,876 -   Comparing differences for Paysol_Characterization_Tests test-suite small[0m
+13:23:38.877 [0m[[0minfo[0m] [0m2016-08-19 13:23:38,877 -     Comparing differences for Paysol_Characterization_Tests test-case warmup - SUCCESS! (on stdout.characterize)[0m
+13:23:38.900 [0m[[0minfo[0m] [0m2016-08-19 13:23:38,900 -     Running Paysol_Characterization_Tests test-suite APPLICATION_RESPONSE[0m
+13:23:38.901 [0m[[0minfo[0m] [0m2016-08-19 13:23:38,900 -       Running Paysol_Characterization_Tests test-case SOGEISpA[0m
+13:23:46.522 [0m[[0minfo[0m] [0m2016-08-19 13:23:46,522 -     Comparing differences for Paysol_Characterization_Tests test-suite APPLICATION_RESPONSE[0m
+13:23:46.526 [0m[[0minfo[0m] [0m2016-08-19 13:23:46,526 -       Comparing differences for Paysol_Characterization_Tests test-case SOGEISpA - SUCCESS! (on catalogue.characterize,documentMetadata1058973355_277646702_RICOHITALIASRL.characterize,eventsLog.characterize,internalxml_APPLICATION_RESPONSE-1058973355_277646702_RICOHITALIASRL.characterize,primarypres1058973355_277646702_RICOHITALIASRL.characterize,routingLog.characterize,stderr.characterize,stdout.characterize)[0m
+13:23:46.546 [0m[[0minfo[0m] [0m2016-08-19 13:23:46,546 -       Running Paysol_Characterization_Tests test-case SERESSPAIN[0m
+13:23:56.490 [0m[[0minfo[0m] [0m2016-08-19 13:23:56,490 -       Comparing differences for Paysol_Characterization_Tests test-case SERESSPAIN - SUCCESS! (on catalogue.characterize,documentMetadata1060015919_363357042_HewlettPackardServiciosEspaaSL.characterize,eventsLog.characterize,internalxml_APPLICATION_RESPONSE-1060015919_363357042_HewlettPackardServiciosEspaaSL.characterize,primarypres1060015919_363357042_HewlettPackardServiciosEspaaSL.characterize,routingLog.characterize,stderr.characterize,stdout.characterize)[0m
+13:23:56.512 [0m[[0minfo[0m] [0m2016-08-19 13:23:56,512 -     Running Paysol_Characterization_Tests test-suite ORDER_RESPONSE[0m
+13:23:56.512 [0m[[0minfo[0m] [0m2016-08-19 13:23:56,512 -       Running Paysol_Characterization_Tests test-case SCHOELLERALLIBERTGMBH[0m
+13:24:08.959 [0m[[0minfo[0m] [0m2016-08-19 13:24:08,959 -     Comparing differences for Paysol_Characterization_Tests test-suite ORDER_RESPONSE[0m
+13:24:08.969 [0m[[0minfo[0m] [0m2016-08-19 13:24:08,968 -       Comparing differences for Paysol_Characterization_Tests test-case SCHOELLERALLIBERTGMBH (on catalogue.characterize,eventsLog.characterize,internalxml_ORDER_RESPONSE-1062276058_279654258_KaiserKraftEuropaGmbH_0030363209.characterize,routingLog.characterize,stderr.characterize,stdout.characterize,documentMetadata1062276058_279654258_KaiserKraftEuropaGmbH_0030363209.characterize,primarypres1062276058_279654258_KaiserKraftEuropaGmbH_0030363209.characterize)[0m
+13:24:08.969 [0m[[0minfo[0m] [0m2016-08-19 13:24:08,969 -       Paysol_Characterization_Tests test-case SCHOELLERALLIBERTGMBH FAILED on build-go-agent001 : missing results for documentMetadata1062276058_279654258_KaiserKraftEuropaGmbH_0030363209,primarypres1062276058_279654258_KaiserKraftEuropaGmbH_0030363209, differences in catalogue,routingLog,stdout[0m
+13:24:08.996 [0m[[0minfo[0m] [0m2016-08-19 13:24:08,996 -       Running Paysol_Characterization_Tests test-case SLOOy[0m
+13:24:17.178 [0m[[0minfo[0m] [0m2016-08-19 13:24:17,177 -       Comparing differences for Paysol_Characterization_Tests test-case SLOOy - SUCCESS! (on catalogue.characterize,documentMetadata1062277159_71460690_TERAWATTOY_5728539.characterize,eventsLog.characterize,internalxml_ORDER_RESPONSE-1062277159_71460690_TERAWATTOY_5728539.characterize,primarypres1062277159_71460690_TERAWATTOY_5728539.characterize,routingLog.characterize,stderr.characterize,stdout.characterize,target_lvisnet_xml_2_0_order_response_1062277159_71460690_TERAWATTOY_5728539.characterize)[0m
+13:24:17.199 [0m[[0minfo[0m] [0m2016-08-19 13:24:17,199 -       Running Paysol_Characterization_Tests test-case RexelFinlandOy[0m
+13:24:25.277 [0m[[0minfo[0m] [0m2016-08-19 13:24:25,276 -       Comparing differences for Paysol_Characterization_Tests test-case RexelFinlandOy - SUCCESS! (on catalogue.characterize,documentMetadata1062493689_70915408_TERAWATTOYSKANNAUSPALVELU_22662504.characterize,eventsLog.characterize,internalxml_ORDER_RESPONSE-1062493689_70915408_TERAWATTOYSKANNAUSPALVELU_22662504.characterize,primarypres1062493689_70915408_TERAWATTOYSKANNAUSPALVELU_22662504.characterize,routingLog.characterize,stderr.characterize,stdout.characterize,target_lvisnet_xml_2_0_order_response_1062493689_70915408_TERAWATTOYSKANNAUSPALVELU_22662504.characterize)[0m
+13:24:25.300 [0m[[0minfo[0m] [0m2016-08-19 13:24:25,300 -     Running Paysol_Characterization_Tests test-suite DISPATCH_ADVICE[0m
+13:24:25.300 [0m[[0minfo[0m] [0m2016-08-19 13:24:25,300 -       Running Paysol_Characterization_Tests test-case SCHOELLERALLIBERTGMBH[0m
+13:24:32.567 [0m[[0minfo[0m] [0m2016-08-19 13:24:32,566 -     Comparing differences for Paysol_Characterization_Tests test-suite DISPATCH_ADVICE[0m
+13:24:32.570 [0m[[0minfo[0m] [0m2016-08-19 13:24:32,570 -       Comparing differences for Paysol_Characterization_Tests test-case SCHOELLERALLIBERTGMBH - SUCCESS! (on catalogue.characterize,documentMetadata1061147131_279654258_KaiserKraftEuropaGmbH_0030363179.characterize,eventsLog.characterize,internalxml_DISPATCH_ADVICE-1061147131_279654258_KaiserKraftEuropaGmbH_0030363179.characterize,primarypres1061147131_279654258_KaiserKraftEuropaGmbH_0030363179.characterize,routingLog.characterize,stderr.characterize,stdout.characterize)[0m
+13:24:32.594 [0m[[0minfo[0m] [0m2016-08-19 13:24:32,594 -     Running Paysol_Characterization_Tests test-suite ORDER[0m
+13:24:32.594 [0m[[0minfo[0m] [0m2016-08-19 13:24:32,594 -       Running Paysol_Characterization_Tests test-case NemhandelmySupply[0m
+13:24:40.841 [0m[[0minfo[0m] [0m2016-08-19 13:24:40,840 -     Comparing differences for Paysol_Characterization_Tests test-suite ORDER[0m
+13:24:40.845 [0m[[0minfo[0m] [0m2016-08-19 13:24:40,845 -       Comparing differences for Paysol_Characterization_Tests test-case NemhandelmySupply - SUCCESS! (on catalogue.characterize,documentMetadata1062625723_604099820_JohnsonJohnson_3000738528.characterize,eventsLog.characterize,internalxml_ORDER-1062625723_604099820_JohnsonJohnson_3000738528.characterize,primarypres1062625723_604099820_JohnsonJohnson_3000738528.characterize,routingLog.characterize,stderr.characterize,stdout.characterize,target_johnson_johnson_order_1062625723_604099820_JohnsonJohnson_3000738528.characterize)[0m
+13:24:40.864 [0m[[0minfo[0m] [0m2016-08-19 13:24:40,864 -       Running Paysol_Characterization_Tests test-case SLOOy[0m
+13:24:49.872 [0m[[0minfo[0m] [0m2016-08-19 13:24:49,872 -       Comparing differences for Paysol_Characterization_Tests test-case SLOOy - SUCCESS! (on catalogue.characterize,documentMetadata1062618862_558933828_SLO_SOB75310048.characterize,eventsLog.characterize,internalxml_ORDER-1062618862_558933828_SLO_SOB75310048.characterize,primarypres1062618862_558933828_SLO_SOB75310048.characterize,routingLog.characterize,stderr.characterize,stdout.characterize)[0m
+13:24:49.893 [0m[[0minfo[0m] [0m2016-08-19 13:24:49,892 -       Running Paysol_Characterization_Tests test-case Viaduct[0m
+13:24:56.900 [0m[[0minfo[0m] [0m2016-08-19 13:24:56,900 -       Comparing differences for Paysol_Characterization_Tests test-case Viaduct - SUCCESS! (on catalogue.characterize,documentMetadata1062625197_89591847_valueisnull_354929.characterize,eventsLog.characterize,internalxml_ORDER-1062625197_89591847_valueisnull_354929.characterize,primarypres1062625197_89591847_valueisnull_354929.characterize,routingLog.characterize,stderr.characterize,stdout.characterize)[0m
+13:24:56.937 [0m[[0minfo[0m] [0m2016-08-19 13:24:56,937 -     Running Paysol_Characterization_Tests test-suite PAYMENT_REMINDER[0m
+13:24:56.937 [0m[[0minfo[0m] [0m2016-08-19 13:24:56,937 -       Running Paysol_Characterization_Tests test-case GebstAB[0m
+13:25:10.178 [0m[[0minfo[0m] [0m2016-08-19 13:25:10,177 -     Comparing differences for Paysol_Characterization_Tests test-suite PAYMENT_REMINDER[0m
+13:25:10.184 [0m[[0minfo[0m] [0m2016-08-19 13:25:10,184 -       Comparing differences for Paysol_Characterization_Tests test-case GebstAB - SUCCESS! (on catalogue.characterize,documentMetadata1060589718_238763126_GteborgsStadsBostadsABCentrum.characterize,documentMetadata1060589718_238763126_WencheLarsson5007271488.characterize,documentMetadata1060589718_238763126_WinabFretagsserviceAB.characterize,eventsLog.characterize,internalxml_PAYMENT_REMINDER-1060589718_238763126_GteborgsStadsBostadsABCentrum.characterize,internalxml_PAYMENT_REMINDER-1060589718_238763126_WencheLarsson5007271488.characterize,internalxml_PAYMENT_REMINDER-1060589718_238763126_WinabFretagsserviceAB.characterize,primarypres1060589718_238763126_GteborgsStadsBostadsABCentrum.characterize,primarypres1060589718_238763126_WencheLarsson5007271488.characterize,primarypres1060589718_238763126_WinabFretagsserviceAB.characterize,routingLog.characterize,stderr.characterize,stdout.characterize)[0m
+13:25:10.210 [0m[[0minfo[0m] [0m2016-08-19 13:25:10,210 -       Running Paysol_Characterization_Tests test-case LexiumAB[0m
+13:25:22.198 [0m[[0minfo[0m] [0m2016-08-19 13:25:22,198 -       Comparing differences for Paysol_Characterization_Tests test-case LexiumAB - SUCCESS! (on catalogue.characterize,documentMetadata1060372116_138836175_ExpediaSwedenAB.characterize,documentMetadata1060372116_138836175_UnivarAB.characterize,eventsLog.characterize,internalxml_PAYMENT_REMINDER-1060372116_138836175_ExpediaSwedenAB.characterize,internalxml_PAYMENT_REMINDER-1060372116_138836175_UnivarAB.characterize,primarypres1060372116_138836175_ExpediaSwedenAB.characterize,primarypres1060372116_138836175_UnivarAB.characterize,routingLog.characterize,stderr.characterize,stdout.characterize)[0m
+13:25:22.222 [0m[[0minfo[0m] [0m2016-08-19 13:25:22,222 -     Running Paysol_Characterization_Tests test-suite INVOICE[0m
+13:25:22.223 [0m[[0minfo[0m] [0m2016-08-19 13:25:22,222 -       Running Paysol_Characterization_Tests test-case RICOHITALIASRL[0m
+13:25:38.567 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,567 -     Comparing differences for Paysol_Characterization_Tests test-suite INVOICE[0m
+13:25:38.571 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,571 -       Comparing differences for Paysol_Characterization_Tests test-case RICOHITALIASRL - SUCCESS! (on catalogue.characterize,documentMetadata1052718728_245128136_UNIVDIGENOVABIBLIOTECADELLASCUOLAPOLITECNICA_169295790.characterize,eventsLog.characterize,internalxml_INVOICE-1052718728_245128136_UNIVDIGENOVABIBLIOTECADELLASCUOLAPOLITECNICA_169295790.characterize,primarypres1052718728_245128136_UNIVDIGENOVABIBLIOTECADELLASCUOLAPOLITECNICA_169295790.characterize,routingLog.characterize,stderr.characterize,stdout.characterize,target_fatturapa_1_1_1052718728_245128136_UNIVDIGENOVABIBLIOTECADELLASCUOLAPOLITECNICA_169295790.characterize)[0m
+13:25:38.573 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,573 - Results:[0m
+13:25:38.573 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,573 - [0m
+13:25:38.573 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,573 - Tests that did not succeed:[0m
+13:25:38.573 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,573 -   Paysol_Characterization_Tests test-case SCHOELLERALLIBERTGMBH FAILED on build-go-agent001 : missing results for documentMetadata1062276058_279654258_KaiserKraftEuropaGmbH_0030363209,primarypres1062276058_279654258_KaiserKraftEuropaGmbH_0030363209, differences in catalogue,routingLog,stdout[0m
+13:25:38.573 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,573 - [0m
+13:25:38.573 [0m[[0minfo[0m] [0m2016-08-19 13:25:38,573 - Tests Run: 13, Failures: 1[0m
+13:25:39.116 java.lang.RuntimeException: There were test failures
+13:25:39.116 	at org.texttest.sbtplugin.TexttestRunner$$anonfun$runTexttest$1.apply(TexttestRunner.scala:95)
+13:25:39.116 	at org.texttest.sbtplugin.TexttestRunner$$anonfun$runTexttest$1.apply(TexttestRunner.scala:75)
+13:25:39.116 	at scala.collection.immutable.List.foreach(List.scala:318)
+13:25:39.116 	at org.texttest.sbtplugin.TexttestRunner.runTexttest(TexttestRunner.scala:75)
+13:25:39.116 	at org.texttest.sbtplugin.TexttestPlugin$$anonfun$projectSettings$14.apply(TexttestPlugin.scala:69)
+13:25:39.116 	at org.texttest.sbtplugin.TexttestPlugin$$anonfun$projectSettings$14.apply(TexttestPlugin.scala:63)
+13:25:39.116 	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47)
+13:25:39.116 	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:40)
+13:25:39.116 	at sbt.std.Transform$$anon$4.work(System.scala:63)
+13:25:39.116 	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:226)
+13:25:39.116 	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:226)
+13:25:39.116 	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:17)
+13:25:39.116 	at sbt.Execute.work(Execute.scala:235)
+13:25:39.116 	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:226)
+13:25:39.116 	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:226)
+13:25:39.116 	at sbt.ConcurrentRestrictions$$anon$4$$anonfun$1.apply(ConcurrentRestrictions.scala:159)
+13:25:39.116 	at sbt.CompletionService$$anon$2.call(CompletionService.scala:28)
+13:25:39.117 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+13:25:39.117 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+13:25:39.117 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+13:25:39.117 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+13:25:39.117 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+13:25:39.117 	at java.lang.Thread.run(Thread.java:745)
+13:25:39.117 [0m[[31merror[0m] [0m(*:[31mtexttestRun[0m) There were test failures[0m
+13:25:39.119 [0m[[31merror[0m] [0mTotal time: 501 s, completed Aug 19, 2016 1:25:39 PM[0m
+13:25:39.147 [go] Current job status: failed.
+
+13:25:39.147 [go] Start to execute task: <exec command="/home/go/.local/bin/xunit_summary" workingdir="po-characterize-tests" >
+<arg>target/sandbox</arg>
+</exec>.
+13:25:39.292 FAILURE: stdout different(+) in Paysol_Characterization_Tests.small.ORDER_RESPONSE.SCHOELLERALLIBERTGMBH.SCHOELLERALLIBERTGMBH
+13:25:39.292 Found 13 tests. 1 failures. 0 errors.
+13:25:39.298 [go] Current job status: failed.
+
+13:25:39.298 [go] Start to execute task: <exec command="/home/go/.local/bin/link_service_logs" workingdir="po-characterize-tests" />.
+13:25:40.403 everything under /var/log/services now readable
+13:25:41.111 [go] Current job status: failed.
+
+13:25:41.115 [go] Start to create properties po-characterize-tests/2253/runTests/1/defaultJob on build-go-agent001 [/var/lib/go-agent]
+13:25:41.115 [go] Start to upload po-characterize-tests/2253/runTests/1/defaultJob on build-go-agent001 [/var/lib/go-agent]
+13:25:41.115 [go] The Directory pipelines/po-characterize-tests/po-characterize-tests/target/texttest_results specified as a test artifact was not found. Please check your configuration
+13:25:41.212 [go] Uploading artifacts from /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target/sandbox/characterize.19Aug132318.32324 to [defaultRoot]
+13:25:41.499 [go] Uploading artifacts from /var/lib/go-agent/pipelines/po-characterize-tests/po-characterize-tests/target/var_log_services to log
+13:25:41.536 Ignoring file target_fatturapa_1_1_1052718728_245128136_UNIVDIGENOVABIBLIOTECADELLASCUOLAPOLITECNICA_169295790.xml - it is not a recognised test file.
+13:25:41.541 Ignoring file internalxml_INVOICE-1052718728_245128136_UNIVDIGENOVABIBLIOTECADELLASCUOLAPOLITECNICA_169295790.xml - it is not a recognised test file.
+13:25:41.543 Ignoring file internalxml_PAYMENT_REMINDER-1060372116_138836175_UnivarAB.xml - it is not a recognised test file.
+13:25:41.544 Ignoring file internalxml_PAYMENT_REMINDER-1060372116_138836175_ExpediaSwedenAB.xml - it is not a recognised test file.
+13:25:41.546 Ignoring file internalxml_PAYMENT_REMINDER-1060589718_238763126_GteborgsStadsBostadsABCentrum.xml - it is not a recognised test file.
+13:25:41.547 Ignoring file internalxml_PAYMENT_REMINDER-1060589718_238763126_WinabFretagsserviceAB.xml - it is not a recognised test file.
+13:25:41.548 Ignoring file internalxml_PAYMENT_REMINDER-1060589718_238763126_WencheLarsson5007271488.xml - it is not a recognised test file.
+13:25:41.550 Ignoring file internalxml_DISPATCH_ADVICE-1061147131_279654258_KaiserKraftEuropaGmbH_0030363179.xml - it is not a recognised test file.
+13:25:41.551 Ignoring file target_lvisnet_xml_2_0_order_response_1062493689_70915408_TERAWATTOYSKANNAUSPALVELU_22662504.xml - it is not a recognised test file.
+13:25:41.552 Ignoring file internalxml_ORDER_RESPONSE-1062493689_70915408_TERAWATTOYSKANNAUSPALVELU_22662504.xml - it is not a recognised test file.
+13:25:41.554 Ignoring file internalxml_ORDER_RESPONSE-1062276058_279654258_KaiserKraftEuropaGmbH_0030363209.xml - it is not a recognised test file.
+13:25:41.556 Ignoring file internalxml_ORDER_RESPONSE-1062277159_71460690_TERAWATTOY_5728539.xml - it is not a recognised test file.
+13:25:41.556 Ignoring file target_lvisnet_xml_2_0_order_response_1062277159_71460690_TERAWATTOY_5728539.xml - it is not a recognised test file.
+13:25:41.558 Ignoring file internalxml_ORDER-1062625723_604099820_JohnsonJohnson_3000738528.xml - it is not a recognised test file.
+13:25:41.560 Ignoring file target_johnson_johnson_order_1062625723_604099820_JohnsonJohnson_3000738528.xml - it is not a recognised test file.
+13:25:41.561 Ignoring file internalxml_ORDER-1062625197_89591847_valueisnull_354929.xml - it is not a recognised test file.
+13:25:41.563 Ignoring file internalxml_ORDER-1062618862_558933828_SLO_SOB75310048.xml - it is not a recognised test file.
+13:25:41.565 Ignoring file internalxml_ORDER-1062618979_558933828_SLO_SOB30410020.xml - it is not a recognised test file.
+13:25:41.566 Ignoring file internalxml_APPLICATION_RESPONSE-1058973355_277646702_RICOHITALIASRL.xml - it is not a recognised test file.
+13:25:41.567 Ignoring file internalxml_APPLICATION_RESPONSE-1060015919_363357042_HewlettPackardServiciosEspaaSL.xml - it is not a recognised test file.
+13:25:41.609 [go] Uploading artifacts from /tmp/cruise-a9a93714-903e-42e9-b8d7-1bac47d2910f/967ba0cb-3371-4aa2-8d6d-d61fa851661f/result/index.html to testoutput
+13:25:41.614 [go] Uploading artifacts from /tmp/cruise-a9a93714-903e-42e9-b8d7-1bac47d2910f/967ba0cb-3371-4aa2-8d6d-d61fa851661f/result to testoutput
+13:25:41.650 [go] Job completed po-characterize-tests/2253/runTests/1/defaultJob on build-go-agent001 [/var/lib/go-agent]

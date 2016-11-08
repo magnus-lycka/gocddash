@@ -1,18 +1,39 @@
 import os
 import sqlite3
+import sys
 from datetime import datetime, timedelta
+from itertools import chain
+
+
+def flatten(seq_of_seq):
+    return list(chain.from_iterable(seq_of_seq))
 
 
 class SQLConnection:
     _shared_state = {'conn': None}
 
-    def __init__(self, path=None):
+    def __init__(self, path=None, foreign_keys=True):
         self.__dict__ = self._shared_state
         if path or not self.conn:
             self.conn = sqlite3.connect(path or 'gocddash.sqlite3')
+            self.conn.row_factory = sqlite3.Row
+            self.foreign_keys = foreign_keys
             self._init()
 
     def _init(self):
+        if self.foreign_keys:
+            with self.conn:
+                cursor = self.conn.cursor()
+                cursor.execute('PRAGMA foreign_keys = ON')
+                cursor.execute('PRAGMA foreign_keys')
+                fetchall = cursor.fetchall()
+                if len(fetchall) >= 1:
+                    if fetchall[0]['foreign_keys'] != 1:
+                        sys.stderr.write('ERROR: Foreign keys not enabled. '
+                                         '"PRAGMA foreign_keys" returned: {}'.format(fetchall))
+                else:
+                    sys.stderr.write('ERROR: Foreign keys not enabled. "PRAGMA foreign_keys" returned nothing')
+
         my_dir = os.path.split(__file__)[0]
         path = os.path.join(my_dir, '..', 'database', 'setup.sql')
         with open(path) as sql_file:
@@ -20,7 +41,11 @@ class SQLConnection:
             for statement in statements:
                 with self.conn:
                     cursor = self.conn.cursor()
-                    cursor.execute(statement)
+                    try:
+                        cursor.execute(statement)
+                    except sqlite3.OperationalError as error:
+                        print('Got', error, 'executing:')
+                        print(statement)
 
     def show_database(self):
         with self.conn:
@@ -55,6 +80,7 @@ class SQLConnection:
                  stage.approved_by, stage.scheduled_date, stage.stage_result))
 
     def insert_job(self, stage_id, job):
+        self._ensure_agent(job.agent_uuid)
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(
@@ -64,11 +90,132 @@ class SQLConnection:
                 (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date,
                  job.job_result, job.tests_run, job.tests_failed, job.tests_skipped))
 
+    def _ensure_agent(self, agent_uuid):
+        if agent_uuid not in [row['id'] for row in self.list_agents()]:
+            self.insert_agent(agent_uuid, '???')
+
     def insert_agent(self, id_, agent_name):
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(
                 "INSERT INTO agent (id, agent_name) VALUES (?, ?);", (id_, agent_name))
+
+    def save_agent(self, uuid, agent_name):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "REPLACE INTO agent (id, agent_name) VALUES (?, ?);", (uuid, agent_name))
+
+    def list_agents(self):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT id, agent_name "
+                "FROM agent "
+                "ORDER BY agent_name ASC ;"
+            )
+            fetchall = cursor.fetchall()
+        return fetchall
+
+    def save_pipeline_sync_rule(self, pattern, sync, log_parser, email_notifications):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "INSERT OR REPLACE INTO pipeline_sync_rule "
+                "(pattern, sync, log_parser, email_notifications) "
+                "VALUES (?, ?, ?, ?);",
+                (pattern, sync, log_parser, email_notifications))
+
+    def list_pipeline_sync_rules(self):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT kind, pipeline_groups_field, pattern, sync, log_parser, email_notifications "
+                "FROM pipeline_sync_rule "
+                "ORDER BY id ASC ;"
+            )
+            fetchall = cursor.fetchall()
+        return fetchall
+
+    def list_pipelines(self):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT pipeline_name, pipeline_group, sync, log_parser, email_notifications "
+                "FROM pipeline "
+                "ORDER BY pipeline_name ASC ;"
+            )
+            fetchall = cursor.fetchall()
+        return fetchall
+
+    def get_pipeline(self, pipeline_name):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT pipeline_name, pipeline_group, sync, log_parser, email_notifications "
+                "FROM pipeline "
+                "WHERE pipeline_name = ? ;",
+                (pipeline_name,)
+            )
+            pipeline = cursor.fetchone()
+        return pipeline
+
+    def get_pipelines_to_sync(self):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT pipeline_name "
+                "FROM pipeline "
+                "WHERE sync = 1 "
+                "ORDER BY pipeline_name ASC ;"
+            )
+            fetchall = cursor.fetchall()
+        return flatten(fetchall)
+
+    def list_new_pipelines(self):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT pipeline_name, pipeline_group, sync, log_parser, email_notifications "
+                "FROM pipeline "
+                "WHERE sync IS NULL "
+                "ORDER BY pipeline_name ASC ;"
+            )
+            fetchall = cursor.fetchall()
+        return fetchall
+
+    def save_pipeline(self, pipeline_name, pipeline_group):
+        with self.conn:
+            cursor = self.conn.cursor()
+            try:
+                # Make sure that we don't disrupt locally set attributes. No REPLACE!
+                cursor.execute(
+                    "INSERT INTO pipeline (pipeline_name, pipeline_group) VALUES (?, ?);",
+                    (pipeline_name, pipeline_group))
+            except sqlite3.IntegrityError:
+                cursor = self.conn.cursor()
+                cursor.execute("UPDATE pipeline "
+                               "SET pipeline_group = ? "
+                               "WHERE pipeline_name = ?",
+                               (pipeline_group, pipeline_name))
+
+    def update_pipeline(self, pipeline_name, **kwargs):
+        sql = "UPDATE pipeline "
+        word = 'SET'
+        cols = ('sync', 'log_parser', 'email_notifications')
+        for arg in cols:
+            if arg in kwargs:
+                sql += "{} {} = :{} ".format(word, arg, arg)
+                word = ", "
+        sql += "WHERE pipeline_name = :pipeline_name"
+        if word != ", ":  # never found any of cols in kwargs
+            raise ValueError('Needed at least one of {}, got {}'.format(cols, kwargs))
+        if set(kwargs) - set(cols):  # We got extra cols
+            raise ValueError('Only expected some of {}, got {}'.format(cols, kwargs))
+        with self.conn:
+            cursor = self.conn.cursor()
+            kwargs['pipeline_name'] = pipeline_name
+            cursor.execute(sql, kwargs)
 
     def insert_texttest_failure(self, stage_id, test_index, failure_type, document_name):
         with self.conn:
@@ -151,8 +298,8 @@ class SQLConnection:
             cursor.execute("SELECT DISTINCT agent_uuid "
                            "FROM job "
                            "WHERE agent_uuid IS NOT NULL EXCEPT SELECT id FROM agent")
-            result = map(lambda x: x[0], cursor.fetchall())
-        return result
+            result = cursor.fetchall()
+        return flatten(result)
 
     def is_failure_downloaded(self, stage_id):
         with self.conn:
@@ -168,9 +315,9 @@ class SQLConnection:
             cursor.execute(
                 "SELECT * "
                 "FROM failure_info "
-                "WHERE pipelinename=%s AND "
-                "      scheduleddate > 'now'::TIMESTAMP - '%s month'::INTERVAL;",
-                (pipeline_name, months_back)
+                "WHERE pipeline_name=? AND "
+                "      scheduled_date > date('now', ?);",
+                (pipeline_name, "-%d months" % months_back)
             )
             fetchall = cursor.fetchall()
         return fetchall
@@ -198,7 +345,7 @@ class SQLConnection:
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute("SELECT document_name FROM all_data WHERE pipelinename=%s;", (pipeline_name,))
-            document_names = map(lambda x: x[0], cursor.fetchall())
+            document_names = flatten(cursor.fetchall())
         return document_names
 
     def get_texttest_failures(self, pipeline_name):
@@ -248,12 +395,6 @@ class SQLConnection:
             current_stage = cursor.fetchone()
         return current_stage
 
-    def truncate_tables(self):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute("TRUNCATE failure_information, job, junit_failure, "
-                           "pipeline_instance, stage, texttest_failure, instance_claim")
-
     def fetch_previous_stage(self, pipeline_name, pipeline_counter, current_stage_name, current_stage_counter):
         sql = """SELECT *
                     FROM failure_info
@@ -279,7 +420,7 @@ class SQLConnection:
                 "GROUP BY stage_name "
                 "ORDER BY min(scheduled_date) ASC;",
                 (pipeline_name,))
-            stage_order = list(map(lambda x: x[0], cursor.fetchall()))
+            stage_order = flatten(cursor.fetchall())
         return stage_order
 
     def fetch_latest_passing_stage(self, pipeline_name):
@@ -417,7 +558,7 @@ class SQLConnection:
     def get_latest_failure_streak(self, pipeline_name):
         with self.conn:
             cursor = self.conn.cursor()
-            cursor.execute("SELECT * "
+            cursor.execute("SELECT pipeline_name, fail_counter, pass_counter, currently_passing "
                            "FROM latest_intervals "
                            "WHERE pipeline_name = ?",
                            (pipeline_name,))

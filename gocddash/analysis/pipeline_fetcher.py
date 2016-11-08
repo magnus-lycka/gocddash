@@ -4,12 +4,11 @@ from datetime import datetime
 
 from gocddash.console_parsers.junit_report_parser import JunitConsoleParser
 from gocddash.util.get_failure_stage import get_failure_stage
-from gocddash.util.pipeline_config import get_pipeline_config
 from gocddash.console_parsers.determine_parser import get_log_parser
 from .data_access import get_connection
 from .domain import PipelineInstance, Stage, create_stage, Job, create_job
 from .email_notifications import build_email_notifications
-from .go_client import go_request_pipeline_history, go_get_agent_information, go_request_stage_instance
+from .go_client import go_request_pipeline_history, go_get_agent_information, go_request_stages_history
 
 
 def download_and_store(pipeline_name, offset, run_times):
@@ -45,7 +44,7 @@ def parse_pipeline_info(pipeline_name, pipeline_instances):
 
 
 def send_new_email_notifications(pipeline_name):
-    if get_pipeline_config().get_email_notif(pipeline_name):
+    if get_connection().get_pipeline(pipeline_name)['email_notifications']:
         build_email_notifications(pipeline_name)
 
 
@@ -69,7 +68,7 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
         pipeline_name = pipeline_instance.pipeline_name
         pipeline_counter = pipeline_instance.pipeline_counter
 
-        stage_instance_response = go_request_stage_instance(pipeline_name, pipeline_counter, stage_index, stage_name)
+        stage_instance_response = go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name)
         tree = json.loads(stage_instance_response)
         stage_result = tree["result"]
         if stage_result != "Unknown":
@@ -77,7 +76,7 @@ def parse_stage_info(stage_count, stage_name, pipeline_instance):
             stage_id = tree["id"]
 
             # Leave for now but a Stage doesn't have a scheduled_date in the API
-            timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"]).replace(microsecond=0)
+            timestamp = ms_timestamp_to_date(tree["jobs"][0]["scheduled_date"])
             stage = Stage(stage_name, tree["approved_by"], stage_result, stage_index, stage_id, timestamp)
             create_stage(pipeline_instance, stage)
 
@@ -90,7 +89,7 @@ def fetch_job(pipeline_counter, pipeline_name, stage, stage_index, jobs):
     for job in jobs:
         job_name = job['name']
         agent_uuid = job['agent_uuid']
-        scheduled_date = ms_timestamp_to_date(job['scheduled_date']).replace(microsecond=0)
+        scheduled_date = ms_timestamp_to_date(job['scheduled_date'])
         job_id = job['id']
         job_result = job['result']
         parser = JunitConsoleParser(pipeline_name, pipeline_counter, stage_index, stage.stage_name, job_name)
@@ -115,4 +114,4 @@ def fetch_failure_info(stage_index, pipeline_counter, pipeline_name, stage_id, s
 
 
 def ms_timestamp_to_date(ms):
-    return datetime.fromtimestamp(ms / 1000.0)
+    return datetime.fromtimestamp(ms // 1000.0)

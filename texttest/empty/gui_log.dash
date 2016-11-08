@@ -1,72 +1,23 @@
-GET http://127.0.0.1:8670/dash/?which=failing
-data: {}
-   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
-     * [2]Failing
-     * [3]Progress
-     * [4]All
-
-     * [5]More/Config
-          + [6]Graph overview
-          +
-          + [7]Select pipeline groups / Config
-          + [8]Select theme
-     * Last refresh: 11:14:42 | 00 seconds
-
-[9]qux 240 2015-11-26
-
-   [10]defaultStage 1 [11]defaultJob
-
-[12]baz 203 2015-11-26
-
-   [13]gamma 1 [14]defaultJob
-   [15]delta 1 [16]defaultJob
-   Breakers: Mary Wollstonecraft <maryw@example.com>
-
-[17]large-norf 13 2015-11-20
-
-   [18]runTests 1 [19]defaultJob
-
-[20]bar 57 2015-11-03
-
-   [21]beta 1 [22]defaultJob
-   Breakers: Willy Wonka <willyw@example.com>
-     __________________________________________________________________
-
-   System status
-   44%
-   11%
-   44%
-
-   ???
-
-References
-
-   Visible links
-   1. http://go.pagero.local/go/
-   2. http://127.0.0.1:8670/dash/?which=failing
-   3. http://127.0.0.1:8670/dash/?which=progress
-   4. http://127.0.0.1:8670/dash/?which=all
-   5. http://127.0.0.1:8670/dash/?which=failing
-   6. http://127.0.0.1:8670/dash/stats
-   7. http://127.0.0.1:8670/dash/select/
-   8. http://127.0.0.1:8670/dash/select_theme/
-   9. http://go-server/go/pipelines/value_stream_map/qux/240
-  10. http://go-server/go/pipelines/qux/240/defaultStage/1
-  11. http://go-server/go/tab/build/detail/qux/240/defaultStage/1/defaultJob
-  12. http://go-server/go/pipelines/value_stream_map/baz/203
-  13. http://go-server/go/pipelines/baz/203/readyToTest/1
-  14. http://go-server/go/tab/build/detail/baz/203/readyToTest/1/defaultJob
-  15. http://go-server/go/pipelines/baz/181/delta/1
-  16. http://go-server/go/tab/build/detail/baz/181/delta/1/defaultJob
-  17. http://go-server/go/pipelines/value_stream_map/large-norf/13
-  18. http://go-server/go/pipelines/large-norf/13/runTests/1
-  19. http://go-server/go/tab/build/detail/large-norf/13/runTests/1/defaultJob
-  20. http://go-server/go/pipelines/value_stream_map/bar/57
-  21. http://go-server/go/pipelines/bar/57/runTests/1
-  22. http://go-server/go/tab/build/detail/bar/57/runTests/1/defaultJob
-
-   Hidden links:
-  24. http://127.0.0.1:8670/dash/?which=failing#collapse1
-  25. http://127.0.0.1:8670/dash/?which=failing#collapse2
-  26. http://127.0.0.1:8670/dash/?which=failing#collapse3
-  27. http://127.0.0.1:8670/dash/?which=failing#collapse4
+POST http://127.0.0.1:7761/dash/select/
+data: {NoBananas='1'}
+Go.CD Dashboard
+Toggle navigation
+http://go.pagero.local/go/
+Failing
+Progress
+All
+More/Config
+Graph overview
+Select pipeline groups / Config
+Select theme
+Last refresh: 22:40:16 |
+00
+seconds
+No pipeline groups selected.
+Select pipeline groups here.
+System status
+44%
+11%
+44%
+???
+var applicationRoot = "/dash";

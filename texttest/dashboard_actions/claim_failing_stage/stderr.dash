@@ -1,7 +1,5 @@
- * Running on http://127.0.0.1:6329/ (Press CTRL+C to quit)
-Loaded new pipeline configuration.
-Loaded new pipeline configuration.
-127.0.0.1 - - [28/Sep/2016 11:34:58] "POST /dash/claim HTTP/1.1" 200 -
-127.0.0.1 - - [28/Sep/2016 11:34:58] "GET /dash/insights/bar HTTP/1.0" 200 -
+ * Running on http://127.0.0.1:7841/ (Press CTRL+C to quit)
+127.0.0.1 - - [08/Nov/2016 13:09:05] "POST /dash/claim HTTP/1.1" 200 -
+127.0.0.1 - - [08/Nov/2016 13:09:05] "GET /dash/insights/bar HTTP/1.0" 200 -
 Coverage.py warning: Module gocddash was previously imported, but not measured.
-127.0.0.1 - - [28/Sep/2016 11:34:58] "GET /dash/coverage/ HTTP/1.1" 201 -
+127.0.0.1 - - [08/Nov/2016 13:09:05] "GET /dash/coverage/ HTTP/1.1" 201 -
