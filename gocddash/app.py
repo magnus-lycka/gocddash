@@ -160,18 +160,6 @@ def select_theme():
     return response
 
 
-@gocddash.route("/reloadconfig", methods=['POST'])
-def reload_config():
-    try:
-        pipeline_path = current_app.config.get('PIPELINE_CONFIG')
-        create_pipeline_config(pipeline_path)
-        flash("Reloaded pipeline config.", "success")
-        return "OK."
-    except (ValueError, FileNotFoundError) as error:
-        flash("Got '{}' when reloading pipeline config.".format(error), 'danger')
-        return str(error)
-
-
 @gocddash.route("/claim", methods=['POST'])
 def claim_instance():
     pipeline_name = request.form.get('pipelineName')

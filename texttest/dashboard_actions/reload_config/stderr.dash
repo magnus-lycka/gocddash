@@ -1,4 +1,0 @@
- * Running on http://127.0.0.1:7211/ (Press CTRL+C to quit)
-127.0.0.1 - - [08/Nov/2016 13:09:08] "POST /dash/reloadconfig HTTP/1.1" 200 -
-Coverage.py warning: Module gocddash was previously imported, but not measured.
-127.0.0.1 - - [08/Nov/2016 13:09:08] "GET /dash/coverage/ HTTP/1.1" 201 -

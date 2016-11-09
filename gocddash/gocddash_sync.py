@@ -7,7 +7,7 @@ import re
 from copy import deepcopy
 
 from gocddash.analysis import data_access, go_client, domain
-from gocddash.util import pipeline_config, app_config
+from gocddash.util import app_config
 from gocddash.console_parsers.junit_report_parser import JunitConsoleParser
 from gocddash.console_parsers.determine_parser import get_log_parser
 
@@ -221,11 +221,16 @@ class SyncController:
         Store failure information from go-server for a given job,
         as extracted from its log parser.
         """
-        log_parser_class = get_log_parser(pipeline_name)
-        log_parser = log_parser_class(pipeline_name, pipeline_counter, stage_counter, stage_name, job_name)
-        failure_stage = log_parser.get_failure_stage()
-        self.db.insert_failure_information(stage_id, failure_stage)
-        log_parser.insert_info(stage_id)
+        try:
+            log_parser_class = get_log_parser(pipeline_name)
+            log_parser = log_parser_class(pipeline_name, pipeline_counter, stage_counter, stage_name, job_name)
+            failure_stage = log_parser.get_failure_stage()
+            self.db.insert_failure_information(stage_id, failure_stage)
+            log_parser.insert_info(stage_id)
+        except LookupError as error:
+            print("Failed to sync failure info for {}/{}/{}/{}/{}: {}".format(
+                pipeline_counter, pipeline_name, stage_name, stage_counter, job_name, error)
+            )
 
     @staticmethod
     def ms_timestamp_to_date(ms):
