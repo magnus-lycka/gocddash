@@ -9,8 +9,8 @@ from gocddash.console_parsers.characterize_console_parser import TexttestConsole
 
 
 class TestFailureTip(unittest.TestCase):
-    path = "data/pipelines.json"
-    create_pipeline_config(path)
+#    path = "data/pipelines.json"
+#    create_pipeline_config(path)
 
     @staticmethod
     def create_stage_failure_info(parent=None, passed=False, failure_stage=None, stage_id=2000):

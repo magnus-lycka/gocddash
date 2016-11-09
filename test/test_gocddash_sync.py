@@ -25,8 +25,8 @@ class SyncControllerTests(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_sync_agents_from_something(self):
-        self.db.insert_agent('ebed8cc9-0236-407c-af6e-104139e3ca20', 'edugo1')
-        self.db.insert_agent('ebed8cc9-0236-407c-af6e-104139e3ca21', 'edugolr')
+        self.db.save_agent('ebed8cc9-0236-407c-af6e-104139e3ca20', 'edugo1')
+        self.db.save_agent('ebed8cc9-0236-407c-af6e-104139e3ca21', 'edugolr')
 
         self.controller.sync_agents()
 

@@ -90,15 +90,11 @@ class SQLConnection:
                 (job.job_id, stage_id, job.job_name, job.agent_uuid, job.scheduled_date,
                  job.job_result, job.tests_run, job.tests_failed, job.tests_skipped))
 
-    def _ensure_agent(self, agent_uuid):
-        if agent_uuid not in [row['id'] for row in self.list_agents()]:
-            self.insert_agent(agent_uuid, '???')
-
-    def insert_agent(self, id_, agent_name):
+    def _ensure_agent(self, uuid):
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(
-                "INSERT INTO agent (id, agent_name) VALUES (?, ?);", (id_, agent_name))
+                "INSERT OR IGNORE INTO agent (id, agent_name) VALUES (?, '???');", (uuid, ))
 
     def save_agent(self, uuid, agent_name):
         with self.conn:
