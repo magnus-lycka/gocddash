@@ -186,8 +186,14 @@ class SyncController:
         scheduled_date = self.ms_timestamp_to_date(job['scheduled_date'])
         job_id = job['id']
         job_result = job['result']
-        parser = JunitConsoleParser(pipeline_name, pipeline_counter, stage_counter, stage_name, job_name)
-        tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
+        try:
+            parser = JunitConsoleParser(pipeline_name, pipeline_counter, stage_counter, stage_name, job_name)
+            tests_run, tests_failed, tests_skipped = parser.parse_bar_chart_info()
+        except LookupError as error:
+            print('Failed parsing test results for {}/{}/{}/{}/{}: {}'.format(
+                pipeline_name, pipeline_counter, stage_counter, stage_name, job_name, error
+            ))
+            tests_run, tests_failed, tests_skipped = 0, 0, 0
         job = domain.Job(job_id, stage_id, job_name, agent_uuid, scheduled_date,
                          job_result, tests_run, tests_failed, tests_skipped)
         self.db.insert_job(stage_id, job)

@@ -279,9 +279,14 @@ def insights(pipeline_name):
                                                            current_stage.pipeline_counter,
                                                            current_stage.stage_name,
                                                            current_stage.stage_counter)
-    log_link = base_url + "tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
-        current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
-        current_stage.stage_counter, get_job_to_display(current_stage.stage_id).job_name)
+
+    job_to_display = get_job_to_display(current_stage.stage_id)
+    if job_to_display:
+        log_link = base_url + "tab/build/detail/{}/{}/{}/{}/{}#tab-tests".format(
+            current_stage.pipeline_name, current_stage.pipeline_counter, current_stage.stage_name,
+            current_stage.stage_counter, job_to_display.job_name)
+    else:
+        log_link = 'FIX_THIS'
 
     main_pipeline_link = base_url + "tab/pipeline/history/{}".format(current_stage.pipeline_name)
 
