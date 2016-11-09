@@ -1,0 +1,30 @@
+[
+    {
+        "name": "g1",
+        "pipelines": [
+            {
+                "label": "${COUNT}", 
+                "materials": [],
+                "name": "p1g1",
+                "stages": []
+            }, 
+            {
+                "label": "${COUNT}", 
+                "materials": [],
+                "name": "p2g1",
+                "stages": []
+            }
+        ]
+    }, 
+    {
+        "name": "g2",
+        "pipelines": [
+            {
+                "label": "${COUNT}",
+                "materials": [],
+                "name": "p1g2",
+                "stages": []
+            }
+        ]
+    }
+]
