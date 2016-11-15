@@ -39,7 +39,7 @@ def pipeline_history_chart_json(pipeline_name):
             "y": y,
             "name": label,
             "type": "bar",
-            "marker": {"color": color }
+            "marker": {"color": color}
         }
 
     data = []
@@ -102,7 +102,7 @@ def agent_success_rate_chart_json(limit_cnt, limit_days, percentage, pipeline):
             "name": label,
             "type": "bar",
             "text": text,
-            "marker": {"color": color }
+            "marker": {"color": color}
         }
 
     y_maker = getattr

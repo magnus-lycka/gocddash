@@ -112,7 +112,8 @@ class SyncController:
         fetched_pipelines_history = self.get_pipeline_history(pipeline_name, wanted_pipeline_instances)
         for pipeline_instance in fetched_pipelines_history:
             self.store_synced_pipeline(pipeline_name, pipeline_instance)
-            self.sync_stages(pipeline_name, pipeline_instance)
+            done = self.sync_stages(pipeline_name, pipeline_instance)
+            self.db.store_pipeline_instance_done(pipeline_instance["id"], done)
 
     def store_synced_pipeline(self, pipeline_name, pipeline_instance):
         pipeline_counter = pipeline_instance["counter"]
@@ -130,15 +131,19 @@ class SyncController:
     def sync_stages(self, pipeline_name, pipeline_instance):
         """
         Find all stages for a pipeline instance, and sync them.
+        Return whether all were done.
         """
         pipeline_counter = pipeline_instance["counter"]
         pipeline_id = pipeline_instance["id"]
+        done = True
         for stage in pipeline_instance['stages']:
-            self.sync_stage(pipeline_name, pipeline_counter, pipeline_id, stage)
+            done &= self.sync_stage(pipeline_name, pipeline_counter, pipeline_id, stage)
+        return done
 
     def sync_stage(self, pipeline_name, pipeline_counter, pipeline_id, stage):
         """
         Find any new runs for a stage, and sync them.
+        Return whether all were done.
         """
         if not stage['scheduled']:
             return
@@ -146,14 +151,22 @@ class SyncController:
         current_stage_counter = int(stage['counter'])
         previous_stage_counter = self.db.get_latest_synced_stage(pipeline_id, stage_name)
         stage_counters = range(previous_stage_counter + 1, current_stage_counter + 1)
+        done = True
         for stage_counter in stage_counters:
-            self.sync_stage_occurrence(pipeline_name, pipeline_counter, pipeline_id,
-                                       stage_name, stage_counter)
+            done &= self.sync_stage_occurrence(
+                pipeline_name,
+                pipeline_counter,
+                pipeline_id,
+                stage_name,
+                stage_counter
+            )
+        return done
 
     def sync_stage_occurrence(self, pipeline_name, pipeline_counter, pipeline_id,
                               stage_name, stage_counter):
         """
         Store information about stage run from go-server and sync its jobs.
+        Return whether we were done with the stage.
         """
         stage_occurrence_json = self.go.request_stages_history(pipeline_name, pipeline_counter,
                                                                stage_counter, stage_name)
@@ -162,7 +175,7 @@ class SyncController:
         if stage_result == 'Unknown':
             print("  Skipping stage: {} / {} - still in progress".format(
                 stage_name, stage_counter))
-            return
+            return False
         print("  Fetching stage: {} / {}".format(stage_name, stage_counter))
         stage_id = stage_occurrence["id"]
 
@@ -173,6 +186,7 @@ class SyncController:
         self.db.insert_stage(pipeline_id, stage)
         for job in stage_occurrence['jobs']:
             self.sync_job(pipeline_name, pipeline_counter, stage_id, stage_name, stage_counter, job)
+        return True
 
     def sync_job(self, pipeline_name, pipeline_counter, stage_id, stage_name, stage_counter, job):
         """

@@ -120,6 +120,7 @@ class SyncControllerTests(unittest.TestCase):
             trigger_message = 'korv'
             instance_id = 1234
         self.db.insert_pipeline_instance(DummyPipeline())
+        self.db.store_pipeline_instance_done(1234, 1)
 
         actual = controller.get_wanted_instances(name, 7)
 
@@ -137,11 +138,14 @@ class SyncControllerTests(unittest.TestCase):
             instance_id = 1234
 
         self.db.insert_pipeline_instance(DummyPipeline())
+        self.db.store_pipeline_instance_done(1234, 1)
         controller = SyncController(self.db, self.go, chunk_size=1000)
 
         actual = controller.get_wanted_instances(name, 2000)
 
         self.assertEqual(499, len(actual))
+        self.assertEqual(2000, actual[0])
+        self.assertEqual(1501, actual[-1])
 
     def test_get_pipeline_history_parts_available(self):
         wanted = [7, 6]
@@ -369,9 +373,11 @@ class SyncControllerTests(unittest.TestCase):
             instance_id = 47621
 
         self.db.insert_pipeline_instance(DummyPipeline())
+        self.db.store_pipeline_instance_done(47621, 1)
         DummyPipeline.pipeline_counter = 7
         DummyPipeline.instance_id = 47647
         self.db.insert_pipeline_instance(DummyPipeline())
+        self.db.store_pipeline_instance_done(47647, 1)
 
         self.controller.sync_pipeline('p0g0')
 
@@ -394,6 +400,7 @@ class SyncControllerTests(unittest.TestCase):
             instance_id = 47621
 
         self.db.insert_pipeline_instance(DummyPipeline())
+        self.db.store_pipeline_instance_done(47621, 1)
 
         self.controller.sync_pipeline('p0g0')
 
@@ -416,6 +423,7 @@ class SyncControllerTests(unittest.TestCase):
             instance_id = 47647
 
         self.db.insert_pipeline_instance(DummyPipeline())
+        self.db.store_pipeline_instance_done(47647, 1)
 
         self.controller.sync_pipeline('p0g0')
 

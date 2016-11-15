@@ -166,7 +166,6 @@ def sync_pipelines():
                            "--source=gocddash",
                            executable("gocddash_sync.py"),
                            "-a", os.getcwd() + "/application.cfg",
-#                           "-p", os.getcwd() + "/pipelines.json",
                            "-f", os.getcwd()])
     print("pipelines are synced")
 

@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS pipeline_instance(
     fail_counter INTEGER,
     pass_counter INTEGER,
     currently_passing INTEGER NOT NULL CHECK (currently_passing IN (0, 1)) DEFAULT 0,
+    done INTEGER CHECK (done IN (0, 1)),
     UNIQUE (pipeline_name, pipeline_counter),
     FOREIGN KEY(pipeline_name) REFERENCES pipeline(pipeline_name)
 );

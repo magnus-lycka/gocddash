@@ -4,14 +4,10 @@ from unittest.mock import MagicMock
 from gocddash.analysis.domain import StageFailureInfo
 from gocddash.dashboard import failure_tip
 from gocddash.dashboard import pipeline_status
-from gocddash.util.pipeline_config import create_pipeline_config
 from gocddash.console_parsers.characterize_console_parser import TexttestConsoleParser
 
 
 class TestFailureTip(unittest.TestCase):
-#    path = "data/pipelines.json"
-#    create_pipeline_config(path)
-
     @staticmethod
     def create_stage_failure_info(parent=None, passed=False, failure_stage=None, stage_id=2000):
         if parent:

@@ -8,10 +8,9 @@ from collections import defaultdict
 from datetime import date, datetime
 
 from flask import Flask, render_template, request, make_response, redirect, url_for, Blueprint, abort
-from flask import flash, current_app, jsonify
+from flask import jsonify
 
 from gocddash.appcoverage import cover  # Make sure this comes before other gocddash imports
-from gocddash.util.pipeline_config import create_pipeline_config
 from gocddash.analysis.go_client import go_get_pipeline_status, create_go_client
 from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.dashboard import failure_tip, pipeline_status

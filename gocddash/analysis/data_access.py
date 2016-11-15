@@ -69,6 +69,11 @@ class SQLConnection:
                  instance.trigger_message)
             )
 
+    def store_pipeline_instance_done(self, pipeline_instance_id, done):
+        with self.conn:
+            cur = self.conn.cursor()
+            cur.execute("UPDATE pipeline_instance SET done=? WHERE id=?", (done, pipeline_instance_id))
+
     def insert_stage(self, pipeline_instance_id, stage):
         with self.conn:
             cursor = self.conn.cursor()
@@ -94,7 +99,7 @@ class SQLConnection:
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute(
-                "INSERT OR IGNORE INTO agent (id, agent_name) VALUES (?, '???');", (uuid, ))
+                "INSERT OR IGNORE INTO agent (id, agent_name) VALUES (?, '???');", (uuid,))
 
     def save_agent(self, uuid, agent_name):
         with self.conn:
@@ -277,26 +282,6 @@ class SQLConnection:
                 (pipeline_name, pipeline_counter)
             )
 
-    def get_highest_pipeline_count(self, pipeline_name):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute(
-                "SELECT COALESCE(max(pipeline_counter), 0) "
-                "FROM pipeline_instance "
-                "WHERE pipeline_name = ?",
-                (pipeline_name,))
-            result = cursor.fetchone()[0]
-        return result
-
-    def get_new_agents(self):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute("SELECT DISTINCT agent_uuid "
-                           "FROM job "
-                           "WHERE agent_uuid IS NOT NULL EXCEPT SELECT id FROM agent")
-            result = cursor.fetchall()
-        return flatten(result)
-
     def is_failure_downloaded(self, stage_id):
         with self.conn:
             cursor = self.conn.cursor()
@@ -304,19 +289,6 @@ class SQLConnection:
 
             fetchone = cursor.fetchone()
         return fetchone
-
-    def get_failure_statistics(self, pipeline_name, months_back=1):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute(
-                "SELECT * "
-                "FROM failure_info "
-                "WHERE pipeline_name=? AND "
-                "      scheduled_date > date('now', ?);",
-                (pipeline_name, "-%d months" % months_back)
-            )
-            fetchall = cursor.fetchall()
-        return fetchall
 
     def get_junit_failure_signature(self, stage_id):
         with self.conn:
@@ -329,27 +301,6 @@ class SQLConnection:
             )
             fetchall = cursor.fetchall()
         return fetchall
-
-    def get_texttest_document_statistics(self, pipeline_name):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute("SELECT * FROM all_data WHERE pipelinename=%s;", (pipeline_name,))
-            fetchall = cursor.fetchall()
-        return fetchall
-
-    def get_texttest_document_names(self, pipeline_name):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute("SELECT document_name FROM all_data WHERE pipelinename=%s;", (pipeline_name,))
-            document_names = flatten(cursor.fetchall())
-        return document_names
-
-    def get_texttest_failures(self, pipeline_name):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute("SELECT * FROM texttest_failure;", (pipeline_name,))
-            failures = cursor.fetchall()
-        return failures
 
     def get_stage_texttest_failures(self, stage_id):
         with self.conn:
@@ -455,17 +406,6 @@ class SQLConnection:
             claim_ = cursor.fetchone() is not None
         return claim_
 
-    def get_graph_statistics_for_pipeline(self, pipeline_name):
-        with self.conn:
-            cursor = self.conn.cursor()
-            cursor.execute(
-                "SELECT * "
-                "FROM graph_statistics "
-                "WHERE pipeline_name = ?", (pipeline_name,)
-            )
-            graph_statistics = cursor.fetchall()
-        return graph_statistics
-
     def get_graph_statistics(self, days_limit, pipeline_name):
         pipeline_name = pipeline_name or "%"
         if days_limit:
@@ -480,7 +420,7 @@ class SQLConnection:
                 "WHERE agent_name NOT LIKE 'UNKNOWN%' "
                 "AND pipeline_name LIKE ? "
                 "AND scheduled_date > ?;",
-                (pipeline_name, start )
+                (pipeline_name, start)
             )
             graph_statistics = cursor.fetchall()
         return graph_statistics
@@ -546,7 +486,9 @@ class SQLConnection:
             cursor = self.conn.cursor()
             cursor.execute("SELECT * "
                            "FROM pipeline_instance "
-                           "WHERE pipeline_name = ? AND pipeline_counter = ?",
+                           "WHERE pipeline_name = ? "
+                           "AND pipeline_counter = ? "
+                           "AND done = 1",
                            (pipeline_name, pipeline_counter))
             instance_exists = cursor.fetchone() is not None
         return instance_exists
