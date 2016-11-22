@@ -1,17 +1,18 @@
-"""This module is used for sending email alerts to addresses in the "Prime Suspects" list on the dashboard.
-If an address appears in the prime suspect list and has not received an email, an email alert will be sent.
-
+"""
+This module is used for sending email alerts to addresses
+in the "Prime Suspects" list on the dashboard.
+If an address appears in the prime suspect list and has
+not received an email, an email alert will be sent.
 """
 
 import re
 from email.mime.text import MIMEText
+import smtplib
 
 from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.util.app_config import get_app_config, create_app_config
 from .domain import get_pipeline_head, get_latest_failure_streak, create_email_notification_sent
 from .data_access import get_connection
-
-import smtplib
 
 
 def send_prime_suspect_email(latest_pipeline, streak, suspect_list):

@@ -119,12 +119,31 @@ class SyncControllerTests(unittest.TestCase):
             pipeline_counter = 4
             trigger_message = 'korv'
             instance_id = 1234
+
         self.db.insert_pipeline_instance(DummyPipeline())
         self.db.store_pipeline_instance_done(1234, 1)
 
         actual = controller.get_wanted_instances(name, 7)
 
         expected = [7, 6, 5, 3, 2]
+        self.assertEqual(actual, expected)
+
+    def test_get_wanted_instances_has_some_undone(self):
+        name = 'p0g0'
+        self.db.save_pipeline(name, 'g0')
+        controller = SyncController(self.db, self.go, chunk_size=5)
+
+        class DummyPipeline:
+            pipeline_name = name
+            pipeline_counter = 4
+            trigger_message = 'korv'
+            instance_id = 1234
+
+        self.db.insert_pipeline_instance(DummyPipeline())
+
+        actual = controller.get_wanted_instances(name, 7)
+
+        expected = [7, 6, 5, 4, 3]
         self.assertEqual(actual, expected)
 
     def test_get_wanted_instances_but_there_is_a_limit(self):
@@ -169,10 +188,10 @@ class SyncControllerTests(unittest.TestCase):
 
         self.controller.sync_pipelines()
 
-        self.assertFalse(self.db.pipeline_instance_exists('nostages', 5))
-        self.assertTrue(self.db.pipeline_instance_exists('nostages', 6))
-        self.assertTrue(self.db.pipeline_instance_exists('nostages', 7))
-        self.assertFalse(self.db.pipeline_instance_exists('nostages', 8))
+        self.assertFalse(self.db.pipeline_instance_done('nostages', 5))
+        self.assertTrue(self.db.pipeline_instance_done('nostages', 6))
+        self.assertTrue(self.db.pipeline_instance_done('nostages', 7))
+        self.assertFalse(self.db.pipeline_instance_done('nostages', 8))
 
     def test_sync_stage(self):
         pipeline_name = 'p0g0'
@@ -354,8 +373,8 @@ class SyncControllerTests(unittest.TestCase):
 
         self.controller.sync_pipeline('p0g0')
 
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 6))
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 7))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 6))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 7))
 
         actual_stage_counter = self.db.get_latest_synced_stage(47621, 'build')
         self.assertEqual(1, actual_stage_counter)
@@ -381,8 +400,8 @@ class SyncControllerTests(unittest.TestCase):
 
         self.controller.sync_pipeline('p0g0')
 
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 6))
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 7))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 6))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 7))
 
         actual_stage_counter = self.db.get_latest_synced_stage(47621, 'build')
         self.assertEqual(0, actual_stage_counter)
@@ -404,8 +423,8 @@ class SyncControllerTests(unittest.TestCase):
 
         self.controller.sync_pipeline('p0g0')
 
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 6))
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 7))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 6))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 7))
 
         actual_stage_counter = self.db.get_latest_synced_stage(47621, 'build')
         self.assertEqual(0, actual_stage_counter)
@@ -427,8 +446,8 @@ class SyncControllerTests(unittest.TestCase):
 
         self.controller.sync_pipeline('p0g0')
 
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 6))
-        self.assertTrue(self.db.pipeline_instance_exists('p0g0', 7))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 6))
+        self.assertTrue(self.db.pipeline_instance_done('p0g0', 7))
 
         actual_stage_counter = self.db.get_latest_synced_stage(47621, 'build')
         self.assertEqual(1, actual_stage_counter)

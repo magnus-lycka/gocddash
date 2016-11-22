@@ -5,34 +5,6 @@ from gocddash.util.html_utils import remove_excessive_whitespace, clean_html
 from .default_console_parser import DefaultConsoleParser
 
 
-# Traceback (most recent call last):
-#   File "venv/bin/gocddash_sync.py", line 355, in <module>
-#     controller.sync()
-#   File "venv/bin/gocddash_sync.py", line 52, in sync
-#     self.sync_pipelines()
-#   File "venv/bin/gocddash_sync.py", line 107, in sync_pipelines
-#     self.sync_pipeline(pipeline_name)
-#   File "venv/bin/gocddash_sync.py", line 115, in sync_pipeline
-#     self.sync_stages(pipeline_name, pipeline_instance)
-#   File "venv/bin/gocddash_sync.py", line 137, in sync_stages
-#     self.sync_stage(pipeline_name, pipeline_counter, pipeline_id, stage)
-#   File "venv/bin/gocddash_sync.py", line 151, in sync_stage
-#     stage_name, stage_counter)
-#   File "venv/bin/gocddash_sync.py", line 175, in sync_stage_occurrence
-#     self.sync_job(pipeline_name, pipeline_counter, stage_id, stage_name, stage_counter, job)
-#   File "venv/bin/gocddash_sync.py", line 189, in sync_job
-#     parser = JunitConsoleParser(pipeline_name, pipeline_counter, stage_counter, stage_name, job_name)
-#   File "/var/www/gocddashtest/venv/lib/python3.4/site-packages/gocddash/console_parsers/junit_report_parser.py", line 11, in __init__
-#     success, response = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
-#   File "/var/www/gocddashtest/venv/lib/python3.4/site-packages/gocddash/analysis/go_client.py", line 224, in go_request_junit_report
-#     return _go_client.go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name, job_name)
-#   File "/var/www/gocddashtest/venv/lib/python3.4/site-packages/gocddash/analysis/go_client.py", line 112, in go_request_junit_report
-#     request = self.base_request(template.format(pipeline_name, pipeline_id, stage_name, stage, job_name))
-#   File "/var/www/gocddashtest/venv/lib/python3.4/site-packages/gocddash/analysis/go_client.py", line 58, in base_request
-#     raise LookupError(err)
-# LookupError: 404 Client Error: Not Found for url: http://localhost:8153/go/files/archive-feature-tests/2948/runTests/1/defaultJob/testoutput/index.html
-
-
 class JunitConsoleParser(DefaultConsoleParser):
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
         super().__init__(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)

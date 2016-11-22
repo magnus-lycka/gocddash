@@ -481,7 +481,7 @@ class SQLConnection:
             fetchall = cursor.fetchall()
         return fetchall
 
-    def pipeline_instance_exists(self, pipeline_name, pipeline_counter):
+    def pipeline_instance_done(self, pipeline_name, pipeline_counter):
         with self.conn:
             cursor = self.conn.cursor()
             cursor.execute("SELECT * "

@@ -100,9 +100,9 @@ class GoSource:  # pragma: no cover
         request = self.api_request("agents", headers={"Accept": "application/vnd.go.cd.v2+json"})
         return request.content.decode("utf-8")
 
-    def go_request_job_history(self, pipeline_name, stage_name, offset=0):
-        return self.simple_api_request("jobs/{}/{}/defaultJob/history/{}".format(
-            pipeline_name, stage_name, offset))
+    def go_request_job_history(self, pipeline_name, stage_name, job_name='defaultJob', offset=0):
+        return self.simple_api_request("jobs/{}/{}/{}/history/{}".format(
+            pipeline_name, stage_name, job_name, offset))
 
     def go_get_pipeline_groups(self):
         return self.simple_api_request("config/pipeline_groups")
@@ -176,7 +176,7 @@ class FileSource:
         return True, self.read_file("/junit.html")
 
     @staticmethod
-    def go_request_job_history(pipeline_name, stage_name, offset=0):
+    def go_request_job_history(pipeline_name, stage_name, job_name='defaultJob', offset=0):
         raise NotImplementedError
 
     def go_get_pipeline_groups(self):
@@ -190,34 +190,6 @@ class FileSource:
 
     def go_get_cctray(self):
         return self.read_file("/config/cctray.xml")
-
-
-def go_request_pipeline_history(pipeline_name, offset=0):
-    return _go_client.go_request_pipeline_history(pipeline_name, offset)
-
-
-def go_get_pipeline_instance(pipeline_name, pipeline_counter):
-    return _go_client.go_get_pipeline_instance(pipeline_name, pipeline_counter)
-
-
-def go_get_stage_instance(pipeline_name, pipeline_counter, stage_name):
-    return _go_client.go_get_stage_instance(pipeline_name, pipeline_counter, stage_name)
-
-
-def go_get_pipeline_status(pipeline_name):
-    return _go_client.go_get_pipeline_status(pipeline_name)
-
-
-def go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name):
-    return _go_client.go_request_stages_history(pipeline_name, pipeline_counter, stage_index, stage_name)
-
-
-def go_get_agent_information(agent_uuid):
-    return _go_client.go_get_agent_information(agent_uuid)
-
-
-def go_get_pipeline_groups():
-    return _go_client.go_get_pipeline_groups()
 
 
 def go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name, job_name):

@@ -2,8 +2,7 @@
 import re
 
 from gocddash.analysis.data_access import get_connection
-from gocddash.analysis.go_client import go_request_console_log
-from gocddash.analysis.go_client import go_request_junit_report
+from gocddash.analysis.go_client import GoClient
 from .default_console_parser import DefaultConsoleParser
 
 
@@ -14,9 +13,10 @@ def ansi_escape(x):
 class TexttestConsoleParser(DefaultConsoleParser):
     def __init__(self, pipeline_name, pipeline_counter, stage_index, stage_name, job_name):
         super().__init__(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
-        self.success, self.response = go_request_junit_report(
+        self.success, self.response = GoClient().request_junit_report(
             pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
-        self.console_log = go_request_console_log(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+        self.console_log = GoClient().request_console_log(
+            pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
 
     def parse_info(self):
         """

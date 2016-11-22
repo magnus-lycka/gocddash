@@ -11,7 +11,7 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 from flask import jsonify
 
 from gocddash.appcoverage import cover  # Make sure this comes before other gocddash imports
-from gocddash.analysis.go_client import go_get_pipeline_status, create_go_client
+from gocddash.analysis.go_client import GoClient
 from gocddash.console_parsers.git_history_comparison import get_git_comparison
 from gocddash.dashboard import failure_tip, pipeline_status
 from gocddash.dashboard.graph import pipeline_history_chart_json, agent_success_rate_chart_json
@@ -413,7 +413,7 @@ def setup():
 
 def pipeline_is_paused(pipeline_name):
     if 'GO_SERVER_USER' in app.config:
-        response = go_get_pipeline_status(pipeline_name)
+        response = GoClient().get_pipeline_status(pipeline_name)
         status = json.loads(response)
         if status["paused"]:
             return status.get("pausedCause") or 'Paused', status.get("pausedBy")
@@ -458,9 +458,9 @@ def parse_args():
 @app.before_first_request
 def main():
     if 'FILE_CLIENT' in app.config:
-        create_go_client(app.config['FILE_CLIENT'], auth=None)
+        GoClient(app.config['FILE_CLIENT'])
     else:
-        create_go_client(
+        GoClient(
             app.config['GO_SERVER_URL'],
             (app.config['GO_SERVER_USER'], app.config['GO_SERVER_PASSWD'])
         )
