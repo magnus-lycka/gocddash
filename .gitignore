@@ -8,10 +8,15 @@ __pycache__/
 *.dot
 *.png
 
+**/application.cfg
+**/pipelines.json
+
 build
 dist
 texttest/venv
 test/.coverage
+.coverage
+tmp
 
 # JetBrains
 .idea/
