@@ -1,4 +1,4 @@
-GET http://127.0.0.1:8772/dash/pipelines/
+GET http://127.0.0.1:4581/dash/pipelines/
 data: {}
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
@@ -10,21 +10,21 @@ data: {}
           +
           + [7]Select pipeline groups / Config
           + [8]Select theme
-     * Last refresh: 16:33:59 | 00 seconds
+     * Last refresh: 19:16:22 | 00 seconds
 
-   Pipeline Name Pipeline Group Sync   Log Parser   Email Notifications
-   bar           Bananas        [X]  [junit_______] [ ]
-   foo           Bananas        [X]  [junit_______] [ ]
+   Pipeline Name Pipeline Group Synchronize   Log Parser   Email Notifications
+   bar           Bananas        [X]         [junit_______] [ ]
+   foo           Bananas        [X]         [junit_______] [ ]
 
    ???
 
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:8772/dash/?which=failing
-   3. http://127.0.0.1:8772/dash/?which=progress
-   4. http://127.0.0.1:8772/dash/?which=all
-   5. http://127.0.0.1:8772/dash/pipelines/
-   6. http://127.0.0.1:8772/dash/stats
-   7. http://127.0.0.1:8772/dash/select/
-   8. http://127.0.0.1:8772/dash/select_theme/
+   2. http://127.0.0.1:4581/dash/?which=failing
+   3. http://127.0.0.1:4581/dash/?which=progress
+   4. http://127.0.0.1:4581/dash/?which=all
+   5. http://127.0.0.1:4581/dash/pipelines/
+   6. http://127.0.0.1:4581/dash/stats
+   7. http://127.0.0.1:4581/dash/select/
+   8. http://127.0.0.1:4581/dash/select_theme/

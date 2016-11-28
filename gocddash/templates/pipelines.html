@@ -2,7 +2,7 @@
 {% block content %}
 
     <div class="container">
-        <form class="pipelinegroupsform" role="form" action="" method="post">
+        <form class="pipelinesform" role="form" action="" method="">
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
@@ -19,7 +19,11 @@
                         <td>{{ pipeline_name }}</td>
                         <td>{{ pipeline_group }}</td>
                         <td>
-                                <input type="checkbox" {% if sync %}checked{% endif %} name="sync_{{ pipeline_name }}">
+                                <input type="checkbox" {% if sync %}checked{% endif %}
+                                       id="sync_{{ pipeline_name }}"
+                                       name="sync_{{ pipeline_name }}"
+                                       onclick="toggleSync({{ pipeline_name }})"
+                                >
                         </td>
                         <td>
                             <select class="form-control">
@@ -29,7 +33,10 @@
                             </select>
                         </td>
                         <td>
-                                <input type="checkbox" {% if email_notifications %}checked{% endif %} name="email_notifications_{{ pipeline_name }}">
+                                <input type="checkbox" {% if email_notifications %}checked{% endif %}
+                                       name="email_notifications_{{ pipeline_name }}"
+                                       onclick="toggleEmailNotifications({{ pipeline_name }})"
+                                >
                         </td>
                     </tr>
                 {% endfor %}
@@ -44,15 +51,15 @@
 {% block scripts %}
 
     <script type="text/javascript" language="javascript">
-        $("#allgroups").click(function () {
-            $(".pipelinegroupsform :checkbox").prop("checked", true);
-        });
+        function toggleSync( pipeline ) {
+            console.log("Sync " + pipeline + " " + document.getElementById('sync_' + pipeline).checked);
+        };
     </script>
 
     <script type="text/javascript" language="javascript">
-        $("#nogroups").click(function () {
-            $(".pipelinegroupsform :checkbox").prop("checked", false);
-        });
+        function toggleEmailNotifications( pipeline ) {
+            console.log("Mail " + pipeline + " " + document.getElementById('email_notifications_' + pipeline).checked);
+        };
     </script>
 
 {% endblock %}
