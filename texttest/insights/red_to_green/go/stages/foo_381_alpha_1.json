@@ -9,6 +9,7 @@
        "result": "Failed",
        "id": 1234,
       "scheduled_date": 1436509518752,
+      "state": "Completed",
       "agent_uuid": "1"
     }
   ]

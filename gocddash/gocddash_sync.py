@@ -186,7 +186,7 @@ class SyncController:
         self.db.insert_stage(pipeline_id, stage)
         all_done = True
         for job in stage_occurrence['jobs']:
-            if job["state"] == "Completed":
+            if job.get("state") == "Completed":
                 self.sync_job(pipeline_name,
                               pipeline_counter,
                               stage_id,

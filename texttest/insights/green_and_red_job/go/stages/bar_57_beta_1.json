@@ -9,6 +9,7 @@
        "result": "Passed",
        "id": 34676,
       "scheduled_date": 1436509518752,
+      "state": "Completed",
       "agent_uuid": "1"
     },
     {
@@ -16,6 +17,7 @@
       "result": "Failed",
       "id": 34677,
       "scheduled_date": 1436509510571,
+      "state": "Completed",
       "agent_uuid": "1"
     }
   ]
