@@ -21,7 +21,13 @@
                         <td>
                                 <input type="checkbox" {% if sync %}checked{% endif %} name="sync_{{ pipeline_name }}">
                         </td>
-                        <td>{{ log_parser }}</td>
+                        <td>
+                            <select>
+                            {% for lp in log_parsers %}
+                                <option value="log_parser_{{ pipeline_name }}_{{ lp }}" {% if lp == log_parser %}selected{% endif %}>{{ lp }}</option>
+                            {% endfor %}
+                            </select>
+                        </td>
                         <td>
                                 <input type="checkbox" {% if email_notifications %}checked{% endif %} name="email_notifications_{{ pipeline_name }}">
                         </td>

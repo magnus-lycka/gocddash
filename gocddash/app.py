@@ -149,6 +149,7 @@ def pipelines():
     template = render_template('pipelines.html',
                                go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
                                pipelines=pipelines,
+                               log_parsers=['junit', 'characterize'],
                                now=datetime.now(),
                                theme=get_bootstrap_theme(),
                                footer=get_footer(),
