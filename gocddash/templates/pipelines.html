@@ -22,7 +22,7 @@
                                 <input type="checkbox" {% if sync %}checked{% endif %} name="sync_{{ pipeline_name }}">
                         </td>
                         <td>
-                            <select>
+                            <select class="form-control">
                             {% for lp in log_parsers %}
                                 <option value="log_parser_{{ pipeline_name }}_{{ lp }}" {% if lp == log_parser %}selected{% endif %}>{{ lp }}</option>
                             {% endfor %}
