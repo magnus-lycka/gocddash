@@ -1,0 +1,29 @@
+GET http://127.0.0.1:9078/dash/pipelines/
+data: {}
+   (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
+     * [2]Failing
+     * [3]Progress
+     * [4]All
+
+     * [5]More/Config
+          + [6]Graph overview
+          +
+          + [7]Select pipeline groups / Config
+          + [8]Select theme
+     * Last refresh: 15:11:17 | 00 seconds
+
+   Bananas 1 junit 0
+   Bananas 1 junit 0
+
+   ???
+
+References
+
+   1. http://go.pagero.local/go/
+   2. http://127.0.0.1:9078/dash/?which=failing
+   3. http://127.0.0.1:9078/dash/?which=progress
+   4. http://127.0.0.1:9078/dash/?which=all
+   5. http://127.0.0.1:9078/dash/pipelines/
+   6. http://127.0.0.1:9078/dash/stats
+   7. http://127.0.0.1:9078/dash/select/
+   8. http://127.0.0.1:9078/dash/select_theme/

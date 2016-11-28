@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="container">
+        <form class="pipelinegroupsform" role="form" action="" method="post">
+            <table>
+            {% for pipeline_name, pipeline_group, sync, log_parser, email_notifications in pipelines %}
+                <tr>
+                    <td>{{ pipeline }}</td>
+                    <td>{{ pipeline_group }}</td>
+                    <td>{{ sync }}</td>
+                    <td>{{ log_parser }}</td>
+                    <td>{{ email_notifications }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </form>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script type="text/javascript" language="javascript">
+        $("#allgroups").click(function () {
+            $(".pipelinegroupsform :checkbox").prop("checked", true);
+        });
+    </script>
+
+    <script type="text/javascript" language="javascript">
+        $("#nogroups").click(function () {
+            $(".pipelinegroupsform :checkbox").prop("checked", false);
+        });
+    </script>
+
+{% endblock %}
+

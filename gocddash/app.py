@@ -142,6 +142,23 @@ def select():
     return response
 
 
+@gocddash.route("/pipelines/", methods=['GET'])
+def pipelines():
+    pipelines = get_connection().list_pipelines()
+
+    template = render_template('pipelines.html',
+                               go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
+                               pipelines=pipelines,
+                               now=datetime.now(),
+                               theme=get_bootstrap_theme(),
+                               footer=get_footer(),
+                               application_root=app.config['APPLICATION_ROOT'])
+
+    response = make_response(template)
+
+    return response
+
+
 @gocddash.route("/select_theme/", methods=['GET', 'POST'])
 def select_theme():
     if request.method == 'POST':
