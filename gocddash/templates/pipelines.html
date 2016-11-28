@@ -4,14 +4,31 @@
     <div class="container">
         <form class="pipelinegroupsform" role="form" action="" method="post">
             <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Pipeline Name</th>
+                        <th>Pipeline Group</th>
+                        <th>Sync</th>
+                        <th>Log Parser</th>
+                        <th>Email Notifications</th>
+                    </tr>
+                </thead>
                 <tbody>
                 {% for pipeline_name, pipeline_group, sync, log_parser, email_notifications in pipelines %}
                     <tr>
                         <td>{{ pipeline_name }}</td>
                         <td>{{ pipeline_group }}</td>
-                        <td>{{ sync }}</td>
+                        <td>
+                            <div class="checkbox">
+                                <input type="checkbox" {{ sync }} name="sync_{{ pipeline_name }}">
+                            </div>
+                        </td>
                         <td>{{ log_parser }}</td>
-                        <td>{{ email_notifications }}</td>
+                        <td>
+                            <div class="checkbox">
+                                <input type="checkbox" {{ email_notifications }} name="email_notifications_{{ pipeline_name }}">
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
