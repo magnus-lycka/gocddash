@@ -19,15 +19,11 @@
                         <td>{{ pipeline_name }}</td>
                         <td>{{ pipeline_group }}</td>
                         <td>
-                            <div class="checkbox">
-                                <input type="checkbox" {{ sync }} name="sync_{{ pipeline_name }}">
-                            </div>
+                                <input type="checkbox" {% if sync %}checked{% endif %} name="sync_{{ pipeline_name }}">
                         </td>
                         <td>{{ log_parser }}</td>
                         <td>
-                            <div class="checkbox">
-                                <input type="checkbox" {{ email_notifications }} name="email_notifications_{{ pipeline_name }}">
-                            </div>
+                                <input type="checkbox" {% if email_notifications %}checked{% endif %} name="email_notifications_{{ pipeline_name }}">
                         </td>
                     </tr>
                 {% endfor %}
