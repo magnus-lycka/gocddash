@@ -6,12 +6,12 @@ as specified in application.cfg. Filters out any material revision modifications
 # noinspection PyPackageRequirements
 from bs4 import BeautifulSoup
 
-from gocddash.analysis.go_client import go_request_comparison_html
+from gocddash.analysis.go_client import go_client
 from gocddash.util.html_utils import remove_new_line
 
 
 def open_html(pipeline_name, current, comparison):
-    html = go_request_comparison_html(pipeline_name, current, comparison)
+    html = go_client().request_comparison_html(pipeline_name, current, comparison)
     soup = BeautifulSoup(html, "html.parser")
     return soup
 

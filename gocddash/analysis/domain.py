@@ -1,7 +1,7 @@
 from collections import namedtuple
 from . import parse_cctray
 from .data_access import get_connection
-from .go_client import go_get_cctray
+from .go_client import go_client
 
 
 def get_previous_stage(current_stage):
@@ -169,7 +169,7 @@ def fold(rows, class_to_instantiate, default=None):
 
 
 def get_cctray_status():
-    xml = go_get_cctray()
+    xml = go_client().get_cctray()
     project = parse_cctray.Projects(xml)
     return project
 

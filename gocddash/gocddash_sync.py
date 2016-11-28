@@ -27,7 +27,7 @@ def setup_go_client(pargs):
     if file_source:
         app_config.get_app_config().cfg['GO_SERVER_URL'] = file_source
 
-    go_client.create_go_client(
+    go_client.go_client(
         app_config.get_app_config().cfg['GO_SERVER_URL'],
         (app_config.get_app_config().cfg['GO_SERVER_USER'], app_config.get_app_config().cfg['GO_SERVER_PASSWD'])
     )
@@ -146,7 +146,7 @@ class SyncController:
         Return whether all were done.
         """
         if not stage['scheduled']:
-            return
+            return False
         stage_name = stage['name']
         current_stage_counter = int(stage['counter'])
         previous_stage_counter = self.db.get_latest_synced_stage(pipeline_id, stage_name)
@@ -168,8 +168,8 @@ class SyncController:
         Store information about stage run from go-server and sync its jobs.
         Return whether we were done with the stage.
         """
-        stage_occurrence_json = self.go.request_stages_history(pipeline_name, pipeline_counter,
-                                                               stage_counter, stage_name)
+        stage_occurrence_json = self.go.get_stage_instance(pipeline_name, pipeline_counter,
+                                                           stage_counter, stage_name)
         stage_occurrence = json.loads(stage_occurrence_json)
         stage_result = stage_occurrence["result"]
         if stage_result == 'Unknown':
@@ -184,9 +184,18 @@ class SyncController:
         stage = domain.Stage(stage_name, stage_occurrence["approved_by"], stage_result,
                              stage_counter, stage_id, timestamp)
         self.db.insert_stage(pipeline_id, stage)
+        all_done = True
         for job in stage_occurrence['jobs']:
-            self.sync_job(pipeline_name, pipeline_counter, stage_id, stage_name, stage_counter, job)
-        return True
+            if job["state"] == "Completed":
+                self.sync_job(pipeline_name,
+                              pipeline_counter,
+                              stage_id,
+                              stage_name,
+                              stage_counter,
+                              job)
+            else:
+                all_done = False
+        return all_done
 
     def sync_job(self, pipeline_name, pipeline_counter, stage_id, stage_name, stage_counter, job):
         """
@@ -333,10 +342,10 @@ class SyncController:
 
 class JsonNodes:
     """
-    Parse a Python data structure coming from json, and return a
+    Parse a Python data structure coming from json, and build a
     list of (key, value) pairs. The keys show the hierarchy using
-    dot notation. E.g. {'a': ['b': 6, 'o': 0]} should return
-    [('a.b', 6), ('a.o', 0)].
+    dot notation. E.g. {'a': ['b': 6, 'o': 0]} should put
+    [('a.b', 6), ('a.o', 0)] in its .nodes attribute.
     """
     def __init__(self, json_structure, prefix=None):
         """
@@ -373,7 +382,7 @@ class JsonNodes:
 
 if __name__ == '__main__':
     setup_go_client(parse_args())
-    go = go_client.GoClient()
+    go = go_client.go_client()
     db = data_access.get_connection(app_config.get_app_config().cfg['DB_PATH'])
     controller = SyncController(db, go)
     log("Starting synchronization.")

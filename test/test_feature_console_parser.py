@@ -38,10 +38,16 @@ _junit_report = (True, """<table class="section-table" cellpadding="2" cellspaci
 
 class TestConsoleFetcher(unittest.TestCase):
     def test_po_webtest(self):
-        junit_report_parser.go_request_junit_report = MagicMock(return_value=_junit_report)
+        go_client = junit_report_parser.go_client
+
+        class Stub:
+            pass
+        junit_report_parser.go_client = Stub
+        junit_report_parser.go_client.request_junit_report = MagicMock(return_value=_junit_report)
         parser = junit_report_parser.JunitConsoleParser("test-interface", 1872, 1, "defaultStage", 'defaultJob')
 
         output_list = parser.parse_info()
 
+        junit_report_parser.go_client = go_client
         error_list = [('Failure', 'FruitCompany123')]
         self.assertEqual(output_list, error_list)

@@ -1218,8 +1218,15 @@ class TestGitBlame(unittest.TestCase):
         current = "2029"
         comparison = "2029"
 
-        git_history_comparison.go_request_comparison_html = MagicMock(return_value=git_history_html)
+        class Stub:
+            pass
+        go_client = git_history_comparison.go_client
+        git_history_comparison.go_client = Stub
+        git_history_comparison.go_client.request_comparison_html = MagicMock(return_value=git_history_html)
+
         output = git_history_comparison.get_git_comparison(pipeline_name, current, comparison, 'banana')
+
+        git_history_comparison.go_client = go_client
         self.assertEqual(output, [
             ('app_server.git, Branch: master', [
                 ('efe8f8d9a2e5aa87398e2d338246fd8e950df60d', 'ab <ab@test.com> 2016-08-17T15:55:37+02:00', 'testing')
@@ -1244,8 +1251,15 @@ class TestGitBlame(unittest.TestCase):
         current = "295"
         comparison = "294"
 
-        git_history_comparison.go_request_comparison_html = MagicMock(return_value=material_revision_diff)
+        class Stub:
+            pass
+        go_client = git_history_comparison.go_client
+        git_history_comparison.go_client = Stub
+        git_history_comparison.go_client.request_comparison_html = MagicMock(return_value=material_revision_diff)
+
         output = git_history_comparison.get_git_comparison(pipeline_name, current, comparison, 'banana')
+
+        git_history_comparison.go_client = go_client
         self.assertEqual(output, None)
 
 

@@ -1,6 +1,6 @@
 """Module used for parsing the console log of a JUnit classified pipeline"""
 from gocddash.analysis.data_access import get_connection
-from gocddash.analysis.go_client import go_request_junit_report
+from gocddash.analysis.go_client import go_client
 from gocddash.util.html_utils import remove_excessive_whitespace, clean_html
 from .default_console_parser import DefaultConsoleParser
 
@@ -10,7 +10,7 @@ class JunitConsoleParser(DefaultConsoleParser):
         super().__init__(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
 
         ###
-        success, response = go_request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+        success, response = go_client().request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         ###
 
         self.response = response

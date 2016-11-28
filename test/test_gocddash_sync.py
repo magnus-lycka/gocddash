@@ -4,14 +4,14 @@ from collections import OrderedDict
 
 from gocddash.gocddash_sync import SyncController, JsonNodes
 from gocddash.analysis.data_access import SQLConnection
-from gocddash.analysis.go_client import GoClient
+from gocddash.analysis.go_client import go_client
 from gocddash.analysis.domain import PipelineInstance
 
 
 class SyncControllerTests(unittest.TestCase):
     def setUp(self):
         self.db = SQLConnection(':memory:', foreign_keys=False)
-        self.go = GoClient('data')
+        self.go = go_client('data')
         self.controller = SyncController(self.db, self.go)
 
     def test_sync_agents_from_empty(self):

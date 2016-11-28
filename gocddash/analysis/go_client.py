@@ -78,48 +78,48 @@ class GoSource:  # pragma: no cover
             cache = SimpleCache(default_timeout=cache_timeout)
             print('Fell back on SimpleCache due to {} consecutive cache failures.'.format(max_fails))
 
-    def go_request_pipeline_history(self, pipeline_name, offset=0):
+    def request_pipeline_history(self, pipeline_name, offset=0):
         return self.simple_api_request("pipelines/{}/history/{}".format(pipeline_name, offset))
 
-    def go_get_pipeline_instance(self, pipeline_name, pipeline_counter):
+    def get_pipeline_instance(self, pipeline_name, pipeline_counter):
         return self.simple_api_request("pipelines/{}/instance/{}/".format(pipeline_name, pipeline_counter))
 
-    def go_get_pipeline_status(self, pipeline_name):
+    def get_pipeline_status(self, pipeline_name):
         response = self.api_request("pipelines/{}/status".format(pipeline_name))
         return response.content.decode("utf-8")
 
-    def go_request_stages_history(self, pipeline_name, pipeline_id, stage, stage_name):
+    def get_stage_instance(self, pipeline_name, pipeline_id, stage, stage_name):
         return self.simple_api_request(
             "stages/{}/{}/instance/{}/{}".format(pipeline_name, stage_name, pipeline_id, stage))
 
-    def go_get_agent_information(self, agent_uuid):
+    def get_agent_information(self, agent_uuid):
         request = self.api_request("agents/" + agent_uuid, headers={"Accept": "application/vnd.go.cd.v2+json"})
         return request.status_code == 200, request.content.decode("utf-8")
 
-    def go_get_agents(self):
+    def get_agents(self):
         request = self.api_request("agents", headers={"Accept": "application/vnd.go.cd.v2+json"})
         return request.content.decode("utf-8")
 
-    def go_request_job_history(self, pipeline_name, stage_name, job_name='defaultJob', offset=0):
+    def request_job_history(self, pipeline_name, stage_name, job_name='defaultJob', offset=0):
         return self.simple_api_request("jobs/{}/{}/{}/history/{}".format(
             pipeline_name, stage_name, job_name, offset))
 
-    def go_get_pipeline_groups(self):
+    def get_pipeline_groups(self):
         return self.simple_api_request("config/pipeline_groups")
 
-    def go_request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name, job_name):
+    def request_junit_report(self, pipeline_name, pipeline_id, stage, stage_name, job_name):
         template = "files/{}/{}/{}/{}/{}/testoutput/index.html"
         request = self.base_request(template.format(pipeline_name, pipeline_id, stage_name, stage, job_name))
         return request.status_code == 200, request.content.decode("utf-8")
 
-    def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name, job_name):
+    def request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name, job_name):
         template = "files/{}/{}/{}/{}/{}/cruise-output/console.log"
         return self.simple_request(template.format(pipeline_name, pipeline_id, stage_name, stage_index, job_name))
 
-    def go_request_comparison_html(self, pipeline_name, current, comparison):
+    def request_comparison_html(self, pipeline_name, current, comparison):
         return self.simple_request("compare/{}/{}/with/{}".format(pipeline_name, current, comparison))
 
-    def go_get_cctray(self):
+    def get_cctray(self):
         return self.simple_request("cctray.xml")
 
 
@@ -142,31 +142,27 @@ class FileSource:
         except FileNotFoundError as err:
             raise LookupError(err)
 
-    def go_request_pipeline_history(self, pipeline_name, offset=0):
+    def request_pipeline_history(self, pipeline_name, offset=0):
         return self.read_file("/history/{}/{}.json".format(pipeline_name, offset))
 
     @staticmethod
-    def go_get_pipeline_instance(pipeline_name, pipeline_counter):
+    def get_pipeline_instance(pipeline_name, pipeline_counter):
         raise NotImplementedError
 
-    def go_get_pipeline_status(self, pipeline_name):
+    def get_pipeline_status(self, pipeline_name):
         return self.read_file("/status/" + pipeline_name + ".json")
 
-    @staticmethod
-    def go_get_stage_instance(pipeline_name, pipeline_counter, stage_name):
-        raise NotImplementedError
-
-    def go_request_stages_history(self, pipeline_name, pipeline_counter, stage_index, stage_name):
+    def get_stage_instance(self, pipeline_name, pipeline_counter, stage_index, stage_name):
         return self.read_file("/stages/" + pipeline_name + "_" + str(pipeline_counter) + "_" + stage_name + "_" + str(
             stage_index) + ".json")
 
-    def go_get_agent_information(self, agent_uuid):
+    def get_agent_information(self, agent_uuid):
         return True, self.read_file("/agents/" + agent_uuid + ".json")
 
-    def go_get_agents(self):
+    def get_agents(self):
         return self.read_file("/agents.json")
 
-    def go_request_junit_report(self, pipeline_name, pipeline_counter, stage_counter, stage_name, job_name):
+    def request_junit_report(self, pipeline_name, pipeline_counter, stage_counter, stage_name, job_name):
         if job_name == "404Job":
             return False, ''
         if job_name == "noTestsJob":
@@ -176,58 +172,29 @@ class FileSource:
         return True, self.read_file("/junit.html")
 
     @staticmethod
-    def go_request_job_history(pipeline_name, stage_name, job_name='defaultJob', offset=0):
+    def request_job_history(pipeline_name, stage_name, job_name='defaultJob', offset=0):
         raise NotImplementedError
 
-    def go_get_pipeline_groups(self):
+    def get_pipeline_groups(self):
         return self.read_file("/config/pipeline_groups.json")
 
-    def go_request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name, job_name):
+    def request_console_log(self, pipeline_name, pipeline_id, stage_index, stage_name, job_name):
         return self.read_file("/console.log")
 
-    def go_request_comparison_html(self, pipeline_name, current, comparison):
+    def request_comparison_html(self, pipeline_name, current, comparison):
         return self.read_file("/compare.html")
 
-    def go_get_cctray(self):
+    def get_cctray(self):
         return self.read_file("/config/cctray.xml")
-
-
-def go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name, job_name):
-    return _go_client.go_request_junit_report(pipeline_name, pipeline_id, stage, stage_name, job_name)
-
-
-def go_request_job_history(pipeline_name, stage_name, offset=0):
-    return _go_client.go_request_job_history(pipeline_name, stage_name, offset)
-
-
-def go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name, job_name):
-    return _go_client.go_request_console_log(pipeline_name, pipeline_id, stage_index, stage_name, job_name)
-
-
-def go_request_comparison_html(pipeline_name, current, comparison):
-    return _go_client.go_request_comparison_html(pipeline_name, current, comparison)
-
-
-def go_get_cctray():
-    return _go_client.go_get_cctray()
 
 _go_client = None
 
 
-def create_go_client(base_go_url, auth):
-    global _go_client
-    if "http" in base_go_url:  # pragma: no cover
-        _go_client = GoSource(base_go_url, auth)
-    else:
-        _go_client = FileSource(base_go_url)
+def go_client(go_url=None, auth=None):
+    if go_url:
+        global _go_client
+        if "http" in go_url:  # pragma: no cover
+            _go_client = GoSource(go_url, auth)
+        else:
+            _go_client = FileSource(go_url)
     return _go_client
-
-
-class GoClient:
-    def __init__(self, go_url=None, auth=None):
-        if go_url:
-            create_go_client(go_url, auth)
-        self.client = _go_client
-
-    def __getattr__(self, item):
-        return getattr(self.client, 'go_' + item)

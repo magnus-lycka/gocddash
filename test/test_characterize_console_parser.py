@@ -182,15 +182,15 @@ class TestConsoleFetcher(unittest.TestCase):
 
         class Stub:
             pass
-        go_client = characterize_console_parser.GoClient
-        characterize_console_parser.GoClient = Stub
-        characterize_console_parser.GoClient.request_console_log = MagicMock(return_value=console_log)
-        characterize_console_parser.GoClient.request_junit_report = MagicMock(return_value=(False, ''))
+        go_client = characterize_console_parser.go_client
+        characterize_console_parser.go_client = Stub
+        characterize_console_parser.go_client.request_console_log = MagicMock(return_value=console_log)
+        characterize_console_parser.go_client.request_junit_report = MagicMock(return_value=(False, ''))
         test_object = characterize_console_parser.TexttestConsoleParser('ct-t', 2064, 1, 'runTests', 'defaultJob')
         output_dictionary = test_object.parse_info()
         self.maxDiff = None
         self.assertEqual(output_dictionary, error_dictionary)
-        characterize_console_parser.GoClient = go_client
+        characterize_console_parser.go_client = go_client
 
 if __name__ == '__main__':
     unittest.main()
