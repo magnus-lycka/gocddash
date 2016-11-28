@@ -481,6 +481,17 @@ class SQLConnection:
             fetchall = cursor.fetchall()
         return fetchall
 
+    def pipeline_instance_exists(self, pipeline_name, pipeline_counter):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute("SELECT * "
+                           "FROM pipeline_instance "
+                           "WHERE pipeline_name = ? "
+                           "AND pipeline_counter = ? ",
+                           (pipeline_name, pipeline_counter))
+            instance_exists = cursor.fetchone() is not None
+        return instance_exists
+
     def pipeline_instance_done(self, pipeline_name, pipeline_counter):
         with self.conn:
             cursor = self.conn.cursor()
@@ -490,8 +501,8 @@ class SQLConnection:
                            "AND pipeline_counter = ? "
                            "AND done = 1",
                            (pipeline_name, pipeline_counter))
-            instance_exists = cursor.fetchone() is not None
-        return instance_exists
+            instance_done = cursor.fetchone() is not None
+        return instance_done
 
     def get_latest_failure_streak(self, pipeline_name):
         with self.conn:

@@ -125,7 +125,7 @@ class SyncController:
             pipeline_instance["build_cause"]["trigger_message"],
             pipeline_id
         )
-        if not self.db.pipeline_instance_done(pipeline_name, pipeline_counter):
+        if not self.db.pipeline_instance_exists(pipeline_name, pipeline_counter):
             self.db.insert_pipeline_instance(instance)
 
     def sync_stages(self, pipeline_name, pipeline_instance):
