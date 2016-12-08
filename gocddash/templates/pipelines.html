@@ -28,7 +28,7 @@
                         <td>
                             <select class="form-control" onchange="saveLogParser(this, '{{ pipeline_name }}');">
                             {% for lp in log_parsers %}
-                                <option value="log_parser_{{ pipeline_name }}_{{ lp }}" {% if lp == log_parser %}selected{% endif %}>{{ lp }}</option>
+                                <option value="{{ lp }}" {% if lp == log_parser %}selected{% endif %}>{{ lp }}</option>
                             {% endfor %}
                             </select>
                         </td>
