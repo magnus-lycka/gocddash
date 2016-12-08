@@ -22,7 +22,7 @@
                                 <input type="checkbox" {% if sync %}checked{% endif %}
                                        id="sync_{{ pipeline_name }}"
                                        name="sync_{{ pipeline_name }}"
-                                       onclick="toggleSync({{ pipeline_name }})"
+                                       onclick="toggleSync(this, '{{ pipeline_name }}'); return false;"
                                 >
                         </td>
                         <td>
@@ -35,7 +35,7 @@
                         <td>
                                 <input type="checkbox" {% if email_notifications %}checked{% endif %}
                                        name="email_notifications_{{ pipeline_name }}"
-                                       onclick="toggleEmailNotifications({{ pipeline_name }})"
+                                       onclick="toggleEmailNotifications(this, '{{ pipeline_name }}'); return false;"
                                 >
                         </td>
                     </tr>
@@ -45,20 +45,29 @@
         </form>
     </div>
 
-
 {% endblock %}
 
 {% block scripts %}
 
     <script type="text/javascript" language="javascript">
-        function toggleSync( pipeline ) {
-            console.log("Sync " + pipeline + " " + document.getElementById('sync_' + pipeline).checked);
+        function toggleSync(element, pipeline) {
+            element.checked = !element.checked;
+            if (element.checked) {
+                alert("Sync " + pipeline);
+            } else {
+                alert("Don't sync " + pipeline);
+            }
         };
     </script>
 
     <script type="text/javascript" language="javascript">
-        function toggleEmailNotifications( pipeline ) {
-            console.log("Mail " + pipeline + " " + document.getElementById('email_notifications_' + pipeline).checked);
+        function toggleEmailNotifications(element, pipeline) {
+            element.checked = !element.checked;
+            if (element.checked) {
+                alert("Email about " + pipeline);
+            } else {
+                alert("Don't email about " + pipeline);
+            }
         };
     </script>
 
