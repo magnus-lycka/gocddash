@@ -163,13 +163,13 @@ def pipelines():
 @gocddash.route("/pipelines/<pipeline_name>/sync", methods=['PUT', 'DELETE'])
 def pipelines_sync(pipeline_name):
     get_connection().update_pipeline(pipeline_name, sync=request.method == 'PUT')
-    return 204, ''
+    return '', 204
 
 
 @gocddash.route("/pipelines/<pipeline_name>/email_notifications", methods=['PUT', 'DELETE'])
 def pipelines_email_notifications(pipeline_name):
     get_connection().update_pipeline(pipeline_name, email_notifications=request.method == 'PUT')
-    return 204, ''
+    return '', 204
 
 
 @gocddash.route("/select_theme/", methods=['GET', 'POST'])

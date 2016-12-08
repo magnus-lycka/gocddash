@@ -51,7 +51,7 @@
 
     <script type="text/javascript" language="javascript">
         function toggleSync(element, pipeline) {
-            var url = '{{ application_root }}/pipelines/' + pipeline + '/sync/';
+            var url = '{{ application_root }}/pipelines/' + pipeline + '/sync';
             var action = 'DELETE';
             if (element.checked) {
                 console.log("Sync " + pipeline);
@@ -68,7 +68,7 @@
 
     <script type="text/javascript" language="javascript">
         function toggleEmailNotifications(element, pipeline) {
-            var url = '{{ application_root }}/pipelines/' + pipeline + '/email_notifications/';
+            var url = '{{ application_root }}/pipelines/' + pipeline + '/email_notifications';
             var action = 'DELETE';
             if (element.checked) {
                 console.log("Email about " + pipeline);
