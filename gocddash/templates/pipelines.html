@@ -22,7 +22,7 @@
                                 <input type="checkbox" {% if sync %}checked{% endif %}
                                        id="sync_{{ pipeline_name }}"
                                        name="sync_{{ pipeline_name }}"
-                                       onclick="toggleSync(this, '{{ pipeline_name }}'); return false;"
+                                       onclick="toggleSync(this, '{{ pipeline_name }}');"
                                 >
                         </td>
                         <td>
@@ -35,7 +35,7 @@
                         <td>
                                 <input type="checkbox" {% if email_notifications %}checked{% endif %}
                                        name="email_notifications_{{ pipeline_name }}"
-                                       onclick="toggleEmailNotifications(this, '{{ pipeline_name }}'); return false;"
+                                       onclick="toggleEmailNotifications(this, '{{ pipeline_name }}');"
                                 >
                         </td>
                     </tr>
