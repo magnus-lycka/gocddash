@@ -51,21 +51,35 @@
 
     <script type="text/javascript" language="javascript">
         function toggleSync(element, pipeline) {
+            var url = '{{ application_root }}/pipelines/' + pipeline + '/sync/';
+            var action = 'DELETE';
             if (element.checked) {
-                alert("Sync " + pipeline);
+                console.log("Sync " + pipeline);
+                action = 'PUT';
             } else {
-                alert("Don't sync " + pipeline);
+                console.log("Don't sync " + pipeline);
             }
+            $.ajax({
+                url: url,
+                type: action
+            });
         };
     </script>
 
     <script type="text/javascript" language="javascript">
         function toggleEmailNotifications(element, pipeline) {
+            var url = '{{ application_root }}/pipelines/' + pipeline + '/email_notifications/';
+            var action = 'DELETE';
             if (element.checked) {
-                alert("Email about " + pipeline);
+                console.log("Email about " + pipeline);
+                action = 'PUT';
             } else {
-                alert("Don't email about " + pipeline);
+                console.log("Don't email about " + pipeline);
             }
+            $.ajax({
+                url: url,
+                type: action
+            });
         };
     </script>
 

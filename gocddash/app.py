@@ -160,6 +160,18 @@ def pipelines():
     return response
 
 
+@gocddash.route("/pipelines/<pipeline_name>/sync", methods=['PUT', 'DELETE'])
+def pipelines(pipeline_name):
+    get_connection().update_pipeline(pipeline_name, sync=request.method == 'PUT')
+    return 204, ''
+
+
+@gocddash.route("/pipelines/<pipeline_name>/email_notifications", methods=['PUT', 'DELETE'])
+def pipelines(pipeline_name):
+    get_connection().update_pipeline(pipeline_name, email_notifications=request.method == 'PUT')
+    return 204, ''
+
+
 @gocddash.route("/select_theme/", methods=['GET', 'POST'])
 def select_theme():
     if request.method == 'POST':
