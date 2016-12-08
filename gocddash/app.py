@@ -172,6 +172,12 @@ def pipelines_email_notifications(pipeline_name):
     return '', 204
 
 
+@gocddash.route("/pipelines/<pipeline_name>/log_parser", methods=['POST'])
+def pipelines_log_parser(pipeline_name):
+    get_connection().update_pipeline(pipeline_name, log_parser=request.form['log_parser'])
+    return '', 204
+
+
 @gocddash.route("/select_theme/", methods=['GET', 'POST'])
 def select_theme():
     if request.method == 'POST':

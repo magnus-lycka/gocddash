@@ -22,11 +22,11 @@
                                 <input type="checkbox" {% if sync %}checked{% endif %}
                                        id="sync_{{ pipeline_name }}"
                                        name="sync_{{ pipeline_name }}"
-                                       onclick="toggleSync(this, '{{ pipeline_name }}');"
+                                       onclick="toggleCB('sync', this, '{{ pipeline_name }}');"
                                 >
                         </td>
                         <td>
-                            <select class="form-control">
+                            <select class="form-control" onchange="saveLogParser(this, '{{ pipeline_name }}');">
                             {% for lp in log_parsers %}
                                 <option value="log_parser_{{ pipeline_name }}_{{ lp }}" {% if lp == log_parser %}selected{% endif %}>{{ lp }}</option>
                             {% endfor %}
@@ -35,7 +35,7 @@
                         <td>
                                 <input type="checkbox" {% if email_notifications %}checked{% endif %}
                                        name="email_notifications_{{ pipeline_name }}"
-                                       onclick="toggleEmailNotifications(this, '{{ pipeline_name }}');"
+                                       onclick="toggleCB('email_notifications', this, '{{ pipeline_name }}');"
                                 >
                         </td>
                     </tr>
@@ -50,14 +50,11 @@
 {% block scripts %}
 
     <script type="text/javascript" language="javascript">
-        function toggleSync(element, pipeline) {
-            var url = '{{ application_root }}/pipelines/' + pipeline + '/sync';
+        function toggleCB(what, element, pipeline) {
+            var url = '{{ application_root }}/pipelines/' + pipeline + '/' + what;
             var action = 'DELETE';
             if (element.checked) {
-                console.log("Sync " + pipeline);
                 action = 'PUT';
-            } else {
-                console.log("Don't sync " + pipeline);
             }
             $.ajax({
                 url: url,
@@ -67,21 +64,16 @@
     </script>
 
     <script type="text/javascript" language="javascript">
-        function toggleEmailNotifications(element, pipeline) {
-            var url = '{{ application_root }}/pipelines/' + pipeline + '/email_notifications';
-            var action = 'DELETE';
-            if (element.checked) {
-                console.log("Email about " + pipeline);
-                action = 'PUT';
-            } else {
-                console.log("Don't email about " + pipeline);
-            }
+        function saveLogParser(element, pipeline) {
+            var url = '{{ application_root }}/pipelines/' + pipeline + '/log_parser';
             $.ajax({
                 url: url,
-                type: action
+                type: 'POST',
+                data: 'log_parser=' + element.value
             });
         };
     </script>
+
 
 {% endblock %}
 
