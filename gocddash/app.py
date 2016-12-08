@@ -144,11 +144,11 @@ def select():
 
 @gocddash.route("/pipelines/", methods=['GET'])
 def pipelines():
-    pipelines = get_connection().list_pipelines()
+    pipeline_list = get_connection().list_pipelines()
 
     template = render_template('pipelines.html',
                                go_server_url=app.config['PUBLIC_GO_SERVER_URL'],
-                               pipelines=pipelines,
+                               pipelines=pipeline_list,
                                log_parsers=['junit', 'characterize'],
                                now=datetime.now(),
                                theme=get_bootstrap_theme(),
@@ -161,13 +161,13 @@ def pipelines():
 
 
 @gocddash.route("/pipelines/<pipeline_name>/sync", methods=['PUT', 'DELETE'])
-def pipelines(pipeline_name):
+def pipelines_sync(pipeline_name):
     get_connection().update_pipeline(pipeline_name, sync=request.method == 'PUT')
     return 204, ''
 
 
 @gocddash.route("/pipelines/<pipeline_name>/email_notifications", methods=['PUT', 'DELETE'])
-def pipelines(pipeline_name):
+def pipelines_email_notifications(pipeline_name):
     get_connection().update_pipeline(pipeline_name, email_notifications=request.method == 'PUT')
     return 204, ''
 
