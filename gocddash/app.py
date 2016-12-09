@@ -67,6 +67,7 @@ def dashboard():
             pipeline.messages['PausedBy'].add(whom)
 
     synced_pipelines = dict()
+    #    for pipeline_head in get_connection().get_synced_pipeline_heads():
     for pipeline_head in get_pipeline_heads():
         synced_pipelines[pipeline_head.pipeline_name] = pipeline_head
 

@@ -325,8 +325,9 @@ class SQLConnection:
             cursor = self.conn.cursor()
             cursor.execute("""SELECT f.* FROM
                             (SELECT pipeline_name, max(id) as stage_id FROM failure_info GROUP BY pipeline_name) s
-                            JOIN failure_info f
-                            ON s.stage_id = f.id;""")
+                            JOIN failure_info f ON s.stage_id = f.id
+                            JOIN pipeline p ON p.pipeline_name = s.pipeline_name
+                            WHERE p.sync = 1;""")
             synced_heads = cursor.fetchall()
         return synced_heads
 
