@@ -98,3 +98,9 @@ Install it with
 ## Development
 
 See the instructions in "README-develop.md"
+
+
+## Contributors
+
+Thanks to Wilhelm Hedman and Elias Djurfeldt for all their work on
+insights and status graphs etc.
