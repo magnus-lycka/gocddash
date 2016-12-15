@@ -10,7 +10,3 @@ def clean_html(raw_html):
 
 def remove_excessive_whitespace(string):
     return re.sub(' ( )+', '', string)
-
-
-def remove_new_line(string):
-    return string.replace("\n", "")

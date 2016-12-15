@@ -10,7 +10,8 @@ class JunitConsoleParser(DefaultConsoleParser):
         super().__init__(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
 
         ###
-        success, response = go_client().request_junit_report(pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
+        success, response = go_client().request_junit_report(
+            pipeline_name, pipeline_counter, stage_index, stage_name, job_name)
         ###
 
         self.response = response

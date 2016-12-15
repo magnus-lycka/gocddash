@@ -1,6 +1,7 @@
 """
-This module handles the pipelines.json file and creates a PipelineConfig object from it.
+This module exposes pipeline configuration from the database.
 """
+
 from gocddash.analysis.data_access import get_connection
 
 

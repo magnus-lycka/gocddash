@@ -7,7 +7,6 @@ as specified in application.cfg. Filters out any material revision modifications
 from bs4 import BeautifulSoup
 
 from gocddash.analysis.go_client import go_client
-from gocddash.util.html_utils import remove_new_line
 
 
 def open_html(pipeline_name, current, comparison):
@@ -54,7 +53,7 @@ def get_git_comparison(pipeline_name, current, comparison, preferred_upstream):
         these_changes = []
         for index, revision in enumerate(revisions):
             revision_text = revision.get_text().strip()
-            modified_by_text = remove_new_line(modified_by[index].get_text().strip())
+            modified_by_text = modified_by[index].get_text().strip().replace("\n", "")
             comments_text = comments[index].get_text().strip()
             these_changes.append((revision_text, modified_by_text, comments_text))
 

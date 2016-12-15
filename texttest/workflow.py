@@ -132,8 +132,7 @@ def start_application(application_port):
     application_process = subprocess.Popen([executable(),
                                             executable("gocddash_app.py"),
                                             "-b", str(application_port),
-                                            "--file-client", os.getcwd(),
-                                            "--pipeline-config", os.getcwd() + "/pipelines.json"])
+                                            "--file-client", os.getcwd()])
 
     _wait_for_app_to_start(application_port)
     return application_process

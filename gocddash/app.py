@@ -485,8 +485,7 @@ def parse_args():
     parser.add_argument('-c', '--pipeline-columns', type=int, choices=[1, 2, 3, 4],
                         default=app.config['PIPELINE_COLUMNS'], help="# columns in pipeline list")
     parser.add_argument('-b', '--bind-port', help='bind port')
-    parser.add_argument('--pipeline-config', help='pipelines.json path')
-    parser.add_argument('--file-client', help='file client folder path')
+    parser.add_argument('--file-client', help='file client folder path (for testing)')
     pargs = parser.parse_args()
     pargs_dict = vars(pargs)
     app.config.update({key.upper(): pargs_dict[key] for key in pargs_dict if pargs_dict[key]})

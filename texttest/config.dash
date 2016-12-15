@@ -14,7 +14,6 @@ default_interface:console
 link_test_path:actions.txt
 link_test_path:agents.json
 link_test_path:application.cfg
-link_test_path:pipelines.json
 link_test_path:go/compare.html
 link_test_path:go/console.log
 link_test_path:go/junit.html
@@ -42,7 +41,6 @@ stdout:\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{6}{REPLACE <time>}
 stdout:Will sync to
 gui_log:Last refresh:
 gui_log:127.0.0.1:\d*{REPLACE 127.0.0.1:<port>}
-gui_log:Error: Missing pipelines.json file in .+{REPLACE Error: Missing pipelines.json file.}
 stderr:127.0.0.1:\d*{REPLACE 127.0.0.1:<port>}
 stderr:\d{2}/\w{3}/\d{4}{REPLACE <date>}
 stderr:\d{2}:\d{2}:\d{2}{REPLACE <timestamp>}

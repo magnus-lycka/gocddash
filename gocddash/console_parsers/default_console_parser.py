@@ -12,6 +12,8 @@ class DefaultConsoleParser:
         raise NotImplementedError
 
     def get_failure_stage(self):
+        # TODO: Investigate this: Surely a POST problem might cause us not to get any
+        #  POSTed test results, and then this code will indicate "startup"?
         if self.success:
             if "No Tests Run" in self.response:
                 return "STARTUP"
