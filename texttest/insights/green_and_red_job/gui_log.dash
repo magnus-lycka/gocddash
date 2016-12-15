@@ -1,4 +1,4 @@
-GET http://127.0.0.1:4709/dash/insights/bar
+GET http://127.0.0.1:4604/dash/insights/bar
 data: {}
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
@@ -10,17 +10,17 @@ data: {}
           +
           + [7]Select pipeline groups / Config
           + [8]Select theme
-     * Last refresh: 15:51:05 | 00 seconds
+     * Last refresh: 11:08:58 | 00 seconds
 
 Insights for bar
 
-Latest in Go
+Most recent in Go
 
    Pipeline counter: 57, run 1
 
    Result: Failure
 
-Latest analyzed
+Highest version analyzed
 
    Pipeline counter:
           57
@@ -44,7 +44,7 @@ Latest analyzed
           Last pipeline was a success. Potential for flickering but may
           need further investigation.
 
-Last green
+Highest green version
 
    Pipeline counter: 56 (1 pipeline ago)
 
@@ -106,15 +106,15 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:4709/dash/?which=failing
-   3. http://127.0.0.1:4709/dash/?which=progress
-   4. http://127.0.0.1:4709/dash/?which=all
-   5. http://127.0.0.1:4709/dash/insights/bar
-   6. http://127.0.0.1:4709/dash/stats
-   7. http://127.0.0.1:4709/dash/select/
-   8. http://127.0.0.1:4709/dash/select_theme/
+   2. http://127.0.0.1:4604/dash/?which=failing
+   3. http://127.0.0.1:4604/dash/?which=progress
+   4. http://127.0.0.1:4604/dash/?which=all
+   5. http://127.0.0.1:4604/dash/insights/bar
+   6. http://127.0.0.1:4604/dash/stats
+   7. http://127.0.0.1:4604/dash/select/
+   8. http://127.0.0.1:4604/dash/select_theme/
    9. http://go.pagero.local/go/tab/pipeline/history/bar
-  10. http://127.0.0.1:4709/dash/insights/bar
+  10. http://127.0.0.1:4604/dash/insights/bar
   11. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests
-  12. http://127.0.0.1:4709/dash/graphs/bar
+  12. http://127.0.0.1:4604/dash/graphs/bar
   13. http://go.pagero.local/go/compare/bar/57/with/56

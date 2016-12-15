@@ -1,6 +1,6 @@
-POST http://127.0.0.1:5382/dash/claim
+POST http://127.0.0.1:5965/dash/claim
 data: {description='Spring', pipelineCounter='57', pipelineName='bar', responsible='Lindemann'}
-OK.GET http://127.0.0.1:5382/dash/insights/bar
+OK.GET http://127.0.0.1:5965/dash/insights/bar
 data: {}
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
@@ -12,19 +12,19 @@ data: {}
           +
           + [7]Select pipeline groups / Config
           + [8]Select theme
-     * Last refresh: 11:17:07 | 00 seconds
+     * Last refresh: 11:09:01 | 00 seconds
 
 Insights for bar
 
 Claimed by Lindemann: Spring
 
-Latest in Go
+Most recent in Go
 
    Pipeline counter: 57, run 1
 
    Result: Failure
 
-Latest analyzed
+Highest version analyzed
 
    Pipeline counter:
           57
@@ -47,7 +47,7 @@ Latest analyzed
    Recommendation:
           Same failure signature and same failure indices as last failure.
 
-Last green
+Highest green version
 
    Pipeline counter: 55 (2 pipelines ago)
 
@@ -140,15 +140,15 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:5382/dash/?which=failing
-   3. http://127.0.0.1:5382/dash/?which=progress
-   4. http://127.0.0.1:5382/dash/?which=all
-   5. http://127.0.0.1:5382/dash/insights/bar
-   6. http://127.0.0.1:5382/dash/stats
-   7. http://127.0.0.1:5382/dash/select/
-   8. http://127.0.0.1:5382/dash/select_theme/
+   2. http://127.0.0.1:5965/dash/?which=failing
+   3. http://127.0.0.1:5965/dash/?which=progress
+   4. http://127.0.0.1:5965/dash/?which=all
+   5. http://127.0.0.1:5965/dash/insights/bar
+   6. http://127.0.0.1:5965/dash/stats
+   7. http://127.0.0.1:5965/dash/select/
+   8. http://127.0.0.1:5965/dash/select_theme/
    9. http://go.pagero.local/go/tab/pipeline/history/bar
-  10. http://127.0.0.1:5382/dash/insights/bar
+  10. http://127.0.0.1:5965/dash/insights/bar
   11. http://go.pagero.local/go/tab/build/detail/bar/57/beta/1/defaultJob#tab-tests
-  12. http://127.0.0.1:5382/dash/graphs/bar
+  12. http://127.0.0.1:5965/dash/graphs/bar
   13. http://go.pagero.local/go/compare/bar/57/with/55
