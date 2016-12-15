@@ -47,14 +47,13 @@
                         <li role="separator" class="divider"></li>
                         <li title="Select which pipeline groups to monitor"><a href="{{ url_for('gocddash.select') }}">Select pipeline groups / Config</a></li>
                         <li title="Select which bootstrap theme to use"><a href="{{ url_for('gocddash.select_theme') }}">Select theme</a></li>
+                        <li title="Configure pipeline synchronization"><a href="{{ url_for('gocddash.pipelines') }}">Pipeline synchronization</a></li>
                     </ul>
                 </li>
                 <li>
                     <p class="navbar-text navbar-right">Last refresh: {{ now | tm }} | <span id="seconds">00</span> seconds</p>
                 </li>
             </ul>
-
-
         </div>
     </div>
 </nav>
