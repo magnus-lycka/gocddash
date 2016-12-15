@@ -1,4 +1,4 @@
-GET http://127.0.0.1:8849/dash/insights/bar
+GET http://127.0.0.1:7499/dash/insights/bar
 data: {}
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
@@ -10,7 +10,8 @@ data: {}
           +
           + [7]Select pipeline groups / Config
           + [8]Select theme
-     * Last refresh: 11:08:57 | 00 seconds
+          + [9]Pipeline synchronization
+     * Last refresh: 21:50:12 | 00 seconds
 
 Insights for bar
 
@@ -46,12 +47,12 @@ Highest green version
    At: 2015-07-10 08:25:18
      __________________________________________________________________
 
-   [9]Overview
-   [10]Rerun beta
-   [11]Test Summary
+   [10]Overview
+   [11]Rerun beta
+   [12]Test Summary
      __________________________________________________________________
 
-   [12]Pipeline Graphs
+   [13]Pipeline Graphs
 
    (BUTTON) ×
 
@@ -68,14 +69,15 @@ Claim failing stage
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:8849/dash/?which=failing
-   3. http://127.0.0.1:8849/dash/?which=progress
-   4. http://127.0.0.1:8849/dash/?which=all
-   5. http://127.0.0.1:8849/dash/insights/bar
-   6. http://127.0.0.1:8849/dash/stats
-   7. http://127.0.0.1:8849/dash/select/
-   8. http://127.0.0.1:8849/dash/select_theme/
-   9. http://go.pagero.local/go/tab/pipeline/history/bar
-  10. http://127.0.0.1:8849/dash/insights/bar
-  11. http://go.pagero.local/go/tab/build/detail/bar/57/beta/2/defaultJob#tab-tests
-  12. http://127.0.0.1:8849/dash/graphs/bar
+   2. http://127.0.0.1:7499/dash/?which=failing
+   3. http://127.0.0.1:7499/dash/?which=progress
+   4. http://127.0.0.1:7499/dash/?which=all
+   5. http://127.0.0.1:7499/dash/insights/bar
+   6. http://127.0.0.1:7499/dash/stats
+   7. http://127.0.0.1:7499/dash/select/
+   8. http://127.0.0.1:7499/dash/select_theme/
+   9. http://127.0.0.1:7499/dash/pipelines/
+  10. http://go.pagero.local/go/tab/pipeline/history/bar
+  11. http://127.0.0.1:7499/dash/insights/bar
+  12. http://go.pagero.local/go/tab/build/detail/bar/57/beta/2/defaultJob#tab-tests
+  13. http://127.0.0.1:7499/dash/graphs/bar

@@ -1,4 +1,4 @@
-POST http://127.0.0.1:7761/dash/select/
+POST http://127.0.0.1:7180/dash/select/
 data: {NoBananas='1'}
 Go.CD Dashboard
 Toggle navigation
@@ -10,7 +10,8 @@ More/Config
 Graph overview
 Select pipeline groups / Config
 Select theme
-Last refresh: 22:40:16 |
+Pipeline synchronization
+Last refresh: 21:50:09 |
 00
 seconds
 No pipeline groups selected.

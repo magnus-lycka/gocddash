@@ -1,4 +1,4 @@
-GET http://127.0.0.1:8752/dash/pipelines/
+GET http://127.0.0.1:6078/dash/pipelines/
 data: {}
    (BUTTON) Toggle navigation [1]http://go.pagero.local/go/
      * [2]Failing
@@ -10,7 +10,8 @@ data: {}
           +
           + [7]Select pipeline groups / Config
           + [8]Select theme
-     * Last refresh: 11:40:56 | 00 seconds
+          + [9]Pipeline synchronization
+     * Last refresh: 21:50:17 | 00 seconds
 
 Please note that changes in this page affect all users and have immediate
 effect.
@@ -24,10 +25,11 @@ effect.
 References
 
    1. http://go.pagero.local/go/
-   2. http://127.0.0.1:8752/dash/?which=failing
-   3. http://127.0.0.1:8752/dash/?which=progress
-   4. http://127.0.0.1:8752/dash/?which=all
-   5. http://127.0.0.1:8752/dash/pipelines/
-   6. http://127.0.0.1:8752/dash/stats
-   7. http://127.0.0.1:8752/dash/select/
-   8. http://127.0.0.1:8752/dash/select_theme/
+   2. http://127.0.0.1:6078/dash/?which=failing
+   3. http://127.0.0.1:6078/dash/?which=progress
+   4. http://127.0.0.1:6078/dash/?which=all
+   5. http://127.0.0.1:6078/dash/pipelines/
+   6. http://127.0.0.1:6078/dash/stats
+   7. http://127.0.0.1:6078/dash/select/
+   8. http://127.0.0.1:6078/dash/select_theme/
+   9. http://127.0.0.1:6078/dash/pipelines/
