@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
-{% block content %}
 
+{% block content %}
 <div class="container">
   <form class="themeform" role="form" action="" method="post">
     {% for theme_name in ['cerulean', 'cosmo', 'cyborg', 'darkly', 'flatly', 'journal', 'lumen', 'paper', 'readable', 'sandstone', 'simplex', 'slate', 'spacelab', 'superhero', 'united', 'yeti'] %}
@@ -27,8 +27,6 @@
         </label>
     </div>
 </div>
-
-
 {% endblock %}
 
 {% block scripts %}

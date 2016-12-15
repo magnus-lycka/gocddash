@@ -23,7 +23,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
+{% block scripts %}
     <script src="{{ url_for('gocddash.static', filename='plotly-latest.min.js') }}"></script>
 
     <script>
@@ -48,5 +50,4 @@
         refreshPipelineChart();
         refreshAgentChart();
     </script>
-
 {% endblock %}

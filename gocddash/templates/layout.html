@@ -8,11 +8,10 @@
     <meta name="description"
           content="Dashboard for Thoughtworks Go Continuous Delivery, Go.CD, CoCD">
     <meta name="author" content="magnus@thinkware.se">
+    {% block headextra %}{% endblock %}
     <title>Go.CD Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/{{ theme }}/bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('gocddash.static', filename='dash.css') }}" rel="stylesheet">
-
-    {% block bokehstuff %}{% endblock %}
 </head>
 
 <body>

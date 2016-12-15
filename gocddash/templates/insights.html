@@ -51,7 +51,7 @@
                             <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true"></span>
                         {% endif %}
                         <h3 class="panel-title">
-                            Latest analyzed
+                            Highest version analyzed
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -94,12 +94,12 @@
                 <div class="panel panel-{{ latest_passing_stage.is_success() | build_outcome_panel }}">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            {% if not latest_passing_stage.is_success() %}Earliest available (No green pipeline
-                                synced) {% endif %}
-                            {% if latest_passing_stage.is_success() %}Last green {% endif %}</h3>
+                            {%- if latest_passing_stage.is_success() %}Highest green version
+                            {%- else %}Earliest available (No green pipeline synced)
+                            {%- endif %}</h3>
                     </div>
                     <div class="panel-body">
-                        {% set count = current_status.stage.pipeline_counter - latest_passing_stage.pipeline_counter %}
+                        {%- set count = current_status.stage.pipeline_counter - latest_passing_stage.pipeline_counter -%}
                         <p><strong>Pipeline counter:</strong> {{ latest_passing_stage.pipeline_counter }} ({{ count }}
                             pipeline{{ count | pluralize }} ago)</p>
                         <p><strong>Stage:</strong> {{ latest_passing_stage.stage_name }}</p>
@@ -199,11 +199,9 @@
                                     </tr>
                                 {% endfor %}
                             {% endfor %}
-
                             </tbody>
                         </table>
                         <hr>
-
                     {% endif %}
 
 
@@ -280,11 +278,9 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block scripts %}
-
     <script type="text/javascript">
         var current_stage = {
             pipeline_name: "{{ current_status.stage.pipeline_name }}",
@@ -298,5 +294,4 @@
     </script>
 
     <script src="{{ url_for('gocddash.static', filename='insights.js') }}"></script>
-
 {% endblock %}

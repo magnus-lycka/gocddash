@@ -25,12 +25,12 @@ def get_first_synced_stage(pipeline_name):
     return result and StageFailureInfo(*result)
 
 
-def create_stage(pipeline_instance, stage):
-    get_connection().insert_stage(pipeline_instance.instance_id, stage)
-
-
-def create_job(stage, job):
-    get_connection().insert_job(stage.stage_id, job)
+# def create_stage(pipeline_instance, stage):
+#     get_connection().insert_stage(pipeline_instance.instance_id, stage)
+#
+#
+# def create_job(stage, job):
+#     get_connection().insert_job(stage.stage_id, job)
 
 
 def create_email_notification_sent(pipeline_name, pipeline_counter):

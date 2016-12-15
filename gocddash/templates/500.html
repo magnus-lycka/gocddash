@@ -1,15 +1,10 @@
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="30;url={{ dashboard_link }}" />
-    <title>500 Internal Server Error</title>
-</head>
-
 {% extends "layout.html" %}
+
+{% block headextra %}
+        <meta http-equiv="refresh" content="10;url={{ dashboard_link }}" />
+{% endblock %}
+
 {% block content %}
-    <head>
-        <meta charset="UTF-8">
-        <title>500: Internal Server Error</title>
-    </head>
     <div class="container">
         <div class="col-md-12">
             <div class="jumbotron">
@@ -23,6 +18,5 @@
                 <p><a class="btn btn-primary btn-lg" href="{{ dashboard_link }}" role="button">Go back to the dashboard</a>
             </div>
         </div>
-
     </div>
 {% endblock %}

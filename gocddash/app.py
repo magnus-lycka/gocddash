@@ -408,7 +408,7 @@ def failure_stage(failed_stage):
 def building_panel_label(cctray_status):
     if 'Building' in cctray_status:
         return "Building in Go"
-    return "Latest in Go"
+    return "Most recent in Go"
 
 
 @app.template_filter('pluralize')

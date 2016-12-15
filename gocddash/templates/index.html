@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+
 {% block content %}
     <div class="container">
         {% if not pipelines %}
@@ -105,8 +106,6 @@
             </div>
         </div>
     </div>
-
-
 {% endblock %}
 
 {% block scripts %}
@@ -122,5 +121,4 @@
             });
         {% endfor %}
     </script>
-
 {% endblock %}

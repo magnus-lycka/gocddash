@@ -15,7 +15,7 @@ class SQLConnection:
     def __init__(self, path=None, foreign_keys=True):
         self.__dict__ = self._shared_state
         if path or not self.conn:
-            self.conn = sqlite3.connect(path or 'gocddash.sqlite3')
+            self.conn = sqlite3.connect(path or 'gocddash.sqlite3', timeout=15)
             self.conn.row_factory = sqlite3.Row
             self.foreign_keys = foreign_keys
             self._init()
